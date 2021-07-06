@@ -4,6 +4,9 @@ import * as POSTPROCESSING from "postprocessing"
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js'
 import * as dat from 'dat.gui'
 
+import StarField from './procedural/starfield'
+import Grid from './world/grid'
+
 // scene, rendering and camera basic setup
 const scene = new THREE.Scene()
 
@@ -21,7 +24,7 @@ const camera = new THREE.PerspectiveCamera(
     100,
     window.innerWidth / window.innerHeight,
     10,
-    10000
+    1000
 )
 
 // setup miscelanous values
@@ -43,6 +46,10 @@ let moveBackward = false
 let moveLeft = false
 let moveRight = false
 let prevTimePerf = performance.now()
+let currentSectorPosition
+
+const baseStarfield = new StarField()
+const grid = new Grid()
 
 /**
  * TODO
@@ -206,7 +213,16 @@ function animate(time) {
     rotateUniverse()
 
     requestAnimationFrame(animate)
-        //console.log(getCameraCurrentPosition(camera))
+
+    let lastSectorPosition = Grid.getCurrentSectorPosition(
+        getCameraCurrentPosition(camera),
+        parameters.starfield.squareSectorSize
+    )
+
+    if (currentSectorPosition != lastSectorPosition) {
+        currentSectorPosition = lastSectorPosition
+        console.log(currentSectorPosition, 'currentSectorPosition')
+    }
 }
 
 window.addEventListener("resize", () => {
