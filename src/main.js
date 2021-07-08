@@ -31,8 +31,8 @@ const camera = new THREE.PerspectiveCamera(
 const controls = new PointerLockControls(camera, document.body)
 const velocity = new THREE.Vector3()
 const direction = new THREE.Vector3()
-const starTexture = new THREE.TextureLoader().load("star.png")
-const starShineTexture = new THREE.TextureLoader().load("star-shine.png")
+const starTexture = new THREE.TextureLoader().load("procedural/starfield/texture/star2.png")
+const starShineTexture = new THREE.TextureLoader().load("procedural/starfield/texture/star1.png")
 const parameters = {
     starfield: {
         squareSectorSize: 2000
@@ -124,6 +124,8 @@ const paleStars = new THREE.Points(
 scene.add(brightStars, mediumStars, paleStars)
 scene.add(controls.getObject())
 
+//scene.background = new THREE.Color(0x030909)
+
 const onKeyDown = (event) => {
     switch (event.code) {
         case "ArrowUp":
@@ -206,11 +208,8 @@ function animate(time) {
 
     camera.position.z -= 0.05
 
-    let current = Math.random()
-
-    if (current > 0.6 && current < 0.65) mediumStars.material.opacity = current
-
-    rotateUniverse()
+    // todo determnine if this will be a problem for the grid 
+    //rotateUniverse()
 
     requestAnimationFrame(animate)
 
