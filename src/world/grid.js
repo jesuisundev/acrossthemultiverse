@@ -1,14 +1,18 @@
 import StarField from '../procedural/starfield'
 
 export default class Grid {
-    constructor() {
+    constructor(scene) {
         // should i use octree for this ? might be overkill actually
         // first we're stick with hashmap and well change later if needed
+        this.scene = scene
+        this.parameters = {
+            sectorSize: 2000
+        }
         this.activeSectors = new Map()
         this.initialize()
     }
 
-    static getCurrentSectorPosition(currentCameraPosition, gridSectorSize) {
+    getCurrentSectorPosition(currentCameraPosition, gridSectorSize) {
         const gridChunk = gridSectorSize / 2
         const xCoordinate = Math.trunc(currentCameraPosition.x / gridChunk)
         const yCoordinate = Math.trunc(currentCameraPosition.y / gridChunk)
@@ -32,12 +36,26 @@ export default class Grid {
         ]
 
         for (let sectorToPopulate of defaultSectorsToPopulate) {
-            this._populateSectorWithRandomPopulation(sectorToPopulate)
+            this._populateSectorWithRandomPopulation(
+                sectorToPopulate,
+                this.parameters.sectorSize
+            )
         }
     }
 
-    _populateSectorWithRandomPopulation(sectorToPopulate) {
-        console.log(sectorToPopulate)
-        const currentStarfield = new StarField()
+    _populateSectorWithRandomPopulation(sectorToPopulate, sectorSize) {
+        // this should randomly populate with different procedual method
+        // handling only starfield for now
+        const randomStarfield = new StarField()
+
+        randomStarfield.generateRandomStarfieldOnSector(sectorToPopulate, sectorSize)
+
+        this.activeSectors.set(sectorToPopulate, randomStarfield)
+
+        this.scene.add(
+            randomStarfield.starfield.bright.points,
+            randomStarfield.starfield.normal.points,
+            randomStarfield.starfield.pale.points
+        )
     }
 }

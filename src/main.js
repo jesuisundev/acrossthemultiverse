@@ -31,13 +31,6 @@ const camera = new THREE.PerspectiveCamera(
 const controls = new PointerLockControls(camera, document.body)
 const velocity = new THREE.Vector3()
 const direction = new THREE.Vector3()
-const starTexture = new THREE.TextureLoader().load("procedural/starfield/texture/star2.png")
-const starShineTexture = new THREE.TextureLoader().load("procedural/starfield/texture/star1.png")
-const parameters = {
-    starfield: {
-        squareSectorSize: 2000
-    }
-}
 
 let needRender = true
 let effectPass
@@ -48,80 +41,8 @@ let moveRight = false
 let prevTimePerf = performance.now()
 let currentSectorPosition
 
-const baseStarfield = new StarField()
-const grid = new Grid()
+const grid = new Grid(scene)
 
-/**
- * TODO
- * @param {*} max 
- * @returns 
- */
-function getStarsGeometry(max = 5000) {
-    const geometry = new THREE.BufferGeometry()
-
-    geometry.setAttribute(
-        "position",
-        new THREE.Float32BufferAttribute(getVerticesInRandomPosition(max), 3)
-    )
-
-    return geometry
-}
-
-/**
- * TODO
- * @param {*} max 
- * @returns 
- */
-function getVerticesInRandomPosition(max) {
-    const vertices = []
-
-    for (let i = 0; i < max; i++) {
-        // random positions confined in a square sector
-        const x = parameters.starfield.squareSectorSize * Math.random() - (parameters.starfield.squareSectorSize / 2)
-        const y = parameters.starfield.squareSectorSize * Math.random() - (parameters.starfield.squareSectorSize / 2)
-        const z = parameters.starfield.squareSectorSize * Math.random() - (parameters.starfield.squareSectorSize / 2)
-
-        vertices.push(x, y, z)
-    }
-
-    return vertices
-}
-
-/**
- * TODO
- * @param {*} texture 
- * @param {*} opacity 
- * @param {*} size 
- * @returns 
- */
-function getStarsMaterial(texture, opacity = 1, size = 5) {
-    return new THREE.PointsMaterial({
-        size: size,
-        sizeAttenuation: true,
-        map: texture,
-        depthWrite: false,
-        transparent: true,
-        blending: THREE.AdditiveBlending,
-        opacity: opacity
-    })
-}
-
-const brightStars = new THREE.Points(
-    getStarsGeometry(20000),
-    getStarsMaterial(starShineTexture, 1)
-)
-const mediumStars = new THREE.Points(
-    getStarsGeometry(20000),
-    getStarsMaterial(starTexture, 0.6)
-)
-const paleStars = new THREE.Points(
-    getStarsGeometry(10000),
-    getStarsMaterial(starTexture, 0.2)
-)
-
-
-
-scene.add(brightStars, mediumStars, paleStars)
 scene.add(controls.getObject())
 
 //scene.background = new THREE.Color(0x030909)
@@ -213,9 +134,9 @@ function animate(time) {
 
     requestAnimationFrame(animate)
 
-    let lastSectorPosition = Grid.getCurrentSectorPosition(
+    let lastSectorPosition = grid.getCurrentSectorPosition(
         getCameraCurrentPosition(camera),
-        parameters.starfield.squareSectorSize
+        grid.parameters.sectorSize
     )
 
     if (currentSectorPosition != lastSectorPosition) {
