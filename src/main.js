@@ -4,7 +4,6 @@ import * as POSTPROCESSING from "postprocessing"
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js'
 import * as dat from 'dat.gui'
 
-import StarField from './procedural/starfield'
 import Grid from './world/grid'
 
 // scene, rendering and camera basic setup
@@ -39,7 +38,7 @@ let moveBackward = false
 let moveLeft = false
 let moveRight = false
 let prevTimePerf = performance.now()
-let currentSectorPosition
+let lastSectorPosition
 
 const grid = new Grid(scene)
 
@@ -134,14 +133,13 @@ function animate(time) {
 
     requestAnimationFrame(animate)
 
-    let lastSectorPosition = grid.getCurrentSectorPosition(
-        getCameraCurrentPosition(camera),
-        grid.parameters.sectorSize
-    )
+    let currentSectorPosition = grid.getCurrentSectorPosition(getCameraCurrentPosition(camera))
 
-    if (currentSectorPosition != lastSectorPosition) {
-        currentSectorPosition = lastSectorPosition
-        console.log(currentSectorPosition, 'currentSectorPosition')
+    if (lastSectorPosition != currentSectorPosition) {
+        if (lastSectorPosition)
+            grid.updateGridBySector(currentSectorPosition)
+
+        lastSectorPosition = currentSectorPosition
     }
 }
 
