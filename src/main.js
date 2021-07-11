@@ -136,6 +136,9 @@ function animate(time) {
     let currentSectorPosition = grid.getCurrentSectorPosition(getCameraCurrentPosition(camera))
 
     if (lastSectorPosition != currentSectorPosition) {
+        // @todo : update grid will be HEAVY intensive work
+        // this will freeze the experience, we need to use web worker or something else
+        // to manage this intensive part
         if (lastSectorPosition)
             grid.updateGridBySector(currentSectorPosition)
 
