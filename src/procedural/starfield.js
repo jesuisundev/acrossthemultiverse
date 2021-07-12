@@ -4,7 +4,7 @@ export default class StarField {
     constructor(scene) {
         this.scene = scene
         this.parameters = {
-            budget: 50000,
+            budget: 100000,
             material: {
                 size: {
                     min: 4,
@@ -22,7 +22,8 @@ export default class StarField {
             pool: [
                 'star1.png',
                 'star2.png',
-                'star3.png'
+                'star3.png',
+                'star4.png'
             ]
         }
 
@@ -30,17 +31,24 @@ export default class StarField {
     }
 
     getRandomStarfield(currentSector, sectorSize, starfieldsVertices) {
-        const brightStarsGeometry = this._getRandomStarsGeometry(10000, currentSector, sectorSize, starfieldsVertices?.brightStarsRandomVertices)
+        const countMaxByType = Math.floor(this.parameters.budget / 3)
+
+        const brightStarsGeometry = this._getRandomStarsGeometry(
+            this._getRandomNumberBeetwen(Math.floor(countMaxByType / 0.5), countMaxByType),
+            currentSector,
+            sectorSize,
+            starfieldsVertices?.brightStarsRandomVertices
+        )
         const brightStarTexture = this._getRandomStarsTexture()
-        const brightStarsmaterial = this._getRandomStarsMaterial(brightStarTexture, this._getRandomNumberBeetwen())
+        const brightStarsmaterial = this._getRandomStarsMaterial(brightStarTexture, 1)
         const brightStars = new THREE.Points(brightStarsGeometry, brightStarsmaterial)
 
-        const normalStarsGeometry = this._getRandomStarsGeometry(10000, currentSector, sectorSize, starfieldsVertices?.normalStarsRandomVertices)
+        const normalStarsGeometry = this._getRandomStarsGeometry(this._getRandomNumberBeetwen(Math.floor(countMaxByType / 2), countMaxByType), currentSector, sectorSize, starfieldsVertices?.normalStarsRandomVertices)
         const normalStarsTexture = this._getRandomStarsTexture()
-        const normalStarsmaterial = this._getRandomStarsMaterial(normalStarsTexture, this._getRandomNumberBeetwen(0.7, 0.8))
+        const normalStarsmaterial = this._getRandomStarsMaterial(normalStarsTexture, this._getRandomNumberBeetwen(0.8, 0.9))
         const normalStars = new THREE.Points(normalStarsGeometry, normalStarsmaterial)
 
-        const paleStarsGeometry = this._getRandomStarsGeometry(5000, currentSector, sectorSize, starfieldsVertices?.paleStarsRandomVertices)
+        const paleStarsGeometry = this._getRandomStarsGeometry(this._getRandomNumberBeetwen(Math.floor(countMaxByType / 4), countMaxByType), currentSector, sectorSize, starfieldsVertices?.paleStarsRandomVertices)
         const paleStarsTexture = this._getRandomStarsTexture()
         const paleStarsmaterial = this._getRandomStarsMaterial(paleStarsTexture, this._getRandomNumberBeetwen(0.3, 0.4))
         const paleStars = new THREE.Points(paleStarsGeometry, paleStarsmaterial)
@@ -109,46 +117,6 @@ export default class StarField {
             this.starfield.normal.points,
             this.starfield.pale.points
         )
-    }
-
-    _getRandomStarfield(currentSector, sectorSize) {
-        const brightStarsGeometry = this._getRandomStarsGeometry(20000, currentSector, sectorSize)
-        const brightStarTexture = this._getRandomStarsTexture()
-        const brightStarsmaterial = this._getRandomStarsMaterial(brightStarTexture, this._getRandomNumberBeetwen())
-        const brightStars = new THREE.Points(brightStarsGeometry, brightStarsmaterial)
-
-        const normalStarsGeometry = this._getRandomStarsGeometry(20000, currentSector, sectorSize)
-        const normalStarsTexture = this._getRandomStarsTexture()
-        const normalStarsmaterial = this._getRandomStarsMaterial(normalStarsTexture, this._getRandomNumberBeetwen(0.7, 0.8))
-        const normalStars = new THREE.Points(normalStarsGeometry, normalStarsmaterial)
-
-        const paleStarsGeometry = this._getRandomStarsGeometry(10000, currentSector, sectorSize)
-        const paleStarsTexture = this._getRandomStarsTexture()
-        const paleStarsmaterial = this._getRandomStarsMaterial(paleStarsTexture, this._getRandomNumberBeetwen(0.3, 0.4))
-        const paleStars = new THREE.Points(paleStarsGeometry, paleStarsmaterial)
-
-        const randomStarfield = {
-            bright: {
-                geometry: brightStarsGeometry,
-                texture: brightStarTexture,
-                material: brightStarsmaterial,
-                points: brightStars
-            },
-            normal: {
-                geometry: normalStarsGeometry,
-                texture: normalStarsTexture,
-                material: normalStarsmaterial,
-                points: normalStars
-            },
-            pale: {
-                geometry: paleStarsGeometry,
-                texture: paleStarsTexture,
-                material: paleStarsmaterial,
-                points: paleStars
-            }
-        }
-
-        return randomStarfield
     }
 
     /**
