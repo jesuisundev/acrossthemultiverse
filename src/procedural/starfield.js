@@ -5,7 +5,6 @@ export default class StarField {
         this.scene = scene
         this.parameters = {
             budget: 50000,
-            sectorSize: 2000,
             material: {
                 size: {
                     min: 4,
@@ -19,7 +18,7 @@ export default class StarField {
         }
 
         this.texture = {
-            baseUrl: 'procedural/starfield/texture/',
+            baseUrl: '/procedural/starfield/texture/',
             pool: [
                 'star1.png',
                 'star2.png',
@@ -30,8 +29,52 @@ export default class StarField {
         this.starfield = null
     }
 
+    getRandomStarfield(currentSector, sectorSize, starfieldsVertices) {
+        const brightStarsGeometry = this._getRandomStarsGeometry(10000, currentSector, sectorSize, starfieldsVertices?.brightStarsRandomVertices)
+        const brightStarTexture = this._getRandomStarsTexture()
+        const brightStarsmaterial = this._getRandomStarsMaterial(brightStarTexture, this._getRandomNumberBeetwen())
+        const brightStars = new THREE.Points(brightStarsGeometry, brightStarsmaterial)
+
+        const normalStarsGeometry = this._getRandomStarsGeometry(10000, currentSector, sectorSize, starfieldsVertices?.normalStarsRandomVertices)
+        const normalStarsTexture = this._getRandomStarsTexture()
+        const normalStarsmaterial = this._getRandomStarsMaterial(normalStarsTexture, this._getRandomNumberBeetwen(0.7, 0.8))
+        const normalStars = new THREE.Points(normalStarsGeometry, normalStarsmaterial)
+
+        const paleStarsGeometry = this._getRandomStarsGeometry(5000, currentSector, sectorSize, starfieldsVertices?.paleStarsRandomVertices)
+        const paleStarsTexture = this._getRandomStarsTexture()
+        const paleStarsmaterial = this._getRandomStarsMaterial(paleStarsTexture, this._getRandomNumberBeetwen(0.3, 0.4))
+        const paleStars = new THREE.Points(paleStarsGeometry, paleStarsmaterial)
+
+        const randomStarfield = {
+            bright: {
+                geometry: brightStarsGeometry,
+                texture: brightStarTexture,
+                material: brightStarsmaterial,
+                points: brightStars
+            },
+            normal: {
+                geometry: normalStarsGeometry,
+                texture: normalStarsTexture,
+                material: normalStarsmaterial,
+                points: normalStars
+            },
+            pale: {
+                geometry: paleStarsGeometry,
+                texture: paleStarsTexture,
+                material: paleStarsmaterial,
+                points: paleStars
+            }
+        }
+
+        return randomStarfield
+    }
+
     generateRandomStarfieldOnSector(currentSector, sectorSize) {
-        this.starfield = this._getRandomStarfield(currentSector, sectorSize)
+        this.starfield = this.getRandomStarfield(currentSector, sectorSize)
+    }
+
+    setStarfield(starfield) {
+        this.starfield = starfield
     }
 
     dispose() {
@@ -49,6 +92,19 @@ export default class StarField {
         this.starfield.pale.material.dispose()
 
         this.scene.remove(
+            this.starfield.bright.points,
+            this.starfield.normal.points,
+            this.starfield.pale.points
+        )
+    }
+
+    show() {
+        if (!this.starfield) {
+            console.log(`Can't show empty starfield`)
+            return
+        }
+
+        this.scene.add(
             this.starfield.bright.points,
             this.starfield.normal.points,
             this.starfield.pale.points
@@ -100,12 +156,13 @@ export default class StarField {
      * @param {*} max 
      * @returns 
      */
-    _getRandomStarsGeometry(max, currentSector, sectorSize) {
+    _getRandomStarsGeometry(max, currentSector, sectorSize, randomVertices) {
         const geometry = new THREE.BufferGeometry()
+        const vertices = randomVertices ? randomVertices : this._getVerticesInRandomPosition(max, currentSector, sectorSize)
 
         geometry.setAttribute(
             "position",
-            new THREE.Float32BufferAttribute(this._getVerticesInRandomPosition(max, currentSector, sectorSize), 3)
+            new THREE.Float32BufferAttribute(vertices, 3)
         )
 
         return geometry

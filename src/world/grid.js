@@ -5,10 +5,13 @@ export default class Grid {
         // should i use octree for this ? might be overkill actually
         // first we're stick with hashmap and well change later if needed
         this.scene = scene
+        this.activeSectors = new Map()
+        this.queueSectors = new Map()
+
         this.parameters = {
             sectorSize: 2000
         }
-        this.activeSectors = new Map()
+
         this.initialize()
     }
 
@@ -39,14 +42,24 @@ export default class Grid {
     }
 
     updateGridBySector(currentSector) {
-        console.log(currentSector, 'currentSector')
         const neighbourSectors = this.getNeighbourSectors(currentSector)
         const sectorsToPopulate = this._getEmptySectorsToPopulate(neighbourSectors)
         const sectorsToDispose = this._getPopulatedSectorsToDispose(neighbourSectors, currentSector)
 
         this.disposeSectors(sectorsToDispose)
-        console.log(sectorsToPopulate, 'sectorsToPopulate')
         this._populateSectorsWithRandomPopulation(sectorsToPopulate)
+    }
+
+    getSectorsStatus(currentSector) {
+        const sectorsNeighbour = this.getNeighbourSectors(currentSector)
+        const sectorsToPopulate = this._getEmptySectorsToPopulate(sectorsNeighbour)
+        const sectorsToDispose = this._getPopulatedSectorsToDispose(sectorsNeighbour, currentSector)
+
+        return {
+            sectorsNeighbour,
+            sectorsToPopulate,
+            sectorsToDispose
+        }
     }
 
     getNeighbourSectors(currentSector) {
@@ -100,7 +113,6 @@ export default class Grid {
     }
 
     disposeSectors(sectorsToDispose) {
-        console.log(sectorsToDispose, 'sectorsToDispose')
         for (let sectorToDispose of sectorsToDispose) {
             let objectToDispose = this.activeSectors.get(sectorToDispose)
 
@@ -114,7 +126,7 @@ export default class Grid {
 
     _getEmptySectorsToPopulate(neighbourSectors) {
         const emptySectorsToPopulate = []
-        console.log(neighbourSectors, 'neighbourSectors')
+
         for (let neighbourSector of neighbourSectors) {
             if (!this.activeSectors.has(neighbourSector))
                 emptySectorsToPopulate.push(neighbourSector)

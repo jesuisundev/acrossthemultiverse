@@ -5,6 +5,7 @@ import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockCont
 import * as dat from 'dat.gui'
 
 import Grid from './world/grid'
+import Starfield from './procedural/starfield'
 
 // scene, rendering and camera basic setup
 const scene = new THREE.Scene()
@@ -106,6 +107,59 @@ const composer = new POSTPROCESSING.EffectComposer(renderer)
 composer.addPass(new POSTPROCESSING.RenderPass(scene, camera))
 composer.addPass(effectPass)
 
+const gridHelper = new THREE.GridHelper(22000, 11, 0x00FF00, 0x00FF00);
+gridHelper.position.y = -300
+scene.add(gridHelper);
+
+if (!window.Worker) {
+    throw new Error("You browser is shit. Do something about it.");
+}
+
+const starfieldWorker = new Worker(
+    new URL(
+        './procedural/starfield-worker.js',
+        import.meta.url
+    )
+)
+
+// @todo the messaging internal system is slow here (GB issue) not sure what to do :(
+// optimise objects, split and all ?
+// make it call right away, only way to render
+starfieldWorker.onmessage = messageEvent => addStarfieldsDataToSectorsQueue(messageEvent.data)
+
+// @todo - should be on grid side
+function addStarfieldsDataToSectorsQueue(starfieldsVertices) {
+    for (let sectorToPopulate of Object.keys(starfieldsVertices)) {
+        const starfieldQueueValue = {
+            type: 'starfield',
+            data: starfieldsVertices[sectorToPopulate]
+        }
+
+        grid.queueSectors.set(sectorToPopulate, starfieldQueueValue)
+    }
+}
+
+// @todo - should be on grid side
+function renderSectorFromQueue(sectorPosition, sectorData) {
+    switch (sectorData.type) {
+        case 'starfield':
+            const starfield = new Starfield(scene)
+            const randomStarfield = starfield.getRandomStarfield(
+                sectorPosition,
+                grid.parameters.sectorSize,
+                sectorData.data
+            )
+
+            starfield.setStarfield(randomStarfield)
+            grid.activeSectors.set(sectorPosition, randomStarfield)
+
+            starfield.show()
+            break;
+        default:
+            console.log('Render sector type unknown', sectorData.type)
+    }
+}
+
 function animate(time) {
     if (needRender) {
         composer.render()
@@ -136,13 +190,26 @@ function animate(time) {
     let currentSectorPosition = grid.getCurrentSectorPosition(getCameraCurrentPosition(camera))
 
     if (lastSectorPosition != currentSectorPosition) {
-        // @todo : update grid will be HEAVY intensive work
-        // this will freeze the experience, we need to use web worker or something else
-        // to manage this intensive part
-        if (lastSectorPosition)
-            grid.updateGridBySector(currentSectorPosition)
+        if (lastSectorPosition) {
+            const sectorsStatus = grid.getSectorsStatus(currentSectorPosition)
+            grid.disposeSectors(sectorsStatus.sectorsToDispose)
+                // @todo : function which decide what and how generated stuff in grid
+                // @todo : use the right worker by types
+                // hardcoding starfields only
+            starfieldWorker.postMessage({
+                sectorsToPopulate: sectorsStatus.sectorsToPopulate,
+                sectorSize: grid.parameters.sectorSize
+            })
+        }
 
         lastSectorPosition = currentSectorPosition
+    } else if (grid.queueSectors.size) {
+        // @todo - should be on grid side
+        const sectorTorender = grid.queueSectors.keys().next().value
+
+        renderSectorFromQueue(sectorTorender, grid.queueSectors.get(sectorTorender))
+
+        grid.queueSectors.delete(sectorTorender)
     }
 }
 
