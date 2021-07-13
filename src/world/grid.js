@@ -1,18 +1,15 @@
 import StarField from '../procedural/starfield'
 
 export default class Grid {
-    constructor(scene) {
+    constructor() {
         // should i use octree for this ? might be overkill actually
         // first we're stick with hashmap and well change later if needed
-        this.scene = scene
         this.activeSectors = new Map()
         this.queueSectors = new Map()
 
         this.parameters = {
             sectorSize: 2000
         }
-
-        this.initialize()
     }
 
     getCurrentSectorPosition(currentCameraPosition) {
@@ -23,22 +20,6 @@ export default class Grid {
         const currentSectorPosition = `${xCoordinate},${yCoordinate},${zCoordinate}`
 
         return currentSectorPosition
-    }
-
-    initialize() {
-        const defaultSectorsToPopulate = [
-            '0,0,0', // center of all, by default the camera will be there
-            '0,0,-1', // forward
-            '0,0,1', // backward
-            '1,0,0', // right
-            '-1,0,0', // left
-            '1,0,-1', // forward right
-            '-1,0,-1', // forward left
-            '1,0,1', // backward right
-            '-1,0,1', // backward left
-        ]
-
-        this._populateSectorsWithRandomPopulation(defaultSectorsToPopulate)
     }
 
     updateGridBySector(currentSector) {
@@ -63,7 +44,7 @@ export default class Grid {
     }
 
     getNeighbourSectors(currentSector) {
-        const neighbourSectors = []
+        const neighbourSectors = [currentSector]
         const currentSectorArray = currentSector.split(',')
         const x = currentSectorArray[0]
         const y = currentSectorArray[1]
@@ -115,7 +96,7 @@ export default class Grid {
     disposeSectors(sectorsToDispose) {
         for (let sectorToDispose of sectorsToDispose) {
             let objectToDispose = this.activeSectors.get(sectorToDispose)
-
+            
             objectToDispose.dispose()
             objectToDispose = null
 
@@ -144,23 +125,5 @@ export default class Grid {
         }
 
         return populatedSectorsToDispose
-    }
-
-    _populateSectorsWithRandomPopulation(sectorsToPopulate) {
-        // this should randomly populate with different procedual method
-        // handling only starfield for now
-        for (let sectorToPopulate of sectorsToPopulate) {
-            const randomStarfield = new StarField(this.scene)
-
-            randomStarfield.generateRandomStarfieldOnSector(sectorToPopulate, this.parameters.sectorSize)
-
-            this.activeSectors.set(sectorToPopulate, randomStarfield)
-
-            this.scene.add(
-                randomStarfield.starfield.bright.points,
-                randomStarfield.starfield.normal.points,
-                randomStarfield.starfield.pale.points
-            )
-        }
     }
 }

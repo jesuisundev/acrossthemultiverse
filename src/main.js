@@ -41,7 +41,7 @@ let moveRight = false
 let prevTimePerf = performance.now()
 let lastSectorPosition
 
-const grid = new Grid(scene)
+const grid = new Grid()
 
 scene.add(controls.getObject())
 
@@ -97,7 +97,7 @@ const bloomEffect = new POSTPROCESSING.BloomEffect({
     blendFunction: POSTPROCESSING.BlendFunction.SCREEN,
     kernelSize: POSTPROCESSING.KernelSize.SMALL
 })
-bloomEffect.blendMode.opacity.value = 2
+bloomEffect.blendMode.opacity.value = 4
 
 // using a global variable because effects will be highly animated during the experience
 effectPass = new POSTPROCESSING.EffectPass(camera, bloomEffect)
@@ -144,14 +144,10 @@ function renderSectorFromQueue(sectorPosition, sectorData) {
     switch (sectorData.type) {
         case 'starfield':
             const starfield = new Starfield(scene)
-            const randomStarfield = starfield.getRandomStarfield(
-                sectorPosition,
-                grid.parameters.sectorSize,
-                sectorData.data
-            )
+            const randomStarfield = starfield.getRandomStarfield(sectorData.data)
 
             starfield.setStarfield(randomStarfield)
-            grid.activeSectors.set(sectorPosition, randomStarfield)
+            grid.activeSectors.set(sectorPosition, starfield)
 
             starfield.show()
             break;
@@ -182,25 +178,20 @@ function animate(time) {
 
     camera.position.z -= 0.05
 
-    // todo determnine if this will be a problem for the grid 
-    //rotateUniverse()
-
     requestAnimationFrame(animate)
 
     let currentSectorPosition = grid.getCurrentSectorPosition(getCameraCurrentPosition(camera))
 
     if (lastSectorPosition != currentSectorPosition) {
-        if (lastSectorPosition) {
-            const sectorsStatus = grid.getSectorsStatus(currentSectorPosition)
-            grid.disposeSectors(sectorsStatus.sectorsToDispose)
-                // @todo : function which decide what and how generated stuff in grid
-                // @todo : use the right worker by types
-                // hardcoding starfields only
-            starfieldWorker.postMessage({
-                sectorsToPopulate: sectorsStatus.sectorsToPopulate,
-                sectorSize: grid.parameters.sectorSize
-            })
-        }
+        const sectorsStatus = grid.getSectorsStatus(currentSectorPosition)
+        grid.disposeSectors(sectorsStatus.sectorsToDispose)
+            // @todo : function which decide what and how generated stuff in grid
+            // @todo : use the right worker by types
+            // hardcoding starfields only
+        starfieldWorker.postMessage({
+            sectorsToPopulate: sectorsStatus.sectorsToPopulate,
+            sectorSize: grid.parameters.sectorSize
+        })
 
         lastSectorPosition = currentSectorPosition
     } else if (grid.queueSectors.size) {
@@ -211,6 +202,9 @@ function animate(time) {
 
         grid.queueSectors.delete(sectorTorender)
     }
+
+    // todo determnine if this will be a problem for the grid
+    //grid.activeSectors.forEach(rotateUniverse)
 }
 
 window.addEventListener("resize", () => {
@@ -220,10 +214,13 @@ window.addEventListener("resize", () => {
     camera.updateProjectionMatrix()
 })
 
-function rotateUniverse(force = 0.0003) {
-    brightStars.rotation.z += force
-    mediumStars.rotation.z += force
-    paleStars.rotation.z += force
+function rotateUniverse(value, key, map) {
+    const force = 0.0003
+
+    // @todo: detect object and change access to rotation accordinly
+    value.starfield.bright.points.rotation.z += force
+    value.starfield.normal.points.rotation.z += force
+    value.starfield.pale.points.rotation.z += force
 }
 
 function getCameraCurrentPosition(camera) {

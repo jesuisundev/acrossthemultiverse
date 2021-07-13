@@ -3,12 +3,26 @@ import StarField from './starfield'
 self.onmessage = messageEvent => {
     const sectorsToPopulate = messageEvent.data.sectorsToPopulate
     const sectorSize = messageEvent.data.sectorSize
+    // todo: find a way to pass parameters from starfield
+    const countMaxByType = Math.floor(50000 / 3)
     const starfieldsVertices = {}
 
     for (let sectorToPopulate of sectorsToPopulate) {
-        const brightStarsRandomVertices = _getVerticesInRandomPosition(sectorToPopulate, sectorSize)
-        const normalStarsRandomVertices = _getVerticesInRandomPosition(sectorToPopulate, sectorSize)
-        const paleStarsRandomVertices = _getVerticesInRandomPosition(sectorToPopulate, sectorSize)
+        const brightStarsRandomVertices = _getVerticesInRandomPosition(
+            _getRandomNumberBeetwen(Math.floor(countMaxByType / 0.5), countMaxByType),
+            sectorToPopulate,
+            sectorSize
+        )
+        const normalStarsRandomVertices = _getVerticesInRandomPosition(
+            _getRandomNumberBeetwen(Math.floor(countMaxByType / 2), countMaxByType),
+            sectorToPopulate,
+            sectorSize
+        )
+        const paleStarsRandomVertices = _getVerticesInRandomPosition(
+            _getRandomNumberBeetwen(Math.floor(countMaxByType / 4), countMaxByType),
+            sectorToPopulate,
+            sectorSize
+        )
 
         starfieldsVertices[sectorToPopulate] = {
             brightStarsRandomVertices,
@@ -21,11 +35,8 @@ self.onmessage = messageEvent => {
 }
 
 
-function _getVerticesInRandomPosition(currentSector, sectorSize) {
+function _getVerticesInRandomPosition(max, currentSector, sectorSize) {
     const vertices = []
-        // @todo make it dynamic from the main thread
-    const max = 20000
-
 
     for (let i = 0; i < max; i++) {
         // creating coordinate for the particles in random positions but confined in the current square sector
@@ -53,4 +64,8 @@ function _getVerticesInRandomPosition(currentSector, sectorSize) {
     }
 
     return vertices
+}
+
+function _getRandomNumberBeetwen(min, max) {
+    return Math.random() * (max - min) + min
 }

@@ -30,25 +30,18 @@ export default class StarField {
         this.starfield = null
     }
 
-    getRandomStarfield(currentSector, sectorSize, starfieldsVertices) {
-        const countMaxByType = Math.floor(this.parameters.budget / 3)
-
-        const brightStarsGeometry = this._getRandomStarsGeometry(
-            this._getRandomNumberBeetwen(Math.floor(countMaxByType / 0.5), countMaxByType),
-            currentSector,
-            sectorSize,
-            starfieldsVertices?.brightStarsRandomVertices
-        )
+    getRandomStarfield(starfieldsVertices) {
+        const brightStarsGeometry = this._getRandomStarsGeometry(starfieldsVertices.brightStarsRandomVertices)
         const brightStarTexture = this._getRandomStarsTexture()
         const brightStarsmaterial = this._getRandomStarsMaterial(brightStarTexture, 1)
         const brightStars = new THREE.Points(brightStarsGeometry, brightStarsmaterial)
 
-        const normalStarsGeometry = this._getRandomStarsGeometry(this._getRandomNumberBeetwen(Math.floor(countMaxByType / 2), countMaxByType), currentSector, sectorSize, starfieldsVertices?.normalStarsRandomVertices)
+        const normalStarsGeometry = this._getRandomStarsGeometry(starfieldsVertices.normalStarsRandomVertices)
         const normalStarsTexture = this._getRandomStarsTexture()
         const normalStarsmaterial = this._getRandomStarsMaterial(normalStarsTexture, this._getRandomNumberBeetwen(0.8, 0.9))
         const normalStars = new THREE.Points(normalStarsGeometry, normalStarsmaterial)
 
-        const paleStarsGeometry = this._getRandomStarsGeometry(this._getRandomNumberBeetwen(Math.floor(countMaxByType / 4), countMaxByType), currentSector, sectorSize, starfieldsVertices?.paleStarsRandomVertices)
+        const paleStarsGeometry = this._getRandomStarsGeometry(starfieldsVertices.paleStarsRandomVertices)
         const paleStarsTexture = this._getRandomStarsTexture()
         const paleStarsmaterial = this._getRandomStarsMaterial(paleStarsTexture, this._getRandomNumberBeetwen(0.3, 0.4))
         const paleStars = new THREE.Points(paleStarsGeometry, paleStarsmaterial)
@@ -75,10 +68,6 @@ export default class StarField {
         }
 
         return randomStarfield
-    }
-
-    generateRandomStarfieldOnSector(currentSector, sectorSize) {
-        this.starfield = this.getRandomStarfield(currentSector, sectorSize)
     }
 
     setStarfield(starfield) {
@@ -124,13 +113,12 @@ export default class StarField {
      * @param {*} max 
      * @returns 
      */
-    _getRandomStarsGeometry(max, currentSector, sectorSize, randomVertices) {
+    _getRandomStarsGeometry(randomVertices) {
         const geometry = new THREE.BufferGeometry()
-        const vertices = randomVertices ? randomVertices : this._getVerticesInRandomPosition(max, currentSector, sectorSize)
 
         geometry.setAttribute(
             "position",
-            new THREE.Float32BufferAttribute(vertices, 3)
+            new THREE.Float32BufferAttribute(randomVertices, 3)
         )
 
         return geometry
@@ -170,43 +158,6 @@ export default class StarField {
             transparent: true,
             blending: THREE.AdditiveBlending
         })
-    }
-
-    /**
-     * TODO
-     * @param {*} max 
-     * @returns 
-     */
-    _getVerticesInRandomPosition(max, currentSector, sectorSize) {
-        const vertices = []
-
-
-        for (let i = 0; i < max; i++) {
-            // creating coordinate for the particles in random positions but confined in the current square sector
-            let x = sectorSize * Math.random() - (sectorSize / 2)
-            let y = sectorSize * Math.random() - (sectorSize / 2)
-            let z = sectorSize * Math.random() - (sectorSize / 2)
-
-            // we dont need to tweak coordinates on the origin sector
-            if (currentSector != '0,0,0') {
-                const arrayCurrentSector = currentSector.split(',')
-
-                // handling x axis (right and left) sectors population
-                if (arrayCurrentSector[0] != 0)
-                    x = (x + (sectorSize * arrayCurrentSector[0]))
-
-                // since we're not handling vertical movement at the moment
-                // we dont need to handle the y axis
-
-                // handling z axis (forward and backward) sectors population
-                if (arrayCurrentSector[2] != 0)
-                    z = (z + (sectorSize * arrayCurrentSector[2]))
-            }
-
-            vertices.push(x, y, z)
-        }
-
-        return vertices
     }
 
     _getRandomNumberBeetwen(min, max) {
