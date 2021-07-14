@@ -40,6 +40,7 @@ let moveLeft = false
 let moveRight = false
 let prevTimePerf = performance.now()
 let lastSectorPosition
+let isRenderingSectorInProgress = false
 
 const grid = new Grid()
 
@@ -195,12 +196,19 @@ function animate(time) {
 
         lastSectorPosition = currentSectorPosition
     } else if (grid.queueSectors.size) {
+        if(isRenderingSectorInProgress) 
+            return
+            
+        isRenderingSectorInProgress = true
+
         // @todo - should be on grid side
         const sectorTorender = grid.queueSectors.keys().next().value
 
-        renderSectorFromQueue(sectorTorender, grid.queueSectors.get(sectorTorender))
-
-        grid.queueSectors.delete(sectorTorender)
+        setTimeout(() => {
+            renderSectorFromQueue(sectorTorender, grid.queueSectors.get(sectorTorender))
+            grid.queueSectors.delete(sectorTorender)
+            isRenderingSectorInProgress = false
+        }, 300)
     }
 
     // todo determnine if this will be a problem for the grid

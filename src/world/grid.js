@@ -13,22 +13,13 @@ export default class Grid {
     }
 
     getCurrentSectorPosition(currentCameraPosition) {
-        const gridChunk = this.parameters.sectorSize / 2
+        const gridChunk = this.parameters.sectorSize
         const xCoordinate = Math.trunc(currentCameraPosition.x / gridChunk)
         const yCoordinate = Math.trunc(currentCameraPosition.y / gridChunk)
         const zCoordinate = Math.trunc(currentCameraPosition.z / gridChunk)
         const currentSectorPosition = `${xCoordinate},${yCoordinate},${zCoordinate}`
 
         return currentSectorPosition
-    }
-
-    updateGridBySector(currentSector) {
-        const neighbourSectors = this.getNeighbourSectors(currentSector)
-        const sectorsToPopulate = this._getEmptySectorsToPopulate(neighbourSectors)
-        const sectorsToDispose = this._getPopulatedSectorsToDispose(neighbourSectors, currentSector)
-
-        this.disposeSectors(sectorsToDispose)
-        this._populateSectorsWithRandomPopulation(sectorsToPopulate)
     }
 
     getSectorsStatus(currentSector) {
@@ -96,7 +87,7 @@ export default class Grid {
     disposeSectors(sectorsToDispose) {
         for (let sectorToDispose of sectorsToDispose) {
             let objectToDispose = this.activeSectors.get(sectorToDispose)
-            
+
             objectToDispose.dispose()
             objectToDispose = null
 
