@@ -30,7 +30,7 @@ export default class StarField {
         this.starfield = null
     }
 
-    getRandomStarfield(starfieldsVertices) {
+    generate(starfieldsVertices) {
         const brightStarsGeometry = this._getRandomStarsGeometry(starfieldsVertices.brightStarsRandomVertices)
         const brightStarTexture = this._getRandomStarsTexture()
         const brightStarsmaterial = this._getRandomStarsMaterial(brightStarTexture, 1)
@@ -67,11 +67,7 @@ export default class StarField {
             }
         }
 
-        return randomStarfield
-    }
-
-    setStarfield(starfield) {
-        this.starfield = starfield
+        this.starfield = randomStarfield
     }
 
     dispose() {

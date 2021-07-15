@@ -4,8 +4,8 @@ import * as POSTPROCESSING from "postprocessing"
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js'
 import * as dat from 'dat.gui'
 
-import Grid from './world/grid'
-import Starfield from './procedural/starfield'
+import Grid from './world/Grid'
+import MultiverseFactory from './procedural/MultiverseFactory'
 
 // scene, rendering and camera basic setup
 const scene = new THREE.Scene()
@@ -43,6 +43,7 @@ let lastSectorPosition
 let isRenderingSectorInProgress = false
 
 const grid = new Grid()
+const multiverseFactory = new MultiverseFactory(scene)
 
 scene.add(controls.getObject())
 
@@ -108,53 +109,63 @@ const composer = new POSTPROCESSING.EffectComposer(renderer)
 composer.addPass(new POSTPROCESSING.RenderPass(scene, camera))
 composer.addPass(effectPass)
 
-const gridHelper = new THREE.GridHelper(22000, 11, 0x00FF00, 0x00FF00);
-gridHelper.position.y = -300
-scene.add(gridHelper);
+window.addEventListener("resize", () => {
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    camera.aspect = window.innerWidth / window.innerHeight
+    composer.setSize(window.innerWidth, window.innerHeight)
+    camera.updateProjectionMatrix()
+})
 
+
+/**
+ * Web worker used for heavy work on background. Critical to not block the event loop.
+ */
 if (!window.Worker) {
     throw new Error("You browser is shit. Do something about it.");
 }
 
-const starfieldWorker = new Worker(
-    new URL(
-        './procedural/starfield-worker.js',
-        import.meta.url
-    )
-)
+const workers = []
 
-// @todo the messaging internal system is slow here (GB issue) not sure what to do :(
-// optimise objects, split and all ?
-// make it call right away, only way to render
-starfieldWorker.onmessage = messageEvent => addStarfieldsDataToSectorsQueue(messageEvent.data)
+const starfieldWorker = new Worker(new URL('./procedural/starfield/StarfieldWorker.js', import.meta.url))
+starfieldWorker.onmessage = messageEvent => addStarfieldsToSectorsQueue(messageEvent.data)
 
-// @todo - should be on grid side
-function addStarfieldsDataToSectorsQueue(starfieldsVertices) {
-    for (let sectorToPopulate of Object.keys(starfieldsVertices)) {
-        const starfieldQueueValue = {
+function addStarfieldsToSectorsQueue(starfields) {
+    for (let sectorToPopulate of Object.keys(starfields)) {
+        grid.queueSectors.set(sectorToPopulate, {
             type: 'starfield',
-            data: starfieldsVertices[sectorToPopulate]
-        }
-
-        grid.queueSectors.set(sectorToPopulate, starfieldQueueValue)
+            data: starfields[sectorToPopulate]
+        })
     }
 }
 
-// @todo - should be on grid side
-function renderSectorFromQueue(sectorPosition, sectorData) {
-    switch (sectorData.type) {
-        case 'starfield':
-            const starfield = new Starfield(scene)
-            const randomStarfield = starfield.getRandomStarfield(sectorData.data)
+workers.push(starfieldWorker)
 
-            starfield.setStarfield(randomStarfield)
-            grid.activeSectors.set(sectorPosition, starfield)
+function getCameraCurrentPosition(camera) {
+    camera.updateMatrixWorld()
+    return camera.position
+}
 
-            starfield.show()
-            break;
-        default:
-            console.log('Render sector type unknown', sectorData.type)
+function getRandomNumberBeetwen(min, max) {
+    return Math.round(Math.random() * (max - min) + min)
+  }
+
+function buildMatters(sectorsToPopulate) {
+    const workerMessage = {
+        sectorsToPopulate: sectorsToPopulate,
+        sectorSize: grid.parameters.sectorSize
     }
+
+    workers[getRandomNumberBeetwen(0, workers.length - 1)].postMessage(workerMessage)
+}
+
+function renderMatters(position, sector) {
+    const matter = multiverseFactory.createMatter(sector.type)
+
+    matter.generate(sector.data)
+    matter.show()
+
+    grid.queueSectors.delete(position)
+    grid.activeSectors.set(position, matter)
 }
 
 function animate(time) {
@@ -174,6 +185,8 @@ function animate(time) {
 
         controls.moveRight(-velocity.x * delta)
         controls.moveForward(-velocity.z * delta)
+    } else {
+        camera.rotation.z += 0.00015
     }
     prevTimePerf = time
 
@@ -184,56 +197,23 @@ function animate(time) {
     let currentSectorPosition = grid.getCurrentSectorPosition(getCameraCurrentPosition(camera))
 
     if (lastSectorPosition != currentSectorPosition) {
+        lastSectorPosition = currentSectorPosition
+
+        // disposing of useless sectors to free memory
         const sectorsStatus = grid.getSectorsStatus(currentSectorPosition)
         grid.disposeSectors(sectorsStatus.sectorsToDispose)
-            // @todo : function which decide what and how generated stuff in grid
-            // @todo : use the right worker by types
-            // hardcoding starfields only
-        starfieldWorker.postMessage({
-            sectorsToPopulate: sectorsStatus.sectorsToPopulate,
-            sectorSize: grid.parameters.sectorSize
-        })
 
-        lastSectorPosition = currentSectorPosition
-    } else if (grid.queueSectors.size) {
-        if(isRenderingSectorInProgress) 
-            return
-            
+        buildMatters(sectorsStatus.sectorsToPopulate)
+    } else if (grid.queueSectors.size && !isRenderingSectorInProgress) {
         isRenderingSectorInProgress = true
 
-        // @todo - should be on grid side
         const sectorTorender = grid.queueSectors.keys().next().value
 
         setTimeout(() => {
-            renderSectorFromQueue(sectorTorender, grid.queueSectors.get(sectorTorender))
-            grid.queueSectors.delete(sectorTorender)
+            renderMatters(sectorTorender, grid.queueSectors.get(sectorTorender))
             isRenderingSectorInProgress = false
-        }, 300)
+        }, 200)
     }
-
-    // todo determnine if this will be a problem for the grid
-    //grid.activeSectors.forEach(rotateUniverse)
-}
-
-window.addEventListener("resize", () => {
-    renderer.setSize(window.innerWidth, window.innerHeight)
-    camera.aspect = window.innerWidth / window.innerHeight
-    composer.setSize(window.innerWidth, window.innerHeight)
-    camera.updateProjectionMatrix()
-})
-
-function rotateUniverse(value, key, map) {
-    const force = 0.0003
-
-    // @todo: detect object and change access to rotation accordinly
-    value.starfield.bright.points.rotation.z += force
-    value.starfield.normal.points.rotation.z += force
-    value.starfield.pale.points.rotation.z += force
-}
-
-function getCameraCurrentPosition(camera) {
-    camera.updateMatrixWorld()
-    return camera.position
 }
 
 animate()

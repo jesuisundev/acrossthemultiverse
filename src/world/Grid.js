@@ -1,14 +1,12 @@
-import StarField from '../procedural/starfield'
+import StarField from '../procedural/starfield/Starfield'
 
 export default class Grid {
     constructor() {
-        // should i use octree for this ? might be overkill actually
-        // first we're stick with hashmap and well change later if needed
         this.activeSectors = new Map()
         this.queueSectors = new Map()
 
         this.parameters = {
-            sectorSize: 2000
+            sectorSize: 2200
         }
     }
 
@@ -86,14 +84,13 @@ export default class Grid {
 
     disposeSectors(sectorsToDispose) {
         for (let sectorToDispose of sectorsToDispose) {
-            let objectToDispose = this.activeSectors.get(sectorToDispose)
+            let matter = this.activeSectors.get(sectorToDispose)
 
-            objectToDispose.dispose()
-            objectToDispose = null
+            matter.dispose()
+            matter = null
 
             this.activeSectors.delete(sectorToDispose)
         }
-
     }
 
     _getEmptySectorsToPopulate(neighbourSectors) {
