@@ -2,7 +2,7 @@ self.onmessage = messageEvent => {
   const sectorsToPopulate = messageEvent.data.sectorsToPopulate
   const sectorSize = messageEvent.data.sectorSize
   // todo: find a way to pass parameters from starfield
-  const countMaxByType = Math.floor(40000 / 3)
+  const countMaxByType = Math.floor(30000 / 3)
   const starfieldsVertices = {}
 
   for (let sectorToPopulate of sectorsToPopulate) {
@@ -66,7 +66,7 @@ function _getVerticesInRandomPosition (max, currentSector, sectorSize) {
     vertices.push(x, y, z)
   }
 
-  return vertices
+  return new Float32Array(vertices)
 }
 
 function _getRandomNumberBeetwen (min, max) {

@@ -22,8 +22,7 @@ export default class StarField {
             pool: [
                 'star1.png',
                 'star2.png',
-                'star3.png',
-                'star4.png'
+                'star3.png'
             ]
         }
 
@@ -89,6 +88,8 @@ export default class StarField {
             this.starfield.normal.points,
             this.starfield.pale.points
         )
+
+        this.starfield = null
     }
 
     show() {
@@ -125,6 +126,7 @@ export default class StarField {
             Math.round(this._getRandomNumberBeetwen(0, this.texture.pool.length - 1))
         ]
 
+        // TODO, might be part of the problem, make a texture handler which download everything at load
         return new THREE.TextureLoader().load(`${this.texture.baseUrl}${randomTextureName}`)
     }
 
