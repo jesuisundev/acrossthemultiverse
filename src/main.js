@@ -6,6 +6,7 @@ import * as dat from 'dat.gui'
 
 import Grid from './world/Grid'
 import MultiverseFactory from './procedural/MultiverseFactory'
+import Library from './world/Library'
 
 // scene, rendering and camera basic setup
 const scene = new THREE.Scene()
@@ -24,7 +25,7 @@ const camera = new THREE.PerspectiveCamera(
     100,
     window.innerWidth / window.innerHeight,
     10,
-    1000
+    1500
 )
 
 // setup miscelanous values
@@ -32,7 +33,7 @@ const controls = new PointerLockControls(camera, document.body)
 const velocity = new THREE.Vector3()
 const direction = new THREE.Vector3()
 
-let needRender = true
+let needRender = false
 let effectPass
 let moveForward = false
 let moveBackward = false
@@ -42,8 +43,11 @@ let prevTimePerf = performance.now()
 let lastSectorPosition
 let isRenderingSectorInProgress = false
 
+const library = new Library()
 const grid = new Grid()
-const multiverseFactory = new MultiverseFactory(scene)
+const multiverseFactory = new MultiverseFactory(scene, library)
+
+library.preload()
 
 scene.add(controls.getObject())
 
@@ -167,6 +171,8 @@ function renderMatters(position, sector) {
     grid.queueSectors.delete(position)
     grid.activeSectors.set(position, matter)
 }
+
+window.onload = () => needRender = true
 
 function animate(time) {
     if (needRender) {

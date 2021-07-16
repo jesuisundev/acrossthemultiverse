@@ -6,7 +6,7 @@ export default class Grid {
         this.queueSectors = new Map()
 
         this.parameters = {
-            sectorSize: 2200
+            sectorSize: 3000
         }
     }
 
