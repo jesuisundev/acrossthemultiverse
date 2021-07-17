@@ -8,18 +8,18 @@ export default class StarField {
         this.starfield = null
     }
 
-    generate(starfieldsVertices) {
-        const brightStarsGeometry = this._getRandomStarsGeometry(starfieldsVertices.brightStarsRandomVertices)
+    generate(starfieldsAttributes) {
+        const brightStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.brightStarsRandomAttributes)
         const brightStarTexture = this._getRandomStarsTexture()
         const brightStarsmaterial = this._getRandomStarsMaterial(brightStarTexture)
         const brightStars = new THREE.Points(brightStarsGeometry, brightStarsmaterial)
 
-        const normalStarsGeometry = this._getRandomStarsGeometry(starfieldsVertices.normalStarsRandomVertices)
+        const normalStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.normalStarsRandomAttributes)
         const normalStarsTexture = this._getRandomStarsTexture()
         const normalStarsmaterial = this._getRandomStarsMaterial(normalStarsTexture)
         const normalStars = new THREE.Points(normalStarsGeometry, normalStarsmaterial)
 
-        const paleStarsGeometry = this._getRandomStarsGeometry(starfieldsVertices.paleStarsRandomVertices)
+        const paleStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.normalStarsRandomAttributes)
         const paleStarsTexture = this._getRandomStarsTexture()
         const paleStarsmaterial = this._getRandomStarsMaterial(paleStarsTexture)
         const paleStars = new THREE.Points(paleStarsGeometry, paleStarsmaterial)
@@ -89,12 +89,17 @@ export default class StarField {
      * @param {*} max 
      * @returns 
      */
-    _getRandomStarsGeometry(randomVertices) {
+    _getRandomStarsGeometry(randomAttributes) {
         const geometry = new THREE.BufferGeometry()
 
         geometry.setAttribute(
             "position",
-            new THREE.Float32BufferAttribute(randomVertices, 3)
+            new THREE.Float32BufferAttribute(randomAttributes.positions, 3)
+        )
+
+        geometry.setAttribute(
+            'color',
+            new THREE.BufferAttribute(randomAttributes.colors, 3)
         )
 
         return geometry
@@ -132,7 +137,8 @@ export default class StarField {
             sizeAttenuation: true,
             depthWrite: false,
             transparent: true,
-            blending: THREE.AdditiveBlending
+            blending: THREE.AdditiveBlending,
+            vertexColors: true
         })
     }
 

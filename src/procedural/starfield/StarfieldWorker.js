@@ -1,39 +1,45 @@
+import * as THREE from 'three'
+
 self.onmessage = messageEvent => {
   const sectorsToPopulate = messageEvent.data.sectorsToPopulate
   const sectorSize = messageEvent.data.sectorSize
   const parameters = messageEvent.data.parameters
   const countMaxByType = Math.floor(parameters.budget / 3)
-  const starfieldsVertices = {}
+  const starfieldsAttributes = {}
 
   for (let sectorToPopulate of sectorsToPopulate) {
-    const brightStarsRandomVertices = _getVerticesInRandomPosition(
+    const brightStarsRandomAttributes = _getAttributesInRandomPosition(
       _getRandomNumberBeetwen(Math.floor(countMaxByType / 0.5), countMaxByType),
       sectorToPopulate,
-      sectorSize
+      sectorSize,
+      parameters
     )
-    const normalStarsRandomVertices = _getVerticesInRandomPosition(
+    const normalStarsRandomAttributes = _getAttributesInRandomPosition(
       _getRandomNumberBeetwen(Math.floor(countMaxByType / 2), countMaxByType),
       sectorToPopulate,
-      sectorSize
+      sectorSize,
+      parameters
     )
-    const paleStarsRandomVertices = _getVerticesInRandomPosition(
+    const paleStarsRandomAttributes = _getAttributesInRandomPosition(
       _getRandomNumberBeetwen(Math.floor(countMaxByType / 4), countMaxByType),
       sectorToPopulate,
-      sectorSize
+      sectorSize,
+      parameters
     )
 
-    starfieldsVertices[sectorToPopulate] = {
-        brightStarsRandomVertices,
-        normalStarsRandomVertices,
-        paleStarsRandomVertices
+    starfieldsAttributes[sectorToPopulate] = {
+        brightStarsRandomAttributes,
+        normalStarsRandomAttributes,
+        paleStarsRandomAttributes
     }
   }
 
-  self.postMessage(starfieldsVertices)
+  self.postMessage(starfieldsAttributes)
 }
 
-function _getVerticesInRandomPosition (max, currentSector, sectorSize) {
-  const vertices = []
+function _getAttributesInRandomPosition (max, currentSector, sectorSize, parameters) {
+  const positions = []
+  const colors = []
 
   for (let i = 0; i < max; i++) {
     // creating coordinate for the particles in random positions but confined in the current square sector
@@ -63,10 +69,21 @@ function _getVerticesInRandomPosition (max, currentSector, sectorSize) {
       }
     }
 
-    vertices.push(x, y, z)
+    positions.push(x, y, z)
+
+    const color = new THREE.Color(
+      parameters.colors[Math.floor(_getRandomNumberBeetwen(0, parameters.colors.length))]
+    )
+
+    colors.push(color.r, color.g, color.b)
   }
 
-  return new Float32Array(vertices)
+  
+
+  return {
+    positions: new Float32Array(positions),
+    colors: new Float32Array(colors)
+  }
 }
 
 function _getRandomNumberBeetwen (min, max) {
