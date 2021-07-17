@@ -1,8 +1,8 @@
 self.onmessage = messageEvent => {
   const sectorsToPopulate = messageEvent.data.sectorsToPopulate
   const sectorSize = messageEvent.data.sectorSize
-  // todo: find a way to pass parameters from starfield
-  const countMaxByType = Math.floor(60000 / 3)
+  const parameters = messageEvent.data.parameters
+  const countMaxByType = Math.floor(parameters.budget / 3)
   const starfieldsVertices = {}
 
   for (let sectorToPopulate of sectorsToPopulate) {

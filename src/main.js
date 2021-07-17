@@ -2,56 +2,46 @@ import './style.css'
 import * as THREE from 'three'
 import * as POSTPROCESSING from "postprocessing"
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js'
-import * as dat from 'dat.gui'
 
-import Grid from './world/Grid'
 import MultiverseFactory from './procedural/MultiverseFactory'
+import Grid from './world/Grid'
 import Library from './world/Library'
+import Parameters from './world/Parameters'
 
-// scene, rendering and camera basic setup
+const parameters = new Parameters()
+
 const scene = new THREE.Scene()
-
-const renderer = new THREE.WebGLRenderer({
-    powerPreference: "high-performance",
-    antialias: false,
-    stencil: false,
-    depth: false
-})
+const renderer = new THREE.WebGLRenderer(parameters.global.webGlRenderer)
 renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
-
 const camera = new THREE.PerspectiveCamera(
-    100,
+    parameters.global.camera.fov,
     window.innerWidth / window.innerHeight,
-    10,
-    1500
+    parameters.global.camera.near,
+    parameters.global.camera.far
 )
 
-// setup miscelanous values
 const controls = new PointerLockControls(camera, document.body)
 const velocity = new THREE.Vector3()
 const direction = new THREE.Vector3()
+const library = new Library()
+const grid = new Grid(parameters)
+const multiverseFactory = new MultiverseFactory(scene, library, parameters)
 
-let needRender = false
 let effectPass
+let lastSectorPosition
+let needRender = false
 let moveForward = false
 let moveBackward = false
 let moveLeft = false
 let moveRight = false
-let prevTimePerf = performance.now()
-let lastSectorPosition
 let isRenderingSectorInProgress = false
-
-const library = new Library()
-const grid = new Grid()
-const multiverseFactory = new MultiverseFactory(scene, library)
+let prevTimePerf = performance.now()
 
 library.preload()
 
 scene.add(controls.getObject())
-
-//scene.background = new THREE.Color(0x030909)
 
 const onKeyDown = (event) => {
     switch (event.code) {
@@ -98,12 +88,18 @@ const onKeyUp = (event) => {
 document.addEventListener("keydown", onKeyDown)
 document.addEventListener("keyup", onKeyUp)
 document.addEventListener("click", () => controls.lock())
+window.addEventListener("resize", () => {
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    camera.aspect = window.innerWidth / window.innerHeight
+    composer.setSize(window.innerWidth, window.innerHeight)
+    camera.updateProjectionMatrix()
+})
 
 const bloomEffect = new POSTPROCESSING.BloomEffect({
     blendFunction: POSTPROCESSING.BlendFunction.SCREEN,
     kernelSize: POSTPROCESSING.KernelSize.SMALL
 })
-bloomEffect.blendMode.opacity.value = 4
+bloomEffect.blendMode.opacity.value = parameters.postprocessing.bloomEffect.opacity
 
 // using a global variable because effects will be highly animated during the experience
 effectPass = new POSTPROCESSING.EffectPass(camera, bloomEffect)
@@ -113,12 +109,7 @@ const composer = new POSTPROCESSING.EffectComposer(renderer)
 composer.addPass(new POSTPROCESSING.RenderPass(scene, camera))
 composer.addPass(effectPass)
 
-window.addEventListener("resize", () => {
-    renderer.setSize(window.innerWidth, window.innerHeight)
-    camera.aspect = window.innerWidth / window.innerHeight
-    composer.setSize(window.innerWidth, window.innerHeight)
-    camera.updateProjectionMatrix()
-})
+
 
 
 /**
@@ -156,7 +147,8 @@ function getRandomNumberBeetwen(min, max) {
 function buildMatters(sectorsToPopulate) {
     const workerMessage = {
         sectorsToPopulate: sectorsToPopulate,
-        sectorSize: grid.parameters.sectorSize
+        sectorSize: grid.parameters.sectorSize,
+        parameters: parameters.matters.starfield
     }
 
     workers[getRandomNumberBeetwen(0, workers.length - 1)].postMessage(workerMessage)
@@ -186,17 +178,22 @@ function animate(time) {
         direction.z = Number(moveForward) - Number(moveBackward)
         direction.x = Number(moveRight) - Number(moveLeft)
 
-        if (moveForward || moveBackward) velocity.z -= direction.z * 400.0 * delta
-        if (moveLeft || moveRight) velocity.x -= direction.x * 400.0 * delta
+        if (moveForward || moveBackward) {
+            velocity.z -= direction.z * parameters.controls.velocity * delta
+        }
+
+        if (moveLeft || moveRight) {
+            velocity.x -= direction.x * parameters.controls.velocity * delta
+        }
 
         controls.moveRight(-velocity.x * delta)
         controls.moveForward(-velocity.z * delta)
     } else {
-        camera.rotation.z += 0.00015
+        camera.rotation.z += parameters.global.camera.defaultRotation
     }
     prevTimePerf = time
 
-    camera.position.z -= 0.05
+    camera.position.z -= parameters.global.camera.defaultForward
 
     requestAnimationFrame(animate)
 
@@ -218,7 +215,7 @@ function animate(time) {
         setTimeout(() => {
             renderMatters(sectorTorender, grid.queueSectors.get(sectorTorender))
             isRenderingSectorInProgress = false
-        }, 200)
+        }, parameters.global.sectorRenderTimeOut)
     }
 }
 

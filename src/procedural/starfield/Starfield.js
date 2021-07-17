@@ -1,23 +1,10 @@
 import * as THREE from 'three'
 
 export default class StarField {
-    constructor(scene, library) {
+    constructor(scene, library, parameters) {
         this.scene = scene
         this.library = library
-        this.parameters = {
-            budget: 100000,
-            material: {
-                size: {
-                    min: 4,
-                    max: 8
-                },
-                opacity: {
-                    min: 0.5,
-                    max: 1
-                }
-            }
-        }
-
+        this.parameters = parameters.matters.starfield
         this.starfield = null
     }
 

@@ -1,13 +1,10 @@
 import StarField from '../procedural/starfield/Starfield'
 
 export default class Grid {
-    constructor() {
+    constructor(parameters) {
         this.activeSectors = new Map()
         this.queueSectors = new Map()
-
-        this.parameters = {
-            sectorSize: 3000
-        }
+        this.parameters = parameters.grid
     }
 
     getCurrentSectorPosition(currentCameraPosition) {
