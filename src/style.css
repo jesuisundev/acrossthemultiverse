@@ -14,3 +14,7 @@ body {
     left: 0;
     outline: none;
 }
+
+.dg.ac {
+    z-index: 9999 !important;
+}

@@ -1,14 +1,12 @@
 import * as dat from 'dat.gui'
 
-// todo : implemet datgui control here
 export default class Parameters {
     constructor() {
         this.global = {
             webGlRenderer:{
                 powerPreference: "high-performance",
-                antialias: false,
-                stencil: false,
-                depth: false
+                antialias: true,
+                stencil: false
             },
             camera : {
                 fov: 100,
@@ -23,6 +21,12 @@ export default class Parameters {
         this.postprocessing = {
             bloomEffect: {
                 opacity: 4
+            },
+            depthOfFieldEffect: {
+                focusDistance: 0.0,
+                focalLength: 4,
+                bokehScale: 4,
+                height: 480
             }
         }
 

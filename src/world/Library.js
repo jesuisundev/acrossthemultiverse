@@ -9,7 +9,8 @@ export default class Library {
                     pool: [
                         'star1.png',
                         'star2.png',
-                        'star3.png'
+                        'star3.png',
+                        'star4.png'
                     ]
                 }
             }

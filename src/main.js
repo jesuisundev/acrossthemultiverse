@@ -7,6 +7,7 @@ import MultiverseFactory from './procedural/MultiverseFactory'
 import Grid from './world/Grid'
 import Library from './world/Library'
 import Parameters from './world/Parameters'
+import Effect from './postprocessing/Effect'
 
 const parameters = new Parameters()
 
@@ -28,8 +29,8 @@ const direction = new THREE.Vector3()
 const library = new Library()
 const grid = new Grid(parameters)
 const multiverseFactory = new MultiverseFactory(scene, library, parameters)
+const effect = new Effect(camera, parameters)
 
-let effectPass
 let lastSectorPosition
 let needRender = false
 let moveForward = false
@@ -95,22 +96,9 @@ window.addEventListener("resize", () => {
     camera.updateProjectionMatrix()
 })
 
-const bloomEffect = new POSTPROCESSING.BloomEffect({
-    blendFunction: POSTPROCESSING.BlendFunction.SCREEN,
-    kernelSize: POSTPROCESSING.KernelSize.SMALL
-})
-bloomEffect.blendMode.opacity.value = parameters.postprocessing.bloomEffect.opacity
-
-// using a global variable because effects will be highly animated during the experience
-effectPass = new POSTPROCESSING.EffectPass(camera, bloomEffect)
-effectPass.renderToScreen = true
-
 const composer = new POSTPROCESSING.EffectComposer(renderer)
 composer.addPass(new POSTPROCESSING.RenderPass(scene, camera))
-composer.addPass(effectPass)
-
-
-
+composer.addPass(effect.getEffectPass())
 
 /**
  * Web worker used for heavy work on background. Critical to not block the event loop.
