@@ -1,5 +1,6 @@
 import * as dat from 'dat.gui'
 
+// TODO : make evertyhing debugable
 export default class Parameters {
     constructor() {
         this.global = {
@@ -11,11 +12,11 @@ export default class Parameters {
             camera : {
                 fov: 100,
                 near: 10,
-                far: 1500,
+                far: 2000,
                 defaultRotation: 0.00015,
                 defaultForward: 0.05
             },
-            sectorRenderTimeOut: 200
+            sectorRenderTimeOut: 100
         }
 
         this.postprocessing = {
@@ -39,12 +40,12 @@ export default class Parameters {
         }
 
         this.grid = {
-            sectorSize: 3000
+            sectorSize: 4500
         }
 
         this.matters = {
             starfield: {
-                budget: 60000,
+                budget: 80000,
                 material: {
                     size: {
                         min: 4,
@@ -69,25 +70,6 @@ export default class Parameters {
                     "#dfe5ff",
                     "#e4e9ff",
                     "#e9ecff",
-                    "#eeefff", // artifically adding more basic white star
-                    "#eeefff",
-                    "#eeefff",
-                    "#eeefff",
-                    "#eeefff",
-                    "#eeefff",
-                    "#eeefff",
-                    "#eeefff",
-                    "#eeefff",
-                    "#eeefff",
-                    "#eeefff",
-                    "#eeefff",
-                    "#eeefff",
-                    "#eeefff",
-                    "#eeefff",
-                    "#eeefff",
-                    "#eeefff",
-                    "#eeefff",
-                    "#eeefff",
                     "#eeefff",
                     "#f3f2ff",
                     "#f8f6ff",

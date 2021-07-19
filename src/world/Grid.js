@@ -1,5 +1,3 @@
-import StarField from '../procedural/starfield/Starfield'
-
 export default class Grid {
     constructor(parameters) {
         this.activeSectors = new Map()

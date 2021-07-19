@@ -9,7 +9,7 @@ self.onmessage = messageEvent => {
 
   for (let sectorToPopulate of sectorsToPopulate) {
     const brightStarsRandomAttributes = _getAttributesInRandomPosition(
-      _getRandomNumberBeetwen(Math.floor(countMaxByType / 0.5), countMaxByType),
+      countMaxByType,
       sectorToPopulate,
       sectorSize,
       parameters
@@ -72,7 +72,7 @@ function _getAttributesInRandomPosition (max, currentSector, sectorSize, paramet
     positions.push(x, y, z)
 
     const color = new THREE.Color(
-      parameters.colors[Math.floor(_getRandomNumberBeetwen(0, parameters.colors.length))]
+      Math.random() > 0.4 ? "#eeefff" : parameters.colors[Math.floor(_getRandomNumberBeetwen(0, parameters.colors.length))]
     )
 
     colors.push(color.r, color.g, color.b)

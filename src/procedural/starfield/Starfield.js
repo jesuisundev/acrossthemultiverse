@@ -85,7 +85,6 @@ export default class StarField {
     }
 
     /**
-     * TODO
      * @param {*} max 
      * @returns 
      */
@@ -114,7 +113,6 @@ export default class StarField {
     }
 
     /**
-     * TODO
      * @param {*} texture 
      * @param {*} opacity 
      * @param {*} size 
@@ -129,6 +127,7 @@ export default class StarField {
             this.parameters.material.opacity.min,
             this.parameters.material.opacity.max
         )
+        randomMaterialTexture.magFilter = THREE.NearestFilter
 
         return new THREE.PointsMaterial({
             size: randomMaterialSize,

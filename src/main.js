@@ -23,6 +23,7 @@ const camera = new THREE.PerspectiveCamera(
     parameters.global.camera.far
 )
 
+// TODO : put everything control in a class
 const controls = new PointerLockControls(camera, document.body)
 const velocity = new THREE.Vector3()
 const direction = new THREE.Vector3()
@@ -40,7 +41,10 @@ let moveRight = false
 let isRenderingSectorInProgress = false
 let prevTimePerf = performance.now()
 
+// preload every needed files to optimise performance
 library.preload()
+// will render something only if everyting has been loaded
+window.onload = () => needRender = true
 
 scene.add(controls.getObject())
 
@@ -128,6 +132,7 @@ function getCameraCurrentPosition(camera) {
     return camera.position
 }
 
+// TODO : use three mathutils
 function getRandomNumberBeetwen(min, max) {
     return Math.round(Math.random() * (max - min) + min)
   }
@@ -152,7 +157,6 @@ function renderMatters(position, sector) {
     grid.activeSectors.set(position, matter)
 }
 
-window.onload = () => needRender = true
 
 function animate(time) {
     if (needRender) {
@@ -167,6 +171,7 @@ function animate(time) {
         direction.x = Number(moveRight) - Number(moveLeft)
 
         if (moveForward || moveBackward) {
+            // TODO : handle velocity limitation
             velocity.z -= direction.z * parameters.controls.velocity * delta
         }
 
