@@ -32,10 +32,10 @@ export default class Parameters {
         }
 
         this.controls = {
-            velocity: 400.0,
+            velocity: 600.0,
             speedLimit: {
-                up: 400.0,
-                down: -400.0
+                up: 600.0,
+                down: -600.0
             }
         }
 

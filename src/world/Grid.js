@@ -1,18 +1,25 @@
 export default class Grid {
-    constructor(parameters) {
+    constructor(camera, parameters) {
+        this.camera = camera
+        this.parameters = parameters.grid
         this.activeSectors = new Map()
         this.queueSectors = new Map()
-        this.parameters = parameters.grid
     }
 
-    getCurrentSectorPosition(currentCameraPosition) {
-        const gridChunk = this.parameters.sectorSize
-        const xCoordinate = Math.trunc(currentCameraPosition.x / gridChunk)
-        const yCoordinate = Math.trunc(currentCameraPosition.y / gridChunk)
-        const zCoordinate = Math.trunc(currentCameraPosition.z / gridChunk)
+    getCurrentSectorPosition() {
+        const currentCameraPosition = this.getCurrentCameraPosition()
+        const xCoordinate = Math.trunc(currentCameraPosition.x / this.parameters.sectorSize)
+        const yCoordinate = Math.trunc(currentCameraPosition.y / this.parameters.sectorSize)
+        const zCoordinate = Math.trunc(currentCameraPosition.z / this.parameters.sectorSize)
         const currentSectorPosition = `${xCoordinate},${yCoordinate},${zCoordinate}`
 
         return currentSectorPosition
+    }
+
+    getCurrentCameraPosition() {
+        this.camera.updateMatrixWorld()
+
+        return this.camera.position
     }
 
     getSectorsStatus(currentSector) {

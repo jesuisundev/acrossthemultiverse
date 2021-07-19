@@ -1,10 +1,10 @@
 import './style.css'
 import * as THREE from 'three'
 import * as POSTPROCESSING from "postprocessing"
-import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js'
 
 import MultiverseFactory from './procedural/MultiverseFactory'
 import Grid from './world/Grid'
+import Controls from './world/Controls'
 import Library from './world/Library'
 import Parameters from './world/Parameters'
 import Effect from './postprocessing/Effect'
@@ -23,76 +23,26 @@ const camera = new THREE.PerspectiveCamera(
     parameters.global.camera.far
 )
 
-// TODO : put everything control in a class
-const controls = new PointerLockControls(camera, document.body)
-const velocity = new THREE.Vector3()
-const direction = new THREE.Vector3()
+const controls = new Controls(camera, parameters)
 const library = new Library()
-const grid = new Grid(parameters)
+const grid = new Grid(camera, parameters)
 const multiverseFactory = new MultiverseFactory(scene, library, parameters)
 const effect = new Effect(camera, parameters)
 
 let lastSectorPosition
 let needRender = false
-let moveForward = false
-let moveBackward = false
-let moveLeft = false
-let moveRight = false
 let isRenderingSectorInProgress = false
 let prevTimePerf = performance.now()
 
-// preload every needed files to optimise performance
+// preload every needed files before showing anything
 library.preload()
-// will render something only if everyting has been loaded
 window.onload = () => needRender = true
 
-scene.add(controls.getObject())
+scene.add(controls.pointerLockControls.getObject())
 
-const onKeyDown = (event) => {
-    switch (event.code) {
-        case "ArrowUp":
-        case "KeyW":
-            moveForward = true
-            break
-        case "ArrowLeft":
-        case "KeyA":
-            moveLeft = true
-            break
-        case "ArrowDown":
-        case "KeyS":
-            moveBackward = true
-            break
-        case "ArrowRight":
-        case "KeyD":
-            moveRight = true
-            break
-    }
-}
-
-const onKeyUp = (event) => {
-    switch (event.code) {
-        case "ArrowUp":
-        case "KeyW":
-            moveForward = false
-            break
-        case "ArrowLeft":
-        case "KeyA":
-            moveLeft = false
-            break
-        case "ArrowDown":
-        case "KeyS":
-            moveBackward = false
-            break
-        case "ArrowRight":
-        case "KeyD":
-            moveRight = false
-            break
-    }
-}
-
-document.addEventListener("keydown", onKeyDown)
-document.addEventListener("keyup", onKeyUp)
-document.addEventListener("click", () => controls.lock())
+document.addEventListener("keydown", (event) => controls.onKeyDown(event))
+document.addEventListener("keyup", (event) => controls.onKeyUp(event))
+document.addEventListener("click", (event) => controls.pointerLockControls.lock())
 window.addEventListener("resize", () => {
     renderer.setSize(window.innerWidth, window.innerHeight)
     camera.aspect = window.innerWidth / window.innerHeight
@@ -127,16 +77,6 @@ function addStarfieldsToSectorsQueue(starfields) {
 
 workers.push(starfieldWorker)
 
-function getCameraCurrentPosition(camera) {
-    camera.updateMatrixWorld()
-    return camera.position
-}
-
-// TODO : use three mathutils
-function getRandomNumberBeetwen(min, max) {
-    return Math.round(Math.random() * (max - min) + min)
-  }
-
 function buildMatters(sectorsToPopulate) {
     const workerMessage = {
         sectorsToPopulate: sectorsToPopulate,
@@ -144,7 +84,7 @@ function buildMatters(sectorsToPopulate) {
         parameters: parameters.matters.starfield
     }
 
-    workers[getRandomNumberBeetwen(0, workers.length - 1)].postMessage(workerMessage)
+    workers[THREE.MathUtils.randInt(0, workers.length - 1)].postMessage(workerMessage)
 }
 
 function renderMatters(position, sector) {
@@ -157,30 +97,14 @@ function renderMatters(position, sector) {
     grid.activeSectors.set(position, matter)
 }
 
-
 function animate(time) {
     if (needRender) {
         composer.render()
     }
 
     const timePerf = performance.now()
-    if (controls.isLocked === true) {
-        const delta = (timePerf - prevTimePerf) / 1000
-
-        direction.z = Number(moveForward) - Number(moveBackward)
-        direction.x = Number(moveRight) - Number(moveLeft)
-
-        if (moveForward || moveBackward) {
-            // TODO : handle velocity limitation
-            velocity.z -= direction.z * parameters.controls.velocity * delta
-        }
-
-        if (moveLeft || moveRight) {
-            velocity.x -= direction.x * parameters.controls.velocity * delta
-        }
-
-        controls.moveRight(-velocity.x * delta)
-        controls.moveForward(-velocity.z * delta)
+    if (controls.pointerLockControls.isLocked === true) {
+        controls.handleMovements(timePerf, prevTimePerf)
     } else {
         camera.rotation.z += parameters.global.camera.defaultRotation
     }
@@ -190,7 +114,7 @@ function animate(time) {
 
     requestAnimationFrame(animate)
 
-    let currentSectorPosition = grid.getCurrentSectorPosition(getCameraCurrentPosition(camera))
+    const currentSectorPosition = grid.getCurrentSectorPosition()
 
     if (lastSectorPosition != currentSectorPosition) {
         lastSectorPosition = currentSectorPosition
