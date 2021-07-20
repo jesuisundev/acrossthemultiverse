@@ -78,13 +78,7 @@ function addStarfieldsToSectorsQueue(starfields) {
 workers.push(starfieldWorker)
 
 function buildMatters(sectorsToPopulate) {
-    const workerMessage = {
-        sectorsToPopulate: sectorsToPopulate,
-        sectorSize: grid.parameters.sectorSize,
-        parameters: parameters.matters.starfield
-    }
-
-    workers[THREE.MathUtils.randInt(0, workers.length - 1)].postMessage(workerMessage)
+    workers[THREE.MathUtils.randInt(0, workers.length - 1)].postMessage({ sectorsToPopulate, parameters })
 }
 
 function renderMatters(position, sector) {

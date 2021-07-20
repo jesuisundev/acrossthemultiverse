@@ -7,28 +7,41 @@ export default class Library {
                 starfield : {
                     baseUrl: '/procedural/starfield/texture/',
                     pool: [
-                        'star1.png',
-                        'star2.png',
-                        'star3.png',
-                        'star4.png',
-                        'star5.png'
+                        {type: 'normal', src: 'star1.png'},
+                        {type: 'normal', src: 'star2.png'},
+                        {type: 'normal', src: 'star3.png'},
+                        {type: 'normal', src: 'star4.png'},
+                        {type: 'normal', src: 'star5.png'},
+                        {type: 'bright', src: 'brightstar1.png'},
+                        {type: 'bright', src: 'brightstar2.png'}
                     ]
                 }
             }
         }
 
         this.textures = {
-            starfield : []
+            starfield : {
+                normal: [],
+                bright: []
+            }
         }
     }
 
     preload() {
-        // preload textures
+        // preload starfield textures
         for(let textureSourceType of Object.keys(this.source.textures)) {
-            for(let file of this.source.textures[textureSourceType].pool) {
-                this.textures.starfield.push(
-                    new THREE.TextureLoader().load(`${this.source.textures[textureSourceType].baseUrl}${file}`)
-                )
+            for(let textureObject of this.source.textures[textureSourceType].pool) {
+                if (textureObject.type == 'normal') {
+                    this.textures.starfield.normal.push(
+                        new THREE.TextureLoader().load(`${this.source.textures[textureSourceType].baseUrl}${textureObject.src}`)
+                    )
+                }
+                
+                if (textureObject.type == 'bright') {
+                    this.textures.starfield.bright.push(
+                        new THREE.TextureLoader().load(`${this.source.textures[textureSourceType].baseUrl}${textureObject.src}`)
+                    )
+                }
             }
         }
     }

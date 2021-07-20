@@ -7,7 +7,7 @@ export default class Parameters {
             webGlRenderer:{
                 powerPreference: "high-performance",
                 logarithmicDepthBuffer: true,
-                antialias: false,
+                antialias: true,
                 stencil: false
             },
             camera : {
@@ -17,7 +17,7 @@ export default class Parameters {
                 defaultRotation: 0.00015,
                 defaultForward: 0.05
             },
-            sectorRenderTimeOut: 100
+            sectorRenderTimeOut: 50
         }
 
         this.postprocessing = {
@@ -46,14 +46,14 @@ export default class Parameters {
 
         this.matters = {
             starfield: {
-                budget: 80000,
+                budget: 60000,
                 material: {
                     size: {
-                        min: 4,
-                        max: 8
+                        min: 6,
+                        max: 7
                     },
                     opacity: {
-                        min: 0.8,
+                        min: 1,
                         max: 1
                     }
                 },

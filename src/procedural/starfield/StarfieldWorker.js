@@ -2,29 +2,28 @@ import * as THREE from 'three'
 
 self.onmessage = messageEvent => {
   const sectorsToPopulate = messageEvent.data.sectorsToPopulate
-  const sectorSize = messageEvent.data.sectorSize
-  const parameters = messageEvent.data.parameters
-  const countMaxByType = Math.floor(parameters.budget / 3)
+  const starfieldParameters = messageEvent.data.parameters.matters.starfield
+  const sectorSize = messageEvent.data.parameters.grid.sectorSize
   const starfieldsAttributes = {}
 
   for (let sectorToPopulate of sectorsToPopulate) {
     const brightStarsRandomAttributes = _getAttributesInRandomPosition(
-      countMaxByType,
+      Math.floor(starfieldParameters.budget * 0.0001),
       sectorToPopulate,
       sectorSize,
-      parameters
+      starfieldParameters
     )
     const normalStarsRandomAttributes = _getAttributesInRandomPosition(
-      _getRandomNumberBeetwen(Math.floor(countMaxByType / 2), countMaxByType),
+      Math.floor(starfieldParameters.budget * 0.40),
       sectorToPopulate,
       sectorSize,
-      parameters
+      starfieldParameters
     )
     const paleStarsRandomAttributes = _getAttributesInRandomPosition(
-      _getRandomNumberBeetwen(Math.floor(countMaxByType / 4), countMaxByType),
+      1,
       sectorToPopulate,
       sectorSize,
-      parameters
+      starfieldParameters
     )
 
     starfieldsAttributes[sectorToPopulate] = {

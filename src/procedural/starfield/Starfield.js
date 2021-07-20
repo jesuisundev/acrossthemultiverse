@@ -9,15 +9,16 @@ export default class StarField {
     }
 
     generate(starfieldsAttributes) {
-        const brightStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.brightStarsRandomAttributes)
-        const brightStarTexture = this._getRandomStarsTexture()
-        const brightStarsmaterial = this._getRandomStarsMaterial(brightStarTexture)
-        const brightStars = new THREE.Points(brightStarsGeometry, brightStarsmaterial)
-
         const normalStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.normalStarsRandomAttributes)
-        const normalStarsTexture = this._getRandomStarsTexture()
-        const normalStarsmaterial = this._getRandomStarsMaterial(normalStarsTexture)
+        const normalStarsTexture = this._getRandomStarsTexture('normal', 1)
+        const normalStarsmaterial = this._getRandomStarsMaterial(normalStarsTexture, this.parameters.material.size.min, this.parameters.material.opacity.min)
         const normalStars = new THREE.Points(normalStarsGeometry, normalStarsmaterial)
+
+        const brightStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.brightStarsRandomAttributes)
+        const brightStarTexture = this._getRandomStarsTexture('bright')
+        
+        const brightStarsmaterial = this._getRandomStarsMaterial(brightStarTexture, THREE.MathUtils.randInt(50, 200))
+        const brightStars = new THREE.Points(brightStarsGeometry, brightStarsmaterial)
 
         const paleStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.normalStarsRandomAttributes)
         const paleStarsTexture = this._getRandomStarsTexture()
@@ -104,9 +105,10 @@ export default class StarField {
         return geometry
     }
 
-    _getRandomStarsTexture() {
-        const randomTexture = this.library.textures.starfield[
-            Math.round(this._getRandomNumberBeetwen(0, this.library.textures.starfield.length - 1))
+    _getRandomStarsTexture(type = 'normal', enforcedTextureIndex) {
+        const currentTexturesPool = this.library.textures.starfield[type]
+        const randomTexture = currentTexturesPool[
+            enforcedTextureIndex || enforcedTextureIndex === 0 ? enforcedTextureIndex : THREE.MathUtils.randInt(0, currentTexturesPool.length - 1)
         ]
 
         return randomTexture
@@ -118,18 +120,18 @@ export default class StarField {
      * @param {*} size 
      * @returns 
      */
-    _getRandomStarsMaterial(randomMaterialTexture, enforcedOpacity, enforcedSize) {
-        const randomMaterialSize = enforcedSize ? enforcedSize : this._getRandomNumberBeetwen(
+    _getRandomStarsMaterial(randomMaterialTexture, enforcedSize, enforcedOpacity) {
+        const randomMaterialSize = enforcedSize || enforcedSize === 0 ? enforcedSize : THREE.MathUtils.randInt(
             this.parameters.material.size.min,
             this.parameters.material.size.max
         )
-        const randomMaterialOpacity = enforcedOpacity ? enforcedOpacity : this._getRandomNumberBeetwen(
+        const randomMaterialOpacity = enforcedOpacity || enforcedOpacity === 0 ? enforcedOpacity : THREE.MathUtils.randInt(
             this.parameters.material.opacity.min,
             this.parameters.material.opacity.max
         )
         randomMaterialTexture.magFilter = THREE.NearestFilter
 
-        return new THREE.PointsMaterial({
+        const material = new THREE.PointsMaterial({
             size: randomMaterialSize,
             opacity: randomMaterialOpacity,
             map: randomMaterialTexture,
@@ -139,9 +141,19 @@ export default class StarField {
             blending: THREE.AdditiveBlending,
             vertexColors: true
         })
-    }
 
-    _getRandomNumberBeetwen(min, max) {
-        return Math.random() * (max - min) + min
+        material.onBeforeCompile = function ( shader ) {
+
+            shader.fragmentShader = shader.fragmentShader.replace(
+                'gl_FragColor = vec4( packNormalToRGB( normal ), opacity );',
+                [
+                'gl_FragColor = vec4( packNormalToRGB( normal ), opacity );',
+                'gl_FragColor.a *= pow( gl_FragCoord.z, 50.0 );',
+                ].join( '\n' )
+            )
+        
+        }
+
+        return material
     }
 }
