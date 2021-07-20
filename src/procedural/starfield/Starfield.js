@@ -5,25 +5,31 @@ export default class StarField {
         this.scene = scene
         this.library = library
         this.parameters = parameters.matters.starfield
+
+        this.textureSeen = []
         this.starfield = null
     }
 
     generate(starfieldsAttributes) {
-        const normalStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.normalStarsRandomAttributes)
-        const normalStarsTexture = this._getRandomStarsTexture('normal', 1)
-        const normalStarsmaterial = this._getRandomStarsMaterial(normalStarsTexture, this.parameters.material.size.min, this.parameters.material.opacity.min)
-        const normalStars = new THREE.Points(normalStarsGeometry, normalStarsmaterial)
-
         const brightStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.brightStarsRandomAttributes)
         const brightStarTexture = this._getRandomStarsTexture('bright')
-        
-        const brightStarsmaterial = this._getRandomStarsMaterial(brightStarTexture, THREE.MathUtils.randInt(50, 200))
+        const brightStarsmaterial = this._getRandomStarsMaterial(brightStarTexture, THREE.MathUtils.randInt(50, 150))
         const brightStars = new THREE.Points(brightStarsGeometry, brightStarsmaterial)
 
-        const paleStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.normalStarsRandomAttributes)
-        const paleStarsTexture = this._getRandomStarsTexture()
-        const paleStarsmaterial = this._getRandomStarsMaterial(paleStarsTexture)
-        const paleStars = new THREE.Points(paleStarsGeometry, paleStarsmaterial)
+        const firstPassStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.firstPassStarsRandomAttributes)
+        const firstPassStarsTexture = this._getRandomStarsTexture()
+        const firstPassStarsmaterial = this._getRandomStarsMaterial(firstPassStarsTexture)
+        const firstPassStars = new THREE.Points(firstPassStarsGeometry, firstPassStarsmaterial)
+
+        const secondPassStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.secondPassStarsRandomAttributes)
+        const secondPassStarsTexture = this._getRandomStarsTexture()
+        const secondPassStarsmaterial = this._getRandomStarsMaterial(secondPassStarsTexture)
+        const secondPassStars = new THREE.Points(secondPassStarsGeometry, secondPassStarsmaterial)
+
+        const thirdPassStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.thirdPassStarsRandomAttributes)
+        const thirdPassStarsTexture = this._getRandomStarsTexture()
+        const thirdPassStarsmaterial = this._getRandomStarsMaterial(thirdPassStarsTexture)
+        const thirdPassStars = new THREE.Points(thirdPassStarsGeometry, thirdPassStarsmaterial)
 
         const randomStarfield = {
             bright: {
@@ -32,17 +38,23 @@ export default class StarField {
                 material: brightStarsmaterial,
                 points: brightStars
             },
-            normal: {
-                geometry: normalStarsGeometry,
-                texture: normalStarsTexture,
-                material: normalStarsmaterial,
-                points: normalStars
+            firstPass: {
+                geometry: firstPassStarsGeometry,
+                texture: firstPassStarsTexture,
+                material: firstPassStarsmaterial,
+                points: firstPassStars
             },
-            pale: {
-                geometry: paleStarsGeometry,
-                texture: paleStarsTexture,
-                material: paleStarsmaterial,
-                points: paleStars
+            secondPass: {
+                geometry: secondPassStarsGeometry,
+                texture: secondPassStarsTexture,
+                material: secondPassStarsmaterial,
+                points: secondPassStars
+            },
+            thirdPass: {
+                geometry: thirdPassStarsGeometry,
+                texture: thirdPassStarsTexture,
+                material: thirdPassStarsmaterial,
+                points: thirdPassStars
             }
         }
 
@@ -56,17 +68,20 @@ export default class StarField {
         }
 
         this.starfield.bright.geometry.dispose()
-        this.starfield.normal.geometry.dispose()
-        this.starfield.pale.geometry.dispose()
+        this.starfield.firstPass.geometry.dispose()
+        this.starfield.secondPass.geometry.dispose()
+        this.starfield.thirdPass.geometry.dispose()
 
         this.starfield.bright.material.dispose()
-        this.starfield.normal.material.dispose()
-        this.starfield.pale.material.dispose()
+        this.starfield.firstPass.material.dispose()
+        this.starfield.secondPass.material.dispose()
+        this.starfield.thirdPass.material.dispose()
 
         this.scene.remove(
             this.starfield.bright.points,
-            this.starfield.normal.points,
-            this.starfield.pale.points
+            this.starfield.firstPass.points,
+            this.starfield.secondPass.points,
+            this.starfield.thirdPass.points
         )
 
         this.starfield = null
@@ -80,8 +95,9 @@ export default class StarField {
 
         this.scene.add(
             this.starfield.bright.points,
-            this.starfield.normal.points,
-            this.starfield.pale.points
+            this.starfield.firstPass.points,
+            this.starfield.secondPass.points,
+            this.starfield.thirdPass.points
         )
     }
 
@@ -105,11 +121,11 @@ export default class StarField {
         return geometry
     }
 
-    _getRandomStarsTexture(type = 'normal', enforcedTextureIndex) {
-        const currentTexturesPool = this.library.textures.starfield[type]
-        const randomTexture = currentTexturesPool[
-            enforcedTextureIndex || enforcedTextureIndex === 0 ? enforcedTextureIndex : THREE.MathUtils.randInt(0, currentTexturesPool.length - 1)
-        ]
+    _getRandomStarsTexture(type = 'pass') {
+        const currentTexturesPool = this.library.textures.starfield[type].filter(texture => !this.textureSeen.includes(texture))
+        const randomTexture = currentTexturesPool[THREE.MathUtils.randInt(0, currentTexturesPool.length - 1)]
+        
+        this.textureSeen.push(randomTexture)
 
         return randomTexture
     }
@@ -142,17 +158,17 @@ export default class StarField {
             vertexColors: true
         })
 
-        material.onBeforeCompile = function ( shader ) {
+        // material.onBeforeCompile = function ( shader ) {
 
-            shader.fragmentShader = shader.fragmentShader.replace(
-                'gl_FragColor = vec4( packNormalToRGB( normal ), opacity );',
-                [
-                'gl_FragColor = vec4( packNormalToRGB( normal ), opacity );',
-                'gl_FragColor.a *= pow( gl_FragCoord.z, 50.0 );',
-                ].join( '\n' )
-            )
+        //     shader.fragmentShader = shader.fragmentShader.replace(
+        //         'gl_FragColor = vec4( packfirstPassToRGB( firstPass ), opacity );',
+        //         [
+        //         'gl_FragColor = vec4( packfirstPassToRGB( firstPass ), opacity );',
+        //         'gl_FragColor.a *= pow( gl_FragCoord.z, 50.0 );',
+        //         ].join( '\n' )
+        //     )
         
-        }
+        // }
 
         return material
     }

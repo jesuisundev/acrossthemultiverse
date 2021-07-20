@@ -13,14 +13,23 @@ self.onmessage = messageEvent => {
       sectorSize,
       starfieldParameters
     )
-    const normalStarsRandomAttributes = _getAttributesInRandomPosition(
-      Math.floor(starfieldParameters.budget * 0.40),
+
+    const firstPassStarsRandomAttributes = _getAttributesInRandomPosition(
+      Math.floor(starfieldParameters.budget * 0.20),
       sectorToPopulate,
       sectorSize,
       starfieldParameters
     )
-    const paleStarsRandomAttributes = _getAttributesInRandomPosition(
-      1,
+
+    const secondPassStarsRandomAttributes = _getAttributesInRandomPosition(
+      Math.floor(starfieldParameters.budget * 0.20),
+      sectorToPopulate,
+      sectorSize,
+      starfieldParameters
+    )
+
+    const thirdPassStarsRandomAttributes = _getAttributesInRandomPosition(
+      Math.floor(starfieldParameters.budget * 0.20),
       sectorToPopulate,
       sectorSize,
       starfieldParameters
@@ -28,8 +37,9 @@ self.onmessage = messageEvent => {
 
     starfieldsAttributes[sectorToPopulate] = {
         brightStarsRandomAttributes,
-        normalStarsRandomAttributes,
-        paleStarsRandomAttributes
+        firstPassStarsRandomAttributes,
+        secondPassStarsRandomAttributes,
+        thirdPassStarsRandomAttributes
     }
   }
 

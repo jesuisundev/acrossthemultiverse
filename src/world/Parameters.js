@@ -7,7 +7,7 @@ export default class Parameters {
             webGlRenderer:{
                 powerPreference: "high-performance",
                 logarithmicDepthBuffer: true,
-                antialias: true,
+                antialias: false,
                 stencil: false
             },
             camera : {
@@ -50,7 +50,7 @@ export default class Parameters {
                 material: {
                     size: {
                         min: 6,
-                        max: 7
+                        max: 10
                     },
                     opacity: {
                         min: 1,
