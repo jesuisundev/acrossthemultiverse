@@ -6,7 +6,8 @@ export default class Parameters {
         this.global = {
             webGlRenderer:{
                 powerPreference: "high-performance",
-                antialias: true,
+                logarithmicDepthBuffer: true,
+                antialias: false,
                 stencil: false
             },
             camera : {
@@ -52,7 +53,7 @@ export default class Parameters {
                         max: 8
                     },
                     opacity: {
-                        min: 0.5,
+                        min: 0.8,
                         max: 1
                     }
                 },
