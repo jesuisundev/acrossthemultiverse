@@ -12,11 +12,9 @@ export default class Postprocessing {
     }
 
     getEffectPass() {
-        const bloomEffect = new POSTPROCESSING.BloomEffect({
-            blendFunction: POSTPROCESSING.BlendFunction.SCREEN,
-            kernelSize: POSTPROCESSING.KernelSize.SMALL
-        })
+        const bloomEffect = new POSTPROCESSING.BloomEffect(this.parameters.postprocessing.bloomEffect)
         bloomEffect.blendMode.opacity.value = this.parameters.postprocessing.bloomEffect.opacity
+        
         const depthOfFieldEffect = new POSTPROCESSING.DepthOfFieldEffect(this.camera, this.parameters.postprocessing.depthOfFieldEffect)
         
         if(this.isDebug)

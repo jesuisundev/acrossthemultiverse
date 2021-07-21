@@ -1,4 +1,5 @@
 import * as dat from 'dat.gui'
+import * as POSTPROCESSING from "postprocessing"
 
 // TODO : make evertyhing debugable
 export default class Parameters {
@@ -22,7 +23,14 @@ export default class Parameters {
 
         this.postprocessing = {
             bloomEffect: {
-                opacity: 4
+                blendFunction: POSTPROCESSING.BlendFunction.SCREEN,
+                kernelSize: POSTPROCESSING.KernelSize.HUGE,
+                luminanceThreshold: 0,
+                luminanceSmoothing: 0,
+                intensity: 2,
+                scale: 1,
+                height: 1080,
+                opacity: 1
             },
             depthOfFieldEffect: {
                 focusDistance: 0.0,
