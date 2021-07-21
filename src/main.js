@@ -17,8 +17,6 @@ renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
 
-// TODO : try to tweak .filmGauge .filmOffset, .focus or even aspect for depth
-
 // TODO : try to get vertices from a geo like TORUS https://threejs.org/docs/scenes/geometry-browser.html#TorusKnotGeometry
 // and play with it to make  more randomness in cluster
 
