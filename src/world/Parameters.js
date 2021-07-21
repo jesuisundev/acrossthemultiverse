@@ -12,7 +12,7 @@ export default class Parameters {
             camera : {
                 fov: 100,
                 near: 10,
-                far: 2000,
+                far: 20000,
                 defaultRotation: 0.00015,
                 defaultForward: 0.05
             },
@@ -39,20 +39,20 @@ export default class Parameters {
         }
 
         this.controls = {
-            velocity: 600.0,
+            velocity: 400.0,
             speedLimit: {
-                up: 600.0,
-                down: -600.0
+                up: 4000.0,
+                down: -4000.0
             }
         }
 
         this.grid = {
-            clusterSize: 4500
+            clusterSize: 45000
         }
 
         this.matters = {
             starfield: {
-                budget: 60000,
+                budget: 300000,
                 vertices: {
                     bright: {
                         min: 0.00001,
@@ -65,12 +65,24 @@ export default class Parameters {
                 },
                 material: {
                     size: {
-                        min: 6,
-                        max: 10
+                        bright: {
+                            min: 200,
+                            max: 300
+                        },
+                        pass: {
+                            min: 50,
+                            max: 60
+                        }
                     },
                     opacity: {
-                        min: 1,
-                        max: 1
+                        bright: {
+                            min: 1,
+                            max: 1
+                        },
+                        pass: {
+                            min: 1,
+                            max: 1
+                        }
                     }
                 },
                 colors: [

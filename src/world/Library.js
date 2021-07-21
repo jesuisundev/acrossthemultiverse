@@ -39,15 +39,17 @@ export default class Library {
         for(let textureSourceType of Object.keys(this.source.textures)) {
             for(let textureObject of this.source.textures[textureSourceType].pool) {
                 if (textureObject.type == 'pass') {
-                    this.textures.starfield.pass.push(
-                        new THREE.TextureLoader().load(`${this.source.textures[textureSourceType].baseUrl}${textureObject.src}`)
-                    )
+                    const currentTexture = new THREE.TextureLoader().load(`${this.source.textures[textureSourceType].baseUrl}${textureObject.src}`)
+                    currentTexture.premultiplyAlpha = true
+
+                    this.textures.starfield.pass.push(currentTexture)
                 }
                 
                 if (textureObject.type == 'bright') {
-                    this.textures.starfield.bright.push(
-                        new THREE.TextureLoader().load(`${this.source.textures[textureSourceType].baseUrl}${textureObject.src}`)
-                    )
+                    const currentTexture = new THREE.TextureLoader().load(`${this.source.textures[textureSourceType].baseUrl}${textureObject.src}`)
+                    currentTexture.premultiplyAlpha = true
+
+                    this.textures.starfield.bright.push(currentTexture)
                 }
             }
         }

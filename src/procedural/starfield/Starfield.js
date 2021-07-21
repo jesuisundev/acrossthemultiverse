@@ -13,7 +13,10 @@ export default class StarField {
     generate(starfieldsAttributes) {
         const brightStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.brightStarsRandomAttributes)
         const brightStarTexture = this._getRandomStarsTexture('bright')
-        const brightStarsmaterial = this._getRandomStarsMaterial(brightStarTexture, THREE.MathUtils.randInt(50, 150))
+        const brightStarsmaterial = this._getRandomStarsMaterial(brightStarTexture, THREE.MathUtils.randInt(
+            this.parameters.material.size.bright.min,
+            this.parameters.material.size.bright.max
+        ))
         const brightStars = new THREE.Points(brightStarsGeometry, brightStarsmaterial)
 
         const firstPassStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.firstPassStarsRandomAttributes)
@@ -138,12 +141,12 @@ export default class StarField {
      */
     _getRandomStarsMaterial(randomMaterialTexture, enforcedSize, enforcedOpacity) {
         const randomMaterialSize = enforcedSize || enforcedSize === 0 ? enforcedSize : THREE.MathUtils.randInt(
-            this.parameters.material.size.min,
-            this.parameters.material.size.max
+            this.parameters.material.size.pass.min,
+            this.parameters.material.size.pass.max
         )
         const randomMaterialOpacity = enforcedOpacity || enforcedOpacity === 0 ? enforcedOpacity : THREE.MathUtils.randInt(
-            this.parameters.material.opacity.min,
-            this.parameters.material.opacity.max
+            this.parameters.material.opacity.pass.min,
+            this.parameters.material.opacity.pass.max
         )
         randomMaterialTexture.magFilter = THREE.NearestFilter
 
