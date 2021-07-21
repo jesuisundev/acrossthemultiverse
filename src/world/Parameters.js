@@ -39,7 +39,7 @@ export default class Parameters {
         }
 
         this.controls = {
-            velocity: 400.0,
+            velocity: 800.0,
             speedLimit: {
                 up: 4000.0,
                 down: -4000.0
@@ -66,8 +66,8 @@ export default class Parameters {
                 material: {
                     size: {
                         bright: {
-                            min: 200,
-                            max: 300
+                            min: 300,
+                            max: 400
                         },
                         pass: {
                             min: 50,
