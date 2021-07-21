@@ -8,28 +8,48 @@ self.onmessage = messageEvent => {
 
   for (let sectorToPopulate of sectorsToPopulate) {
     const brightStarsRandomAttributes = _getAttributesInRandomPosition(
-      Math.floor(starfieldParameters.budget * 0.0001),
+      Math.floor(
+        starfieldParameters.budget * THREE.MathUtils.randFloat(
+          starfieldParameters.vertices.bright.min,
+          starfieldParameters.vertices.bright.max
+        )
+      ),
       sectorToPopulate,
       sectorSize,
       starfieldParameters
     )
 
     const firstPassStarsRandomAttributes = _getAttributesInRandomPosition(
-      Math.floor(starfieldParameters.budget * 0.20),
+      Math.floor(
+        starfieldParameters.budget * THREE.MathUtils.randFloat(
+          starfieldParameters.vertices.pass.min,
+          starfieldParameters.vertices.pass.max
+        )
+      ),
       sectorToPopulate,
       sectorSize,
       starfieldParameters
     )
 
     const secondPassStarsRandomAttributes = _getAttributesInRandomPosition(
-      Math.floor(starfieldParameters.budget * 0.20),
+      Math.floor(
+        starfieldParameters.budget * THREE.MathUtils.randFloat(
+          starfieldParameters.vertices.pass.min,
+          starfieldParameters.vertices.pass.max
+        )
+      ),
       sectorToPopulate,
       sectorSize,
       starfieldParameters
     )
 
     const thirdPassStarsRandomAttributes = _getAttributesInRandomPosition(
-      Math.floor(starfieldParameters.budget * 0.20),
+      Math.floor(
+        starfieldParameters.budget * THREE.MathUtils.randFloat(
+          starfieldParameters.vertices.pass.min,
+          starfieldParameters.vertices.pass.max
+        )
+      ),
       sectorToPopulate,
       sectorSize,
       starfieldParameters

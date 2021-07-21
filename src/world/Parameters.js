@@ -55,6 +55,16 @@ export default class Parameters {
         this.matters = {
             starfield: {
                 budget: 60000,
+                vertices: {
+                    bright: {
+                        min: 0.00001,
+                        max: 0.0001
+                    },
+                    pass: {
+                        min: 0.10,
+                        max: 0.20
+                    }
+                },
                 material: {
                     size: {
                         min: 6,
