@@ -16,6 +16,17 @@ const renderer = new THREE.WebGLRenderer(parameters.global.webGlRenderer)
 renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
+
+// TODO : try to tweak .filmGauge .filmOffset, .focus or even aspect for depth
+
+// TODO : try to get vertices from a geo like TORUS https://threejs.org/docs/scenes/geometry-browser.html#TorusKnotGeometry
+// and play with it to make  more randomness in cluster
+
+// TODO : build globular cluster : https://earthsky.org/space/definition-what-is-a-globular-cluster/
+
+// TODO : build other types of starfield
+
+// TODO : build nebula
 const camera = new THREE.PerspectiveCamera(
     parameters.global.camera.fov,
     window.innerWidth / window.innerHeight,
@@ -29,9 +40,9 @@ const grid = new Grid(camera, parameters)
 const multiverseFactory = new MultiverseFactory(scene, library, parameters)
 const effect = new Effect(camera, parameters)
 
-let lastSectorPosition
+let lastClusterPosition
 let needRender = false
-let isRenderingSectorInProgress = false
+let isRenderingClusterInProgress = false
 let prevTimePerf = performance.now()
 
 // preload every needed files before showing anything
@@ -64,31 +75,31 @@ if (!window.Worker) {
 const workers = []
 
 const starfieldWorker = new Worker(new URL('./procedural/starfield/StarfieldWorker.js', import.meta.url))
-starfieldWorker.onmessage = messageEvent => addStarfieldsToSectorsQueue(messageEvent.data)
+starfieldWorker.onmessage = messageEvent => addStarfieldsToClustersQueue(messageEvent.data)
 
-function addStarfieldsToSectorsQueue(starfields) {
-    for (let sectorToPopulate of Object.keys(starfields)) {
-        grid.queueSectors.set(sectorToPopulate, {
+function addStarfieldsToClustersQueue(starfields) {
+    for (let clusterToPopulate of Object.keys(starfields)) {
+        grid.queueClusters.set(clusterToPopulate, {
             type: 'starfield',
-            data: starfields[sectorToPopulate]
+            data: starfields[clusterToPopulate]
         })
     }
 }
 
 workers.push(starfieldWorker)
 
-function buildMatters(sectorsToPopulate) {
-    workers[THREE.MathUtils.randInt(0, workers.length - 1)].postMessage({ sectorsToPopulate, parameters })
+function buildMatters(clustersToPopulate) {
+    workers[THREE.MathUtils.randInt(0, workers.length - 1)].postMessage({ clustersToPopulate, parameters })
 }
 
-function renderMatters(position, sector) {
-    const matter = multiverseFactory.createMatter(sector.type)
+function renderMatters(position, cluster) {
+    const matter = multiverseFactory.createMatter(cluster.type)
 
-    matter.generate(sector.data)
+    matter.generate(cluster.data)
     matter.show()
 
-    grid.queueSectors.delete(position)
-    grid.activeSectors.set(position, matter)
+    grid.queueClusters.delete(position)
+    grid.activeClusters.set(position, matter)
 }
 
 function animate(time) {
@@ -108,25 +119,25 @@ function animate(time) {
 
     requestAnimationFrame(animate)
 
-    const currentSectorPosition = grid.getCurrentSectorPosition()
+    const currentClusterPosition = grid.getCurrentClusterPosition()
 
-    if (lastSectorPosition != currentSectorPosition) {
-        lastSectorPosition = currentSectorPosition
+    if (lastClusterPosition != currentClusterPosition) {
+        lastClusterPosition = currentClusterPosition
 
-        // disposing of useless sectors to free memory
-        const sectorsStatus = grid.getSectorsStatus(currentSectorPosition)
-        grid.disposeSectors(sectorsStatus.sectorsToDispose)
+        // disposing of useless clusters to free memory
+        const clustersStatus = grid.getClustersStatus(currentClusterPosition)
+        grid.disposeClusters(clustersStatus.clustersToDispose)
 
-        buildMatters(sectorsStatus.sectorsToPopulate)
-    } else if (grid.queueSectors.size && !isRenderingSectorInProgress) {
-        isRenderingSectorInProgress = true
+        buildMatters(clustersStatus.clustersToPopulate)
+    } else if (grid.queueClusters.size && !isRenderingClusterInProgress) {
+        isRenderingClusterInProgress = true
 
-        const sectorTorender = grid.queueSectors.keys().next().value
+        const clusterTorender = grid.queueClusters.keys().next().value
 
         setTimeout(() => {
-            renderMatters(sectorTorender, grid.queueSectors.get(sectorTorender))
-            isRenderingSectorInProgress = false
-        }, parameters.global.sectorRenderTimeOut)
+            renderMatters(clusterTorender, grid.queueClusters.get(clusterTorender))
+            isRenderingClusterInProgress = false
+        }, parameters.global.clusterRenderTimeOut)
     }
 }
 

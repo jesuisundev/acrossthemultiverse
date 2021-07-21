@@ -1,12 +1,12 @@
 import * as THREE from 'three'
 
 self.onmessage = messageEvent => {
-  const sectorsToPopulate = messageEvent.data.sectorsToPopulate
+  const clustersToPopulate = messageEvent.data.clustersToPopulate
   const starfieldParameters = messageEvent.data.parameters.matters.starfield
-  const sectorSize = messageEvent.data.parameters.grid.sectorSize
+  const clusterSize = messageEvent.data.parameters.grid.clusterSize
   const starfieldsAttributes = {}
 
-  for (let sectorToPopulate of sectorsToPopulate) {
+  for (let clusterToPopulate of clustersToPopulate) {
     const brightStarsRandomAttributes = _getAttributesInRandomPosition(
       Math.floor(
         starfieldParameters.budget * THREE.MathUtils.randFloat(
@@ -14,8 +14,8 @@ self.onmessage = messageEvent => {
           starfieldParameters.vertices.bright.max
         )
       ),
-      sectorToPopulate,
-      sectorSize,
+      clusterToPopulate,
+      clusterSize,
       starfieldParameters
     )
 
@@ -26,8 +26,8 @@ self.onmessage = messageEvent => {
           starfieldParameters.vertices.pass.max
         )
       ),
-      sectorToPopulate,
-      sectorSize,
+      clusterToPopulate,
+      clusterSize,
       starfieldParameters
     )
 
@@ -38,8 +38,8 @@ self.onmessage = messageEvent => {
           starfieldParameters.vertices.pass.max
         )
       ),
-      sectorToPopulate,
-      sectorSize,
+      clusterToPopulate,
+      clusterSize,
       starfieldParameters
     )
 
@@ -50,12 +50,12 @@ self.onmessage = messageEvent => {
           starfieldParameters.vertices.pass.max
         )
       ),
-      sectorToPopulate,
-      sectorSize,
+      clusterToPopulate,
+      clusterSize,
       starfieldParameters
     )
 
-    starfieldsAttributes[sectorToPopulate] = {
+    starfieldsAttributes[clusterToPopulate] = {
         brightStarsRandomAttributes,
         firstPassStarsRandomAttributes,
         secondPassStarsRandomAttributes,
@@ -66,35 +66,35 @@ self.onmessage = messageEvent => {
   self.postMessage(starfieldsAttributes)
 }
 
-function _getAttributesInRandomPosition (max, currentSector, sectorSize, parameters) {
+function _getAttributesInRandomPosition (max, currentCluster, clusterSize, parameters) {
   const positions = []
   const colors = []
 
   for (let i = 0; i < max; i++) {
-    // creating coordinate for the particles in random positions but confined in the current square sector
-    let x = sectorSize * Math.random() - (sectorSize / 2)
-    let y = sectorSize * Math.random() - (sectorSize / 2)
-    let z = sectorSize * Math.random() - (sectorSize / 2)
+    // creating coordinate for the particles in random positions but confined in the current square cluster
+    let x = clusterSize * Math.random() - (clusterSize / 2)
+    let y = clusterSize * Math.random() - (clusterSize / 2)
+    let z = clusterSize * Math.random() - (clusterSize / 2)
 
-    // we dont need to tweak coordinates on the origin sector
-    if (currentSector != '0,0,0') {
-      const arrayCurrentSector = currentSector.split(',')
+    // we dont need to tweak coordinates on the origin cluster
+    if (currentCluster != '0,0,0') {
+      const arrayCurrentCluster = currentCluster.split(',')
 
-      // handling x axis (right and left) sectors population
-      const xCurrentSector = parseInt(arrayCurrentSector[0])
+      // handling x axis (right and left) clusters population
+      const xCurrentCluster = parseInt(arrayCurrentCluster[0])
 
-      if (xCurrentSector != 0) {
-          x = sectorSize * (Math.random() + xCurrentSector) - (sectorSize / 2)
+      if (xCurrentCluster != 0) {
+          x = clusterSize * (Math.random() + xCurrentCluster) - (clusterSize / 2)
       }
 
       // since we're not handling vertical movement at the moment
       // we dont need to handle the y axis
 
-      // handling z axis (forward and backward) sectors population
-      const zCurrentSector = parseInt(arrayCurrentSector[2])
+      // handling z axis (forward and backward) clusters population
+      const zCurrentCluster = parseInt(arrayCurrentCluster[2])
 
-      if (zCurrentSector != 0) {
-        z = sectorSize * (Math.random() + zCurrentSector) - (sectorSize / 2)
+      if (zCurrentCluster != 0) {
+        z = clusterSize * (Math.random() + zCurrentCluster) - (clusterSize / 2)
       }
     }
 

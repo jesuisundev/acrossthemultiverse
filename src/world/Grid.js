@@ -2,18 +2,18 @@ export default class Grid {
     constructor(camera, parameters) {
         this.camera = camera
         this.parameters = parameters.grid
-        this.activeSectors = new Map()
-        this.queueSectors = new Map()
+        this.activeClusters = new Map()
+        this.queueClusters = new Map()
     }
 
-    getCurrentSectorPosition() {
+    getCurrentClusterPosition() {
         const currentCameraPosition = this.getCurrentCameraPosition()
-        const xCoordinate = Math.trunc(currentCameraPosition.x / this.parameters.sectorSize)
-        const yCoordinate = Math.trunc(currentCameraPosition.y / this.parameters.sectorSize)
-        const zCoordinate = Math.trunc(currentCameraPosition.z / this.parameters.sectorSize)
-        const currentSectorPosition = `${xCoordinate},${yCoordinate},${zCoordinate}`
+        const xCoordinate = Math.trunc(currentCameraPosition.x / this.parameters.clusterSize)
+        const yCoordinate = Math.trunc(currentCameraPosition.y / this.parameters.clusterSize)
+        const zCoordinate = Math.trunc(currentCameraPosition.z / this.parameters.clusterSize)
+        const currentClusterPosition = `${xCoordinate},${yCoordinate},${zCoordinate}`
 
-        return currentSectorPosition
+        return currentClusterPosition
     }
 
     getCurrentCameraPosition() {
@@ -22,98 +22,98 @@ export default class Grid {
         return this.camera.position
     }
 
-    getSectorsStatus(currentSector) {
-        const sectorsNeighbour = this.getNeighbourSectors(currentSector)
-        const sectorsToPopulate = this._getEmptySectorsToPopulate(sectorsNeighbour)
-        const sectorsToDispose = this._getPopulatedSectorsToDispose(sectorsNeighbour, currentSector)
+    getClustersStatus(currentCluster) {
+        const clustersNeighbour = this.getNeighbourClusters(currentCluster)
+        const clustersToPopulate = this._getEmptyClustersToPopulate(clustersNeighbour)
+        const clustersToDispose = this._getPopulatedClustersToDispose(clustersNeighbour, currentCluster)
 
         return {
-            sectorsNeighbour,
-            sectorsToPopulate,
-            sectorsToDispose
+            clustersNeighbour,
+            clustersToPopulate,
+            clustersToDispose
         }
     }
 
-    getNeighbourSectors(currentSector) {
-        const neighbourSectors = [currentSector]
-        const currentSectorArray = currentSector.split(',')
-        const x = currentSectorArray[0]
-        const y = currentSectorArray[1]
-        const z = currentSectorArray[2]
+    getNeighbourClusters(currentCluster) {
+        const neighbourClusters = [currentCluster]
+        const currentClusterArray = currentCluster.split(',')
+        const x = currentClusterArray[0]
+        const y = currentClusterArray[1]
+        const z = currentClusterArray[2]
 
         // forward
-        neighbourSectors.push(
+        neighbourClusters.push(
             `${x},${y},${Number(z) - 1}`
         )
 
         // backward
-        neighbourSectors.push(
+        neighbourClusters.push(
             `${x},${y},${Number(z) + 1}`
         )
 
         // right
-        neighbourSectors.push(
+        neighbourClusters.push(
             `${Number(x) + 1},${y},${z}`
         )
 
         // left
-        neighbourSectors.push(
+        neighbourClusters.push(
             `${Number(x) - 1},${y},${z}`
         )
 
         // forward right
-        neighbourSectors.push(
+        neighbourClusters.push(
             `${Number(x) + 1},${y},${Number(z) - 1}`
         )
 
         // forward left
-        neighbourSectors.push(
+        neighbourClusters.push(
             `${Number(x) - 1},${y},${Number(z) - 1}`
         )
 
         // backward right
-        neighbourSectors.push(
+        neighbourClusters.push(
             `${Number(x) + 1},${y},${Number(z) + 1}`
         )
 
         // backward left
-        neighbourSectors.push(
+        neighbourClusters.push(
             `${Number(x) - 1},${y},${Number(z) + 1}`
         )
 
-        return neighbourSectors
+        return neighbourClusters
     }
 
-    disposeSectors(sectorsToDispose) {
-        for (let sectorToDispose of sectorsToDispose) {
-            let matter = this.activeSectors.get(sectorToDispose)
+    disposeClusters(clustersToDispose) {
+        for (let clusterToDispose of clustersToDispose) {
+            let matter = this.activeClusters.get(clusterToDispose)
 
             matter.dispose()
             matter = null
 
-            this.activeSectors.delete(sectorToDispose)
+            this.activeClusters.delete(clusterToDispose)
         }
     }
 
-    _getEmptySectorsToPopulate(neighbourSectors) {
-        const emptySectorsToPopulate = []
+    _getEmptyClustersToPopulate(neighbourClusters) {
+        const emptyClustersToPopulate = []
 
-        for (let neighbourSector of neighbourSectors) {
-            if (!this.activeSectors.has(neighbourSector))
-                emptySectorsToPopulate.push(neighbourSector)
+        for (let neighbourCluster of neighbourClusters) {
+            if (!this.activeClusters.has(neighbourCluster))
+                emptyClustersToPopulate.push(neighbourCluster)
         }
 
-        return emptySectorsToPopulate
+        return emptyClustersToPopulate
     }
 
-    _getPopulatedSectorsToDispose(neighbourSectors, currentSector) {
-        const populatedSectorsToDispose = []
+    _getPopulatedClustersToDispose(neighbourClusters, currentCluster) {
+        const populatedClustersToDispose = []
 
-        for (let activeSectorKey of this.activeSectors.keys()) {
-            if (currentSector != activeSectorKey && !neighbourSectors.includes(activeSectorKey))
-                populatedSectorsToDispose.push(activeSectorKey)
+        for (let activeClusterKey of this.activeClusters.keys()) {
+            if (currentCluster != activeClusterKey && !neighbourClusters.includes(activeClusterKey))
+                populatedClustersToDispose.push(activeClusterKey)
         }
 
-        return populatedSectorsToDispose
+        return populatedClustersToDispose
     }
 }

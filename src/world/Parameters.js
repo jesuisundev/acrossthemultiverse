@@ -1,7 +1,5 @@
-import * as dat from 'dat.gui'
 import * as POSTPROCESSING from "postprocessing"
 
-// TODO : make evertyhing debugable
 export default class Parameters {
     constructor() {
         this.global = {
@@ -18,7 +16,7 @@ export default class Parameters {
                 defaultRotation: 0.00015,
                 defaultForward: 0.05
             },
-            sectorRenderTimeOut: 50
+            clusterRenderTimeOut: 50
         }
 
         this.postprocessing = {
@@ -49,7 +47,7 @@ export default class Parameters {
         }
 
         this.grid = {
-            sectorSize: 4500
+            clusterSize: 4500
         }
 
         this.matters = {
