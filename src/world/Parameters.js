@@ -14,7 +14,7 @@ export default class Parameters {
                 near: 10,
                 far: 20000,
                 defaultRotation: 0.00015,
-                defaultForward: 0.05
+                defaultForward: 0.5
             },
             clusterRenderTimeOut: 50
         }
@@ -32,7 +32,7 @@ export default class Parameters {
             },
             depthOfFieldEffect: {
                 focusDistance: 0.0,
-                focalLength: 4,
+                focalLength: 5,
                 bokehScale: 4,
                 height: 480
             }

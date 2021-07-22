@@ -1,3 +1,7 @@
+// this is just not working the way i want it to
+// might try to make it work later
+// or can you ?
+
 import * as THREE from 'three'
 import { Curves } from "three/examples/jsm/curves/CurveExtras"
 
@@ -71,9 +75,9 @@ function _getAttributesInRandomPosition (max, currentCluster, clusterSize, param
   const positions = []
   const colors = []
 
-  const CurvesGrannyKnot = new Curves.GrannyKnot()
-  const geometry = new THREE.TubeGeometry(CurvesGrannyKnot, 5000, 12, 5, true);
-  geometry.scale(200, 200, 200)
+  const CurvesGrannyKnot = new Curves.CinquefoilKnot()
+  const geometry = new THREE.TubeGeometry(CurvesGrannyKnot, 1000, 12, 2, true);
+  geometry.scale(100, 100, 100)
 
   if (currentCluster != '0,0,0') {
     let xTranslation = 0
@@ -82,16 +86,18 @@ function _getAttributesInRandomPosition (max, currentCluster, clusterSize, param
 
     const xCurrentCluster = parseInt(arrayCurrentCluster[0])
     if (xCurrentCluster != 0) {
-      xTranslation = Math.floor(clusterSize / 4) * xCurrentCluster
+      //xTranslation = Math.floor(clusterSize / 4) * xCurrentCluster
+      xTranslation = clusterSize * xCurrentCluster - (clusterSize / 2)
     }
 
     const zCurrentCluster = parseInt(arrayCurrentCluster[2])
     if (zCurrentCluster != 0) {
-      zTranslation = Math.floor(clusterSize / 4) * zCurrentCluster
+      //zTranslation = Math.floor(clusterSize / 4) * zCurrentCluster
+      zTranslation = clusterSize * zCurrentCluster - (clusterSize / 2)
     }
 
-    console.log('xTranslation', xTranslation)
-    console.log('zTranslation', zTranslation)
+    //console.log('xTranslation', xTranslation)
+    //console.log('zTranslation', zTranslation)
 
     geometry.translate(xTranslation, 0, zTranslation)
   }

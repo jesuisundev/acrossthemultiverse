@@ -17,10 +17,7 @@ renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
 
-// TODO : try to get vertices from a geo like TORUS https://threejs.org/docs/scenes/geometry-browser.html#TorusKnotGeometry
-// and play with it to make  more randomness in cluster
-
-// TODO : build globular cluster : https://earthsky.org/space/definition-what-is-a-globular-cluster/
+// TODO : IN PROGRESS : build globular cluster : https://earthsky.org/space/definition-what-is-a-globular-cluster/
 
 // TODO : build other types of starfield
 
