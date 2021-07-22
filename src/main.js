@@ -19,9 +19,9 @@ document.body.appendChild(renderer.domElement)
 
 // TODO : IN PROGRESS : build globular cluster : https://earthsky.org/space/definition-what-is-a-globular-cluster/
 
-// TODO : build other types of starfield
+// TODO : build stellar association starfield
 
-// TODO : build nebula
+// TODO : build nebula starfield
 const camera = new THREE.PerspectiveCamera(
     parameters.global.camera.fov,
     window.innerWidth / window.innerHeight,
@@ -69,8 +69,8 @@ if (!window.Worker) {
 
 const workers = []
 
-const starfieldWorker = new Worker(new URL('./procedural/starfield/StarfieldWorker.js', import.meta.url))
-starfieldWorker.onmessage = messageEvent => addStarfieldsToClustersQueue(messageEvent.data)
+const openStarfieldWorker = new Worker(new URL('./procedural/starfield/GlobularStarfieldWorker.js', import.meta.url))
+openStarfieldWorker.onmessage = messageEvent => addStarfieldsToClustersQueue(messageEvent.data)
 
 function addStarfieldsToClustersQueue(starfields) {
     for (let clusterToPopulate of Object.keys(starfields)) {
@@ -81,7 +81,7 @@ function addStarfieldsToClustersQueue(starfields) {
     }
 }
 
-workers.push(starfieldWorker)
+workers.push(openStarfieldWorker)
 
 function buildMatters(clustersToPopulate) {
     workers[THREE.MathUtils.randInt(0, workers.length - 1)].postMessage({ clustersToPopulate, parameters })

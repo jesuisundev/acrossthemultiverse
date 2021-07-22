@@ -161,6 +161,8 @@ export default class StarField {
             vertexColors: true
         })
 
+        // todo: maybe a way to set material https://github.com/brunosimon/experiment-rick-and-morty-tribute/blob/master/src/Experience/Particles.js
+
         return material
     }
 }

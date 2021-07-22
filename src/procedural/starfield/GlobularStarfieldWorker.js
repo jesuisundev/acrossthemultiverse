@@ -76,20 +76,18 @@ function _getAttributesInRandomPosition (max, currentCluster, clusterSize, param
     spherical.phi = Math.random() * Math.PI
     spherical.theta = Math.random() * Math.PI * 2
     spherical.radius = Math.random() * (clusterSize / 2)
+
     const currentVector = new THREE.Vector3().setFromSpherical(spherical)
-    
 
     // we dont need to tweak coordinates on the origin cluster
     if (currentCluster != '0,0,0') {
-        // TODO : handle others coordinate
-      return
       const arrayCurrentCluster = currentCluster.split(',')
 
       // handling x axis (right and left) clusters population
       const xCurrentCluster = parseInt(arrayCurrentCluster[0])
 
       if (xCurrentCluster != 0) {
-        currentVector.x = currentVector.x * xCurrentCluster
+        currentVector.x = currentVector.x + (clusterSize * xCurrentCluster)
       }
 
       // since we're not handling vertical movement at the moment
@@ -99,8 +97,11 @@ function _getAttributesInRandomPosition (max, currentCluster, clusterSize, param
       const zCurrentCluster = parseInt(arrayCurrentCluster[2])
 
       if (zCurrentCluster != 0) {
-        currentVector.z = currentVector.z * zCurrentCluster
+        currentVector.z = currentVector.z + (clusterSize * zCurrentCluster)
       }
+
+      // TODO - ROTATION DOEST NOT WORK FIX IT
+      //currentVector.applyAxisAngle(new THREE.Vector3(1,0,0), Math.PI / 1.2)
     }
 
     positions.push(currentVector.x, currentVector.y, currentVector.z)
@@ -111,8 +112,6 @@ function _getAttributesInRandomPosition (max, currentCluster, clusterSize, param
 
     colors.push(color.r, color.g, color.b)
   }
-
-  
 
   return {
     positions: new Float32Array(positions),

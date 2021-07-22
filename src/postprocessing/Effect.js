@@ -17,6 +17,8 @@ export default class Postprocessing {
         
         const depthOfFieldEffect = new POSTPROCESSING.DepthOfFieldEffect(this.camera, this.parameters.postprocessing.depthOfFieldEffect)
         
+        //const brightnessContrastEffect = new POSTPROCESSING.BrightnessContrastEffect(this.parameters.postprocessing.brightnessContrastEffect)
+
         if(this.isDebug)
             this._enableDebug(bloomEffect, depthOfFieldEffect)
 
@@ -27,12 +29,18 @@ export default class Postprocessing {
     }
 
     _enableDebug(bloomEffect, depthOfFieldEffect) {
-        const folderPostprocessing = this.gui.addFolder('Postprocessing');
+        const folderPostprocessingBloom = this.gui.addFolder('Postprocessing - Bloom')
+        folderPostprocessingBloom.add(this.parameters.postprocessing.bloomEffect, 'opacity').onChange(value => bloomEffect.blendMode.opacity.value = value)
+        
+        const folderPostprocessingDepth = this.gui.addFolder('Postprocessing - Depth')
+        folderPostprocessingDepth.add(this.parameters.postprocessing.depthOfFieldEffect, 'focusDistance').onChange(value => depthOfFieldEffect.circleOfConfusionMaterial.uniforms.focusDistance.value = value)
+        folderPostprocessingDepth.add(this.parameters.postprocessing.depthOfFieldEffect, 'focalLength').onChange(value => depthOfFieldEffect.circleOfConfusionMaterial.uniforms.focalLength.value = value)
+        folderPostprocessingDepth.add(this.parameters.postprocessing.depthOfFieldEffect, 'bokehScale').onChange(value => depthOfFieldEffect.bokehScale = value)
+        folderPostprocessingDepth.add(this.parameters.postprocessing.depthOfFieldEffect, 'height').onChange(value => depthOfFieldEffect.resolution.height = value)
 
-        folderPostprocessing.add(this.parameters.postprocessing.bloomEffect, 'opacity').onChange(value => bloomEffect.blendMode.opacity.value = value)
-        folderPostprocessing.add(this.parameters.postprocessing.depthOfFieldEffect, 'focusDistance').onChange(value => depthOfFieldEffect.circleOfConfusionMaterial.uniforms.focusDistance.value = value)
-        folderPostprocessing.add(this.parameters.postprocessing.depthOfFieldEffect, 'focalLength').onChange(value => depthOfFieldEffect.circleOfConfusionMaterial.uniforms.focalLength.value = value)
-        folderPostprocessing.add(this.parameters.postprocessing.depthOfFieldEffect, 'bokehScale').onChange(value => depthOfFieldEffect.bokehScale = value)
-        folderPostprocessing.add(this.parameters.postprocessing.depthOfFieldEffect, 'height').onChange(value => depthOfFieldEffect.resolution.height = value)
+        // const folderPostprocessingBrightness = this.gui.addFolder('Postprocessing - Brightness')
+        // folderPostprocessingBrightness.add(this.parameters.postprocessing.brightnessContrastEffect, 'brightness').onChange(value => brightnessContrastEffect.uniforms.get("brightness").value = value)
+        // folderPostprocessingBrightness.add(this.parameters.postprocessing.brightnessContrastEffect, 'constrast').onChange(value => brightnessContrastEffect.uniforms.get("contrast").value = value)
+        // folderPostprocessingBrightness.add(this.parameters.postprocessing.brightnessContrastEffect, 'opacity').onChange(value => brightnessContrastEffect.blendMode.opacity.value = value)
     }
 }

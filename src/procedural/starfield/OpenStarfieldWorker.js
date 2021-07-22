@@ -70,6 +70,7 @@ function _getAttributesInRandomPosition (max, currentCluster, clusterSize, param
   const positions = []
   const colors = []
 
+  // creating coordinate for the particles in random positions but confined in the current square cluster
   for (let i = 0; i < max; i++) {
     // creating coordinate for the particles in random positions but confined in the current square cluster
     let x = clusterSize * Math.random() - (clusterSize / 2)
@@ -106,8 +107,6 @@ function _getAttributesInRandomPosition (max, currentCluster, clusterSize, param
 
     colors.push(color.r, color.g, color.b)
   }
-
-  
 
   return {
     positions: new Float32Array(positions),

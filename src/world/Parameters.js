@@ -35,6 +35,12 @@ export default class Parameters {
                 focalLength: 5,
                 bokehScale: 4,
                 height: 480
+            },
+            brightnessContrastEffect: {
+                blendFunction: POSTPROCESSING.BlendFunction.OVERLAY,
+                brightness: 1,
+                constrast: 1,
+                opacity: 1
             }
         }
 
