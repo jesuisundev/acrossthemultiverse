@@ -14,7 +14,6 @@ self.onmessage = messageEvent => {
           starfieldParameters.vertices.bright.max
         )
       ),
-      clusterToPopulate,
       clusterSize,
       starfieldParameters
     )
@@ -26,7 +25,6 @@ self.onmessage = messageEvent => {
           starfieldParameters.vertices.pass.max
         )
       ),
-      clusterToPopulate,
       clusterSize,
       starfieldParameters
     )
@@ -38,7 +36,6 @@ self.onmessage = messageEvent => {
           starfieldParameters.vertices.pass.max
         )
       ),
-      clusterToPopulate,
       clusterSize,
       starfieldParameters
     )
@@ -50,7 +47,6 @@ self.onmessage = messageEvent => {
           starfieldParameters.vertices.pass.max
         )
       ),
-      clusterToPopulate,
       clusterSize,
       starfieldParameters
     )
@@ -66,38 +62,15 @@ self.onmessage = messageEvent => {
   self.postMessage(starfieldsAttributes)
 }
 
-function _getAttributesInRandomPosition (max, currentCluster, clusterSize, parameters) {
+function _getAttributesInRandomPosition (max, clusterSize, parameters) {
   const positions = []
   const colors = []
 
-  // creating coordinate for the particles in random positions but confined in the current square cluster
   for (let i = 0; i < max; i++) {
     // creating coordinate for the particles in random positions but confined in the current square cluster
     let x = clusterSize * Math.random() - (clusterSize / 2)
     let y = clusterSize * Math.random() - (clusterSize / 2)
     let z = clusterSize * Math.random() - (clusterSize / 2)
-
-    // we dont need to tweak coordinates on the origin cluster
-    if (currentCluster != '0,0,0') {
-      const arrayCurrentCluster = currentCluster.split(',')
-
-      // handling x axis (right and left) clusters population
-      const xCurrentCluster = parseInt(arrayCurrentCluster[0])
-
-      if (xCurrentCluster != 0) {
-          x = clusterSize * (Math.random() + xCurrentCluster) - (clusterSize / 2)
-      }
-
-      // since we're not handling vertical movement at the moment
-      // we dont need to handle the y axis
-
-      // handling z axis (forward and backward) clusters population
-      const zCurrentCluster = parseInt(arrayCurrentCluster[2])
-
-      if (zCurrentCluster != 0) {
-        z = clusterSize * (Math.random() + zCurrentCluster) - (clusterSize / 2)
-      }
-    }
 
     positions.push(x, y, z)
 

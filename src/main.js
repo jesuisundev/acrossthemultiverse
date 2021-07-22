@@ -17,8 +17,7 @@ renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
 
-// TODO : IN PROGRESS : build globular cluster : https://earthsky.org/space/definition-what-is-a-globular-cluster/
-
+// TODO : Try to make spline starfield works
 // TODO : build stellar association starfield
 
 // TODO : build nebula starfield
@@ -69,8 +68,10 @@ if (!window.Worker) {
 
 const workers = []
 
-const openStarfieldWorker = new Worker(new URL('./procedural/starfield/GlobularStarfieldWorker.js', import.meta.url))
+const openStarfieldWorker = new Worker(new URL('./procedural/starfield/OpenStarfieldWorker.js', import.meta.url))
+const globularStarfieldWorker = new Worker(new URL('./procedural/starfield/GlobularStarfieldWorker.js', import.meta.url))
 openStarfieldWorker.onmessage = messageEvent => addStarfieldsToClustersQueue(messageEvent.data)
+globularStarfieldWorker.onmessage = messageEvent => addStarfieldsToClustersQueue(messageEvent.data)
 
 function addStarfieldsToClustersQueue(starfields) {
     for (let clusterToPopulate of Object.keys(starfields)) {
@@ -81,16 +82,23 @@ function addStarfieldsToClustersQueue(starfields) {
     }
 }
 
-workers.push(openStarfieldWorker)
+workers.push(openStarfieldWorker, globularStarfieldWorker)
 
 function buildMatters(clustersToPopulate) {
-    workers[THREE.MathUtils.randInt(0, workers.length - 1)].postMessage({ clustersToPopulate, parameters })
+    for(let clusterToPopulate of clustersToPopulate) {
+        const randomWorkerIndex = clusterToPopulate === '0,0,0' ? 0 : THREE.MathUtils.randInt(0, workers.length - 1)
+
+        workers[randomWorkerIndex].postMessage({
+            clustersToPopulate: [clusterToPopulate],
+            parameters: parameters
+        })
+    }
 }
 
 function renderMatters(position, cluster) {
     const matter = multiverseFactory.createMatter(cluster.type)
 
-    matter.generate(cluster.data)
+    matter.generate(cluster.data, position)
     matter.show()
 
     grid.queueClusters.delete(position)

@@ -4,35 +4,49 @@ export default class StarField {
     constructor(scene, library, parameters) {
         this.scene = scene
         this.library = library
-        this.parameters = parameters.matters.starfield
+        this.parameters = parameters
 
         this.textureSeen = []
         this.starfield = null
     }
 
-    generate(starfieldsAttributes) {
+    generate(starfieldsAttributes, position) {
+        const currentCoordinateVector = this._getCoordinateVectorByPosition(position)
+
         const brightStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.brightStarsRandomAttributes)
         const brightStarTexture = this._getRandomStarsTexture('bright')
         const brightStarsmaterial = this._getRandomStarsMaterial(brightStarTexture, THREE.MathUtils.randInt(
-            this.parameters.material.size.bright.min,
-            this.parameters.material.size.bright.max
+            this.parameters.matters.starfield.material.size.bright.min,
+            this.parameters.matters.starfield.material.size.bright.max
         ))
         const brightStars = new THREE.Points(brightStarsGeometry, brightStarsmaterial)
+
+        brightStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
+        brightStars.rotateX(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
 
         const firstPassStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.firstPassStarsRandomAttributes)
         const firstPassStarsTexture = this._getRandomStarsTexture()
         const firstPassStarsmaterial = this._getRandomStarsMaterial(firstPassStarsTexture)
         const firstPassStars = new THREE.Points(firstPassStarsGeometry, firstPassStarsmaterial)
 
+        firstPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
+        firstPassStarsGeometry.rotateX(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
+
         const secondPassStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.secondPassStarsRandomAttributes)
         const secondPassStarsTexture = this._getRandomStarsTexture()
         const secondPassStarsmaterial = this._getRandomStarsMaterial(secondPassStarsTexture)
         const secondPassStars = new THREE.Points(secondPassStarsGeometry, secondPassStarsmaterial)
 
+        secondPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
+        secondPassStars.rotateX(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
+
         const thirdPassStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.thirdPassStarsRandomAttributes)
         const thirdPassStarsTexture = this._getRandomStarsTexture()
         const thirdPassStarsmaterial = this._getRandomStarsMaterial(thirdPassStarsTexture)
         const thirdPassStars = new THREE.Points(thirdPassStarsGeometry, thirdPassStarsmaterial)
+
+        thirdPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
+        thirdPassStars.rotateX(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
 
         const randomStarfield = {
             bright: {
@@ -104,6 +118,34 @@ export default class StarField {
         )
     }
 
+    _getCoordinateVectorByPosition(position) {
+        let coordinateVector = new THREE.Vector3(0, 0, 0)
+
+        //we dont need to tweak coordinates on the origin cluster
+        if (position != '0,0,0') {
+          const arrayCurrentCluster = position.split(',')
+
+          // handling x axis (right and left) clusters population
+          const xCurrentCluster = parseInt(arrayCurrentCluster[0])
+
+          if (xCurrentCluster != 0) {
+            coordinateVector.x = (this.parameters.grid.clusterSize) * xCurrentCluster
+          }
+
+          // since we're not handling vertical movement at the moment
+          // we dont need to handle the y axis
+
+          // handling z axis (forward and backward) clusters population
+          const zCurrentCluster = parseInt(arrayCurrentCluster[2])
+
+          if (zCurrentCluster != 0) {
+            coordinateVector.z = (this.parameters.grid.clusterSize) * zCurrentCluster
+          }
+        }
+
+        return coordinateVector
+    }
+
     /**
      * @param {*} max 
      * @returns 
@@ -141,12 +183,12 @@ export default class StarField {
      */
     _getRandomStarsMaterial(randomMaterialTexture, enforcedSize, enforcedOpacity) {
         const randomMaterialSize = enforcedSize || enforcedSize === 0 ? enforcedSize : THREE.MathUtils.randInt(
-            this.parameters.material.size.pass.min,
-            this.parameters.material.size.pass.max
+            this.parameters.matters.starfield.material.size.pass.min,
+            this.parameters.matters.starfield.material.size.pass.max
         )
         const randomMaterialOpacity = enforcedOpacity || enforcedOpacity === 0 ? enforcedOpacity : THREE.MathUtils.randInt(
-            this.parameters.material.opacity.pass.min,
-            this.parameters.material.opacity.pass.max
+            this.parameters.matters.starfield.material.opacity.pass.min,
+            this.parameters.matters.starfield.material.opacity.pass.max
         )
         randomMaterialTexture.magFilter = THREE.NearestFilter
 
