@@ -20,6 +20,15 @@ export default class Library {
                         {type: 'bright', src: 'brightstar3.png'},
                         {type: 'bright', src: 'brightstar4.png'}
                     ]
+                },
+                nebula : {
+                    baseUrl: '/procedural/nebula/texture/',
+                    pool: [
+                        {type: 'cloud', src: 'cloud1.png'},
+                        {type: 'cloud', src: 'cloud2.png'},
+                        {type: 'cloud', src: 'cloud3.png'},
+                        {type: 'cloud', src: 'cloud4.png'}
+                    ]
                 }
             }
         }
@@ -28,27 +37,22 @@ export default class Library {
             starfield : {
                 pass: [],
                 bright: []
+            },
+            nebula : {
+                cloud: []
             }
         }
     }
 
     preload() {
-        // preload starfield textures
         for(let textureSourceType of Object.keys(this.source.textures)) {
             for(let textureObject of this.source.textures[textureSourceType].pool) {
-                if (textureObject.type == 'pass') {
-                    const currentTexture = new THREE.TextureLoader().load(`${this.source.textures[textureSourceType].baseUrl}${textureObject.src}`)
-                    currentTexture.premultiplyAlpha = true
+                const currentTexture = new THREE.TextureLoader().load(
+                    `${this.source.textures[textureSourceType].baseUrl}${textureObject.src}`
+                )
+                currentTexture.premultiplyAlpha = true
 
-                    this.textures.starfield.pass.push(currentTexture)
-                }
-                
-                if (textureObject.type == 'bright') {
-                    const currentTexture = new THREE.TextureLoader().load(`${this.source.textures[textureSourceType].baseUrl}${textureObject.src}`)
-                    currentTexture.premultiplyAlpha = true
-
-                    this.textures.starfield.bright.push(currentTexture)
-                }
+                this.textures[textureSourceType][textureObject.type].push(currentTexture)
             }
         }
     }

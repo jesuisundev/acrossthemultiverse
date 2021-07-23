@@ -17,7 +17,6 @@ renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
 
-// TODO : build stellar association starfield - WIP
 // TODO : build nebula starfield - WIP
 // TODO : build black hole singularity
 const camera = new THREE.PerspectiveCamera(
@@ -67,25 +66,28 @@ if (!window.Worker) {
 
 const workers = []
 
+// starfields
 const openStarfieldWorker = new Worker(new URL('./procedural/starfield/OpenStarfieldWorker.js', import.meta.url))
 const globularStarfieldWorker = new Worker(new URL('./procedural/starfield/GlobularStarfieldWorker.js', import.meta.url))
-const stellarAssociationsStarfieldWorker = new Worker(new URL('./procedural/starfield/StellarAssociationsStarfieldWorker.js', import.meta.url))
 
-openStarfieldWorker.onmessage = messageEvent => addStarfieldsToClustersQueue(messageEvent.data)
-globularStarfieldWorker.onmessage = messageEvent => addStarfieldsToClustersQueue(messageEvent.data)
-stellarAssociationsStarfieldWorker.onmessage = messageEvent => addStarfieldsToClustersQueue(messageEvent.data)
+// nebula
+const nebulaWorker = new Worker(new URL('./procedural/nebula/NebulaWorker.js', import.meta.url))
 
-function addStarfieldsToClustersQueue(starfields) {
-    for (let clusterToPopulate of Object.keys(starfields)) {
+openStarfieldWorker.onmessage = messageEvent => addMattersToClustersQueue(messageEvent.data)
+globularStarfieldWorker.onmessage = messageEvent => addMattersToClustersQueue(messageEvent.data)
+
+nebulaWorker.onmessage = messageEvent => addMattersToClustersQueue(messageEvent.data, 'nebula')
+
+function addMattersToClustersQueue(matters, type = 'starfield') {
+    for (let clusterToPopulate of Object.keys(matters)) {
         grid.queueClusters.set(clusterToPopulate, {
-            type: 'starfield',
-            data: starfields[clusterToPopulate]
+            type: type,
+            data: matters[clusterToPopulate]
         })
     }
 }
 
-//workers.push(openStarfieldWorker, globularStarfieldWorker, stellarAssociationsStarfieldWorker)
-workers.push(stellarAssociationsStarfieldWorker)
+workers.push(openStarfieldWorker, globularStarfieldWorker, nebulaWorker)
 
 function buildMatters(clustersToPopulate) {
     for(let clusterToPopulate of clustersToPopulate) {
