@@ -17,10 +17,9 @@ renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
 
-// TODO : Try to make spline starfield works
-// TODO : build stellar association starfield
-
-// TODO : build nebula starfield
+// TODO : build stellar association starfield - WIP
+// TODO : build nebula starfield - WIP
+// TODO : build black hole singularity
 const camera = new THREE.PerspectiveCamera(
     parameters.global.camera.fov,
     window.innerWidth / window.innerHeight,
@@ -70,8 +69,11 @@ const workers = []
 
 const openStarfieldWorker = new Worker(new URL('./procedural/starfield/OpenStarfieldWorker.js', import.meta.url))
 const globularStarfieldWorker = new Worker(new URL('./procedural/starfield/GlobularStarfieldWorker.js', import.meta.url))
+const stellarAssociationsStarfieldWorker = new Worker(new URL('./procedural/starfield/StellarAssociationsStarfieldWorker.js', import.meta.url))
+
 openStarfieldWorker.onmessage = messageEvent => addStarfieldsToClustersQueue(messageEvent.data)
 globularStarfieldWorker.onmessage = messageEvent => addStarfieldsToClustersQueue(messageEvent.data)
+stellarAssociationsStarfieldWorker.onmessage = messageEvent => addStarfieldsToClustersQueue(messageEvent.data)
 
 function addStarfieldsToClustersQueue(starfields) {
     for (let clusterToPopulate of Object.keys(starfields)) {
@@ -82,7 +84,8 @@ function addStarfieldsToClustersQueue(starfields) {
     }
 }
 
-workers.push(openStarfieldWorker, globularStarfieldWorker)
+//workers.push(openStarfieldWorker, globularStarfieldWorker, stellarAssociationsStarfieldWorker)
+workers.push(stellarAssociationsStarfieldWorker)
 
 function buildMatters(clustersToPopulate) {
     for(let clusterToPopulate of clustersToPopulate) {

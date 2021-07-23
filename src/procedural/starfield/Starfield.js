@@ -23,6 +23,7 @@ export default class StarField {
 
         brightStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
         brightStars.rotateX(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
+        brightStars.rotateZ(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
 
         const firstPassStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.firstPassStarsRandomAttributes)
         const firstPassStarsTexture = this._getRandomStarsTexture()
@@ -31,6 +32,7 @@ export default class StarField {
 
         firstPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
         firstPassStarsGeometry.rotateX(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
+        firstPassStarsGeometry.rotateZ(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
 
         const secondPassStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.secondPassStarsRandomAttributes)
         const secondPassStarsTexture = this._getRandomStarsTexture()
@@ -39,6 +41,7 @@ export default class StarField {
 
         secondPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
         secondPassStars.rotateX(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
+        secondPassStars.rotateZ(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
 
         const thirdPassStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.thirdPassStarsRandomAttributes)
         const thirdPassStarsTexture = this._getRandomStarsTexture()
@@ -47,6 +50,7 @@ export default class StarField {
 
         thirdPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
         thirdPassStars.rotateX(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
+        thirdPassStars.rotateZ(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
 
         const randomStarfield = {
             bright: {
@@ -110,6 +114,7 @@ export default class StarField {
             return
         }
 
+        // TODO - Make bright become cloud for nebula ? or keep stellar and make new nebula ?
         this.scene.add(
             this.starfield.bright.points,
             this.starfield.firstPass.points,
