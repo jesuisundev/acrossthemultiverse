@@ -75,7 +75,7 @@ function _getAttributesInRandomPosition (max, clusterSize, parameters) {
     positions.push(x, y, z)
 
     const color = new THREE.Color(
-      Math.random() > 0.4 ? "#eeefff" : parameters.colors[THREE.MathUtils.randInt(0, parameters.colors.length)]
+      Math.random() > 0.4 ? "#eeefff" : parameters.colors[THREE.MathUtils.randInt(0, parameters.colors.length - 1)]
     )
 
     colors.push(color.r, color.g, color.b)

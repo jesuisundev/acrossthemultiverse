@@ -42,8 +42,11 @@ export default class Nebula {
         firstPassStarsGeometry.rotateZ(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
 
         const secondPassStarsGeometry = this._getGeometry(nebulasAttributes.secondPassStarsRandomAttributes)
-        const secondPassStarsTexture = this._getRandomTexture()
-        const secondPassStarsmaterial = this._getMaterial(secondPassStarsTexture)
+        const secondPassStarsTexture = this._getRandomTexture('bright')
+        const secondPassStarsmaterial = this._getMaterial(secondPassStarsTexture, THREE.MathUtils.randInt(
+            this.parameters.matters.nebula.material.size.bright.min,
+            this.parameters.matters.nebula.material.size.bright.max
+        ))
         const secondPassStars = new THREE.Points(secondPassStarsGeometry, secondPassStarsmaterial)
 
         secondPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
@@ -180,14 +183,14 @@ export default class Nebula {
     _getRandomTexture(type = 'pass') {
         let currentTexturesPool
 
-        if(type === 'pass') {
+        if(type === 'pass' || type === 'bright') {
             currentTexturesPool = this.library.textures.starfield[type].filter(texture => !this.textureSeen.includes(texture))
         } else {
             currentTexturesPool = this.library.textures.nebula[type].filter(texture => !this.textureSeen.includes(texture))
         }
 
         const randomTexture = currentTexturesPool[THREE.MathUtils.randInt(0, currentTexturesPool.length - 1)]
-        
+
         this.textureSeen.push(randomTexture)
 
         return randomTexture

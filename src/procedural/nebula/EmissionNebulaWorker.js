@@ -1,8 +1,6 @@
 import * as THREE from 'three'
 import { Curves } from "three/examples/jsm/curves/CurveExtras"
 
-// GOAL : https://icdn.digitaltrends.com/image/digitaltrends/the-rosy-glow-of-a-cosmic-seagull.jpg
-
 self.onmessage = messageEvent => {
   const clustersToPopulate = messageEvent.data.clustersToPopulate
   const nebulaParameters = messageEvent.data.parameters.matters.nebula
@@ -25,12 +23,8 @@ self.onmessage = messageEvent => {
       clusterSize
     )
 
-    // bright stars following shaped gaz
-    const secondPassStarsRandomAttributes = _getShapeAttributesInRandomPosition(
-      nebulaParameters,
-      gazRandomAttributes.positions,
-      gazRandomAttributes.colors
-    )
+    // bright stars
+    const secondPassStarsRandomAttributes = _getAttributesInRandomPosition(nebulaParameters)
 
     // random stars shaped not following gaz
     const thirdPassStarsRandomAttributes = _getShapeAttributesInRandomPosition(nebulaParameters)
@@ -49,8 +43,11 @@ self.onmessage = messageEvent => {
 function _getShapeAttributesInRandomPosition (parameters, enforcedPositions, enforcedColors) {
   const positions = enforcedPositions ? enforcedPositions : []
   const colors = enforcedColors ? enforcedColors : []
+
+  // black magic
   const randomNess = 4
   const radius = 5
+  const colorRadius = 1200
 
   const geometry = new THREE.TubeGeometry(
     new Curves.CinquefoilKnot(),
@@ -63,30 +60,28 @@ function _getShapeAttributesInRandomPosition (parameters, enforcedPositions, enf
   geometry.scale(80, 80, 80)
   
   if(!positions.length || !colors.length) {
-    const colorInside = new THREE.Color("#FF0000")
-    const colorOutside = new THREE.Color("#FFFF00")
+    const colorInside = new THREE.Color(parameters.colors[THREE.MathUtils.randInt(0, parameters.colors.length - 1)])
+    const colorOutside = new THREE.Color(parameters.colors[THREE.MathUtils.randInt(0, parameters.colors.length - 1)])
     const mixedColor = colorInside.clone()
 
     for (let i = 0; i < geometry.attributes.position.array.length - 1; i++) {
       const i3 = i * 3
+      
+      mixedColor.lerp(colorOutside, i / (geometry.attributes.position.array.length * colorRadius))
 
       if(geometry.attributes.position.array[i3]){
-        // TODO FIX THIS
-        mixedColor.lerp(colorOutside, i / geometry.attributes.position.array.length)
         positions[i3] = geometry.attributes.position.array[i3] * (Math.random() * randomNess + radius)
         colors[i3] = mixedColor.r
       }
 
-      if(geometry.attributes.position.array[i3+1]) {
-        mixedColor.lerp(colorOutside, i / geometry.attributes.position.array.length)
-        positions[i3 + 1] = geometry.attributes.position.array[i3+1] * (Math.random() * randomNess + radius)
+      if(geometry.attributes.position.array[i3 + 1]) {
+        positions[i3 + 1] = geometry.attributes.position.array[i3 + 1] * (Math.random() * randomNess + radius)
         colors[i3 + 1] = mixedColor.g
       }
         
 
-      if(geometry.attributes.position.array[i3+2]) {
-        mixedColor.lerp(colorOutside, i / geometry.attributes.position.array.length)
-        positions[i3 + 2] = geometry.attributes.position.array[i3+2] * (Math.random() * randomNess + radius)
+      if(geometry.attributes.position.array[i3 + 2]) {
+        positions[i3 + 2] = geometry.attributes.position.array[i3 + 2] * (Math.random() * randomNess + radius)
         colors[i3 + 2] = mixedColor.b
       }
     }
@@ -111,7 +106,7 @@ function _getAttributesInRandomPosition (parameters, max, clusterSize) {
     positions.push(x, y, z)
 
     const color = new THREE.Color(
-      parameters.colors[THREE.MathUtils.randInt(0, parameters.colors.length)]
+      Math.random() > 0.4 ? "#eeefff" : parameters.colors[THREE.MathUtils.randInt(0, parameters.colors.length - 1)]
     )
 
     colors.push(color.r, color.g, color.b)

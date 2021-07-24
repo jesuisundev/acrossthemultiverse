@@ -12,7 +12,7 @@ export default class Parameters {
             camera : {
                 fov: 100,
                 near: 100,
-                far: 200000,
+                far: 20000,
                 defaultRotation: 0.00015,
                 defaultForward: 0.5
             },
@@ -147,16 +147,16 @@ export default class Parameters {
                 budget: 300000,
                 vertices: {
                     bright: {
-                        min: 0.00001,
-                        max: 0.00001
+                        min: 0.001,
+                        max: 0.01
                     },
                     pass: {
                         min: 0.10,
                         max: 0.20
                     },
                     emission: {
-                        tubularSegments: 200,
-                        radius: 1,
+                        tubularSegments: 100,
+                        radius: 10,
                         radiusSegments: 50,
                         closed: true
                     }
@@ -170,15 +170,23 @@ export default class Parameters {
                         pass: {
                             min: 50,
                             max: 60
-                        }
+                        },
+                        bright: {
+                            min: 500,
+                            max: 600
+                        },
                     },
                     opacity: {
                         cloud: {
-                            min: 0.1,
-                            max: 0.2
+                            min: 0.01,
+                            max: 0.02
                         },
                         pass: {
                             min: 1,
+                            max: 1
+                        },
+                        bright: {
+                            min: 0.1,
                             max: 1
                         }
                     }

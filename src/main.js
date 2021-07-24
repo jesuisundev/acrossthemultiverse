@@ -17,7 +17,6 @@ renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
 
-// TODO : build emission nebula starfield - WIP
 // TODO : build others nebula
 // TODO : build black hole singularity
 const camera = new THREE.PerspectiveCamera(
