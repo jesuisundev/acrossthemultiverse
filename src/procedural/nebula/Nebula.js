@@ -13,7 +13,7 @@ export default class Nebula {
     generate(nebulasAttributes, position) {
         const currentCoordinateVector = this._getCoordinateVectorByPosition(position)
 
-        const cloudGeometry = this._getGeometry(nebulasAttributes.cloudRandomAttributes)
+        const cloudGeometry = this._getGeometry(nebulasAttributes.gazRandomAttributes)
         const cloudTexture = this._getRandomTexture('cloud')
         const cloudMaterial = this._getMaterial(
             cloudTexture,

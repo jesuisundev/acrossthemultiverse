@@ -25,8 +25,7 @@ export default class Library {
                     baseUrl: '/procedural/nebula/texture/',
                     pool: [
                         {type: 'cloud', src: 'cloud1.png'},
-                        {type: 'cloud', src: 'cloud2.png'},
-                        {type: 'cloud', src: 'cloud3.png'}
+                        {type: 'cloud', src: 'cloud2.png'}
                     ]
                 }
             }
