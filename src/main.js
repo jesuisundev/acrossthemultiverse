@@ -17,7 +17,7 @@ renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
 
-// TODO : build others nebula
+// TODO : planetary nebula - WIP
 // TODO : build black hole singularity
 const camera = new THREE.PerspectiveCamera(
     parameters.global.camera.fov,
@@ -72,11 +72,13 @@ const globularStarfieldWorker = new Worker(new URL('./procedural/starfield/Globu
 
 // nebula
 const emissionNebulaWorker = new Worker(new URL('./procedural/nebula/EmissionNebulaWorker.js', import.meta.url))
+const planetaryNebulaWorker = new Worker(new URL('./procedural/nebula/PlanetaryNebulaWorker.js', import.meta.url))
 
 openStarfieldWorker.onmessage = messageEvent => addMattersToClustersQueue(messageEvent.data)
 globularStarfieldWorker.onmessage = messageEvent => addMattersToClustersQueue(messageEvent.data)
 
 emissionNebulaWorker.onmessage = messageEvent => addMattersToClustersQueue(messageEvent.data, 'nebula')
+planetaryNebulaWorker.onmessage = messageEvent => addMattersToClustersQueue(messageEvent.data, 'nebula')
 
 function addMattersToClustersQueue(matters, type = 'starfield') {
     for (let clusterToPopulate of Object.keys(matters)) {
@@ -87,7 +89,7 @@ function addMattersToClustersQueue(matters, type = 'starfield') {
     }
 }
 
-workers.push(openStarfieldWorker, globularStarfieldWorker, emissionNebulaWorker)
+workers.push(planetaryNebulaWorker)
 
 function buildMatters(clustersToPopulate) {
     for(let clusterToPopulate of clustersToPopulate) {

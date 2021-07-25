@@ -12,7 +12,7 @@ export default class Parameters {
             camera : {
                 fov: 100,
                 near: 100,
-                far: 20000,
+                far: 200000,
                 defaultRotation: 0.00015,
                 defaultForward: 0.5
             },
@@ -147,10 +147,14 @@ export default class Parameters {
                 budget: 300000,
                 vertices: {
                     bright: {
-                        min: 0.001,
-                        max: 0.01
+                        min: 0.00002,
+                        max: 0.0002
                     },
                     pass: {
+                        min: 0.10,
+                        max: 0.20
+                    },
+                    cloud: {
                         min: 0.10,
                         max: 0.20
                     },
@@ -165,7 +169,7 @@ export default class Parameters {
                     size: {
                         cloud: {
                             min: 2000,
-                            max: 3000
+                            max: 2000
                         },
                         pass: {
                             min: 50,
@@ -178,7 +182,7 @@ export default class Parameters {
                     },
                     opacity: {
                         cloud: {
-                            min: 0.01,
+                            min: 0.02,
                             max: 0.02
                         },
                         pass: {
@@ -192,18 +196,11 @@ export default class Parameters {
                     }
                 },
                 colors: [
-                    "#CB4C61",
-                    "#F89ACC",
-                    "#225074",
-                    "#6F2408",
-                    "#00626F",
-                    "#150A12",
-                    "#FEFBFF",
-                    "#7D7F42",
-                    "#B3DAFE",
-                    "#BF4215",
-                    "#57ECF9",
-                    "#60FA04"
+                    "#0000FF",
+                    "#FF0000",
+                    "#00FF00",
+                    "#FFFF00",
+                    "#FF00FF"
                 ]
             }
         }

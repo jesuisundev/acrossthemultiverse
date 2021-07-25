@@ -24,13 +24,24 @@ self.onmessage = messageEvent => {
     )
 
     // bright stars
-    const secondPassStarsRandomAttributes = _getAttributesInRandomPosition(nebulaParameters)
+    const secondPassStarsRandomAttributes = _getAttributesInRandomPosition(
+      nebulaParameters,
+      Math.floor(
+        nebulaParameters.budget * THREE.MathUtils.randFloat(
+          nebulaParameters.vertices.bright.min,
+          nebulaParameters.vertices.bright.max
+        )
+      ),
+      clusterSize,
+      false,
+      gazRandomAttributes.colors
+    )
 
     // random stars shaped not following gaz
     const thirdPassStarsRandomAttributes = _getShapeAttributesInRandomPosition(nebulaParameters)
 
     nebulasAttributes[clusterToPopulate] = {
-      gazRandomAttributes,
+        gazRandomAttributes,
         firstPassStarsRandomAttributes,
         secondPassStarsRandomAttributes,
         thirdPassStarsRandomAttributes
@@ -60,14 +71,13 @@ function _getShapeAttributesInRandomPosition (parameters, enforcedPositions, enf
   geometry.scale(80, 80, 80)
   
   if(!positions.length || !colors.length) {
-    const colorInside = new THREE.Color(parameters.colors[THREE.MathUtils.randInt(0, parameters.colors.length - 1)])
-    const colorOutside = new THREE.Color(parameters.colors[THREE.MathUtils.randInt(0, parameters.colors.length - 1)])
-    const mixedColor = colorInside.clone()
+    const chosenColors = _getTwoDifferentColors(parameters.colors)
+    const mixedColor = chosenColors.colorIn.clone()
 
     for (let i = 0; i < geometry.attributes.position.array.length - 1; i++) {
       const i3 = i * 3
       
-      mixedColor.lerp(colorOutside, i / (geometry.attributes.position.array.length * colorRadius))
+      mixedColor.lerp(chosenColors.colorOut, i / (geometry.attributes.position.array.length * colorRadius))
 
       if(geometry.attributes.position.array[i3]){
         positions[i3] = geometry.attributes.position.array[i3] * (Math.random() * randomNess + radius)
@@ -93,23 +103,35 @@ function _getShapeAttributesInRandomPosition (parameters, enforcedPositions, enf
   }
 }
 
-function _getAttributesInRandomPosition (parameters, max, clusterSize) {
-  const positions = []
-  const colors = []
+function _getTwoDifferentColors(pool) {
+  const poolCloned = JSON.parse(JSON.stringify(pool))
+  const colorIn = new THREE.Color(poolCloned.splice(THREE.MathUtils.randInt(0, poolCloned.length - 1), 1).shift())
+  const colorOut = new THREE.Color(poolCloned.splice(THREE.MathUtils.randInt(0, poolCloned.length - 1), 1).shift())
+
+  return { colorIn, colorOut }
+}
+
+function _getAttributesInRandomPosition (parameters, max, clusterSize, enforcedPositions = false, enforcedColors = false) {
+  const positions = enforcedPositions ? enforcedPositions : []
+  const colors = enforcedColors ? enforcedColors : []
 
   for (let i = 0; i < max; i++) {
     // creating coordinate for the particles in random positions but confined in the current square cluster
-    let x = clusterSize * Math.random() - (clusterSize / 2)
-    let y = clusterSize * Math.random() - (clusterSize / 2)
-    let z = clusterSize * Math.random() - (clusterSize / 2)
+    if(!enforcedPositions) {
+      let x = clusterSize * Math.random() - (clusterSize / 2)
+      let y = clusterSize * Math.random() - (clusterSize / 2)
+      let z = clusterSize * Math.random() - (clusterSize / 2)
 
-    positions.push(x, y, z)
+      positions.push(x, y, z)
+    }
 
-    const color = new THREE.Color(
-      Math.random() > 0.4 ? "#eeefff" : parameters.colors[THREE.MathUtils.randInt(0, parameters.colors.length - 1)]
-    )
+    if(!enforcedColors) {
+      const color = new THREE.Color(
+        Math.random() > 0.2 ? "#eeefff" : parameters.colors[THREE.MathUtils.randInt(0, parameters.colors.length - 1)]
+      )
 
-    colors.push(color.r, color.g, color.b)
+      colors.push(color.r, color.g, color.b)
+    }
   }
 
   return {
