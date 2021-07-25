@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-
+// TODO - Add blur/distorsion/softness to cloud to make it ore "gazy"
 export default class Nebula {
     constructor(scene, library, parameters) {
         this.scene = scene
@@ -10,7 +10,10 @@ export default class Nebula {
         this.nebula = null
     }
 
-    generate(nebulasAttributes, position) {
+    generate(nebulasAttributes, position, subtype = null) {
+        if(subtype === 'remnant')
+            return this._generateRemnant(nebulasAttributes, position)
+
         const currentCoordinateVector = this._getCoordinateVectorByPosition(position)
 
         const cloudGeometry = this._getGeometry(nebulasAttributes.gazRandomAttributes)
@@ -61,6 +64,86 @@ export default class Nebula {
         thirdPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
         thirdPassStars.rotateX(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
         thirdPassStars.rotateZ(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
+
+        const randomNebula = {
+            cloud: {
+                geometry: cloudGeometry,
+                texture: cloudTexture,
+                material: cloudMaterial,
+                points: cloud
+            },
+            firstPass: {
+                geometry: firstPassStarsGeometry,
+                texture: firstPassStarsTexture,
+                material: firstPassStarsmaterial,
+                points: firstPassStars
+            },
+            secondPass: {
+                geometry: secondPassStarsGeometry,
+                texture: secondPassStarsTexture,
+                material: secondPassStarsmaterial,
+                points: secondPassStars
+            },
+            thirdPass: {
+                geometry: thirdPassStarsGeometry,
+                texture: thirdPassStarsTexture,
+                material: thirdPassStarsmaterial,
+                points: thirdPassStars
+            }
+        }
+
+        this.nebula = randomNebula
+    }
+
+    _generateRemnant(nebulasAttributes, position) {
+        const currentCoordinateVector = this._getCoordinateVectorByPosition(position)
+
+        const cloudGeometry = this._getGeometry(nebulasAttributes.gazRandomAttributes)
+        const cloudTexture = this._getRandomTexture('cloud')
+        const cloudMaterial = this._getMaterial(
+            cloudTexture,
+            THREE.MathUtils.randInt(
+                this.parameters.matters.nebula.material.size.cloud.min,
+                this.parameters.matters.nebula.material.size.cloud.max
+            ),
+            THREE.MathUtils.randInt(
+                this.parameters.matters.nebula.material.opacity.cloud.min,
+                this.parameters.matters.nebula.material.opacity.cloud.max
+            )
+        )
+        const cloud = new THREE.Points(cloudGeometry, cloudMaterial)
+
+        cloud.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
+
+        const firstPassStarsGeometry = this._getGeometry(nebulasAttributes.firstPassStarsRandomAttributes)
+        const firstPassStarsTexture = this._getRandomTexture()
+        const firstPassStarsmaterial = this._getMaterial(firstPassStarsTexture)
+        const firstPassStars = new THREE.Points(firstPassStarsGeometry, firstPassStarsmaterial)
+
+        firstPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
+
+        const secondPassStarsGeometry = this._getGeometry(nebulasAttributes.secondPassStarsRandomAttributes)
+        const secondPassStarsTexture = this._getRandomTexture('cloud')
+        const secondPassStarsmaterial = this._getMaterial(
+            secondPassStarsTexture,
+            THREE.MathUtils.randInt(
+                this.parameters.matters.nebula.material.size.cloud.min,
+                this.parameters.matters.nebula.material.size.cloud.max
+            ),
+            THREE.MathUtils.randInt(
+                this.parameters.matters.nebula.material.opacity.cloud.min+0.01,
+                this.parameters.matters.nebula.material.opacity.cloud.max+0.02
+        ))
+        const secondPassStars = new THREE.Points(secondPassStarsGeometry, secondPassStarsmaterial)
+
+        secondPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
+
+        const thirdPassStarsGeometry = this._getGeometry(nebulasAttributes.thirdPassStarsRandomAttributes)
+        const thirdPassStarsTexture = this._getRandomTexture('bright')
+        const thirdPassStarsmaterial = this._getMaterial()
+        const thirdPassStars = new THREE.Points(thirdPassStarsGeometry, thirdPassStarsmaterial)
+
+        thirdPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
 
         const randomNebula = {
             cloud: {
@@ -211,7 +294,10 @@ export default class Nebula {
             this.parameters.matters.nebula.material.opacity.pass.min,
             this.parameters.matters.nebula.material.opacity.pass.max
         )
-        randomMaterialTexture.magFilter = THREE.NearestFilter
+
+        // TODO - WTF? fix this
+        if(randomMaterialTexture)
+            randomMaterialTexture.magFilter = THREE.NearestFilter
 
         const material = new THREE.PointsMaterial({
             size: randomMaterialSize,

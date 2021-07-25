@@ -17,8 +17,9 @@ renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
 
-// TODO : planetary nebula - WIP
+// TODO : fix supernova remmant nebula
 // TODO : build black hole singularity
+// TODO : build wrap hole travel
 const camera = new THREE.PerspectiveCamera(
     parameters.global.camera.fov,
     window.innerWidth / window.innerHeight,
@@ -72,24 +73,25 @@ const globularStarfieldWorker = new Worker(new URL('./procedural/starfield/Globu
 
 // nebula
 const emissionNebulaWorker = new Worker(new URL('./procedural/nebula/EmissionNebulaWorker.js', import.meta.url))
-const planetaryNebulaWorker = new Worker(new URL('./procedural/nebula/PlanetaryNebulaWorker.js', import.meta.url))
+const supernovaRemnantsNebulaWorker = new Worker(new URL('./procedural/nebula/SupernovaRemnantsNebulaWorker.js', import.meta.url))
 
 openStarfieldWorker.onmessage = messageEvent => addMattersToClustersQueue(messageEvent.data)
 globularStarfieldWorker.onmessage = messageEvent => addMattersToClustersQueue(messageEvent.data)
 
 emissionNebulaWorker.onmessage = messageEvent => addMattersToClustersQueue(messageEvent.data, 'nebula')
-planetaryNebulaWorker.onmessage = messageEvent => addMattersToClustersQueue(messageEvent.data, 'nebula')
+supernovaRemnantsNebulaWorker.onmessage = messageEvent => addMattersToClustersQueue(messageEvent.data, 'nebula', 'remnant')
 
-function addMattersToClustersQueue(matters, type = 'starfield') {
+function addMattersToClustersQueue(matters, type = 'starfield', subtype = null) {
     for (let clusterToPopulate of Object.keys(matters)) {
         grid.queueClusters.set(clusterToPopulate, {
             type: type,
+            subtype: subtype,
             data: matters[clusterToPopulate]
         })
     }
 }
 
-workers.push(planetaryNebulaWorker)
+workers.push(openStarfieldWorker, globularStarfieldWorker, emissionNebulaWorker, supernovaRemnantsNebulaWorker)
 
 function buildMatters(clustersToPopulate) {
     for(let clusterToPopulate of clustersToPopulate) {
@@ -105,7 +107,7 @@ function buildMatters(clustersToPopulate) {
 function renderMatters(position, cluster) {
     const matter = multiverseFactory.createMatter(cluster.type)
 
-    matter.generate(cluster.data, position)
+    matter.generate(cluster.data, position, cluster.subtype)
     matter.show()
 
     grid.queueClusters.delete(position)

@@ -114,7 +114,6 @@ export default class StarField {
             return
         }
 
-        // TODO - Make bright become cloud for nebula ? or keep stellar and make new nebula ?
         this.scene.add(
             this.starfield.bright.points,
             this.starfield.firstPass.points,

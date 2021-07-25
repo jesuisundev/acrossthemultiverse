@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 
-// TODO GOAL : https://study.com/cimages/videopreview/videopreview-full/je5pi21bpe.jpg
+// TODO - sphere is too big and collasping, also opacity can be off. FIX IT
 
 self.onmessage = messageEvent => {
   const clustersToPopulate = messageEvent.data.clustersToPopulate
@@ -22,22 +22,41 @@ self.onmessage = messageEvent => {
     )
 
     // random stars to fill emptyness
-    const firstPassStarsRandomAttributes = _getAttributesInRandomPosition(
+    const firstPassStarsRandomAttributes = _getRoundAttributesInRandomPosition(
       nebulaParameters,
       Math.floor(
         nebulaParameters.budget * THREE.MathUtils.randFloat(
-          nebulaParameters.vertices.pass.min * 0.25,
-          nebulaParameters.vertices.pass.max * 0.25
+          nebulaParameters.vertices.pass.min * 4,
+          nebulaParameters.vertices.pass.max * 4
         )
       ),
       clusterSize
     )
 
-    // bright stars
-    const secondPassStarsRandomAttributes = _getRoundAttributesInRandomPosition(nebulaParameters)
+    // gaz shaped sphere inside
+    const secondPassStarsRandomAttributes = _getRoundAttributesInRandomPosition(
+        nebulaParameters,
+        Math.floor(
+          nebulaParameters.budget * THREE.MathUtils.randFloat(
+            nebulaParameters.vertices.cloud.min * 0.25,
+            nebulaParameters.vertices.cloud.max * 0.25
+          )
+        ),
+        clusterSize * 0.5,
+        20000
+    )
 
-    // random stars shaped not following gaz
-    const thirdPassStarsRandomAttributes = _getRoundAttributesInRandomPosition(nebulaParameters)
+    // random stars shaped following gaz
+    const thirdPassStarsRandomAttributes = _getRoundAttributesInRandomPosition(
+      nebulaParameters,
+      Math.floor(
+        nebulaParameters.budget * THREE.MathUtils.randFloat(
+          nebulaParameters.vertices.bright.min * 2,
+          nebulaParameters.vertices.bright.max * 2
+        )
+      ),
+      clusterSize
+    )
 
     nebulasAttributes[clusterToPopulate] = {
         gazRandomAttributes,
@@ -75,25 +94,24 @@ function _getAttributesInRandomPosition (parameters, max, clusterSize) {
     }
 }
 
-function _getRoundAttributesInRandomPosition (parameters, max, clusterSize) {
+function _getRoundAttributesInRandomPosition (parameters, max, clusterSize, distordedAmplitude = 50000) {
   const positions = []
   const colors = []
+  const chosenColors = _getTwoDifferentColors(parameters.colors)
+  const mixedColor = chosenColors.colorIn.clone()
 
   for (let i = 0; i < max; i++) {
     const alpha = Math.random() * (Math.PI)
-    const theta = Math.random() * (Math.PI)
+    const theta = Math.random() * (Math.PI * 2)
 
-    let x = clusterSize * (Math.cos(alpha) * Math.sin(theta)) - (clusterSize / 2)
+    let x = clusterSize * (Math.cos(alpha) * Math.sin(theta)) - (clusterSize / 2) - (THREE.MathUtils.randFloat(0, distordedAmplitude) / 2)
     let y = clusterSize * (Math.sin(alpha) * Math.sin(theta)) - (clusterSize / 2)
-    let z = clusterSize * (Math.cos(theta)) - (clusterSize / 2)
+    let z = clusterSize * (Math.cos(theta)) - (clusterSize / 2) - (THREE.MathUtils.randFloat(0, distordedAmplitude) / 2)
 
     positions.push(x, y, z)
 
-    const color = new THREE.Color(
-      Math.random() > 0.4 ? "#eeefff" : parameters.colors[THREE.MathUtils.randInt(0, parameters.colors.length - 1)]
-    )
-
-    colors.push(color.r, color.g, color.b)
+    mixedColor.lerp(chosenColors.colorOut, i / (max * 1200))
+    colors.push(mixedColor.r, mixedColor.g, mixedColor.b)
   }
 
   return {
