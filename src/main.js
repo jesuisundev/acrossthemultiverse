@@ -17,9 +17,20 @@ renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
 
-// TODO : fix supernova remmant nebula
+// ROAD MAP
+// TODO : fix supernova remmant nebula size https://theplanets.org/nebula-facts/supernova-remnant-facts/
+// TODO : function for possibility for each matters : 
+// default open starfield (60%), globula (25%), nebula (10%), remnabnt (5%)
+// update at each franchissement
+// TODO : build Dark Nebula https://theplanets.org/nebula-facts/dark-nebula/
 // TODO : build black hole singularity
 // TODO : build wrap hole travel
+// TODO : build four types of galaxy https://theplanets.org/types-of-galaxies/
+// TODO : ask for UI/UX
+// TODO : build tweark for others universes
+// TODO : add sequencer
+// TODO : add UI and music
+// TODO : push to cloudfare
 const camera = new THREE.PerspectiveCamera(
     parameters.global.camera.fov,
     window.innerWidth / window.innerHeight,

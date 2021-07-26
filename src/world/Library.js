@@ -27,7 +27,8 @@ export default class Library {
                         {type: 'cloud', src: 'cloud1.png'},
                         {type: 'cloud', src: 'cloud2.png'},
                         {type: 'cloud', src: 'cloud3.png'},
-                        {type: 'cloud', src: 'cloud4.png'}
+                        {type: 'cloud', src: 'cloud4.png'},
+                        {type: 'cloud', src: 'cloud5.png'}
                     ]
                 }
             }

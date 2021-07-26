@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 // TODO - Add blur/distorsion/softness to cloud to make it ore "gazy"
+// TODO - make it more filament https://lh3.googleusercontent.com/proxy/_-d5wJEsLt0IgANmjQ9OvwL-n7hDLEd426-ZoL-4xgRaPAOVKY_1TCl79zUfMIpBZ9pY30bB2I8FezJBXwyYxe3KKrt_YQyI8UuKR6DShC5hatRj7cZuMgL-lLBmtKyWs3QZhlDdZifNX0HrX7sCTRaPeSWOzXAvr91L39UyZvvHq2clWSBoWA
 export default class Nebula {
     constructor(scene, library, parameters) {
         this.scene = scene
