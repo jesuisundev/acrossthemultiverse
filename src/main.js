@@ -18,13 +18,18 @@ renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : fix supernova remmant nebula size https://theplanets.org/nebula-facts/supernova-remnant-facts/
 // TODO : function for possibility for each matters : 
 // default open starfield (60%), globula (25%), nebula (10%), remnabnt (5%)
 // update at each franchissement
 // TODO : build Dark Nebula https://theplanets.org/nebula-facts/dark-nebula/
+// TODO : more randomess to globular
+// TODO : more randomess to remant
+// TODO : fix the fov issue
+// TODO : try a main sequence starfield https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Sirius_A_and_B_artwork.jpg/1200px-Sirius_A_and_B_artwork.jpg
+// todo : maybe a way to set material https://github.com/brunosimon/experiment-rick-and-morty-tribute/blob/master/src/Experience/Particles.js
 // TODO : build black hole singularity
 // TODO : build wrap hole travel
+// TODO : SH THJ
 // TODO : build four types of galaxy https://theplanets.org/types-of-galaxies/
 // TODO : ask for UI/UX
 // TODO : build tweark for others universes

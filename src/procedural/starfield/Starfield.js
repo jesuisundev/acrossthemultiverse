@@ -1,6 +1,5 @@
 import * as THREE from 'three'
 
-// TODO - try a main sequence starfield https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Sirius_A_and_B_artwork.jpg/1200px-Sirius_A_and_B_artwork.jpg
 export default class StarField {
     constructor(scene, library, parameters) {
         this.scene = scene
@@ -207,8 +206,6 @@ export default class StarField {
             blending: THREE.AdditiveBlending,
             vertexColors: true
         })
-
-        // todo: maybe a way to set material https://github.com/brunosimon/experiment-rick-and-morty-tribute/blob/master/src/Experience/Particles.js
 
         return material
     }

@@ -1,6 +1,5 @@
 import * as THREE from 'three'
-// TODO - Add blur/distorsion/softness to cloud to make it ore "gazy"
-// TODO - make it more filament https://lh3.googleusercontent.com/proxy/_-d5wJEsLt0IgANmjQ9OvwL-n7hDLEd426-ZoL-4xgRaPAOVKY_1TCl79zUfMIpBZ9pY30bB2I8FezJBXwyYxe3KKrt_YQyI8UuKR6DShC5hatRj7cZuMgL-lLBmtKyWs3QZhlDdZifNX0HrX7sCTRaPeSWOzXAvr91L39UyZvvHq2clWSBoWA
+
 export default class Nebula {
     constructor(scene, library, parameters) {
         this.scene = scene
@@ -97,6 +96,7 @@ export default class Nebula {
     }
 
     _generateRemnant(nebulasAttributes, position) {
+        const adjustPositionGaz = 20000
         const currentCoordinateVector = this._getCoordinateVectorByPosition(position)
 
         const cloudGeometry = this._getGeometry(nebulasAttributes.gazRandomAttributes)
@@ -108,20 +108,28 @@ export default class Nebula {
                 this.parameters.matters.nebula.material.size.cloud.max
             ),
             THREE.MathUtils.randInt(
-                this.parameters.matters.nebula.material.opacity.cloud.min,
-                this.parameters.matters.nebula.material.opacity.cloud.max
+                this.parameters.matters.nebula.material.opacity.cloud.min - 0.002,
+                this.parameters.matters.nebula.material.opacity.cloud.max - 0.002
             )
         )
         const cloud = new THREE.Points(cloudGeometry, cloudMaterial)
 
-        cloud.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
+        cloud.position.set(
+            currentCoordinateVector.x + adjustPositionGaz,
+            currentCoordinateVector.y + adjustPositionGaz,
+            currentCoordinateVector.z + adjustPositionGaz
+        )
 
         const firstPassStarsGeometry = this._getGeometry(nebulasAttributes.firstPassStarsRandomAttributes)
         const firstPassStarsTexture = this._getRandomTexture()
         const firstPassStarsmaterial = this._getMaterial(firstPassStarsTexture)
         const firstPassStars = new THREE.Points(firstPassStarsGeometry, firstPassStarsmaterial)
 
-        firstPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
+        firstPassStars.position.set(
+            currentCoordinateVector.x + adjustPositionGaz,
+            currentCoordinateVector.y + adjustPositionGaz,
+            currentCoordinateVector.z + adjustPositionGaz
+        )
 
         const secondPassStarsGeometry = this._getGeometry(nebulasAttributes.secondPassStarsRandomAttributes)
         const secondPassStarsTexture = this._getRandomTexture('cloud')
@@ -132,16 +140,20 @@ export default class Nebula {
                 this.parameters.matters.nebula.material.size.cloud.max
             ),
             THREE.MathUtils.randInt(
-                this.parameters.matters.nebula.material.opacity.cloud.min+0.01,
-                this.parameters.matters.nebula.material.opacity.cloud.max+0.02
+                this.parameters.matters.nebula.material.opacity.cloud.min + 0.01,
+                this.parameters.matters.nebula.material.opacity.cloud.max + 0.01
         ))
         const secondPassStars = new THREE.Points(secondPassStarsGeometry, secondPassStarsmaterial)
 
-        secondPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
+        secondPassStars.position.set(
+            currentCoordinateVector.x + adjustPositionGaz - 5000,
+            currentCoordinateVector.y + adjustPositionGaz - 10000,
+            currentCoordinateVector.z + adjustPositionGaz
+        )
 
         const thirdPassStarsGeometry = this._getGeometry(nebulasAttributes.thirdPassStarsRandomAttributes)
-        const thirdPassStarsTexture = this._getRandomTexture('bright')
-        const thirdPassStarsmaterial = this._getMaterial()
+        const thirdPassStarsTexture = this._getRandomTexture()
+        const thirdPassStarsmaterial = this._getMaterial(thirdPassStarsTexture)
         const thirdPassStars = new THREE.Points(thirdPassStarsGeometry, thirdPassStarsmaterial)
 
         thirdPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
@@ -296,9 +308,7 @@ export default class Nebula {
             this.parameters.matters.nebula.material.opacity.pass.max
         )
 
-        // TODO - WTF? fix this
-        if(randomMaterialTexture)
-            randomMaterialTexture.magFilter = THREE.NearestFilter
+        randomMaterialTexture.magFilter = THREE.NearestFilter
 
         const material = new THREE.PointsMaterial({
             size: randomMaterialSize,
@@ -310,8 +320,6 @@ export default class Nebula {
             blending: THREE.AdditiveBlending,
             vertexColors: true
         })
-
-        // todo: maybe a way to set material https://github.com/brunosimon/experiment-rick-and-morty-tribute/blob/master/src/Experience/Particles.js
 
         return material
     }
