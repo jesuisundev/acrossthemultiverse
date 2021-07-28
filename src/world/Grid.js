@@ -95,6 +95,16 @@ export default class Grid {
         }
     }
 
+    addMattersToClustersQueue(matters, type = 'starfield', subtype = null) {
+        for (let clusterToPopulate of Object.keys(matters)) {
+            this.queueClusters.set(clusterToPopulate, {
+                type: type,
+                subtype: subtype,
+                data: matters[clusterToPopulate]
+            })
+        }
+    }
+
     _getEmptyClustersToPopulate(neighbourClusters) {
         const emptyClustersToPopulate = []
 

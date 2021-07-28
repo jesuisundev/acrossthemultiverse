@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import * as POSTPROCESSING from "postprocessing"
 
 import MultiverseFactory from './procedural/MultiverseFactory'
+import Workers from './procedural/Workers'
 import Grid from './world/Grid'
 import Controls from './world/Controls'
 import Library from './world/Library'
@@ -18,13 +19,16 @@ renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : function for possibility for each matters : 
-// default open starfield (60%), globula (25%), nebula (10%), remnabnt (5%)
-// update at each franchissement
-// TODO : build Dark Nebula https://theplanets.org/nebula-facts/dark-nebula/
 // TODO : more randomess to globular
+// add amplitude to start to fill emptyness and more random
+// add colors and shape if possible
 // TODO : more randomess to remant
-// TODO : fix the fov issue
+// force colors
+// more amplitude random to giant gaz
+// TODO : more randomess to open
+// number of bright and not bright
+// amplitude try
+// TODO : fix the fov issue (might be impossible)
 // TODO : try a main sequence starfield https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Sirius_A_and_B_artwork.jpg/1200px-Sirius_A_and_B_artwork.jpg
 // todo : maybe a way to set material https://github.com/brunosimon/experiment-rick-and-morty-tribute/blob/master/src/Experience/Particles.js
 // TODO : build black hole singularity
@@ -46,6 +50,7 @@ const camera = new THREE.PerspectiveCamera(
 const controls = new Controls(camera, parameters)
 const library = new Library()
 const grid = new Grid(camera, parameters)
+const workers = new Workers(grid)
 const multiverseFactory = new MultiverseFactory(scene, library, parameters)
 const effect = new Effect(camera, parameters)
 
@@ -74,46 +79,11 @@ const composer = new POSTPROCESSING.EffectComposer(renderer)
 composer.addPass(new POSTPROCESSING.RenderPass(scene, camera))
 composer.addPass(effect.getEffectPass())
 
-/**
- * Web worker used for heavy work on background. Critical to not block the event loop.
- */
-if (!window.Worker) {
-    throw new Error("You browser is shit. Do something about it.");
-}
-
-const workers = []
-
-// starfields
-const openStarfieldWorker = new Worker(new URL('./procedural/starfield/OpenStarfieldWorker.js', import.meta.url))
-const globularStarfieldWorker = new Worker(new URL('./procedural/starfield/GlobularStarfieldWorker.js', import.meta.url))
-
-// nebula
-const emissionNebulaWorker = new Worker(new URL('./procedural/nebula/EmissionNebulaWorker.js', import.meta.url))
-const supernovaRemnantsNebulaWorker = new Worker(new URL('./procedural/nebula/SupernovaRemnantsNebulaWorker.js', import.meta.url))
-
-openStarfieldWorker.onmessage = messageEvent => addMattersToClustersQueue(messageEvent.data)
-globularStarfieldWorker.onmessage = messageEvent => addMattersToClustersQueue(messageEvent.data)
-
-emissionNebulaWorker.onmessage = messageEvent => addMattersToClustersQueue(messageEvent.data, 'nebula')
-supernovaRemnantsNebulaWorker.onmessage = messageEvent => addMattersToClustersQueue(messageEvent.data, 'nebula', 'remnant')
-
-function addMattersToClustersQueue(matters, type = 'starfield', subtype = null) {
-    for (let clusterToPopulate of Object.keys(matters)) {
-        grid.queueClusters.set(clusterToPopulate, {
-            type: type,
-            subtype: subtype,
-            data: matters[clusterToPopulate]
-        })
-    }
-}
-
-workers.push(openStarfieldWorker, globularStarfieldWorker, emissionNebulaWorker, supernovaRemnantsNebulaWorker)
-
 function buildMatters(clustersToPopulate) {
     for(let clusterToPopulate of clustersToPopulate) {
-        const randomWorkerIndex = clusterToPopulate === '0,0,0' ? 0 : THREE.MathUtils.randInt(0, workers.length - 1)
+        const randomDistributedWorker = workers.getWorkerDistributed(clusterToPopulate)
 
-        workers[randomWorkerIndex].postMessage({
+        randomDistributedWorker.postMessage({
             clustersToPopulate: [clusterToPopulate],
             parameters: parameters
         })
@@ -151,11 +121,10 @@ function animate(time) {
 
     if (lastClusterPosition != currentClusterPosition) {
         lastClusterPosition = currentClusterPosition
-
-        // disposing of useless clusters to free memory
+        
         const clustersStatus = grid.getClustersStatus(currentClusterPosition)
+        
         grid.disposeClusters(clustersStatus.clustersToDispose)
-
         buildMatters(clustersStatus.clustersToPopulate)
     } else if (grid.queueClusters.size && !isRenderingClusterInProgress) {
         isRenderingClusterInProgress = true
