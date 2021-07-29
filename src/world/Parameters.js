@@ -65,9 +65,13 @@ export default class Parameters {
                         max: 0.0001
                     },
                     pass: {
-                        min: 0.10,
-                        max: 0.20
-                    }
+                        min: 0.05,
+                        max: 0.25
+                    },
+                    globularPass: {
+                        min: 0.1,
+                        max: 0.15
+                    } 
                 },
                 material: {
                     size: {
@@ -141,6 +145,25 @@ export default class Parameters {
                     "#ff9523",
                     "#ff7b00",
                     "#ff5200"
+                ],
+                globularColors: [
+                    "#FF8E05",
+                    "#EF93E6",
+                    "#FDFFF2",
+                    "#D7693D",
+                    "#ffc178",
+                    "#ffb765",
+                    "#ffa94b",
+                    "#ff9523",
+                    "#ff7b00",
+                    "#ff5200",
+                    "#9bb2ff",
+                    "#9eb5ff",
+                    "#a3b9ff",
+                    "#aabfff",
+                    "#b2c5ff",
+                    "#bbccff",
+                    "#c4d2ff"
                 ]
             },
             nebula: {

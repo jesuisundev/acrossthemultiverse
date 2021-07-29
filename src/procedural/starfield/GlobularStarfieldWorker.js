@@ -21,8 +21,8 @@ self.onmessage = messageEvent => {
     const firstPassStarsRandomAttributes = _getAttributesInRandomPosition(
       Math.floor(
         starfieldParameters.budget * THREE.MathUtils.randFloat(
-          starfieldParameters.vertices.pass.min,
-          starfieldParameters.vertices.pass.max
+          starfieldParameters.vertices.globularPass.min,
+          starfieldParameters.vertices.globularPass.max
         )
       ),
       clusterSize,
@@ -32,8 +32,8 @@ self.onmessage = messageEvent => {
     const secondPassStarsRandomAttributes = _getAttributesInRandomPosition(
       Math.floor(
         starfieldParameters.budget * THREE.MathUtils.randFloat(
-          starfieldParameters.vertices.pass.min,
-          starfieldParameters.vertices.pass.max
+          starfieldParameters.vertices.globularPass.min,
+          starfieldParameters.vertices.globularPass.max
         )
       ),
       clusterSize,
@@ -43,8 +43,8 @@ self.onmessage = messageEvent => {
     const thirdPassStarsRandomAttributes = _getAttributesInRandomPosition(
       Math.floor(
         starfieldParameters.budget * THREE.MathUtils.randFloat(
-          starfieldParameters.vertices.pass.min,
-          starfieldParameters.vertices.pass.max
+          starfieldParameters.vertices.globularPass.min,
+          starfieldParameters.vertices.globularPass.max
         )
       ),
       clusterSize,
@@ -66,20 +66,27 @@ function _getAttributesInRandomPosition (max, clusterSize, parameters) {
   const positions = []
   const colors = []
   const spherical = new THREE.Spherical();
+  const shapeDice = Math.random()
+  const colorChosen = parameters.globularColors[THREE.MathUtils.randInt(0, parameters.globularColors.length)]
 
   for (let i = 0; i < max; i++) {
     // creating coordinate for the particles in random positions but confined in the current sphere cluster
     spherical.phi = Math.random() * Math.PI
     spherical.theta = Math.random() * Math.PI * 2
-    spherical.radius = Math.random() * ((clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 10)))
+    spherical.radius = Math.random() * ((clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5)))
 
     const currentVector = new THREE.Vector3().setFromSpherical(spherical)
 
+    // random shapes
+    if(shapeDice < 0.1) {
+      currentVector.multiply(new THREE.Vector3().random())
+    } else if(shapeDice < 0.9) {
+      currentVector.cross(new THREE.Vector3().random())
+    }
+
     positions.push(currentVector.x, currentVector.y, currentVector.z)
 
-    const color = new THREE.Color(
-      Math.random() > 0.4 ? "#eeefff" : parameters.colors[Math.floor(_getRandomNumberBeetwen(0, parameters.colors.length))]
-    )
+    const color = new THREE.Color(colorChosen)
 
     colors.push(color.r, color.g, color.b)
   }
@@ -88,8 +95,4 @@ function _getAttributesInRandomPosition (max, clusterSize, parameters) {
     positions: new Float32Array(positions),
     colors: new Float32Array(colors)
   }
-}
-
-function _getRandomNumberBeetwen (min, max) {
-  return Math.random() * (max - min) + min
 }

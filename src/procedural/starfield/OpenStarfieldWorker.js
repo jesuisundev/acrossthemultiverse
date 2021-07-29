@@ -7,6 +7,9 @@ self.onmessage = messageEvent => {
   const starfieldsAttributes = {}
 
   for (let clusterToPopulate of clustersToPopulate) {
+    // first impressions are crucial
+    const verticesPassmin = clusterToPopulate === '0,0,0' ? starfieldParameters.vertices.pass.max : starfieldParameters.vertices.pass.min
+
     const brightStarsRandomAttributes = _getAttributesInRandomPosition(
       Math.floor(
         starfieldParameters.budget * THREE.MathUtils.randFloat(
@@ -21,7 +24,7 @@ self.onmessage = messageEvent => {
     const firstPassStarsRandomAttributes = _getAttributesInRandomPosition(
       Math.floor(
         starfieldParameters.budget * THREE.MathUtils.randFloat(
-          starfieldParameters.vertices.pass.min,
+          verticesPassmin,
           starfieldParameters.vertices.pass.max
         )
       ),
@@ -32,7 +35,7 @@ self.onmessage = messageEvent => {
     const secondPassStarsRandomAttributes = _getAttributesInRandomPosition(
       Math.floor(
         starfieldParameters.budget * THREE.MathUtils.randFloat(
-          starfieldParameters.vertices.pass.min,
+          verticesPassmin,
           starfieldParameters.vertices.pass.max
         )
       ),
@@ -43,7 +46,7 @@ self.onmessage = messageEvent => {
     const thirdPassStarsRandomAttributes = _getAttributesInRandomPosition(
       Math.floor(
         starfieldParameters.budget * THREE.MathUtils.randFloat(
-          starfieldParameters.vertices.pass.min,
+          verticesPassmin,
           starfieldParameters.vertices.pass.max
         )
       ),
@@ -68,9 +71,9 @@ function _getAttributesInRandomPosition (max, clusterSize, parameters) {
 
   for (let i = 0; i < max; i++) {
     // creating coordinate for the particles in random positions but confined in the current square cluster
-    let x = clusterSize * Math.random() - (clusterSize / 2)
-    let y = clusterSize * Math.random() - (clusterSize / 2)
-    let z = clusterSize * Math.random() - (clusterSize / 2)
+    let x = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
+    let y = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
+    let z = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
 
     positions.push(x, y, z)
 
