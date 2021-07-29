@@ -71,7 +71,7 @@ function _getAttributesInRandomPosition (max, clusterSize, parameters) {
     // creating coordinate for the particles in random positions but confined in the current sphere cluster
     spherical.phi = Math.random() * Math.PI
     spherical.theta = Math.random() * Math.PI * 2
-    spherical.radius = Math.random() * (clusterSize / 2)
+    spherical.radius = Math.random() * ((clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 10)))
 
     const currentVector = new THREE.Vector3().setFromSpherical(spherical)
 

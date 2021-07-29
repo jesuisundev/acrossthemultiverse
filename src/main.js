@@ -20,10 +20,9 @@ document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
 // TODO : more randomess to globular
-// add amplitude to start to fill emptyness and more random
 // add colors and shape if possible
 // TODO : more randomess to remant
-// force colors
+// force colors // try to interpolate several colors
 // more amplitude random to giant gaz
 // TODO : more randomess to open
 // number of bright and not bright
@@ -37,6 +36,7 @@ document.body.appendChild(renderer.domElement)
 // TODO : build four types of galaxy https://theplanets.org/types-of-galaxies/
 // TODO : ask for UI/UX
 // TODO : build tweark for others universes
+// TODO : build epiphany - filament interconnected of universes via shaders points
 // TODO : add sequencer
 // TODO : add UI and music
 // TODO : push to cloudfare
