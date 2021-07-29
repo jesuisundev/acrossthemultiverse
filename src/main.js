@@ -19,7 +19,6 @@ renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : fix the fov issue (might be impossible)
 // TODO : smooth camera control
 // todo : maybe a way to set material https://github.com/brunosimon/experiment-rick-and-morty-tribute/blob/master/src/Experience/Particles.js
 // TODO : build black hole singularity
