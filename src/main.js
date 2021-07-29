@@ -19,13 +19,8 @@ renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : more randomess to remant
-// force colors // try to interpolate several colors
-// more amplitude random to giant gaz
-// TODO : more randomess to open
-// number of bright and not bright
-// amplitude try
 // TODO : fix the fov issue (might be impossible)
+// TODO : smooth camera control
 // todo : maybe a way to set material https://github.com/brunosimon/experiment-rick-and-morty-tribute/blob/master/src/Experience/Particles.js
 // TODO : build black hole singularity
 // TODO : build wrap hole travel

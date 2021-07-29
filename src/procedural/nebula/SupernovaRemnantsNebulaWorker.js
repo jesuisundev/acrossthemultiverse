@@ -73,9 +73,9 @@ function _getAttributesInRandomPosition (parameters, max, clusterSize) {
   
     for (let i = 0; i < max; i++) {
       // creating coordinate for the particles in random positions but confined in the current square cluster
-      let x = clusterSize * Math.random() - (clusterSize / 2)
-      let y = clusterSize * Math.random() - (clusterSize / 2)
-      let z = clusterSize * Math.random() - (clusterSize / 2)
+      let x = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
+      let y = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
+      let z = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
   
       positions.push(x, y, z)
   
@@ -96,7 +96,7 @@ function _getRoundAttributesInRandomPosition (parameters, max, clusterSize, dist
   const positions = []
   const colors = []
   const radius = clusterSize / 3
-  const chosenColors = _getTwoDifferentColors(parameters.colors)
+  const chosenColors = _getTwoDifferentColors(parameters.remnantColors)
   const mixedColor = chosenColors.colorIn.clone()
 
   for (let i = 0; i < max; i++) {

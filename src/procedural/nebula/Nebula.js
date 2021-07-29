@@ -97,6 +97,7 @@ export default class Nebula {
 
     _generateRemnant(nebulasAttributes, position) {
         const adjustPositionGaz = 20000
+        const adjustPositionGazY = THREE.MathUtils.randInt(10000, 30000)
         const currentCoordinateVector = this._getCoordinateVectorByPosition(position)
 
         const cloudGeometry = this._getGeometry(nebulasAttributes.gazRandomAttributes)
@@ -108,15 +109,15 @@ export default class Nebula {
                 this.parameters.matters.nebula.material.size.cloud.max
             ),
             THREE.MathUtils.randInt(
-                this.parameters.matters.nebula.material.opacity.cloud.min - 0.002,
-                this.parameters.matters.nebula.material.opacity.cloud.max - 0.002
+                this.parameters.matters.nebula.material.opacity.cloud.min,
+                this.parameters.matters.nebula.material.opacity.cloud.max
             )
         )
         const cloud = new THREE.Points(cloudGeometry, cloudMaterial)
 
         cloud.position.set(
             currentCoordinateVector.x + adjustPositionGaz,
-            currentCoordinateVector.y + adjustPositionGaz,
+            currentCoordinateVector.y + adjustPositionGazY,
             currentCoordinateVector.z + adjustPositionGaz
         )
 
@@ -127,7 +128,7 @@ export default class Nebula {
 
         firstPassStars.position.set(
             currentCoordinateVector.x + adjustPositionGaz,
-            currentCoordinateVector.y + adjustPositionGaz,
+            currentCoordinateVector.y + adjustPositionGazY,
             currentCoordinateVector.z + adjustPositionGaz
         )
 
@@ -140,14 +141,14 @@ export default class Nebula {
                 this.parameters.matters.nebula.material.size.cloud.max
             ),
             THREE.MathUtils.randInt(
-                this.parameters.matters.nebula.material.opacity.cloud.min + 0.01,
-                this.parameters.matters.nebula.material.opacity.cloud.max + 0.01
+                this.parameters.matters.nebula.material.opacity.cloud.min,
+                this.parameters.matters.nebula.material.opacity.cloud.max
         ))
         const secondPassStars = new THREE.Points(secondPassStarsGeometry, secondPassStarsmaterial)
 
         secondPassStars.position.set(
             currentCoordinateVector.x + adjustPositionGaz - 5000,
-            currentCoordinateVector.y + adjustPositionGaz - 10000,
+            currentCoordinateVector.y + adjustPositionGazY - 8000,
             currentCoordinateVector.z + adjustPositionGaz
         )
 

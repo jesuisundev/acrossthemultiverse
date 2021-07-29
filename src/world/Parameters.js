@@ -224,6 +224,11 @@ export default class Parameters {
                     "#00FF00",
                     "#FFFF00",
                     "#FF00FF"
+                ],
+                remnantColors: [
+                    "#0000FF",
+                    "#FF0000",
+                    "#00FF00"
                 ]
             }
         }

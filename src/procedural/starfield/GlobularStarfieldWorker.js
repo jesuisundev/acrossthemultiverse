@@ -67,7 +67,7 @@ function _getAttributesInRandomPosition (max, clusterSize, parameters) {
   const colors = []
   const spherical = new THREE.Spherical();
   const shapeDice = Math.random()
-  const colorChosen = parameters.globularColors[THREE.MathUtils.randInt(0, parameters.globularColors.length)]
+  const colorChosen = parameters.globularColors[THREE.MathUtils.randInt(0, parameters.globularColors.length - 1)]
 
   for (let i = 0; i < max; i++) {
     // creating coordinate for the particles in random positions but confined in the current sphere cluster
