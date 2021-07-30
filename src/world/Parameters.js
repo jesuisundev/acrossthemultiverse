@@ -230,6 +230,8 @@ export default class Parameters {
                     "#FF0000",
                     "#00FF00"
                 ]
+            },
+            blackhole: {
             }
         }
     }

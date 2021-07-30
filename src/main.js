@@ -19,12 +19,12 @@ renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : smooth camera control
-// todo : maybe a way to set material https://github.com/brunosimon/experiment-rick-and-morty-tribute/blob/master/src/Experience/Particles.js
 // TODO : build black hole singularity
+// TODO : more randomess in emission
 // TODO : build wrap hole travel
 // TODO : SH THJ
 // TODO : build four types of galaxy https://theplanets.org/types-of-galaxies/
+// todo : maybe a way to set material https://github.com/brunosimon/experiment-rick-and-morty-tribute/blob/master/src/Experience/Particles.js
 // TODO : ask for UI/UX
 // TODO : build tweark for others universes
 // TODO : build epiphany - filament interconnected of universes via shaders points
@@ -32,7 +32,7 @@ document.body.appendChild(renderer.domElement)
 // TODO : add UI and music
 // TODO : push to cloudfare
 const camera = new THREE.PerspectiveCamera(
-    parameters.global.camera.fov,
+    parameters.global.camera.fov, // can you fix the fov issue without sacrifying the wow effect ?
     window.innerWidth / window.innerHeight,
     parameters.global.camera.near,
     parameters.global.camera.far
@@ -52,7 +52,10 @@ let prevTimePerf = performance.now()
 
 // preload every needed files before showing anything
 library.preload()
-window.onload = () => needRender = true
+window.onload = () => {
+    needRender = true
+    scene.add(library.models.singularity.blackhole.scene)
+}
 
 scene.add(controls.pointerLockControls.getObject())
 
