@@ -19,10 +19,10 @@ renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : build black hole singularity
+// TODO : LEARN SHADER - WIP
+// TODO : build black hole singularity - WIP
 // TODO : more randomess in emission
 // TODO : build wrap hole travel
-// TODO : SH THJ
 // TODO : build four types of galaxy https://theplanets.org/types-of-galaxies/
 // todo : maybe a way to set material https://github.com/brunosimon/experiment-rick-and-morty-tribute/blob/master/src/Experience/Particles.js
 // TODO : ask for UI/UX
