@@ -1,6 +1,7 @@
 * {
     margin: 0;
     padding: 0;
+    background: black;
 }
 
 html,
@@ -10,7 +11,7 @@ body {
 
 #multiverse {
     position: fixed;
-    top: 0;
+    top: 12%;
     left: 0;
     outline: none;
 }

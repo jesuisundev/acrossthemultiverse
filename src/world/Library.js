@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 export default class Library {
     constructor() {
@@ -31,14 +30,6 @@ export default class Library {
                         {type: 'cloud', src: 'cloud4.png'}
                     ]
                 }
-            },
-            models: {
-                singularity: {
-                    baseUrl: '/models/singularity/',
-                    pool: [
-                        {type: 'blackhole', src: 'blackhole.gltf'}
-                    ]
-                }
             }
         }
 
@@ -49,12 +40,6 @@ export default class Library {
             },
             nebula : {
                 cloud: []
-            }
-        }
-
-        this.models = {
-            singularity: {
-                blackhole: {}
             }
         }
     }
@@ -69,20 +54,6 @@ export default class Library {
                 currentTexture.premultiplyAlpha = true
 
                 this.textures[textureSourceType][textureObject.type].push(currentTexture)
-            }
-        }
-
-        // preloading all models
-        const gltfLoader = new GLTFLoader()
-
-        for(let modelSourceType of Object.keys(this.source.models)) {
-            for(let modelObject of this.source.models[modelSourceType].pool) {
-                gltfLoader.load(
-                    `${this.source.models[modelSourceType].baseUrl}${modelObject.src}`,
-                    gltf => this.models[modelSourceType][modelObject.type] = gltf, 
-                    undefined, 
-                    error => console.error(error)
-                )
             }
         }
     }

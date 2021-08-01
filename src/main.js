@@ -14,7 +14,7 @@ const parameters = new Parameters()
 
 const scene = new THREE.Scene()
 const renderer = new THREE.WebGLRenderer(parameters.global.webGlRenderer)
-renderer.setSize(window.innerWidth, window.innerHeight)
+renderer.setSize(window.innerWidth, window.innerHeight / 1.3)
 renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
 
@@ -63,9 +63,9 @@ document.addEventListener("keydown", (event) => controls.onKeyDown(event))
 document.addEventListener("keyup", (event) => controls.onKeyUp(event))
 document.addEventListener("click", (event) => controls.pointerLockControls.lock())
 window.addEventListener("resize", () => {
-    renderer.setSize(window.innerWidth, window.innerHeight)
-    camera.aspect = window.innerWidth / window.innerHeight
-    composer.setSize(window.innerWidth, window.innerHeight)
+    renderer.setSize(window.innerWidth, window.innerHeight / 1.3)
+    camera.aspect = window.innerWidth / (window.innerHeight  / 1.3)
+    composer.setSize(window.innerWidth, window.innerHeight / 1.3)
     camera.updateProjectionMatrix()
 })
 
