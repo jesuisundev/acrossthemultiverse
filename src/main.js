@@ -53,10 +53,24 @@ let prevTimePerf = performance.now()
 // preload every needed files before showing anything
 library.preload()
 window.onload = () => {
-    needRender = true
-    scene.add(library.models.singularity.blackhole.scene)
-}
+    library.models.singularity.blackhole.scene.scale.set(100,100,100)
 
+    library.models.singularity.blackhole.scene.traverse(node => {
+        if (node.isMesh) {
+            node.material.transparent = true
+            node.material.map = library.textures.nebula.cloud[0]
+            node.material.needsUpdate = true
+            library.textures.nebula.cloud[0].needsUpdate = true
+        }
+    })
+    console.log(library.models.singularity.blackhole.scene, 'library.models.singularity.blackhole.scene')
+    const directionalLight = new THREE.DirectionalLight( 0xffeedd )
+    directionalLight.position.set( 0, 0, 1 )
+    scene.add( directionalLight )
+    scene.add(library.models.singularity.blackhole.scene)
+    needRender = true
+}
+camera.position.z = 3000
 scene.add(controls.pointerLockControls.getObject())
 
 document.addEventListener("keydown", (event) => controls.onKeyDown(event))
