@@ -19,11 +19,13 @@ renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : LEARN SHADER - WIP
-// TODO : build black hole singularity - WIP
+// LEARN SHADER - WIP
+// TODO : build main sequence star
+// TODO : build simple blackhole (sphere with shader distortion)
 // TODO : more randomess in emission
 // TODO : build wrap hole travel
 // TODO : build four types of galaxy https://theplanets.org/types-of-galaxies/
+// TODO : improve blackhole ?
 // todo : maybe a way to set material https://github.com/brunosimon/experiment-rick-and-morty-tribute/blob/master/src/Experience/Particles.js
 // TODO : ask for UI/UX
 // TODO : build tweark for others universes
@@ -53,24 +55,9 @@ let prevTimePerf = performance.now()
 // preload every needed files before showing anything
 library.preload()
 window.onload = () => {
-    library.models.singularity.blackhole.scene.scale.set(100,100,100)
-
-    library.models.singularity.blackhole.scene.traverse(node => {
-        if (node.isMesh) {
-            node.material.transparent = true
-            node.material.map = library.textures.nebula.cloud[0]
-            node.material.needsUpdate = true
-            library.textures.nebula.cloud[0].needsUpdate = true
-        }
-    })
-    console.log(library.models.singularity.blackhole.scene, 'library.models.singularity.blackhole.scene')
-    const directionalLight = new THREE.DirectionalLight( 0xffeedd )
-    directionalLight.position.set( 0, 0, 1 )
-    scene.add( directionalLight )
-    scene.add(library.models.singularity.blackhole.scene)
     needRender = true
 }
-camera.position.z = 3000
+
 scene.add(controls.pointerLockControls.getObject())
 
 document.addEventListener("keydown", (event) => controls.onKeyDown(event))
