@@ -10,6 +10,10 @@ import Library from './world/Library'
 import Parameters from './world/Parameters'
 import Effect from './postprocessing/Effect'
 
+import mainSequenceVertexShader from './shaders/starfield/mainsequence/vertex.glsl'
+import mainSequenceFragmentShader from './shaders/starfield/mainsequence/fragment.glsl'
+
+const clock = new THREE.Clock()
 const parameters = new Parameters()
 
 const scene = new THREE.Scene()
@@ -20,7 +24,7 @@ document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
 // LEARN SHADER - WIP
-// TODO : build main sequence star
+// TODO : integrate main sequence with starfield
 // TODO : build simple blackhole (sphere with shader distortion)
 // TODO : more randomess in emission
 // TODO : build wrap hole travel
@@ -31,6 +35,8 @@ document.body.appendChild(renderer.domElement)
 // TODO : build tweark for others universes
 // TODO : build epiphany - filament interconnected of universes via shaders points
 // TODO : add sequencer
+// TODO : lock fps
+// TODO : performance
 // TODO : add UI and music
 // TODO : push to cloudfare
 const camera = new THREE.PerspectiveCamera(
@@ -51,10 +57,25 @@ let lastClusterPosition
 let needRender = false
 let isRenderingClusterInProgress = false
 let prevTimePerf = performance.now()
-
+let material
 // preload every needed files before showing anything
 library.preload()
 window.onload = () => {
+    const geometry = new THREE.SphereGeometry(1, 64, 32)
+    material = new THREE.ShaderMaterial({
+        vertexShader: mainSequenceVertexShader, 
+        fragmentShader: mainSequenceFragmentShader,
+        uniforms: {
+            uTime: {value: 0}
+        },
+        side: THREE.DoubleSide
+    })
+    const sphere = new THREE.Mesh(geometry, material)
+    sphere.scale.set(10000,10000,10000)
+    scene.add(sphere)
+    
+    sphere.position.z = -15000
+
     needRender = true
 }
 
@@ -98,6 +119,13 @@ function renderMatters(position, cluster) {
 function animate(time) {
     if (needRender) {
         composer.render()
+    }
+
+    const elapsedTime = clock.getElapsedTime()
+
+    if(material)  {
+        material.uniforms.uTime.value = elapsedTime
+        material.needsUpdate = true
     }
 
     const timePerf = performance.now()
