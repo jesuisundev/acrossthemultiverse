@@ -1,5 +1,6 @@
 import Starfield from './starfield/Starfield'
 import Nebula from './nebula/Nebula'
+import Giant from './giant/Giant'
 
 export default class MultiverseFactory {
     constructor(scene, library, parameters) {
@@ -15,6 +16,9 @@ export default class MultiverseFactory {
 
             case "nebula":
                 return new Nebula(this.scene, this.library, this.parameters)
+
+            case "giant":
+                return new Giant(this.scene, this.library, this.parameters)
           }
     }
 }

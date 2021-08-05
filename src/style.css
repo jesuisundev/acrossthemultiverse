@@ -11,7 +11,7 @@ body {
 
 #multiverse {
     position: fixed;
-    top: 12%;
+    top: 0;
     left: 0;
     outline: none;
 }

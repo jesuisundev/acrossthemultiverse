@@ -29,23 +29,51 @@ export default class Workers {
 
         this.emissionNebulaWorker = {
             type: "Nebula",
-            subtype: 'Emission',
+            subtype: "Emission",
             source: new Worker(new URL('./nebula/EmissionNebulaWorker.js', import.meta.url))
         }
 
         this.supernovaRemnantsNebulaWorker = {
             type: "Nebula",
-            subtype: 'Remnant',
+            subtype: "Remnant",
             source: new Worker(new URL('./nebula/SupernovaRemnantsNebulaWorker.js', import.meta.url))
+        }
+
+        this.giantWorker = {
+            type: "Giant",
+            subtype: "Sun",
+            source: new Worker(new URL('./giant/SunGiantWorker.js', import.meta.url))
         }
     }
 
     _setWorkersListener() {
-        this.openStarfieldWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(messageEvent.data)
-        this.globularStarfieldWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(messageEvent.data)
+        this.openStarfieldWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
+            messageEvent.data, 
+            'starfield',
+            'open'
+        )
+        this.globularStarfieldWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
+            messageEvent.data, 
+            'starfield',
+            'globular'
+        )
 
-        this.emissionNebulaWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(messageEvent.data, 'nebula')
-        this.supernovaRemnantsNebulaWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(messageEvent.data, 'nebula', 'remnant')
+        this.emissionNebulaWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
+            messageEvent.data, 
+            'nebula',
+            'emission'
+        )
+        this.supernovaRemnantsNebulaWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
+            messageEvent.data,
+            'nebula',
+            'remnant'
+        )
+
+        this.giantWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
+            messageEvent.data,
+            'giant',
+            'sun'
+        )
     }
 
     _setWorkersDistribution() {
@@ -63,8 +91,12 @@ export default class Workers {
                 worker: this.emissionNebulaWorker
             },
             {
-                chances: 10,
+                chances: 8,
                 worker: this.supernovaRemnantsNebulaWorker
+            },
+            {
+                chances: 2,
+                worker: this.giantWorker
             }
         ]
     }

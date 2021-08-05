@@ -2,7 +2,9 @@ precision mediump float;
 
 uniform vec3 uColor;
 uniform float uTime;
-uniform sampler2D uNoiseTexture;
+uniform float uBrightnessAmplifier;
+uniform float uNoiseIntensity;
+uniform float uNoiseSpeed;
 
 varying vec2 vUv;
 varying vec3 vPosition;
@@ -147,13 +149,13 @@ float snoise(vec4 v)
 // creating octave (layer) of noise
 float noiseOctave(vec4 layer)
 {
-    float noiseOctaveOffset = 100.0;
+    float noiseOctaveOffset = 500.0;
     float noiseAmplitude = 1.0;
     float noiseScale = 1.0;
 
     float sum = 0.0;
 
-    for(int i=0; i<8; i++)
+    for(int i=0; i<6; i++)
     {
         // adding layers of noise on each other
         // with different scale and amplitude
@@ -175,9 +177,11 @@ float noiseOctave(vec4 layer)
 // convert perceptible brightness to sun color
 vec3 convertBrightToColor(float brightness)
 {
-    float brightnessAmplifier = 0.25;
+    float brightnessAmplifier = uBrightnessAmplifier;
 
     brightness *= brightnessAmplifier;
+
+    // add uniform for color pow here to change color on diff universes
     return vec3(brightness, brightness*brightness, brightness*brightness*brightness*brightness) * 0.6;
 }
 
@@ -189,8 +193,8 @@ float fresnel(vec3 eyeVector, vec3 worldNormal)
 
 void main()
 {
-    float noiseIntensity = 4.0;
-    float noiseSpeed = 0.03;
+    float noiseIntensity = uNoiseIntensity;
+    float noiseSpeed = uNoiseSpeed;
     float fresnelAmplifier = 1.0;
 
     // base layer of noise

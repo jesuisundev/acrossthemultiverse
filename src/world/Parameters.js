@@ -231,6 +231,112 @@ export default class Parameters {
                     "#00FF00"
                 ]
             },
+            giant: {
+                budget: 300000,
+                vertices: {
+                    bright: {
+                        min: 0.00001,
+                        max: 0.0001
+                    },
+                    pass: {
+                        min: 0.05,
+                        max: 0.25
+                    }
+                },
+                material: {
+                    size: {
+                        bright: {
+                            min: 300,
+                            max: 400
+                        },
+                        pass: {
+                            min: 50,
+                            max: 60
+                        }
+                    },
+                    opacity: {
+                        bright: {
+                            min: 1,
+                            max: 1
+                        },
+                        pass: {
+                            min: 1,
+                            max: 1
+                        }
+                    }
+                },
+                shader: {
+                    sun: {
+                        scale: {
+                            min: 5000,
+                            max: 15000
+                        },
+                        uBrightnessAmplifier: {
+                            min: 0.25,
+                            max: 0.40
+                        },
+                        uNoiseIntensity: {
+                            min: 2.0,
+                            max: 8.0
+                        },
+                        uNoiseSpeed: {
+                            min: 0.03,
+                            max: 0.08
+                        }
+                    }
+                },
+                colors: [
+                    "#9bb2ff",
+                    "#9eb5ff",
+                    "#a3b9ff",
+                    "#aabfff",
+                    "#b2c5ff",
+                    "#bbccff",
+                    "#c4d2ff",
+                    "#ccd8ff",
+                    "#d3ddff",
+                    "#dae2ff",
+                    "#dfe5ff",
+                    "#e4e9ff",
+                    "#e9ecff",
+                    "#eeefff",
+                    "#f3f2ff",
+                    "#f8f6ff",
+                    "#fef9ff",
+                    "#fff9fb",
+                    "#fff7f5",
+                    "#fff5ef",
+                    "#fff3ea",
+                    "#fff1e5",
+                    "#ffefe0",
+                    "#ffeddb",
+                    "#ffebd6",
+                    "#ffe9d2",
+                    "#ffe8ce",
+                    "#ffe6ca",
+                    "#ffe5c6",
+                    "#ffe3c3",
+                    "#ffe2bf",
+                    "#ffe0bb",
+                    "#ffdfb8",
+                    "#ffddb4",
+                    "#ffdbb0",
+                    "#ffdaad",
+                    "#ffd8a9",
+                    "#ffd6a5",
+                    "#ffd5a1",
+                    "#ffd29c",
+                    "#ffd096",
+                    "#ffcc8f",
+                    "#ffc885",
+                    "#ffc178",
+                    "#ffb765",
+                    "#ffa94b",
+                    "#ff9523",
+                    "#ff7b00",
+                    "#ff5200"
+                ]
+            },
             blackhole: {
             }
         }

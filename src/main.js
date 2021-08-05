@@ -10,24 +10,21 @@ import Library from './world/Library'
 import Parameters from './world/Parameters'
 import Effect from './postprocessing/Effect'
 
-import mainSequenceVertexShader from './shaders/starfield/mainsequence/vertex.glsl'
-import mainSequenceFragmentShader from './shaders/starfield/mainsequence/fragment.glsl'
-
 const clock = new THREE.Clock()
 const parameters = new Parameters()
 
 const scene = new THREE.Scene()
 const renderer = new THREE.WebGLRenderer(parameters.global.webGlRenderer)
-renderer.setSize(window.innerWidth, window.innerHeight / 1.3)
+renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// LEARN SHADER - WIP
-// TODO : integrate main sequence with starfield
-// TODO : build simple blackhole (sphere with shader distortion)
+// TODO : retry blackhole with eye vector and cameraposition
+// TODO : build simple blackhole (sphere with shader distortion tweaking fresnel)
 // TODO : more randomess in emission
 // TODO : build wrap hole travel
+// LEARN SHADER
 // TODO : build four types of galaxy https://theplanets.org/types-of-galaxies/
 // TODO : improve blackhole ?
 // todo : maybe a way to set material https://github.com/brunosimon/experiment-rick-and-morty-tribute/blob/master/src/Experience/Particles.js
@@ -57,27 +54,11 @@ let lastClusterPosition
 let needRender = false
 let isRenderingClusterInProgress = false
 let prevTimePerf = performance.now()
-let material
+
 // preload every needed files before showing anything
 library.preload()
-window.onload = () => {
-    const geometry = new THREE.SphereGeometry(1, 64, 32)
-    material = new THREE.ShaderMaterial({
-        vertexShader: mainSequenceVertexShader, 
-        fragmentShader: mainSequenceFragmentShader,
-        uniforms: {
-            uTime: {value: 0}
-        },
-        side: THREE.DoubleSide
-    })
-    const sphere = new THREE.Mesh(geometry, material)
-    sphere.scale.set(10000,10000,10000)
-    scene.add(sphere)
-    
-    sphere.position.z = -15000
-
-    needRender = true
-}
+window.onload = () => needRender = true
+window.materialsToUpdate = {}
 
 scene.add(controls.pointerLockControls.getObject())
 
@@ -85,9 +66,9 @@ document.addEventListener("keydown", (event) => controls.onKeyDown(event))
 document.addEventListener("keyup", (event) => controls.onKeyUp(event))
 document.addEventListener("click", (event) => controls.pointerLockControls.lock())
 window.addEventListener("resize", () => {
-    renderer.setSize(window.innerWidth, window.innerHeight / 1.3)
-    camera.aspect = window.innerWidth / (window.innerHeight  / 1.3)
-    composer.setSize(window.innerWidth, window.innerHeight / 1.3)
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    camera.aspect = window.innerWidth / window.innerHeight
+    composer.setSize(window.innerWidth, window.innerHeight)
     camera.updateProjectionMatrix()
 })
 
@@ -123,9 +104,10 @@ function animate(time) {
 
     const elapsedTime = clock.getElapsedTime()
 
-    if(material)  {
-        material.uniforms.uTime.value = elapsedTime
-        material.needsUpdate = true
+    if(Object.keys(window.materialsToUpdate).length) {
+        for(let materialToUpdate of Object.values(window.materialsToUpdate)) {
+            materialToUpdate.uniforms.uTime.value = elapsedTime
+        }
     }
 
     const timePerf = performance.now()
