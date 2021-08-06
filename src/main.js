@@ -10,6 +10,9 @@ import Library from './world/Library'
 import Parameters from './world/Parameters'
 import Effect from './postprocessing/Effect'
 
+import vertexShader from './shaders/singularity/blackhole/vertex.glsl'
+import fragmentShader from './shaders/singularity/blackhole/fragment.glsl'
+
 const clock = new THREE.Clock()
 const parameters = new Parameters()
 
@@ -20,8 +23,7 @@ renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : retry blackhole with eye vector and cameraposition
-// TODO : build simple blackhole (sphere with shader distortion tweaking fresnel)
+// TODO : build simple blackhole (sphere with shader distortion tweaking fresnel) - wip
 // TODO : more randomess in emission
 // TODO : build wrap hole travel
 // LEARN SHADER
@@ -54,10 +56,37 @@ let lastClusterPosition
 let needRender = false
 let isRenderingClusterInProgress = false
 let prevTimePerf = performance.now()
+let material
+let mesh
 
 // preload every needed files before showing anything
 library.preload()
-window.onload = () => needRender = true
+window.onload = () => {
+    // Geometry
+    const geometry = new THREE.RingGeometry( 1, 10, 32 )
+    //const geometry = new THREE.CircleGeometry( 5, 32 );
+    //const geometry = new THREE.TorusGeometry( 10, 0.8, 30, 100 );
+    // Material
+    const material = new THREE.ShaderMaterial({
+        vertexShader: vertexShader, 
+        fragmentShader: fragmentShader,
+        uniforms: {
+            uFrequency: { value : new THREE.Vector2(250, 250) },
+            uTime: { value: 0 },
+            uTexture: { value: library.textures.blackhole.disk[0] }
+        },
+        side: THREE.DoubleSide
+    })
+
+    material.needsUpdate = true
+    mesh = new THREE.Mesh(geometry, material)
+    mesh.scale.set(1000,1000,1000)
+    scene.add(mesh)
+
+    mesh.position.z = -10000
+    needRender = true
+}
+
 window.materialsToUpdate = {}
 
 scene.add(controls.pointerLockControls.getObject())
@@ -103,6 +132,14 @@ function animate(time) {
     }
 
     const elapsedTime = clock.getElapsedTime()
+
+    if(material) {
+        material.uniforms.uTime.value = elapsedTime
+        material.needsUpdate = true
+    }
+    if(mesh) {
+        mesh.rotateZ(1)
+    }
 
     if(Object.keys(window.materialsToUpdate).length) {
         for(let materialToUpdate of Object.values(window.materialsToUpdate)) {

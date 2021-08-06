@@ -29,6 +29,12 @@ export default class Library {
                         {type: 'cloud', src: 'cloud3.png'},
                         {type: 'cloud', src: 'cloud4.png'}
                     ]
+                },
+                blackhole: {
+                    baseUrl: '/textures/blackhole/',
+                    pool: [
+                        {type: 'disk', src: 'disk.jpg'}
+                    ]
                 }
             }
         }
@@ -40,6 +46,9 @@ export default class Library {
             },
             nebula : {
                 cloud: []
+            },
+            blackhole : {
+                disk: []
             }
         }
     }
