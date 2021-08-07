@@ -44,6 +44,12 @@ export default class Workers {
             subtype: "Sun",
             source: new Worker(new URL('./giant/SunGiantWorker.js', import.meta.url))
         }
+
+        this.blackholeWorker = {
+            type: "Singularity",
+            subtype: "Blackhole",
+            source: new Worker(new URL('./singularity/BlackHoleSingularityWorker.js', import.meta.url))
+        }
     }
 
     _setWorkersListener() {
@@ -74,12 +80,18 @@ export default class Workers {
             'giant',
             'sun'
         )
+
+        this.blackholeWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
+            messageEvent.data,
+            'singularity',
+            'blackhole'
+        )
     }
 
     _setWorkersDistribution() {
         this.workersDistribution = [
             {
-                chances: 50,
+                chances: 49,
                 worker: this.openStarfieldWorker
             },
             {
@@ -97,6 +109,10 @@ export default class Workers {
             {
                 chances: 2,
                 worker: this.giantWorker
+            },
+            {
+                chances: 0, // this sould get updated to 1 after some time
+                worker: this.blackholeWorker
             }
         ]
     }

@@ -10,9 +10,6 @@ import Library from './world/Library'
 import Parameters from './world/Parameters'
 import Effect from './postprocessing/Effect'
 
-import vertexShader from './shaders/singularity/blackhole/vertex.glsl'
-import fragmentShader from './shaders/singularity/blackhole/fragment.glsl'
-
 const clock = new THREE.Clock()
 const parameters = new Parameters()
 
@@ -23,7 +20,6 @@ renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : integrate BH TO WORLD
 // TODO : more randomess in emission
 // TODO : build wrap hole travel
 // LEARN SHADER
@@ -56,46 +52,15 @@ let lastClusterPosition
 let needRender = false
 let isRenderingClusterInProgress = false
 let prevTimePerf = performance.now()
-let material
-let mesh
-let sphere
 
 // preload every needed files before showing anything
 library.preload()
 window.onload = () => {
-    const geometry = new THREE.RingGeometry( 1, 10, 32 )
-    material = new THREE.ShaderMaterial({
-        vertexShader: vertexShader, 
-        fragmentShader: fragmentShader,
-        uniforms: {
-            uTime: { value: 0 },
-            uTexture: { value: library.textures.blackhole.disk[1] }
-        },
-        side: THREE.DoubleSide
-    })
-
-    material.needsUpdate = true
-    mesh = new THREE.Mesh(geometry, material)
-    mesh.scale.set(1000,1000,1000)
-    scene.add(mesh)
-    mesh.position.z = -10000
-
-    const geometrySphere = new THREE.SphereGeometry( 1, 32, 16 );
-    const materialSphere = new THREE.MeshBasicMaterial( {
-        color: 0x000000,
-        transparent:false,
-        side: THREE.DoubleSide
-    } );
-    sphere = new THREE.Mesh( geometrySphere, materialSphere );
-    sphere.scale.set(1600,1400,500)
-    scene.add( sphere );
-    sphere.position.z = -10000
-
-
     needRender = true
 }
 
 window.materialsToUpdate = {}
+window.meshesToUpdate = {}
 
 scene.add(controls.pointerLockControls.getObject())
 
@@ -140,21 +105,7 @@ function animate(time) {
     }
 
     const elapsedTime = clock.getElapsedTime()
-
-    if(material) {
-        material.uniforms.uTime.value = elapsedTime
-        material.needsUpdate = true
-    }
-    if(mesh && sphere) {
-        mesh.rotateZ(2)
-        sphere.rotateZ(2)
-    }
-
-    if(Object.keys(window.materialsToUpdate).length) {
-        for(let materialToUpdate of Object.values(window.materialsToUpdate)) {
-            materialToUpdate.uniforms.uTime.value = elapsedTime
-        }
-    }
+    updateAnimatedObjects(elapsedTime)
 
     const timePerf = performance.now()
     if (controls.pointerLockControls.isLocked === true) {
@@ -186,6 +137,22 @@ function animate(time) {
             renderMatters(clusterTorender, grid.queueClusters.get(clusterTorender))
             isRenderingClusterInProgress = false
         }, parameters.global.clusterRenderTimeOut)
+    }
+}
+
+function updateAnimatedObjects(elapsedTime) {
+    // update materials (shaders animation)
+    if(Object.keys(window.materialsToUpdate).length) {
+        for(let materialToUpdate of Object.values(window.materialsToUpdate)) {
+            materialToUpdate.uniforms.uTime.value = elapsedTime
+        }
+    }
+
+    // update mesh (object animation)
+    if(Object.keys(window.meshesToUpdate).length) {
+        for(let meshesToUpdate of Object.values(window.meshesToUpdate)) {
+            meshesToUpdate.rotateZ(2)
+        }
     }
 }
 
