@@ -33,7 +33,8 @@ export default class Library {
                 blackhole: {
                     baseUrl: '/textures/blackhole/',
                     pool: [
-                        {type: 'disk', src: 'disk.jpg'}
+                        {type: 'disk', src: 'disk.jpg'},
+                        {type: 'disk', src: 'disk2.png'}
                     ]
                 }
             }

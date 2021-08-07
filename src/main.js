@@ -23,7 +23,7 @@ renderer.domElement.id = "multiverse"
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : build simple blackhole (sphere with shader distortion tweaking fresnel) - wip
+// TODO : integrate BH TO WORLD
 // TODO : more randomess in emission
 // TODO : build wrap hole travel
 // LEARN SHADER
@@ -58,22 +58,18 @@ let isRenderingClusterInProgress = false
 let prevTimePerf = performance.now()
 let material
 let mesh
+let sphere
 
 // preload every needed files before showing anything
 library.preload()
 window.onload = () => {
-    // Geometry
     const geometry = new THREE.RingGeometry( 1, 10, 32 )
-    //const geometry = new THREE.CircleGeometry( 5, 32 );
-    //const geometry = new THREE.TorusGeometry( 10, 0.8, 30, 100 );
-    // Material
-    const material = new THREE.ShaderMaterial({
+    material = new THREE.ShaderMaterial({
         vertexShader: vertexShader, 
         fragmentShader: fragmentShader,
         uniforms: {
-            uFrequency: { value : new THREE.Vector2(250, 250) },
             uTime: { value: 0 },
-            uTexture: { value: library.textures.blackhole.disk[0] }
+            uTexture: { value: library.textures.blackhole.disk[1] }
         },
         side: THREE.DoubleSide
     })
@@ -82,8 +78,20 @@ window.onload = () => {
     mesh = new THREE.Mesh(geometry, material)
     mesh.scale.set(1000,1000,1000)
     scene.add(mesh)
-
     mesh.position.z = -10000
+
+    const geometrySphere = new THREE.SphereGeometry( 1, 32, 16 );
+    const materialSphere = new THREE.MeshBasicMaterial( {
+        color: 0x000000,
+        transparent:false,
+        side: THREE.DoubleSide
+    } );
+    sphere = new THREE.Mesh( geometrySphere, materialSphere );
+    sphere.scale.set(1600,1400,500)
+    scene.add( sphere );
+    sphere.position.z = -10000
+
+
     needRender = true
 }
 
@@ -137,8 +145,9 @@ function animate(time) {
         material.uniforms.uTime.value = elapsedTime
         material.needsUpdate = true
     }
-    if(mesh) {
-        mesh.rotateZ(1)
+    if(mesh && sphere) {
+        mesh.rotateZ(2)
+        sphere.rotateZ(2)
     }
 
     if(Object.keys(window.materialsToUpdate).length) {

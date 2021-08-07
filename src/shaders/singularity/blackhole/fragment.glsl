@@ -145,7 +145,7 @@ float snoise(vec4 v)
 // creating octave (layer) of noise
 float noiseOctave(vec4 layer)
 {
-    float noiseOctaveOffset = 500.0;
+    float noiseOctaveOffset = abs(sin(uTime) * 0.1) + 3.5;
     float noiseAmplitude = 5.0;
     float noiseScale = 2.0;
 
@@ -164,7 +164,7 @@ float noiseOctave(vec4 layer)
         noiseScale *= 2.0;
 
         // offseting each layer by the time
-        layer.w += noiseOctaveOffset;
+        layer.w *= noiseOctaveOffset;
     }
 
     return sum;
@@ -173,12 +173,12 @@ float noiseOctave(vec4 layer)
 // convert perceptible brightness to sun color
 vec3 convertBrightToColor(float brightness)
 {
-    float brightnessAmplifier = 0.1;
+    float brightnessAmplifier = 0.35;
 
     brightness *= brightnessAmplifier;
 
     // add uniform for color pow here to change color on diff universes
-    return vec3(brightness, brightness*brightness, brightness*brightness*brightness*brightness) * 0.6;
+    return vec3(brightness, brightness*brightness, brightness*brightness*brightness*brightness*brightness*brightness) * 1.2;
 }
 
 // calucate the fresnel of the object
@@ -190,12 +190,18 @@ float fresnel(vec3 eyeVector, vec3 worldNormal)
 void main()
 {
     // get texture data from texture
-    // first param - the texture sampler
-    // second param - coordinates where to pick color on texture 
-    vec4 textureColor = texture2D(uTexture, vUv);
+    vec4 texture = texture2D(uTexture, vUv);
 
-    textureColor.xyz -= convertBrightToColor(1.0);
+    // noises
+    float textureNoises = noiseOctave(texture);
+    float regionNoises = max(snoise(texture), 0.0);
+    float smoothRegionNoises = mix(1.0, regionNoises, 0.7);
+    float smoothedLayersOfNoises = textureNoises * smoothRegionNoises;
 
-    // r, g, b, alpha
-    gl_FragColor = textureColor;
+    // add the fresnel to the shape
+    smoothedLayersOfNoises += fresnel(vEyeVector, vPosition) * 1.2;
+
+    vec3 textureNoisesColored = convertBrightToColor(smoothedLayersOfNoises);
+
+    gl_FragColor = vec4(textureNoisesColored, 1.0);
 }
