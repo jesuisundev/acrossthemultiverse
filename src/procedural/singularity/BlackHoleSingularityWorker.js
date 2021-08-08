@@ -3,7 +3,7 @@ self.onmessage = messageEvent => {
   const blackholeAttributes = {}
 
   // we dont need any particles for this instance
-  for (let clusterToPopulate of clustersToPopulate) {
+  for (const clusterToPopulate of clustersToPopulate) {
     blackholeAttributes[clusterToPopulate] = {}
   }
 

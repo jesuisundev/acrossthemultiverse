@@ -6,7 +6,7 @@ self.onmessage = messageEvent => {
   const clusterSize = messageEvent.data.parameters.grid.clusterSize
   const starfieldsAttributes = {}
 
-  for (let clusterToPopulate of clustersToPopulate) {
+  for (const clusterToPopulate of clustersToPopulate) {
     // first impressions are crucial
     const verticesPassmin = clusterToPopulate === '0,0,0' ? starfieldParameters.vertices.pass.max : starfieldParameters.vertices.pass.min
 
@@ -55,10 +55,10 @@ self.onmessage = messageEvent => {
     )
 
     starfieldsAttributes[clusterToPopulate] = {
-        brightStarsRandomAttributes,
-        firstPassStarsRandomAttributes,
-        secondPassStarsRandomAttributes,
-        thirdPassStarsRandomAttributes
+      brightStarsRandomAttributes,
+      firstPassStarsRandomAttributes,
+      secondPassStarsRandomAttributes,
+      thirdPassStarsRandomAttributes
     }
   }
 
@@ -71,14 +71,14 @@ function _getAttributesInRandomPosition (max, clusterSize, parameters) {
 
   for (let i = 0; i < max; i++) {
     // creating coordinate for the particles in random positions but confined in the current square cluster
-    let x = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
-    let y = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
-    let z = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
+    const x = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
+    const y = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
+    const z = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
 
     positions.push(x, y, z)
 
     const color = new THREE.Color(
-      Math.random() > 0.4 ? "#eeefff" : parameters.colors[THREE.MathUtils.randInt(0, parameters.colors.length - 1)]
+      Math.random() > 0.4 ? '#eeefff' : parameters.colors[THREE.MathUtils.randInt(0, parameters.colors.length - 1)]
     )
 
     colors.push(color.r, color.g, color.b)

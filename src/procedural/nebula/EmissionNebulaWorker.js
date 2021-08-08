@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { Curves } from "three/examples/jsm/curves/CurveExtras"
+import { Curves } from 'three/examples/jsm/curves/CurveExtras'
 
 self.onmessage = messageEvent => {
   const clustersToPopulate = messageEvent.data.clustersToPopulate
@@ -7,7 +7,7 @@ self.onmessage = messageEvent => {
   const clusterSize = messageEvent.data.parameters.grid.clusterSize
   const nebulasAttributes = {}
 
-  for (let clusterToPopulate of clustersToPopulate) {
+  for (const clusterToPopulate of clustersToPopulate) {
     // gaz shaped
     const gazRandomAttributes = _getShapeAttributesInRandomPosition(nebulaParameters)
 
@@ -41,10 +41,10 @@ self.onmessage = messageEvent => {
     const thirdPassStarsRandomAttributes = _getShapeAttributesInRandomPosition(nebulaParameters)
 
     nebulasAttributes[clusterToPopulate] = {
-        gazRandomAttributes,
-        firstPassStarsRandomAttributes,
-        secondPassStarsRandomAttributes,
-        thirdPassStarsRandomAttributes
+      gazRandomAttributes,
+      firstPassStarsRandomAttributes,
+      secondPassStarsRandomAttributes,
+      thirdPassStarsRandomAttributes
     }
   }
 
@@ -52,8 +52,8 @@ self.onmessage = messageEvent => {
 }
 
 function _getShapeAttributesInRandomPosition (parameters, enforcedPositions, enforcedColors) {
-  const positions = enforcedPositions ? enforcedPositions : []
-  const colors = enforcedColors ? enforcedColors : []
+  const positions = enforcedPositions || []
+  const colors = enforcedColors || []
 
   // black magic
   const randomNess = 4
@@ -69,41 +69,40 @@ function _getShapeAttributesInRandomPosition (parameters, enforcedPositions, enf
   )
 
   geometry.scale(80, 80, 80)
-  
-  if(!positions.length || !colors.length) {
+
+  if (!positions.length || !colors.length) {
     const chosenColors = _getTwoDifferentColors(parameters.colors)
     const mixedColor = chosenColors.colorIn.clone()
 
     for (let i = 0; i < geometry.attributes.position.array.length - 1; i++) {
       const i3 = i * 3
-      
+
       mixedColor.lerp(chosenColors.colorOut, i / (geometry.attributes.position.array.length * colorRadius))
 
-      if(geometry.attributes.position.array[i3]){
+      if (geometry.attributes.position.array[i3]) {
         positions[i3] = geometry.attributes.position.array[i3] * (Math.random() * randomNess + radius)
         colors[i3] = mixedColor.r
       }
 
-      if(geometry.attributes.position.array[i3 + 1]) {
+      if (geometry.attributes.position.array[i3 + 1]) {
         positions[i3 + 1] = geometry.attributes.position.array[i3 + 1] * (Math.random() * randomNess + radius)
         colors[i3 + 1] = mixedColor.g
       }
-        
 
-      if(geometry.attributes.position.array[i3 + 2]) {
+      if (geometry.attributes.position.array[i3 + 2]) {
         positions[i3 + 2] = geometry.attributes.position.array[i3 + 2] * (Math.random() * randomNess + radius)
         colors[i3 + 2] = mixedColor.b
       }
     }
   }
-  
+
   return {
     positions: new Float32Array(positions),
     colors: new Float32Array(colors)
   }
 }
 
-function _getTwoDifferentColors(pool) {
+function _getTwoDifferentColors (pool) {
   const poolCloned = JSON.parse(JSON.stringify(pool))
   const colorIn = new THREE.Color(poolCloned.splice(THREE.MathUtils.randInt(0, poolCloned.length - 1), 1).shift())
   const colorOut = new THREE.Color(poolCloned.splice(THREE.MathUtils.randInt(0, poolCloned.length - 1), 1).shift())
@@ -112,22 +111,22 @@ function _getTwoDifferentColors(pool) {
 }
 
 function _getAttributesInRandomPosition (parameters, max, clusterSize, enforcedPositions = false, enforcedColors = false) {
-  const positions = enforcedPositions ? enforcedPositions : []
-  const colors = enforcedColors ? enforcedColors : []
+  const positions = enforcedPositions || []
+  const colors = enforcedColors || []
 
   for (let i = 0; i < max; i++) {
     // creating coordinate for the particles in random positions but confined in the current square cluster
-    if(!enforcedPositions) {
-      let x = clusterSize * Math.random() - (clusterSize / 2)
-      let y = clusterSize * Math.random() - (clusterSize / 2)
-      let z = clusterSize * Math.random() - (clusterSize / 2)
+    if (!enforcedPositions) {
+      const x = clusterSize * Math.random() - (clusterSize / 2)
+      const y = clusterSize * Math.random() - (clusterSize / 2)
+      const z = clusterSize * Math.random() - (clusterSize / 2)
 
       positions.push(x, y, z)
     }
 
-    if(!enforcedColors) {
+    if (!enforcedColors) {
       const color = new THREE.Color(
-        Math.random() > 0.2 ? "#eeefff" : parameters.colors[THREE.MathUtils.randInt(0, parameters.colors.length - 1)]
+        Math.random() > 0.2 ? '#eeefff' : parameters.colors[THREE.MathUtils.randInt(0, parameters.colors.length - 1)]
       )
 
       colors.push(color.r, color.g, color.b)

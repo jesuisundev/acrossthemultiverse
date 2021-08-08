@@ -6,7 +6,7 @@ self.onmessage = messageEvent => {
   const clusterSize = messageEvent.data.parameters.grid.clusterSize
   const starfieldsAttributes = {}
 
-  for (let clusterToPopulate of clustersToPopulate) {
+  for (const clusterToPopulate of clustersToPopulate) {
     const brightStarsRandomAttributes = _getAttributesInRandomPosition(
       Math.floor(
         starfieldParameters.budget * THREE.MathUtils.randFloat(
@@ -52,10 +52,10 @@ self.onmessage = messageEvent => {
     )
 
     starfieldsAttributes[clusterToPopulate] = {
-        brightStarsRandomAttributes,
-        firstPassStarsRandomAttributes,
-        secondPassStarsRandomAttributes,
-        thirdPassStarsRandomAttributes
+      brightStarsRandomAttributes,
+      firstPassStarsRandomAttributes,
+      secondPassStarsRandomAttributes,
+      thirdPassStarsRandomAttributes
     }
   }
 
@@ -65,7 +65,7 @@ self.onmessage = messageEvent => {
 function _getAttributesInRandomPosition (max, clusterSize, parameters) {
   const positions = []
   const colors = []
-  const spherical = new THREE.Spherical();
+  const spherical = new THREE.Spherical()
   const shapeDice = Math.random()
   const colorChosen = parameters.globularColors[THREE.MathUtils.randInt(0, parameters.globularColors.length - 1)]
 
@@ -78,9 +78,9 @@ function _getAttributesInRandomPosition (max, clusterSize, parameters) {
     const currentVector = new THREE.Vector3().setFromSpherical(spherical)
 
     // random shapes
-    if(shapeDice < 0.1) {
+    if (shapeDice < 0.1) {
       currentVector.multiply(new THREE.Vector3().random())
-    } else if(shapeDice < 0.9) {
+    } else if (shapeDice < 0.9) {
       currentVector.cross(new THREE.Vector3().random())
     }
 

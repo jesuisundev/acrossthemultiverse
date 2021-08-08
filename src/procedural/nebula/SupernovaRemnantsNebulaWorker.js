@@ -6,18 +6,18 @@ self.onmessage = messageEvent => {
   const clusterSize = messageEvent.data.parameters.grid.clusterSize
   const nebulasAttributes = {}
 
-  for (let clusterToPopulate of clustersToPopulate) {
+  for (const clusterToPopulate of clustersToPopulate) {
     // giant gaz sphere shaped
     const gazRandomAttributes = _getRoundAttributesInRandomPosition(
-        nebulaParameters,
-        Math.floor(
-          nebulaParameters.budget * THREE.MathUtils.randFloat(
-            nebulaParameters.vertices.cloud.min * 0.3,
-            nebulaParameters.vertices.cloud.max * 0.3
-          )
-        ),
-        clusterSize,
-        THREE.MathUtils.randInt(3000, 5000)
+      nebulaParameters,
+      Math.floor(
+        nebulaParameters.budget * THREE.MathUtils.randFloat(
+          nebulaParameters.vertices.cloud.min * 0.3,
+          nebulaParameters.vertices.cloud.max * 0.3
+        )
+      ),
+      clusterSize,
+      THREE.MathUtils.randInt(3000, 5000)
     )
 
     // random stars shaped following giant gaz
@@ -34,14 +34,14 @@ self.onmessage = messageEvent => {
 
     // small gaz sphere shaped (inside)
     const secondPassStarsRandomAttributes = _getRoundAttributesInRandomPosition(
-        nebulaParameters,
-        Math.floor(
-          nebulaParameters.budget * THREE.MathUtils.randFloat(
-            nebulaParameters.vertices.cloud.min * 0.05,
-            nebulaParameters.vertices.cloud.max * 0.05
-          )
-        ),
-        clusterSize * 0.5
+      nebulaParameters,
+      Math.floor(
+        nebulaParameters.budget * THREE.MathUtils.randFloat(
+          nebulaParameters.vertices.cloud.min * 0.05,
+          nebulaParameters.vertices.cloud.max * 0.05
+        )
+      ),
+      clusterSize * 0.5
     )
 
     // random stars to fill emptyness
@@ -57,10 +57,10 @@ self.onmessage = messageEvent => {
     )
 
     nebulasAttributes[clusterToPopulate] = {
-        gazRandomAttributes,
-        firstPassStarsRandomAttributes,
-        secondPassStarsRandomAttributes,
-        thirdPassStarsRandomAttributes
+      gazRandomAttributes,
+      firstPassStarsRandomAttributes,
+      secondPassStarsRandomAttributes,
+      thirdPassStarsRandomAttributes
     }
   }
 
@@ -68,28 +68,28 @@ self.onmessage = messageEvent => {
 }
 
 function _getAttributesInRandomPosition (parameters, max, clusterSize) {
-    const positions = []
-    const colors = []
-  
-    for (let i = 0; i < max; i++) {
-      // creating coordinate for the particles in random positions but confined in the current square cluster
-      let x = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
-      let y = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
-      let z = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
-  
-      positions.push(x, y, z)
-  
-      const color = new THREE.Color(
-        Math.random() > 0.2 ? "#eeefff" : parameters.colors[THREE.MathUtils.randInt(0, parameters.colors.length - 1)]
-      )
-  
-      colors.push(color.r, color.g, color.b)
-    }
-  
-    return {
-      positions: new Float32Array(positions),
-      colors: new Float32Array(colors)
-    }
+  const positions = []
+  const colors = []
+
+  for (let i = 0; i < max; i++) {
+    // creating coordinate for the particles in random positions but confined in the current square cluster
+    const x = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
+    const y = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
+    const z = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
+
+    positions.push(x, y, z)
+
+    const color = new THREE.Color(
+      Math.random() > 0.2 ? '#eeefff' : parameters.colors[THREE.MathUtils.randInt(0, parameters.colors.length - 1)]
+    )
+
+    colors.push(color.r, color.g, color.b)
+  }
+
+  return {
+    positions: new Float32Array(positions),
+    colors: new Float32Array(colors)
+  }
 }
 
 function _getRoundAttributesInRandomPosition (parameters, max, clusterSize, distordedAmplitude = 10000) {
@@ -119,10 +119,10 @@ function _getRoundAttributesInRandomPosition (parameters, max, clusterSize, dist
   }
 }
 
-function _getTwoDifferentColors(pool) {
-    const poolCloned = JSON.parse(JSON.stringify(pool))
-    const colorIn = new THREE.Color(poolCloned.splice(THREE.MathUtils.randInt(0, poolCloned.length - 1), 1).shift())
-    const colorOut = new THREE.Color(poolCloned.splice(THREE.MathUtils.randInt(0, poolCloned.length - 1), 1).shift())
+function _getTwoDifferentColors (pool) {
+  const poolCloned = JSON.parse(JSON.stringify(pool))
+  const colorIn = new THREE.Color(poolCloned.splice(THREE.MathUtils.randInt(0, poolCloned.length - 1), 1).shift())
+  const colorOut = new THREE.Color(poolCloned.splice(THREE.MathUtils.randInt(0, poolCloned.length - 1), 1).shift())
 
-    return { colorIn, colorOut }
+  return { colorIn, colorOut }
 }
