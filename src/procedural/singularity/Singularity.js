@@ -15,7 +15,7 @@ export default class Singularity {
   generate (blackholeAttributes, position) {
     const currentCoordinateVector = this._getCoordinateVectorByPosition(position)
 
-    const blackholeDiskGeometry = new THREE.RingGeometry(1, 10, 32)
+    const blackholeDiskGeometry = new THREE.RingGeometry(5.45, 15, 32)
     const blackholeDiskMaterial = this._getRandomBlackHoleShaderMaterial()
     const blackholeDiskMesh = new THREE.Mesh(blackholeDiskGeometry, blackholeDiskMaterial)
     blackholeDiskMesh.scale.set(1000, 1000, 1000)
@@ -34,7 +34,7 @@ export default class Singularity {
       side: THREE.DoubleSide
     })
     const blackholeMesh = new THREE.Mesh(blackholeGeometry, blackholeMaterial)
-    blackholeMesh.scale.set(1600, 1400, 500)
+    blackholeMesh.scale.set(5000, 5000, 3000)
     blackholeMesh.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
 
     blackholeMesh.key = Math.floor(Date.now() + Math.random())
@@ -101,7 +101,7 @@ export default class Singularity {
       fragmentShader: singularityBlackholeFragmentShader,
       uniforms: {
         uTime: { value: 0 },
-        uTexture: { value: this.library.textures.blackhole.disk[1] }
+        uTexture: { value: this.library.textures.blackhole.disk[0] }
       },
       side: THREE.DoubleSide
     })

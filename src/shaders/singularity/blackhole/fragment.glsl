@@ -145,7 +145,7 @@ float snoise(vec4 v)
 // creating octave (layer) of noise
 float noiseOctave(vec4 layer)
 {
-    float noiseOctaveOffset = abs(sin(uTime) * 0.1) + 3.5;
+    float noiseOctaveOffset = abs(sin(uTime) * 0.2) + 4.5;
     float noiseAmplitude = 5.0;
     float noiseScale = 2.0;
 
@@ -173,7 +173,7 @@ float noiseOctave(vec4 layer)
 // convert perceptible brightness to sun color
 vec3 convertBrightToColor(float brightness)
 {
-    float brightnessAmplifier = 0.35;
+    float brightnessAmplifier = 0.30;
 
     brightness *= brightnessAmplifier;
 

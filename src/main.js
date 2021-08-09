@@ -20,19 +20,18 @@ renderer.domElement.id = 'multiverse'
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : more randomess in emission
 // TODO : build wrap hole travel
 // LEARN SHADER
 // TODO : build four types of galaxy https://theplanets.org/types-of-galaxies/
-// TODO : improve blackhole ?
 // todo : maybe a way to set material https://github.com/brunosimon/experiment-rick-and-morty-tribute/blob/master/src/Experience/Particles.js
 // TODO : ask for UI/UX
 // TODO : build tweark for others universes
 // TODO : build epiphany - filament interconnected of universes via shaders points
 // TODO : add sequencer
 // TODO : lock fps
-// TODO : performance
+// TODO : performance, screen size
 // TODO : add UI and music
+// TODO : refactor clean up comment
 // TODO : push to cloudfare
 const camera = new THREE.PerspectiveCamera(
   parameters.global.camera.fov, // can you fix the fov issue without sacrifying the wow effect ?

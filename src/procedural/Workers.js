@@ -23,7 +23,7 @@ export default class Workers {
 
     this.globularStarfieldWorker = {
       type: 'Starfield',
-      subtype: 'Open',
+      subtype: 'Globular',
       source: new Worker(new URL('./starfield/GlobularStarfieldWorker.js', import.meta.url))
     }
 
@@ -109,17 +109,18 @@ export default class Workers {
       {
         chances: 2,
         worker: this.giantWorker
-      },
-      {
-        chances: 0, // this sould get updated to 1 after some time
-        worker: this.blackholeWorker
       }
     ]
+
+    // {
+    //   chances: 0, // this sould get updated to 1 after some time
+    //   worker: this.blackholeWorker
+    // }
   }
 
   getWorkerDistributed (clusterToPopulate) {
     if (clusterToPopulate === '0,0,0') {
-        return this.openStarfieldWorker.source
+      return this.openStarfieldWorker.source
     }
 
     let currentProbability = 0
