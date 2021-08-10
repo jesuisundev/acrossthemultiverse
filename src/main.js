@@ -10,6 +10,9 @@ import Library from './world/Library'
 import Parameters from './world/Parameters'
 import Effect from './postprocessing/Effect'
 
+import { Curves } from 'three/examples/jsm/curves/CurveExtras'
+import { SceneUtils } from 'three/examples/jsm/utils/SceneUtils.js'
+
 const clock = new THREE.Clock()
 const parameters = new Parameters()
 
@@ -55,6 +58,31 @@ let prevTimePerf = performance.now()
 // preload every needed files before showing anything
 library.preload()
 window.onload = () => {
+  const wormholeShape = new Curves.CinquefoilKnot()
+  const wormholeTube = new THREE.TubeGeometry(
+    wormholeShape,
+    500,
+    2,
+    12,
+    true
+  )
+
+  const tubeMesh = SceneUtils.createMultiMaterialObject(wormholeTube, [
+    new THREE.MeshLambertMaterial({
+      color: 0xFFFFFF,
+      opacity: 0.8,
+      transparent: true
+    }),
+    new THREE.MeshBasicMaterial({
+      color: 0xFFFFFF,
+      opacity: 0.5,
+      wireframe: true
+  })])
+
+  tubeMesh.scale.set(500, 500, 500)
+
+  scene.add(tubeMesh)
+
   needRender = true
 }
 
