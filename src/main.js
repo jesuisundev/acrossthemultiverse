@@ -23,7 +23,7 @@ renderer.domElement.id = 'multiverse'
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : build wrap hole travel
+// TODO : build wrap hole travel - WIP
 // LEARN SHADER
 // TODO : build four types of galaxy https://theplanets.org/types-of-galaxies/
 // todo : maybe a way to set material https://github.com/brunosimon/experiment-rick-and-morty-tribute/blob/master/src/Experience/Particles.js
@@ -55,33 +55,21 @@ let needRender = false
 let isRenderingClusterInProgress = false
 let prevTimePerf = performance.now()
 
+let wormholeShape
+let wormholeCameraPositionIndex = 0
+
 // preload every needed files before showing anything
 library.preload()
 window.onload = () => {
-  const wormholeShape = new Curves.CinquefoilKnot()
-  const wormholeTube = new THREE.TubeGeometry(
-    wormholeShape,
-    500,
-    2,
-    12,
-    true
-  )
-
-  const tubeMesh = SceneUtils.createMultiMaterialObject(wormholeTube, [
-    new THREE.MeshLambertMaterial({
-      color: 0xFFFFFF,
-      opacity: 0.8,
-      transparent: true
-    }),
-    new THREE.MeshBasicMaterial({
-      color: 0xFFFFFF,
-      opacity: 0.5,
-      wireframe: true
-  })])
-
-  tubeMesh.scale.set(500, 500, 500)
-
-  scene.add(tubeMesh)
+  wormholeShape = new Curves.CinquefoilKnot()
+  wormholeShape.scale = 500
+  
+  const wormholeTube = new THREE.TubeGeometry(wormholeShape, 500, 2, 12, true)
+  const wormholeTubeMesh = new THREE.Mesh(wormholeTube, new THREE.MeshBasicMaterial({
+    color: 0xFFFFFF,
+    wireframe: true
+  }))
+  scene.add(wormholeTubeMesh)
 
   needRender = true
 }
@@ -128,7 +116,8 @@ function renderMatters (position, cluster) {
 
 function animate (time) {
   if (needRender) {
-    composer.render()
+    //if not worhole composer.render() else
+    updatePositionInWormhole()
   }
 
   const elapsedTime = clock.getElapsedTime()
@@ -138,11 +127,11 @@ function animate (time) {
   if (controls.pointerLockControls.isLocked === true) {
     controls.handleMovements(timePerf, prevTimePerf)
   } else {
-    camera.rotation.z += parameters.global.camera.defaultRotation
+    //camera.rotation.z += parameters.global.camera.defaultRotation
   }
   prevTimePerf = time
 
-  camera.position.z -= parameters.global.camera.defaultForward
+  //camera.position.z -= parameters.global.camera.defaultForward
 
   requestAnimationFrame(animate)
 
@@ -181,6 +170,27 @@ function updateAnimatedObjects (elapsedTime) {
       meshesToUpdate.rotateZ(2)
     }
   }
+}
+
+function updatePositionInWormhole () {
+  wormholeCameraPositionIndex++
+
+  if (wormholeCameraPositionIndex > 2000) {
+    wormholeCameraPositionIndex = 0
+  }
+  const camPos = wormholeShape.getPoint(wormholeCameraPositionIndex / 2000)
+  const camRot = wormholeShape.getTangent(wormholeCameraPositionIndex / 2000)
+
+  camera.position.x = camPos.x
+  camera.position.y = camPos.y
+  camera.position.z = camPos.z
+
+  camera.rotation.x = camRot.x
+  camera.rotation.y = camRot.y
+  camera.rotation.z = camRot.z
+
+  camera.lookAt(wormholeShape.getPoint((wormholeCameraPositionIndex + 1) / 2000))
+  composer.render()
 }
 
 animate()

@@ -11,7 +11,7 @@ export default class Parameters {
       },
       camera: {
         fov: 100,
-        near: 100,
+        near: 0.01,
         far: 20000,
         defaultRotation: 0.00015,
         defaultForward: 0.5
