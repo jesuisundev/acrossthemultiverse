@@ -23,7 +23,7 @@ renderer.domElement.id = 'multiverse'
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : build wrap hole travel - WIP
+// TODO : build wrap hole travel - WIP 
 // LEARN SHADER
 // TODO : build four types of galaxy https://theplanets.org/types-of-galaxies/
 // todo : maybe a way to set material https://github.com/brunosimon/experiment-rick-and-morty-tribute/blob/master/src/Experience/Particles.js
@@ -71,7 +71,7 @@ window.onload = () => {
 
   wormholeShape.scale = 500
 
-  // stars
+  // wireframed stars
   firstPassTexture = library.textures.wormhole.galaxy[0]
   firstPassTexture.wrapS = THREE.RepeatWrapping
   firstPassTexture.wrapT = THREE.MirroredRepeatWrapping
@@ -96,19 +96,20 @@ window.onload = () => {
       transparent: true,
       opacity: 0.7,
       blending: THREE.AdditiveBlending,
-      side: THREE.BackSide
+      side: THREE.BackSide,
+      wireframe: true
     }),
     new THREE.MeshBasicMaterial({
       map: secondPassTexture,
       transparent: true,
       opacity: 1,
       blending: THREE.AdditiveBlending,
-      side: THREE.BackSide
+      side: THREE.DoubleSide
     }),
     new THREE.MeshBasicMaterial({
       map: thirdPassTexture,
       transparent: true,
-      opacity: 0.7,
+      opacity: 0,
       blending: THREE.AdditiveBlending,
       side: THREE.BackSide
     })
