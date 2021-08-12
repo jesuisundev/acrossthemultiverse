@@ -40,7 +40,8 @@ export default class Library {
           baseUrl: '/textures/wormhole/',
           pool: [
             { type: 'galaxy', src: 'galaxy1.jpg' },
-            { type: 'galaxy', src: 'galaxy2.png' }
+            { type: 'galaxy', src: 'galaxy2.png' },
+            { type: 'galaxy', src: 'galaxy3.jpg' }
           ]
         }
       }

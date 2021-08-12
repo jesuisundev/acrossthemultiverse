@@ -59,6 +59,7 @@ let wormholeShape
 let wormholeCameraPositionIndex = 0
 let firstPassTexture
 let secondPassTexture
+let thirdPassTexture
 
 // preload every needed files before showing anything
 library.preload()
@@ -69,18 +70,27 @@ window.onload = () => {
   //wormholeShape = new Curves.HeartCurve()
 
   wormholeShape.scale = 500
+
+  // stars
   firstPassTexture = library.textures.wormhole.galaxy[0]
   firstPassTexture.wrapS = THREE.RepeatWrapping
   firstPassTexture.wrapT = THREE.MirroredRepeatWrapping
   firstPassTexture.repeat.set(40, 2)
 
+  // speeder light
   secondPassTexture = library.textures.wormhole.galaxy[1]
   secondPassTexture.wrapS = THREE.RepeatWrapping
   secondPassTexture.wrapT = THREE.MirroredRepeatWrapping
   secondPassTexture.repeat.set(1, 2)
 
-  const wormholeTube = new THREE.TubeGeometry(wormholeShape, 500, 12, 12, true)
-  const wormholeTubeMesh = SceneUtils.createMultiMaterialObject(wormholeTube, [
+  // nebula
+  thirdPassTexture = library.textures.wormhole.galaxy[2]
+  thirdPassTexture.wrapS = THREE.RepeatWrapping
+  thirdPassTexture.wrapT = THREE.MirroredRepeatWrapping
+  thirdPassTexture.repeat.set(1, 2)
+
+  const wormholeGeometry = new THREE.TubeGeometry(wormholeShape, 500, 12, 12, true)
+  const wormholeTubeMesh = SceneUtils.createMultiMaterialObject(wormholeGeometry, [
     new THREE.MeshBasicMaterial({
       map: firstPassTexture,
       transparent: true,
@@ -90,9 +100,16 @@ window.onload = () => {
     }),
     new THREE.MeshBasicMaterial({
       map: secondPassTexture,
+      transparent: true,
       opacity: 1,
       blending: THREE.AdditiveBlending,
+      side: THREE.BackSide
+    }),
+    new THREE.MeshBasicMaterial({
+      map: thirdPassTexture,
       transparent: true,
+      opacity: 0.7,
+      blending: THREE.AdditiveBlending,
       side: THREE.BackSide
     })
   ])
@@ -202,7 +219,7 @@ function updateAnimatedObjects (elapsedTime) {
 
 function updatePositionInWormhole () {
   wormholeCameraPositionIndex++
-  const speed = 2000
+  const speed = 1500
 
   if (wormholeCameraPositionIndex > speed) {
     wormholeCameraPositionIndex = 0
