@@ -57,18 +57,46 @@ let prevTimePerf = performance.now()
 
 let wormholeShape
 let wormholeCameraPositionIndex = 0
+let firstPassTexture
+let secondPassTexture
 
 // preload every needed files before showing anything
 library.preload()
 window.onload = () => {
-  wormholeShape = new Curves.CinquefoilKnot()
+  //wormholeShape = new Curves.CinquefoilKnot()
+  wormholeShape = new Curves.TorusKnot()
+  //speeder
+  //wormholeShape = new Curves.HeartCurve()
+
   wormholeShape.scale = 500
-  
-  const wormholeTube = new THREE.TubeGeometry(wormholeShape, 500, 2, 12, true)
-  const wormholeTubeMesh = new THREE.Mesh(wormholeTube, new THREE.MeshBasicMaterial({
-    color: 0xFFFFFF,
-    wireframe: true
-  }))
+  firstPassTexture = library.textures.wormhole.galaxy[0]
+  firstPassTexture.wrapS = THREE.RepeatWrapping
+  firstPassTexture.wrapT = THREE.MirroredRepeatWrapping
+  firstPassTexture.repeat.set(40, 2)
+
+  secondPassTexture = library.textures.wormhole.galaxy[1]
+  secondPassTexture.wrapS = THREE.RepeatWrapping
+  secondPassTexture.wrapT = THREE.MirroredRepeatWrapping
+  secondPassTexture.repeat.set(1, 2)
+
+  const wormholeTube = new THREE.TubeGeometry(wormholeShape, 500, 12, 12, true)
+  const wormholeTubeMesh = SceneUtils.createMultiMaterialObject(wormholeTube, [
+    new THREE.MeshBasicMaterial({
+      map: firstPassTexture,
+      transparent: true,
+      opacity: 0.7,
+      blending: THREE.AdditiveBlending,
+      side: THREE.BackSide
+    }),
+    new THREE.MeshBasicMaterial({
+      map: secondPassTexture,
+      opacity: 1,
+      blending: THREE.AdditiveBlending,
+      transparent: true,
+      side: THREE.BackSide
+    })
+  ])
+
   scene.add(wormholeTubeMesh)
 
   needRender = true
@@ -174,12 +202,13 @@ function updateAnimatedObjects (elapsedTime) {
 
 function updatePositionInWormhole () {
   wormholeCameraPositionIndex++
+  const speed = 2000
 
-  if (wormholeCameraPositionIndex > 2000) {
+  if (wormholeCameraPositionIndex > speed) {
     wormholeCameraPositionIndex = 0
   }
-  const camPos = wormholeShape.getPoint(wormholeCameraPositionIndex / 2000)
-  const camRot = wormholeShape.getTangent(wormholeCameraPositionIndex / 2000)
+  const camPos = wormholeShape.getPoint(wormholeCameraPositionIndex / speed)
+  const camRot = wormholeShape.getTangent(wormholeCameraPositionIndex / speed)
 
   camera.position.x = camPos.x
   camera.position.y = camPos.y
@@ -189,7 +218,8 @@ function updatePositionInWormhole () {
   camera.rotation.y = camRot.y
   camera.rotation.z = camRot.z
 
-  camera.lookAt(wormholeShape.getPoint((wormholeCameraPositionIndex + 1) / 2000))
+  camera.lookAt(wormholeShape.getPoint((wormholeCameraPositionIndex + 1) / speed))
+
   composer.render()
 }
 

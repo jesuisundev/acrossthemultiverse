@@ -35,6 +35,13 @@ export default class Library {
           pool: [
             { type: 'disk', src: 'disk.jpg' }
           ]
+        },
+        wormhole: {
+          baseUrl: '/textures/wormhole/',
+          pool: [
+            { type: 'galaxy', src: 'galaxy1.jpg' },
+            { type: 'galaxy', src: 'galaxy2.png' }
+          ]
         }
       }
     }
@@ -49,6 +56,9 @@ export default class Library {
       },
       blackhole: {
         disk: []
+      },
+      wormhole: {
+        galaxy: []
       }
     }
   }
