@@ -24,22 +24,16 @@ document.body.appendChild(renderer.domElement)
 // TODO : build wrap hole travel - WIP 
 // TODO sequencer - WIP
 // ----- star seq wormhole
-// -> fadein html black wall
-// -> start music
-// -> delete eveything and put camera at 0.0.0
-// -> add starfield
-// -> add wormhole and launch it
-// -> fade out black wall to music drop
 // -> play with opacity of materials
 // -> when end of music accelerate
 // -> fadein whitewall
+// -> add event start wormhole on black hole overlap
+// ----- star seq chapter 2
 // LEARN SHADER
 // TODO : build four types of galaxy https://theplanets.org/types-of-galaxies/
-// todo : maybe a way to set material https://github.com/brunosimon/experiment-rick-and-morty-tribute/blob/master/src/Experience/Particles.js
 // TODO : ask for UI/UX
 // TODO : build tweark for others universes
 // TODO : build epiphany - filament interconnected of universes via shaders points
-// TODO : add sequencer
 // TODO : lock fps
 // TODO : performance, screen size
 // TODO : add UI and music
@@ -58,7 +52,7 @@ const grid = new Grid(camera, parameters)
 const workers = new Workers(grid)
 const multiverseFactory = new MultiverseFactory(scene, library, parameters)
 const effect = new Effect(camera, parameters)
-const sequencer = new Sequencer(scene, library, parameters)
+const sequencer = new Sequencer(scene, library, parameters, grid, camera)
 
 let lastClusterPosition
 let needRender = false
