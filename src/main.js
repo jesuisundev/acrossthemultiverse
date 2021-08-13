@@ -70,6 +70,7 @@ window.meshesToUpdate = {}
 window.wormhole = {
   shape: null,
   CameraPositionIndex: 0,
+  speed: parameters.wormhole.speed,
   active: false
 }
 
@@ -91,7 +92,13 @@ composer.addPass(effect.getEffectPass())
 
 function buildMatters (clustersToPopulate) {
   for (const clusterToPopulate of clustersToPopulate) {
-    const randomDistributedWorker = workers.getWorkerDistributed(clusterToPopulate)
+    let randomDistributedWorker = workers.getWorkerDistributed(clusterToPopulate)
+
+    if (!randomDistributedWorker) {
+      console.error('randomDistributedWorker', randomDistributedWorker)
+      console.error('// TODO - why the fuck this happen, fix it')
+      randomDistributedWorker = workers.openStarfieldWorker.source
+    }
 
     randomDistributedWorker.postMessage({
       clustersToPopulate: [clusterToPopulate],
@@ -178,11 +185,11 @@ function updateAnimatedObjects (elapsedTime) {
 function updatePositionInWormhole () {
   window.wormhole.CameraPositionIndex++
 
-  if (window.wormhole.CameraPositionIndex > parameters.wormhole.speed) {
+  if (window.wormhole.CameraPositionIndex > window.wormhole.speed) {
     window.wormhole.CameraPositionIndex = 0
   }
-  const camPos = window.wormhole.shape.getPoint(window.wormhole.CameraPositionIndex / parameters.wormhole.speed)
-  const camRot = window.wormhole.shape.getTangent(window.wormhole.CameraPositionIndex / parameters.wormhole.speed)
+  const camPos = window.wormhole.shape.getPoint(window.wormhole.CameraPositionIndex / window.wormhole.speed)
+  const camRot = window.wormhole.shape.getTangent(window.wormhole.CameraPositionIndex / window.wormhole.speed)
 
   camera.position.x = camPos.x
   camera.position.y = camPos.y
@@ -192,7 +199,7 @@ function updatePositionInWormhole () {
   camera.rotation.y = camRot.y
   camera.rotation.z = camRot.z
 
-  camera.lookAt(window.wormhole.shape.getPoint((window.wormhole.CameraPositionIndex + 1) / parameters.wormhole.speed))
+  camera.lookAt(window.wormhole.shape.getPoint((window.wormhole.CameraPositionIndex + 1) / window.wormhole.speed))
 
   composer.render()
 }

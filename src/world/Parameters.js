@@ -342,7 +342,7 @@ export default class Parameters {
     }
 
     this.wormhole = {
-      speed: 1500,
+      speed: 5000,
       wireframedStarsSpeeder: {
         material: {
           opacity: 0.7
@@ -350,7 +350,7 @@ export default class Parameters {
       },
       auraSpeeder: {
         material: {
-          opacity: 1
+          opacity: 0
         }
       },
       nebulaSpeeder: {
@@ -360,7 +360,7 @@ export default class Parameters {
       },
       starsSpeeder: {
         material: {
-          opacity: 0.4
+          opacity: 0
         }
       }
     }

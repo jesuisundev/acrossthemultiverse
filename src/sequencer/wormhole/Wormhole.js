@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { Curves } from 'three/examples/jsm/curves/CurveExtras'
 import { SceneUtils } from 'three/examples/jsm/utils/SceneUtils.js'
+import { gsap } from 'gsap'
 
 export default class Wormhole {
   constructor (scene, library, parameters) {
@@ -25,6 +26,7 @@ export default class Wormhole {
       side: THREE.BackSide,
       wireframe: true
     })
+    this.wireframedStarsSpeederMaterial = wireframedStarsSpeederMaterial
 
     const auraSpeederTexture = this.library.textures.wormhole.galaxy[1]
     auraSpeederTexture.wrapS = THREE.RepeatWrapping
@@ -37,6 +39,7 @@ export default class Wormhole {
       blending: THREE.AdditiveBlending,
       side: THREE.DoubleSide
     })
+    this.auraSpeederMaterial = auraSpeederMaterial
 
     const nebulaSpeederTexture = this.library.textures.wormhole.galaxy[2]
     nebulaSpeederTexture.wrapS = THREE.RepeatWrapping
@@ -49,6 +52,7 @@ export default class Wormhole {
       blending: THREE.AdditiveBlending,
       side: THREE.BackSide
     })
+    this.nebulaSpeederMaterial = nebulaSpeederMaterial
 
     const starsSpeederTexture = this.library.textures.wormhole.galaxy[3]
     starsSpeederTexture.wrapS = THREE.RepeatWrapping
@@ -61,6 +65,7 @@ export default class Wormhole {
       blending: THREE.AdditiveBlending,
       side: THREE.BackSide
     })
+    this.starsSpeederMaterial = starsSpeederMaterial
 
     const wormholeGeometry = new THREE.TubeGeometry(window.wormhole.shape, 500, 12, 12, true)
     const wormholeTubeMesh = SceneUtils.createMultiMaterialObject(wormholeGeometry, [
@@ -73,11 +78,24 @@ export default class Wormhole {
     this.scene.add(wormholeTubeMesh)
   }
 
+  async animate () {
+    const wormholeTimeline = gsap.timeline()
+
+    // initial massive boost at wormhole enter
+    wormholeTimeline
+      .to(this.starsSpeederMaterial, { duration: 12, ease: 'expo.out', opacity: 1 }, 0)
+      .to(this.auraSpeederMaterial, { duration: 12, ease: 'expo.out', opacity: 0.8 }, 0)
+      .to(window.wormhole, { duration: 12, ease: 'expo.out', speed: 2000 }, 0)
+
+    return wormholeTimeline.then(() => true)
+  }
+
   active () {
     window.wormhole.active = true
   }
 
   dispose () {
     window.wormhole.active = false
+    // todo - delete properly for garbage collector
   }
 }

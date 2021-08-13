@@ -13,43 +13,49 @@ export default class Sequencer {
   }
 
   async startWormholeSequence () {
-    await this.fadeInBlackWall()
-
     this.stopAllSounds()
     this.startSoundByTitle('oceansoftime')
+
+    await this.fadeInWallById('#blackwall')
 
     this.resetScene()
 
     this.wormhole.generate()
     this.wormhole.active()
 
-    await this.fadeOutBlackWall()
+    await this.asyncWaitFor(10000)
+
+    this.fadeOutWallById('#blackwall', 0.5)
+
+    await this.wormhole.animate()
+
+    await this.fadeInWallById('#whitewall', 5)
   }
 
-  async fadeInBlackWall () {
-    const blackwallElement = document.querySelector('#blackwall')
+  async fadeInWallById (id, duration = 2) {
+    const element = document.querySelector(id)
 
-    blackwallElement.style.opacity = 0
-    blackwallElement.style.zIndex = 9
+    element.style.opacity = 0
+    element.style.zIndex = 9
 
-    return gsap.to(blackwallElement.style, {
-      duration: 2,
+    return gsap.to(element.style, {
+      duration: duration,
       ease: 'power2.out',
       opacity: 1
     }).then(() => true)
   }
 
-  async fadeOutBlackWall () {
-    const blackwallElement = document.querySelector('#blackwall')
+  async fadeOutWallById (id, duration = 2) {
+    const element = document.querySelector(id)
 
-    blackwallElement.style.opacity = 1
+    element.style.opacity = 1
 
-    return gsap.to(blackwallElement.style, {
-      duration: 2,
+    return gsap.to(element.style, {
+      duration: duration,
       ease: 'power2.out',
       opacity: 0
     }).then(() => {
-      blackwallElement.style.zIndex = 7
+      element.style.zIndex = 7
       return true
     })
   }
@@ -60,6 +66,10 @@ export default class Sequencer {
 
   startSoundByTitle (title) {
     this.library.audio[title].play()
+  }
+
+  async asyncWaitFor (milliseconds) {
+    await new Promise(resolve => setTimeout(resolve, milliseconds))
   }
 
   resetScene () {
