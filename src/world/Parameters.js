@@ -340,5 +340,29 @@ export default class Parameters {
       blackhole: {
       }
     }
+
+    this.wormhole = {
+      speed: 1500,
+      wireframedStarsSpeeder: {
+        material: {
+          opacity: 0.7
+        }
+      },
+      auraSpeeder: {
+        material: {
+          opacity: 1
+        }
+      },
+      nebulaSpeeder: {
+        material: {
+          opacity: 0
+        }
+      },
+      starsSpeeder: {
+        material: {
+          opacity: 0.4
+        }
+      }
+    }
   }
 }

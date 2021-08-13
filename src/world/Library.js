@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { Howl, Howler } from 'howler'
 
 export default class Library {
   constructor () {
@@ -45,6 +46,12 @@ export default class Library {
             { type: 'galaxy', src: 'galaxy4.jpg' }
           ]
         }
+      },
+      audio: {
+        baseUrl: '/audio/',
+        pool: [
+          { title: 'oceansoftime', src: 'oceansoftime.mp3' }
+        ]
       }
     }
 
@@ -63,19 +70,28 @@ export default class Library {
         galaxy: []
       }
     }
+
+    this.audio = {}
   }
 
   preload () {
-    // preloading all textures
+    // textures
     for (const textureSourceType of Object.keys(this.source.textures)) {
       for (const textureObject of this.source.textures[textureSourceType].pool) {
         const currentTexture = new THREE.TextureLoader().load(
-                    `${this.source.textures[textureSourceType].baseUrl}${textureObject.src}`
+          `${this.source.textures[textureSourceType].baseUrl}${textureObject.src}`
         )
         currentTexture.premultiplyAlpha = true
 
         this.textures[textureSourceType][textureObject.type].push(currentTexture)
       }
+    }
+
+    // audio
+    for (const audioObject of this.source.audio.pool) {
+      this.audio[audioObject.title] = new Howl({
+        src: [`${this.source.audio.baseUrl}${audioObject.src}`]
+      })
     }
   }
 }

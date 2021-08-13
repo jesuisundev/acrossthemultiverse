@@ -9,9 +9,7 @@ import Controls from './world/Controls'
 import Library from './world/Library'
 import Parameters from './world/Parameters'
 import Effect from './postprocessing/Effect'
-
-import { Curves } from 'three/examples/jsm/curves/CurveExtras'
-import { SceneUtils } from 'three/examples/jsm/utils/SceneUtils.js'
+import Sequencer from './sequencer/sequencer'
 
 const clock = new THREE.Clock()
 const parameters = new Parameters()
@@ -24,15 +22,10 @@ document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
 // TODO : build wrap hole travel - WIP 
-// TODO sequencer 
-// -> add gsap to project
-// -> add music like atu
-// -> add html black wall hidden
-// -> add html white wall hidden
-// -> screenshot inside supernovae remnant for tweet
+// TODO sequencer - WIP
 // ----- star seq wormhole
-// -> start music
 // -> fadein html black wall
+// -> start music
 // -> delete eveything and put camera at 0.0.0
 // -> add starfield
 // -> add wormhole and launch it
@@ -65,81 +58,26 @@ const grid = new Grid(camera, parameters)
 const workers = new Workers(grid)
 const multiverseFactory = new MultiverseFactory(scene, library, parameters)
 const effect = new Effect(camera, parameters)
+const sequencer = new Sequencer(scene, library, parameters)
 
 let lastClusterPosition
 let needRender = false
 let isRenderingClusterInProgress = false
 let prevTimePerf = performance.now()
 
-let wormholeShape
-let wormholeCameraPositionIndex = 0
-
 // preload every needed files before showing anything
 library.preload()
 window.onload = () => {
-  wormholeShape = new Curves.TorusKnot()
-  wormholeShape.scale = 500
-
-  const wireframedStarsSpeederTexture = library.textures.wormhole.galaxy[0]
-  wireframedStarsSpeederTexture.wrapS = THREE.RepeatWrapping
-  wireframedStarsSpeederTexture.wrapT = THREE.MirroredRepeatWrapping
-  wireframedStarsSpeederTexture.repeat.set(40, 2)
-
-  const auraSpeederTexture = library.textures.wormhole.galaxy[1]
-  auraSpeederTexture.wrapS = THREE.RepeatWrapping
-  auraSpeederTexture.wrapT = THREE.MirroredRepeatWrapping
-  auraSpeederTexture.repeat.set(1, 2)
-
-  const nebulaSpeederTexture = library.textures.wormhole.galaxy[2]
-  nebulaSpeederTexture.wrapS = THREE.RepeatWrapping
-  nebulaSpeederTexture.wrapT = THREE.MirroredRepeatWrapping
-  nebulaSpeederTexture.repeat.set(1, 2)
-
-  const starsSpeederTexture = library.textures.wormhole.galaxy[3]
-  starsSpeederTexture.wrapS = THREE.RepeatWrapping
-  starsSpeederTexture.wrapT = THREE.MirroredRepeatWrapping
-  starsSpeederTexture.repeat.set(10, 2)
-
-  const wormholeGeometry = new THREE.TubeGeometry(wormholeShape, 500, 12, 12, true)
-  const wormholeTubeMesh = SceneUtils.createMultiMaterialObject(wormholeGeometry, [
-    new THREE.MeshBasicMaterial({
-      map: wireframedStarsSpeederTexture,
-      transparent: true,
-      opacity: 0.7,
-      blending: THREE.AdditiveBlending,
-      side: THREE.BackSide,
-      wireframe: true
-    }),
-    new THREE.MeshBasicMaterial({
-      map: auraSpeederTexture,
-      transparent: true,
-      opacity: 1,
-      blending: THREE.AdditiveBlending,
-      side: THREE.DoubleSide
-    }),
-    new THREE.MeshBasicMaterial({
-      map: nebulaSpeederTexture,
-      transparent: true,
-      opacity: 0,
-      blending: THREE.AdditiveBlending,
-      side: THREE.BackSide
-    }),
-    new THREE.MeshBasicMaterial({
-      map: starsSpeederTexture,
-      transparent: true,
-      opacity: 0.4,
-      blending: THREE.AdditiveBlending,
-      side: THREE.BackSide
-    })
-  ])
-
-  scene.add(wormholeTubeMesh)
-
   needRender = true
 }
 
 window.materialsToUpdate = {}
 window.meshesToUpdate = {}
+window.wormhole = {
+  shape: null,
+  CameraPositionIndex: 0,
+  active: false
+}
 
 scene.add(controls.pointerLockControls.getObject())
 
@@ -180,8 +118,11 @@ function renderMatters (position, cluster) {
 
 function animate (time) {
   if (needRender) {
-    //if not worhole composer.render() else
-    updatePositionInWormhole()
+    if (window.wormhole.active) {
+      updatePositionInWormhole()
+    } else {
+      composer.render()
+    }
   }
 
   const elapsedTime = clock.getElapsedTime()
@@ -191,11 +132,15 @@ function animate (time) {
   if (controls.pointerLockControls.isLocked === true) {
     controls.handleMovements(timePerf, prevTimePerf)
   } else {
-    //camera.rotation.z += parameters.global.camera.defaultRotation
+    if (!window.wormhole.active) {
+      camera.rotation.z += parameters.global.camera.defaultRotation
+    }
   }
   prevTimePerf = time
 
-  //camera.position.z -= parameters.global.camera.defaultForward
+  if (!window.wormhole.active) {
+    camera.position.z -= parameters.global.camera.defaultForward
+  }
 
   requestAnimationFrame(animate)
 
@@ -237,14 +182,13 @@ function updateAnimatedObjects (elapsedTime) {
 }
 
 function updatePositionInWormhole () {
-  wormholeCameraPositionIndex++
-  const speed = 1500
+  window.wormhole.CameraPositionIndex++
 
-  if (wormholeCameraPositionIndex > speed) {
-    wormholeCameraPositionIndex = 0
+  if (window.wormhole.CameraPositionIndex > parameters.wormhole.speed) {
+    window.wormhole.CameraPositionIndex = 0
   }
-  const camPos = wormholeShape.getPoint(wormholeCameraPositionIndex / speed)
-  const camRot = wormholeShape.getTangent(wormholeCameraPositionIndex / speed)
+  const camPos = window.wormhole.shape.getPoint(window.wormhole.CameraPositionIndex / parameters.wormhole.speed)
+  const camRot = window.wormhole.shape.getTangent(window.wormhole.CameraPositionIndex / parameters.wormhole.speed)
 
   camera.position.x = camPos.x
   camera.position.y = camPos.y
@@ -254,9 +198,13 @@ function updatePositionInWormhole () {
   camera.rotation.y = camRot.y
   camera.rotation.z = camRot.z
 
-  camera.lookAt(wormholeShape.getPoint((wormholeCameraPositionIndex + 1) / speed))
+  camera.lookAt(window.wormhole.shape.getPoint((window.wormhole.CameraPositionIndex + 1) / parameters.wormhole.speed))
 
   composer.render()
 }
 
 animate()
+
+setTimeout(() => {
+  sequencer.startWormholeSequence()
+}, 3000)

@@ -14,6 +14,29 @@ body {
     top: 0;
     left: 0;
     outline: none;
+    z-index: 8;
+}
+
+#blackwall {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+    z-index: 7;
+    opacity: 0;
+}
+
+#whitewall {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    z-index: 7;
+    opacity: 0;
 }
 
 .dg.ac {
