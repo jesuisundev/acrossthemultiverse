@@ -24,6 +24,22 @@ document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
 // TODO : build wrap hole travel - WIP 
+// TODO sequencer 
+// -> add gsap to project
+// -> add music like atu
+// -> add html black wall hidden
+// -> add html white wall hidden
+// -> screenshot inside supernovae remnant for tweet
+// ----- star seq wormhole
+// -> start music
+// -> fadein html black wall
+// -> delete eveything and put camera at 0.0.0
+// -> add starfield
+// -> add wormhole and launch it
+// -> fade out black wall to music drop
+// -> play with opacity of materials
+// -> when end of music accelerate
+// -> fadein whitewall
 // LEARN SHADER
 // TODO : build four types of galaxy https://theplanets.org/types-of-galaxies/
 // todo : maybe a way to set material https://github.com/brunosimon/experiment-rick-and-morty-tribute/blob/master/src/Experience/Particles.js
@@ -57,42 +73,37 @@ let prevTimePerf = performance.now()
 
 let wormholeShape
 let wormholeCameraPositionIndex = 0
-let firstPassTexture
-let secondPassTexture
-let thirdPassTexture
 
 // preload every needed files before showing anything
 library.preload()
 window.onload = () => {
-  //wormholeShape = new Curves.CinquefoilKnot()
   wormholeShape = new Curves.TorusKnot()
-  //speeder
-  //wormholeShape = new Curves.HeartCurve()
-
   wormholeShape.scale = 500
 
-  // wireframed stars
-  firstPassTexture = library.textures.wormhole.galaxy[0]
-  firstPassTexture.wrapS = THREE.RepeatWrapping
-  firstPassTexture.wrapT = THREE.MirroredRepeatWrapping
-  firstPassTexture.repeat.set(40, 2)
+  const wireframedStarsSpeederTexture = library.textures.wormhole.galaxy[0]
+  wireframedStarsSpeederTexture.wrapS = THREE.RepeatWrapping
+  wireframedStarsSpeederTexture.wrapT = THREE.MirroredRepeatWrapping
+  wireframedStarsSpeederTexture.repeat.set(40, 2)
 
-  // speeder light
-  secondPassTexture = library.textures.wormhole.galaxy[1]
-  secondPassTexture.wrapS = THREE.RepeatWrapping
-  secondPassTexture.wrapT = THREE.MirroredRepeatWrapping
-  secondPassTexture.repeat.set(1, 2)
+  const auraSpeederTexture = library.textures.wormhole.galaxy[1]
+  auraSpeederTexture.wrapS = THREE.RepeatWrapping
+  auraSpeederTexture.wrapT = THREE.MirroredRepeatWrapping
+  auraSpeederTexture.repeat.set(1, 2)
 
-  // nebula
-  thirdPassTexture = library.textures.wormhole.galaxy[2]
-  thirdPassTexture.wrapS = THREE.RepeatWrapping
-  thirdPassTexture.wrapT = THREE.MirroredRepeatWrapping
-  thirdPassTexture.repeat.set(1, 2)
+  const nebulaSpeederTexture = library.textures.wormhole.galaxy[2]
+  nebulaSpeederTexture.wrapS = THREE.RepeatWrapping
+  nebulaSpeederTexture.wrapT = THREE.MirroredRepeatWrapping
+  nebulaSpeederTexture.repeat.set(1, 2)
+
+  const starsSpeederTexture = library.textures.wormhole.galaxy[3]
+  starsSpeederTexture.wrapS = THREE.RepeatWrapping
+  starsSpeederTexture.wrapT = THREE.MirroredRepeatWrapping
+  starsSpeederTexture.repeat.set(10, 2)
 
   const wormholeGeometry = new THREE.TubeGeometry(wormholeShape, 500, 12, 12, true)
   const wormholeTubeMesh = SceneUtils.createMultiMaterialObject(wormholeGeometry, [
     new THREE.MeshBasicMaterial({
-      map: firstPassTexture,
+      map: wireframedStarsSpeederTexture,
       transparent: true,
       opacity: 0.7,
       blending: THREE.AdditiveBlending,
@@ -100,16 +111,23 @@ window.onload = () => {
       wireframe: true
     }),
     new THREE.MeshBasicMaterial({
-      map: secondPassTexture,
+      map: auraSpeederTexture,
       transparent: true,
       opacity: 1,
       blending: THREE.AdditiveBlending,
       side: THREE.DoubleSide
     }),
     new THREE.MeshBasicMaterial({
-      map: thirdPassTexture,
+      map: nebulaSpeederTexture,
       transparent: true,
       opacity: 0,
+      blending: THREE.AdditiveBlending,
+      side: THREE.BackSide
+    }),
+    new THREE.MeshBasicMaterial({
+      map: starsSpeederTexture,
+      transparent: true,
+      opacity: 0.4,
       blending: THREE.AdditiveBlending,
       side: THREE.BackSide
     })

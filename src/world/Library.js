@@ -41,7 +41,8 @@ export default class Library {
           pool: [
             { type: 'galaxy', src: 'galaxy1.jpg' },
             { type: 'galaxy', src: 'galaxy2.png' },
-            { type: 'galaxy', src: 'galaxy3.jpg' }
+            { type: 'galaxy', src: 'galaxy3.jpg' },
+            { type: 'galaxy', src: 'galaxy4.jpg' }
           ]
         }
       }
