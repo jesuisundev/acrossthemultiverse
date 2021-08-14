@@ -14,7 +14,6 @@ export default class Sequencer {
 
   async startWormholeSequence () {
     this.stopAllSounds()
-    this.startSoundByTitle('oceansoftime')
 
     await this.fadeInWallById('#blackwall')
 
@@ -23,13 +22,12 @@ export default class Sequencer {
     this.wormhole.generate()
     this.wormhole.active()
 
-    await this.asyncWaitFor(10000)
-
+    this.startSoundByTitle('wormhole')
     this.fadeOutWallById('#blackwall', 0.5)
 
     await this.wormhole.animate()
 
-    await this.fadeInWallById('#whitewall', 5)
+    await this.fadeInWallById('#whitewall', 1)
   }
 
   async fadeInWallById (id, duration = 2) {

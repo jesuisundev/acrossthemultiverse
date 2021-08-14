@@ -44,7 +44,7 @@ export default class Wormhole {
     const nebulaSpeederTexture = this.library.textures.wormhole.galaxy[2]
     nebulaSpeederTexture.wrapS = THREE.RepeatWrapping
     nebulaSpeederTexture.wrapT = THREE.MirroredRepeatWrapping
-    nebulaSpeederTexture.repeat.set(1, 2)
+    nebulaSpeederTexture.repeat.set(20, 2)
     const nebulaSpeederMaterial = new THREE.MeshBasicMaterial({
       map: nebulaSpeederTexture,
       transparent: true,
@@ -67,12 +67,26 @@ export default class Wormhole {
     })
     this.starsSpeederMaterial = starsSpeederMaterial
 
+    const clusterSpeederTexture = this.library.textures.wormhole.galaxy[4]
+    clusterSpeederTexture.wrapS = THREE.RepeatWrapping
+    clusterSpeederTexture.wrapT = THREE.MirroredRepeatWrapping
+    clusterSpeederTexture.repeat.set(20, 2)
+    const clusterSpeederMaterial = new THREE.MeshBasicMaterial({
+      map: clusterSpeederTexture,
+      transparent: true,
+      opacity: this.parameters.wormhole.clusterSpeeder.material.opacity,
+      blending: THREE.AdditiveBlending,
+      side: THREE.BackSide
+    })
+    this.clusterSpeederMaterial = clusterSpeederMaterial
+
     const wormholeGeometry = new THREE.TubeGeometry(window.wormhole.shape, 500, 12, 12, true)
     const wormholeTubeMesh = SceneUtils.createMultiMaterialObject(wormholeGeometry, [
       wireframedStarsSpeederMaterial,
       auraSpeederMaterial,
       nebulaSpeederMaterial,
-      starsSpeederMaterial
+      starsSpeederMaterial,
+      clusterSpeederMaterial
     ])
 
     this.scene.add(wormholeTubeMesh)
@@ -83,9 +97,22 @@ export default class Wormhole {
 
     // initial massive boost at wormhole enter
     wormholeTimeline
-      .to(this.starsSpeederMaterial, { duration: 12, ease: 'expo.out', opacity: 1 }, 0)
-      .to(this.auraSpeederMaterial, { duration: 12, ease: 'expo.out', opacity: 0.8 }, 0)
-      .to(window.wormhole, { duration: 12, ease: 'expo.out', speed: 2000 }, 0)
+      .to(this.starsSpeederMaterial, { duration: 7, opacity: 1 }, 0)
+      .to(this.wireframedStarsSpeederMaterial, { duration: 7, ease: 'expo.out', opacity: 1 }, 0)
+      .to(this.auraSpeederMaterial, { duration: 7, ease: 'expo.out', opacity: 1 }, 0)
+      .to(window.wormhole, { duration: 7, ease: 'expo.out', speed: 2500 }, 0)
+
+    // adding speed and noises
+    wormholeTimeline
+      .to(this.clusterSpeederMaterial, { duration: 6, opacity: 1 }, 7)
+      .to(window.wormhole, { duration: 6, speed: 2000 }, 7)
+
+    // adding speed and nebula distorded
+    wormholeTimeline
+      .to(this.nebulaSpeederMaterial, { duration: 5.5, opacity: 1 }, 13)
+      .to(this.clusterSpeederMaterial, { duration: 5.5, opacity: 0 }, 13)
+      .to(this.auraSpeederMaterial, { duration: 5.5, opacity: 0 }, 13)
+      .to(window.wormhole, { duration: 5.5, speed: 1800 }, 13)
 
     return wormholeTimeline.then(() => true)
   }

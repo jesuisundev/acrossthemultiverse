@@ -43,14 +43,15 @@ export default class Library {
             { type: 'galaxy', src: 'galaxy1.jpg' },
             { type: 'galaxy', src: 'galaxy2.png' },
             { type: 'galaxy', src: 'galaxy3.jpg' },
-            { type: 'galaxy', src: 'galaxy4.jpg' }
+            { type: 'galaxy', src: 'galaxy4.jpg' },
+            { type: 'galaxy', src: 'galaxy5.jpeg' }
           ]
         }
       },
       audio: {
         baseUrl: '/audio/',
         pool: [
-          { title: 'oceansoftime', src: 'oceansoftime.mp3' }
+          { title: 'wormhole', src: 'wormhole.mp3' }
         ]
       }
     }

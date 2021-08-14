@@ -21,12 +21,7 @@ renderer.domElement.id = 'multiverse'
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : build wrap hole travel - WIP 
-// TODO sequencer - WIP
 // ----- star seq wormhole
-// -> play with opacity of materials
-// -> when end of music accelerate
-// -> fadein whitewall
 // -> add event start wormhole on black hole overlap
 // ----- star seq chapter 2
 // LEARN SHADER

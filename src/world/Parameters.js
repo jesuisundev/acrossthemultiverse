@@ -345,7 +345,7 @@ export default class Parameters {
       speed: 5000,
       wireframedStarsSpeeder: {
         material: {
-          opacity: 0.7
+          opacity: 0
         }
       },
       auraSpeeder: {
@@ -359,6 +359,11 @@ export default class Parameters {
         }
       },
       starsSpeeder: {
+        material: {
+          opacity: 0
+        }
+      },
+      clusterSpeeder: {
         material: {
           opacity: 0
         }
