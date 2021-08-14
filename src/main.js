@@ -202,5 +202,5 @@ function updatePositionInWormhole () {
 animate()
 
 setTimeout(() => {
-  sequencer.startWormholeSequence()
+  sequencer.wormholeSequence()
 }, 3000)

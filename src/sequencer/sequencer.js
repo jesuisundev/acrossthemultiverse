@@ -12,7 +12,7 @@ export default class Sequencer {
     this.wormhole = new Wormhole(this.scene, this.library, this.parameters)
   }
 
-  async startWormholeSequence () {
+  async wormholeSequence () {
     this.stopAllSounds()
 
     await this.fadeInWallById('#blackwall')
@@ -28,6 +28,8 @@ export default class Sequencer {
     await this.wormhole.animate()
 
     await this.fadeInWallById('#whitewall', 1)
+
+    this.wormhole.dispose()
   }
 
   async fadeInWallById (id, duration = 2) {

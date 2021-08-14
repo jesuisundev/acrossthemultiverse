@@ -14,107 +14,103 @@ export default class Wormhole {
     window.wormhole.shape = new Curves.TorusKnot()
     window.wormhole.shape.scale = 500
 
-    const wireframedStarsSpeederTexture = this.library.textures.wormhole.galaxy[0]
-    wireframedStarsSpeederTexture.wrapS = THREE.RepeatWrapping
-    wireframedStarsSpeederTexture.wrapT = THREE.MirroredRepeatWrapping
-    wireframedStarsSpeederTexture.repeat.set(40, 2)
-    const wireframedStarsSpeederMaterial = new THREE.MeshBasicMaterial({
-      map: wireframedStarsSpeederTexture,
+    this.library.textures.wormhole.galaxy[0].wrapS = THREE.RepeatWrapping
+    this.library.textures.wormhole.galaxy[0].wrapT = THREE.MirroredRepeatWrapping
+    this.library.textures.wormhole.galaxy[0].repeat.set(40, 2)
+
+    this.wireframedStarsSpeederMaterial = new THREE.MeshBasicMaterial({
+      map: this.library.textures.wormhole.galaxy[0],
       transparent: true,
       opacity: this.parameters.wormhole.wireframedStarsSpeeder.material.opacity,
       blending: THREE.AdditiveBlending,
       side: THREE.BackSide,
       wireframe: true
     })
-    this.wireframedStarsSpeederMaterial = wireframedStarsSpeederMaterial
 
-    const auraSpeederTexture = this.library.textures.wormhole.galaxy[1]
-    auraSpeederTexture.wrapS = THREE.RepeatWrapping
-    auraSpeederTexture.wrapT = THREE.MirroredRepeatWrapping
-    auraSpeederTexture.repeat.set(1, 2)
-    const auraSpeederMaterial = new THREE.MeshBasicMaterial({
-      map: auraSpeederTexture,
+    this.library.textures.wormhole.galaxy[1].wrapS = THREE.RepeatWrapping
+    this.library.textures.wormhole.galaxy[1].wrapT = THREE.MirroredRepeatWrapping
+    this.library.textures.wormhole.galaxy[1].repeat.set(1, 2)
+
+    this.auraSpeederMaterial = new THREE.MeshBasicMaterial({
+      map: this.library.textures.wormhole.galaxy[1],
       transparent: true,
       opacity: this.parameters.wormhole.auraSpeeder.material.opacity,
       blending: THREE.AdditiveBlending,
       side: THREE.DoubleSide
     })
-    this.auraSpeederMaterial = auraSpeederMaterial
 
-    const nebulaSpeederTexture = this.library.textures.wormhole.galaxy[2]
-    nebulaSpeederTexture.wrapS = THREE.RepeatWrapping
-    nebulaSpeederTexture.wrapT = THREE.MirroredRepeatWrapping
-    nebulaSpeederTexture.repeat.set(20, 2)
-    const nebulaSpeederMaterial = new THREE.MeshBasicMaterial({
-      map: nebulaSpeederTexture,
+    this.library.textures.wormhole.galaxy[2].wrapS = THREE.RepeatWrapping
+    this.library.textures.wormhole.galaxy[2].wrapT = THREE.MirroredRepeatWrapping
+    this.library.textures.wormhole.galaxy[2].repeat.set(20, 2)
+
+    this.nebulaSpeederMaterial = new THREE.MeshBasicMaterial({
+      map: this.library.textures.wormhole.galaxy[2],
       transparent: true,
       opacity: this.parameters.wormhole.nebulaSpeeder.material.opacity,
       blending: THREE.AdditiveBlending,
       side: THREE.BackSide
     })
-    this.nebulaSpeederMaterial = nebulaSpeederMaterial
 
-    const starsSpeederTexture = this.library.textures.wormhole.galaxy[3]
-    starsSpeederTexture.wrapS = THREE.RepeatWrapping
-    starsSpeederTexture.wrapT = THREE.MirroredRepeatWrapping
-    starsSpeederTexture.repeat.set(10, 2)
-    const starsSpeederMaterial = new THREE.MeshBasicMaterial({
-      map: starsSpeederTexture,
+    this.library.textures.wormhole.galaxy[3].wrapS = THREE.RepeatWrapping
+    this.library.textures.wormhole.galaxy[3].wrapT = THREE.MirroredRepeatWrapping
+    this.library.textures.wormhole.galaxy[3].repeat.set(10, 2)
+
+    this.starsSpeederMaterial = new THREE.MeshBasicMaterial({
+      map: this.library.textures.wormhole.galaxy[3],
       transparent: true,
       opacity: this.parameters.wormhole.starsSpeeder.material.opacity,
       blending: THREE.AdditiveBlending,
       side: THREE.BackSide
     })
-    this.starsSpeederMaterial = starsSpeederMaterial
 
-    const clusterSpeederTexture = this.library.textures.wormhole.galaxy[4]
-    clusterSpeederTexture.wrapS = THREE.RepeatWrapping
-    clusterSpeederTexture.wrapT = THREE.MirroredRepeatWrapping
-    clusterSpeederTexture.repeat.set(20, 2)
-    const clusterSpeederMaterial = new THREE.MeshBasicMaterial({
-      map: clusterSpeederTexture,
+    this.library.textures.wormhole.galaxy[4].wrapS = THREE.RepeatWrapping
+    this.library.textures.wormhole.galaxy[4].wrapT = THREE.MirroredRepeatWrapping
+    this.library.textures.wormhole.galaxy[4].repeat.set(20, 2)
+
+    this.clusterSpeederMaterial = new THREE.MeshBasicMaterial({
+      map: this.library.textures.wormhole.galaxy[4],
       transparent: true,
       opacity: this.parameters.wormhole.clusterSpeeder.material.opacity,
       blending: THREE.AdditiveBlending,
       side: THREE.BackSide
     })
-    this.clusterSpeederMaterial = clusterSpeederMaterial
 
-    const wormholeGeometry = new THREE.TubeGeometry(window.wormhole.shape, 500, 12, 12, true)
-    const wormholeTubeMesh = SceneUtils.createMultiMaterialObject(wormholeGeometry, [
-      wireframedStarsSpeederMaterial,
-      auraSpeederMaterial,
-      nebulaSpeederMaterial,
-      starsSpeederMaterial,
-      clusterSpeederMaterial
+    this.wormholeGeometry = new THREE.TubeGeometry(window.wormhole.shape, 800, 5, 12, true)
+    this.wormholeTubeMesh = SceneUtils.createMultiMaterialObject(this.wormholeGeometry, [
+      this.wireframedStarsSpeederMaterial,
+      this.auraSpeederMaterial,
+      this.nebulaSpeederMaterial,
+      this.starsSpeederMaterial,
+      this.clusterSpeederMaterial
     ])
 
-    this.scene.add(wormholeTubeMesh)
+    this.scene.add(this.wormholeTubeMesh)
   }
 
   async animate () {
-    const wormholeTimeline = gsap.timeline()
+    this.wormholeTimeline = gsap.timeline()
 
     // initial massive boost at wormhole enter
-    wormholeTimeline
+    this.wormholeTimeline
       .to(this.starsSpeederMaterial, { duration: 7, opacity: 1 }, 0)
       .to(this.wireframedStarsSpeederMaterial, { duration: 7, ease: 'expo.out', opacity: 1 }, 0)
       .to(this.auraSpeederMaterial, { duration: 7, ease: 'expo.out', opacity: 1 }, 0)
       .to(window.wormhole, { duration: 7, ease: 'expo.out', speed: 2500 }, 0)
 
     // adding speed and noises
-    wormholeTimeline
+    this.wormholeTimeline
       .to(this.clusterSpeederMaterial, { duration: 6, opacity: 1 }, 7)
+      .to(this.auraSpeederMaterial, { duration: 2, opacity: 0 }, 7)
       .to(window.wormhole, { duration: 6, speed: 2000 }, 7)
 
     // adding speed and nebula distorded
-    wormholeTimeline
-      .to(this.nebulaSpeederMaterial, { duration: 5.5, opacity: 1 }, 13)
-      .to(this.clusterSpeederMaterial, { duration: 5.5, opacity: 0 }, 13)
-      .to(this.auraSpeederMaterial, { duration: 5.5, opacity: 0 }, 13)
-      .to(window.wormhole, { duration: 5.5, speed: 1800 }, 13)
+    this.wormholeTimeline
+      .to(this.nebulaSpeederMaterial, { duration: 6, opacity: 1 }, 13)
+      .to(this.clusterSpeederMaterial, { duration: 6, opacity: 0 }, 13)
+      .to(this.auraSpeederMaterial, { duration: 6, opacity: 0.7 }, 13)
+      .to(window.wormhole, { duration: 6, speed: 1800 }, 13)
 
-    return wormholeTimeline.then(() => true)
+    return this.wormholeTimeline.then(() => true)
   }
 
   active () {
@@ -123,6 +119,18 @@ export default class Wormhole {
 
   dispose () {
     window.wormhole.active = false
-    // todo - delete properly for garbage collector
+
+    this.wormholeGeometry.dispose()
+
+    this.wireframedStarsSpeederMaterial.dispose()
+    this.auraSpeederMaterial.dispose()
+    this.nebulaSpeederMaterial.dispose()
+    this.starsSpeederMaterial.dispose()
+    this.clusterSpeederMaterial.dispose()
+
+    this.scene.remove(this.wormholeTubeMesh)
+
+    this.wormholeTimeline = null
+    this.wormholeTubeMesh = null
   }
 }
