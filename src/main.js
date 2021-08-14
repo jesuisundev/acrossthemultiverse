@@ -22,6 +22,7 @@ document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
 // TODO : build four types of galaxy https://theplanets.org/types-of-galaxies/
+// TODO : if time White Dwarf
 // TODO : sequence part 1 and 2 and 3
 // TODO : ask for UI/UX
 // TODO : build tweark for others universes

@@ -15,7 +15,7 @@ export default class Singularity {
   generate (blackholeAttributes, position) {
     const currentCoordinateVector = this._getCoordinateVectorByPosition(position)
 
-    const blackholeDiskGeometry = new THREE.RingGeometry(5.45, 15, 32)
+    const blackholeDiskGeometry = new THREE.RingGeometry(5.45, 20, 32)
     const blackholeDiskMaterial = this._getRandomBlackHoleShaderMaterial()
     const blackholeDiskMesh = new THREE.Mesh(blackholeDiskGeometry, blackholeDiskMaterial)
     blackholeDiskMesh.scale.set(1000, 1000, 1000)

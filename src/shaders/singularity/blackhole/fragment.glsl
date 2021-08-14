@@ -170,15 +170,19 @@ float noiseOctave(vec4 layer)
     return sum;
 }
 
-// convert perceptible brightness to sun color
-vec3 convertBrightToColor(float brightness)
+// conver to predetermine color
+vec3 convertToColor(float brightness)
 {
-    float brightnessAmplifier = 0.30;
+    float brightnessAmplifier = 0.50;
 
     brightness *= brightnessAmplifier;
 
     // add uniform for color pow here to change color on diff universes
-    return vec3(brightness, brightness*brightness, brightness*brightness*brightness*brightness*brightness*brightness) * 1.2;
+    return vec3(
+        brightness*brightness*brightness*brightness*brightness*brightness,
+        brightness*brightness*brightness*brightness*brightness*brightness,
+        brightness*brightness*brightness*brightness*brightness*brightness
+    ) * 1.2;
 }
 
 // calucate the fresnel of the object
@@ -201,7 +205,7 @@ void main()
     // add the fresnel to the shape
     smoothedLayersOfNoises += fresnel(vEyeVector, vPosition) * 1.2;
 
-    vec3 textureNoisesColored = convertBrightToColor(smoothedLayersOfNoises);
+    vec3 textureNoisesColored = convertToColor(smoothedLayersOfNoises);
 
     gl_FragColor = vec4(textureNoisesColored, 1.0);
 }
