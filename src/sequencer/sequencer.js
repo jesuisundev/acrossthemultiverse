@@ -9,7 +9,58 @@ export default class Sequencer {
     this.grid = grid
     this.camera = camera
 
+    this.currentChapter = 0
+    this.active = false
+
     this.wormhole = new Wormhole(this.scene, this.library, this.parameters)
+  }
+
+  async launchNextSequence () {
+    switch (this.currentChapter) {
+      case 0:
+        await this.chapterOneSequence()
+        break
+
+      case 1:
+        await this.chapterTwoSequence()
+        break
+
+      case 2:
+        await this.chapterThreeSequence()
+        break
+
+      case 3:
+        await this.epiphanySequence()
+        break
+
+      default:
+        console.error('Unknow chapter', this.currentChapter)
+        break
+    }
+  }
+
+  async chapterOneSequence () {
+    this.currentChapter++
+
+    this.active = false
+  }
+
+  async chapterTwoSequence () {
+    this.currentChapter++
+
+    this.active = false
+  }
+
+  async chapterThreeSequence () {
+    this.currentChapter++
+
+    this.active = false
+  }
+
+  async epiphanySequence () {
+    this.currentChapter++
+
+    this.active = false
   }
 
   async wormholeSequence () {
@@ -30,6 +81,8 @@ export default class Sequencer {
     await this.fadeInWallById('#whitewall', 1)
 
     this.wormhole.dispose()
+
+    await this.launchNextSequence()
   }
 
   async fadeInWallById (id, duration = 2) {

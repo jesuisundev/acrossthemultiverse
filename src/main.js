@@ -21,14 +21,11 @@ renderer.domElement.id = 'multiverse'
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// ----- star seq wormhole
-// -> add event start wormhole on black hole overlap
-// ----- star seq chapter 2
-// LEARN SHADER
 // TODO : build four types of galaxy https://theplanets.org/types-of-galaxies/
+// TODO : sequence part 1 and 2 and 3
 // TODO : ask for UI/UX
 // TODO : build tweark for others universes
-// TODO : build epiphany - filament interconnected of universes via shaders points
+// TODO : build epiphany + sequence epiphany - filament interconnected of universes via shaders points
 // TODO : lock fps
 // TODO : performance, screen size
 // TODO : add UI and music
@@ -142,7 +139,7 @@ function animate (time) {
 
   const currentClusterPosition = grid.getCurrentClusterPosition()
 
-  if (lastClusterPosition !== currentClusterPosition) {
+  if (lastClusterPosition !== currentClusterPosition && !sequencer.active) {
     lastClusterPosition = currentClusterPosition
 
     const clustersStatus = grid.getClustersStatus(currentClusterPosition)
@@ -173,6 +170,11 @@ function updateAnimatedObjects (elapsedTime) {
   if (Object.keys(window.meshesToUpdate).length) {
     for (const meshesToUpdate of Object.values(window.meshesToUpdate)) {
       meshesToUpdate.rotateZ(2)
+
+      if (camera.position.distanceTo(meshesToUpdate.position) < 4000 && !sequencer.active) {
+        sequencer.active = true
+        sequencer.wormholeSequence()
+      }
     }
   }
 }
@@ -200,7 +202,4 @@ function updatePositionInWormhole () {
 }
 
 animate()
-
-setTimeout(() => {
-  sequencer.wormholeSequence()
-}, 3000)
+sequencer.launchNextSequence()

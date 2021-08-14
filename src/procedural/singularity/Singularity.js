@@ -77,7 +77,7 @@ export default class Singularity {
 
     this.scene.remove(
       this.blackhole.disk.mesh,
-      this.blackhole.blackhole.points
+      this.blackhole.blackhole.mesh
     )
 
     this.blackhole = null
