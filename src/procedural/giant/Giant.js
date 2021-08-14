@@ -1,6 +1,8 @@
 import * as THREE from 'three'
 import giantSunVertexShader from '../../shaders/giant/sun/vertex.glsl'
 import giantSunFragmentShader from '../../shaders/giant/sun/fragment.glsl'
+import giantWhiteDwarfVertexShader from '../../shaders/giant/whitedwarf/vertex.glsl'
+import giantWhiteDwarfFragmentShader from '../../shaders/giant/whitedwarf/fragment.glsl'
 
 export default class Giant {
   constructor (scene, library, parameters) {
@@ -12,7 +14,11 @@ export default class Giant {
     this.giant = null
   }
 
-  generate (giantsAttributes, position) {
+  generate (giantsAttributes, position, subtype = null) {
+    if (subtype === 'whitedwarf') {
+      return this._generateWhiteDwarf(giantsAttributes, position)
+    }
+
     const currentCoordinateVector = this._getCoordinateVectorByPosition(position)
 
     const giantStarGeometry = new THREE.SphereGeometry(1, 64, 32)
@@ -26,6 +32,51 @@ export default class Giant {
     const giantStarScale = THREE.MathUtils.randInt(
       this.parameters.matters.giant.shader.sun.scale.min,
       this.parameters.matters.giant.shader.sun.scale.max
+    )
+    giantStar.scale.set(giantStarScale, giantStarScale, giantStarScale)
+    giantStar.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
+
+    const firstPassStarsGeometry = this._getRandomStarsGeometry(giantsAttributes.firstPassStarsRandomAttributes)
+    const firstPassStarsTexture = this._getRandomStarsTexture()
+    const firstPassStarsmaterial = this._getRandomStarsMaterial(firstPassStarsTexture)
+    const firstPassStars = new THREE.Points(firstPassStarsGeometry, firstPassStarsmaterial)
+
+    firstPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
+    firstPassStarsGeometry.rotateX(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
+    firstPassStarsGeometry.rotateZ(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
+
+    const randomGiant = {
+      giant: {
+        geometry: giantStarGeometry,
+        texture: brightStarTexture,
+        material: giantStarmaterial,
+        mesh: giantStar
+      },
+      firstPass: {
+        geometry: firstPassStarsGeometry,
+        texture: firstPassStarsTexture,
+        material: firstPassStarsmaterial,
+        points: firstPassStars
+      }
+    }
+
+    this.giant = randomGiant
+  }
+
+  _generateWhiteDwarf (giantsAttributes, position) {
+    const currentCoordinateVector = this._getCoordinateVectorByPosition(position)
+
+    const giantStarGeometry = new THREE.SphereGeometry(1, 64, 32)
+    const brightStarTexture = null
+    // TODO - fix transparency issue (add a mesh inside to cover up?)
+    const giantStarmaterial = this._getRandomWhiteDwarfShaderMaterial()
+
+    giantStarmaterial.key = Math.floor(Date.now() + Math.random())
+    window.materialsToUpdate[giantStarmaterial.key] = giantStarmaterial
+    const giantStar = new THREE.Mesh(giantStarGeometry, giantStarmaterial)
+    const giantStarScale = THREE.MathUtils.randInt(
+      this.parameters.matters.giant.shader.whitedwarf.scale.min,
+      this.parameters.matters.giant.shader.whitedwarf.scale.max
     )
     giantStar.scale.set(giantStarScale, giantStarScale, giantStarScale)
     giantStar.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
@@ -113,6 +164,35 @@ export default class Giant {
           value: THREE.MathUtils.randFloat(
             this.parameters.matters.giant.shader.sun.uNoiseSpeed.min,
             this.parameters.matters.giant.shader.sun.uNoiseSpeed.max
+          )
+        }
+      },
+      side: THREE.DoubleSide
+    })
+  }
+
+  _getRandomWhiteDwarfShaderMaterial () {
+    return new THREE.ShaderMaterial({
+      vertexShader: giantWhiteDwarfVertexShader,
+      fragmentShader: giantWhiteDwarfFragmentShader,
+      uniforms: {
+        uTime: { value: 0 },
+        uBrightnessAmplifier: {
+          value: THREE.MathUtils.randFloat(
+            this.parameters.matters.giant.shader.whitedwarf.uBrightnessAmplifier.min,
+            this.parameters.matters.giant.shader.whitedwarf.uBrightnessAmplifier.max
+          )
+        },
+        uNoiseIntensity: {
+          value: THREE.MathUtils.randFloat(
+            this.parameters.matters.giant.shader.whitedwarf.uNoiseIntensity.min,
+            this.parameters.matters.giant.shader.whitedwarf.uNoiseIntensity.max
+          )
+        },
+        uNoiseSpeed: {
+          value: THREE.MathUtils.randFloat(
+            this.parameters.matters.giant.shader.whitedwarf.uNoiseSpeed.min,
+            this.parameters.matters.giant.shader.whitedwarf.uNoiseSpeed.max
           )
         }
       },

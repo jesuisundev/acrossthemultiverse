@@ -235,19 +235,19 @@ export default class Parameters {
         budget: 300000,
         vertices: {
           bright: {
-            min: 0.00001,
-            max: 0.0001
+            min: 0.001,
+            max: 0.002
           },
           pass: {
-            min: 0.05,
-            max: 0.25
+            min: 0.25,
+            max: 0.30
           }
         },
         material: {
           size: {
             bright: {
-              min: 300,
-              max: 400
+              min: 600,
+              max: 800
             },
             pass: {
               min: 50,
@@ -272,8 +272,8 @@ export default class Parameters {
               max: 15000
             },
             uBrightnessAmplifier: {
-              min: 0.25,
-              max: 0.40
+              min: 0.20,
+              max: 0.25
             },
             uNoiseIntensity: {
               min: 2.0,
@@ -282,6 +282,24 @@ export default class Parameters {
             uNoiseSpeed: {
               min: 0.03,
               max: 0.08
+            }
+          },
+          whitedwarf: {
+            scale: {
+              min: 1000,
+              max: 1500
+            },
+            uBrightnessAmplifier: {
+              min: 0.20,
+              max: 0.25
+            },
+            uNoiseIntensity: {
+              min: 2.0,
+              max: 6.0
+            },
+            uNoiseSpeed: {
+              min: 0.01,
+              max: 0.02
             }
           }
         },

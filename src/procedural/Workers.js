@@ -39,10 +39,16 @@ export default class Workers {
       source: new Worker(new URL('./nebula/SupernovaRemnantsNebulaWorker.js', import.meta.url))
     }
 
-    this.giantWorker = {
+    this.sunGiantWorker = {
       type: 'Giant',
       subtype: 'Sun',
       source: new Worker(new URL('./giant/SunGiantWorker.js', import.meta.url))
+    }
+
+    this.whiteDwarfGiantWorker = {
+      type: 'Giant',
+      subtype: 'WhiteDwarf',
+      source: new Worker(new URL('./giant/WhiteDwarfGiantWorker.js', import.meta.url))
     }
 
     this.blackholeWorker = {
@@ -75,10 +81,16 @@ export default class Workers {
       'remnant'
     )
 
-    this.giantWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
+    this.sunGiantWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
       messageEvent.data,
       'giant',
       'sun'
+    )
+
+    this.whiteDwarfGiantWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
+      messageEvent.data,
+      'giant',
+      'whitedwarf'
     )
 
     this.blackholeWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
@@ -91,7 +103,7 @@ export default class Workers {
   _setWorkersDistribution () {
     this.workersDistribution = [
       {
-        chances: 49,
+        chances: 45,
         worker: this.openStarfieldWorker
       },
       {
@@ -107,8 +119,12 @@ export default class Workers {
         worker: this.supernovaRemnantsNebulaWorker
       },
       {
+        chances: 4,
+        worker: this.whiteDwarfGiantWorker
+      },
+      {
         chances: 2,
-        worker: this.giantWorker
+        worker: this.sunGiantWorker
       }
     ]
   }

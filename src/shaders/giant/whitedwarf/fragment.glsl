@@ -1,6 +1,10 @@
+precision mediump float;
+
 uniform vec3 uColor;
 uniform float uTime;
-uniform sampler2D uTexture;
+uniform float uBrightnessAmplifier;
+uniform float uNoiseIntensity;
+uniform float uNoiseSpeed;
 
 varying vec2 vUv;
 varying vec3 vPosition;
@@ -145,13 +149,13 @@ float snoise(vec4 v)
 // creating octave (layer) of noise
 float noiseOctave(vec4 layer)
 {
-    float noiseOctaveOffset = abs(sin(uTime) * 0.2) + 4.5;
-    float noiseAmplitude = 5.0;
-    float noiseScale = 2.0;
+    float noiseOctaveOffset = 200.0;
+    float noiseAmplitude = 6.0;
+    float noiseScale = 4.0;
 
     float sum = 0.0;
 
-    for(int i=0; i<2; i++)
+    for(int i=0; i<6; i++)
     {
         // adding layers of noise on each other
         // with different scale and amplitude
@@ -164,7 +168,7 @@ float noiseOctave(vec4 layer)
         noiseScale *= 2.0;
 
         // offseting each layer by the time
-        layer.w *= noiseOctaveOffset;
+        layer.w += noiseOctaveOffset;
     }
 
     return sum;
@@ -173,16 +177,16 @@ float noiseOctave(vec4 layer)
 // convert to predetermined color
 vec3 convertToColor(float brightness)
 {
-    float brightnessAmplifier = 0.40;
+    float brightnessAmplifier = 0.15;
 
     brightness *= brightnessAmplifier;
 
     // add uniform for color pow here to change color on diff universes
-    // black and white colors
+    // blue/black and white colors
     return vec3(
-        brightness*brightness*brightness*brightness*brightness*brightness,
-        brightness*brightness*brightness*brightness*brightness*brightness,
-        brightness*brightness*brightness*brightness*brightness*brightness
+        brightness*brightness*brightness*brightness*brightness*brightness*brightness*brightness*brightness,
+        brightness*brightness*brightness*brightness*brightness*brightness*brightness*brightness*brightness,
+        brightness*brightness
     ) * 1.2;
 }
 
@@ -194,19 +198,21 @@ float fresnel(vec3 eyeVector, vec3 worldNormal)
 
 void main()
 {
-    // get texture data from texture
-    vec4 texture = texture2D(uTexture, vUv);
+    float noiseIntensity = uNoiseIntensity;
+    float noiseSpeed = uNoiseSpeed;
+    float fresnelAmplifier = 10.0;
 
-    // noises
-    float textureNoises = noiseOctave(texture);
-    float regionNoises = max(snoise(texture), 0.0);
-    float smoothRegionNoises = mix(1.0, regionNoises, 0.7);
-    float smoothedLayersOfNoises = textureNoises * smoothRegionNoises;
+    // base layer of noise
+    vec4 baseLayer = vec4(vPosition * noiseIntensity, uTime * noiseSpeed);
+
+    // build octave of noises
+    float noises = noiseOctave(baseLayer);
 
     // add the fresnel to the shape
-    smoothedLayersOfNoises += fresnel(vEyeVector, vPosition) * 1.2;
+    noises += fresnel(vEyeVector, vPosition) * fresnelAmplifier;
 
-    vec3 textureNoisesColored = convertToColor(smoothedLayersOfNoises);
+    // convert region of noises in sun color
+    vec3 noisesColored = convertToColor(noises * 1.0 + 0.2);
 
-    gl_FragColor = vec4(textureNoisesColored, 1.0);
+    gl_FragColor = vec4(noisesColored, 1.0);
 }
