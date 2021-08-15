@@ -12,6 +12,7 @@ export default class Galaxy {
 
   generate (galaxiesAttributes, position) {
     const currentCoordinateVector = this._getCoordinateVectorByPosition(position)
+    const rotation = THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360))
 
     const firstPassStarsGeometry = this._getRandomStarsGeometry(galaxiesAttributes.firstPassStarsRandomAttributes)
     const firstPassStarsTexture = this._getRandomStarsTexture()
@@ -19,16 +20,29 @@ export default class Galaxy {
     const firstPassStars = new THREE.Points(firstPassStarsGeometry, firstPassStarsmaterial)
 
     firstPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
-    //firstPassStarsGeometry.rotateX(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
-    //firstPassStarsGeometry.rotateZ(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
-    // TODO - boundary to random rotation
-    firstPassStarsGeometry.rotateX(250)
+    firstPassStarsGeometry.rotateX(rotation)
+
+    const secondPassStarsGeometry = this._getRandomStarsGeometry(galaxiesAttributes.secondPassStarsRandomAttributes)
+    const secondPassStarsTexture = this._getRandomStarsTextureByType('cloud')
+    const secondPassStarsmaterial = this._getRandomStarsMaterial(secondPassStarsTexture, 500, 0.02)
+    const secondPassStars = new THREE.Points(secondPassStarsGeometry, secondPassStarsmaterial)
+
+    secondPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
+    secondPassStars.rotateX(rotation)
+
+
     const randomGalaxy = {
       firstPass: {
         geometry: firstPassStarsGeometry,
         texture: firstPassStarsTexture,
         material: firstPassStarsmaterial,
         points: firstPassStars
+      },
+      secondPass: {
+        geometry: secondPassStarsGeometry,
+        texture: secondPassStarsTexture,
+        material: secondPassStarsmaterial,
+        points: secondPassStars
       }
     }
 
@@ -42,11 +56,14 @@ export default class Galaxy {
     }
 
     this.galaxy.firstPass.geometry.dispose()
+    this.galaxy.secondPass.geometry.dispose()
 
     this.galaxy.firstPass.material.dispose()
+    this.galaxy.secondPass.material.dispose()
 
     this.scene.remove(
-      this.galaxy.firstPass.points
+      this.galaxy.firstPass.points,
+      this.galaxy.secondPass.points
     )
 
     this.galaxy = null
@@ -59,7 +76,8 @@ export default class Galaxy {
     }
 
     this.scene.add(
-      this.galaxy.firstPass.points
+      this.galaxy.firstPass.points,
+      this.galaxy.secondPass.points
     )
   }
 
@@ -111,9 +129,18 @@ export default class Galaxy {
     return geometry
   }
 
-  _getRandomStarsTexture (type = 'pass') {
+  _getRandomStarsTexture () {
     const starsChoosenIndexes = [0, 1, 3, 4]
-    const currentTexturesPool = this.library.textures.starfield[type].filter((texture, index) => starsChoosenIndexes.includes(index))
+    const currentTexturesPool = this.library.textures.starfield["pass"].filter((texture, index) => starsChoosenIndexes.includes(index))
+    const randomTexture = currentTexturesPool[THREE.MathUtils.randInt(0, currentTexturesPool.length - 1)]
+
+    this.textureSeen.push(randomTexture)
+
+    return randomTexture
+  }
+
+  _getRandomStarsTextureByType (type = 'pass') {
+    const currentTexturesPool = this.library.textures.nebula[type].filter(texture => !this.textureSeen.includes(texture))
     const randomTexture = currentTexturesPool[THREE.MathUtils.randInt(0, currentTexturesPool.length - 1)]
 
     this.textureSeen.push(randomTexture)

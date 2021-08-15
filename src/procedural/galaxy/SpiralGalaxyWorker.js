@@ -5,8 +5,10 @@ self.onmessage = messageEvent => {
   const galaxyParameters = messageEvent.data.parameters.matters.galaxy
   const clusterSize = messageEvent.data.parameters.grid.clusterSize
   const galaxyAttributes = {}
+  const defaultBranchesNumber = THREE.MathUtils.randInt(galaxyParameters.spiral.branches.min, galaxyParameters.spiral.branches.max)
 
   for (const clusterToPopulate of clustersToPopulate) {
+    // base galaxy shaped
     const firstPassStarsRandomAttributes = _getAttributesInRandomPosition(
       Math.floor(
         galaxyParameters.budget * THREE.MathUtils.randFloat(
@@ -15,22 +17,38 @@ self.onmessage = messageEvent => {
         )
       ),
       clusterSize,
-      galaxyParameters
+      galaxyParameters,
+      defaultBranchesNumber
+    )
+
+    // gaz galaxy shaped
+    // todo - maybe i dont need to recalulte this. could i pass the other attributes; less random tho
+    const secondPassStarsRandomAttributes = _getAttributesInRandomPosition(
+      Math.floor(
+        galaxyParameters.budget * THREE.MathUtils.randFloat(
+          galaxyParameters.vertices.cloud.min * 0.7,
+          galaxyParameters.vertices.cloud.max * 0.7
+        )
+      ),
+      clusterSize,
+      galaxyParameters,
+      defaultBranchesNumber
     )
 
     galaxyAttributes[clusterToPopulate] = {
-      firstPassStarsRandomAttributes
+      firstPassStarsRandomAttributes,
+      secondPassStarsRandomAttributes
     }
   }
 
   self.postMessage(galaxyAttributes)
 }
 
-function _getAttributesInRandomPosition (max, clusterSize, parameters) {
+function _getAttributesInRandomPosition (max, clusterSize, parameters, enforcedBranches) {
   const positions = []
   const colors = []
-  const radius = clusterSize / 2
-  const branches = THREE.MathUtils.randInt(parameters.spiral.branches.min, parameters.spiral.branches.max)
+  const radius = clusterSize / 1.8
+  const branches = enforcedBranches || THREE.MathUtils.randInt(parameters.spiral.branches.min, parameters.spiral.branches.max)
   const spin = THREE.MathUtils.randInt(parameters.spiral.spin.min, parameters.spiral.spin.max)
   const chosenColors = _getTwoDifferentColors(parameters.galaxyColors)
   const mixedColor = chosenColors.colorIn.clone()

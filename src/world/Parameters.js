@@ -360,14 +360,14 @@ export default class Parameters {
       galaxy: {
         budget: 100000,
         spiral: {
-          randomnessPower: 3,
-          randomness: 0.6,
+          randomnessPower: 2.8,
+          randomness: 0.8,
           spin: {
             min: 3,
             max: 3
           },
           branches: {
-            min: 6,
+            min: 5,
             max: 8
           }
         },
@@ -380,9 +380,9 @@ export default class Parameters {
             min: 1,
             max: 1
           },
-          globularPass: {
-            min: 0.1,
-            max: 0.15
+          cloud: {
+            min: 1,
+            max: 1
           }
         },
         material: {
