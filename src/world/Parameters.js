@@ -358,17 +358,17 @@ export default class Parameters {
       blackhole: {
       },
       galaxy: {
-        budget: 300000,
+        budget: 100000,
         spiral: {
-          randomnessPower: 4,
-          randomness: 0.3,
+          randomnessPower: 3,
+          randomness: 0.6,
           spin: {
             min: 3,
             max: 3
           },
           branches: {
-            min: 4,
-            max: 6
+            min: 6,
+            max: 8
           }
         },
         vertices: {
@@ -408,75 +408,29 @@ export default class Parameters {
           }
         },
         colors: [
-          '#9bb2ff',
-          '#9eb5ff',
-          '#a3b9ff',
-          '#aabfff',
-          '#b2c5ff',
-          '#bbccff',
-          '#c4d2ff',
-          '#ccd8ff',
-          '#d3ddff',
-          '#dae2ff',
-          '#dfe5ff',
-          '#e4e9ff',
-          '#e9ecff',
-          '#eeefff',
-          '#f3f2ff',
-          '#f8f6ff',
-          '#fef9ff',
-          '#fff9fb',
-          '#fff7f5',
-          '#fff5ef',
-          '#fff3ea',
-          '#fff1e5',
-          '#ffefe0',
-          '#ffeddb',
-          '#ffebd6',
-          '#ffe9d2',
-          '#ffe8ce',
-          '#ffe6ca',
-          '#ffe5c6',
-          '#ffe3c3',
-          '#ffe2bf',
-          '#ffe0bb',
-          '#ffdfb8',
-          '#ffddb4',
-          '#ffdbb0',
-          '#ffdaad',
-          '#ffd8a9',
-          '#ffd6a5',
-          '#ffd5a1',
-          '#ffd29c',
-          '#ffd096',
-          '#ffcc8f',
-          '#ffc885',
-          '#ffc178',
-          '#ffb765',
-          '#ffa94b',
-          '#ff9523',
-          '#ff7b00',
-          '#ff5200'
+          '#24346c',
+          '#5965a4',
+          '#b09bc7',
+          '#313e58',
+          '#f2f4ff',
+          '#000210'
         ],
-        globularColors: [
-          '#FF8E05',
-          '#EF93E6',
-          '#FDFFF2',
-          '#D7693D',
-          '#ffc178',
-          '#ffb765',
-          '#ffa94b',
-          '#ff9523',
-          '#ff7b00',
-          '#ff5200',
-          '#9bb2ff',
-          '#9eb5ff',
-          '#a3b9ff',
-          '#aabfff',
-          '#b2c5ff',
-          '#bbccff',
-          '#c4d2ff'
-        ]
+        galaxyColors: {
+          in: [
+            '#f2f4ff',
+            '#c9d1fe',
+            '#8ab1cf',
+            '#b09bc7',
+            '#EFCEBD'
+          ],
+          out: [
+            '#24346c',
+            '#0A0068',
+            '#000210',
+            '#000941',
+            '#841B1F'
+          ]
+        }
       }
     }
 

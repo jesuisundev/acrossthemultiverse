@@ -112,7 +112,8 @@ export default class Galaxy {
   }
 
   _getRandomStarsTexture (type = 'pass') {
-    const currentTexturesPool = this.library.textures.starfield[type].filter(texture => !this.textureSeen.includes(texture))
+    const starsChoosenIndexes = [0, 1, 3, 4]
+    const currentTexturesPool = this.library.textures.starfield[type].filter((texture, index) => starsChoosenIndexes.includes(index))
     const randomTexture = currentTexturesPool[THREE.MathUtils.randInt(0, currentTexturesPool.length - 1)]
 
     this.textureSeen.push(randomTexture)

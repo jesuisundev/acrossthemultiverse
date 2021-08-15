@@ -26,7 +26,7 @@ document.body.appendChild(renderer.domElement)
 // TODO : eliptical
 // TODO : Irregular
 // increase randomess for iregular
-// Fix interpolation of colors for nebulas using lerpColors
+// Fix interpolation of colors for nebulas using lerpColors and colorin out fix
 // TODO : sequence part 1 and 2 and 3
 // TODO : ask for UI/UX
 // TODO : build tweark for others universes

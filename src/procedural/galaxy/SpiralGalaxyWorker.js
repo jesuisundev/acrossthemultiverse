@@ -29,10 +29,10 @@ self.onmessage = messageEvent => {
 function _getAttributesInRandomPosition (max, clusterSize, parameters) {
   const positions = []
   const colors = []
-  const radius = clusterSize / 3
+  const radius = clusterSize / 2
   const branches = THREE.MathUtils.randInt(parameters.spiral.branches.min, parameters.spiral.branches.max)
   const spin = THREE.MathUtils.randInt(parameters.spiral.spin.min, parameters.spiral.spin.max)
-  const chosenColors = _getTwoDifferentColors(parameters.colors)
+  const chosenColors = _getTwoDifferentColors(parameters.galaxyColors)
   const mixedColor = chosenColors.colorIn.clone()
 
   for (let i = 0; i < max; i++) {
@@ -78,10 +78,8 @@ function _getAttributesInRandomPosition (max, clusterSize, parameters) {
 }
 
 function _getTwoDifferentColors (pool) {
-  // TODO - dedicated pool colors
-  const poolCloned = JSON.parse(JSON.stringify(pool))
-  const colorIn = new THREE.Color(poolCloned.splice(THREE.MathUtils.randInt(0, poolCloned.length - 1), 1).shift())
-  const colorOut = new THREE.Color(poolCloned.splice(THREE.MathUtils.randInt(0, poolCloned.length - 1), 1).shift())
+  const colorIn = new THREE.Color(pool.in[THREE.MathUtils.randInt(0, pool.in.length - 1)])
+  const colorOut = new THREE.Color(pool.out[THREE.MathUtils.randInt(0, pool.out.length - 1)])
 
   return { colorIn, colorOut }
 }
