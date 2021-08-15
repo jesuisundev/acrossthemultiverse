@@ -22,10 +22,9 @@ document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
 // TODO : build three types of galaxy https://theplanets.org/types-of-galaxies/ - wip
-// TODO : spiral - WIP
-// TODO : eliptical
 // TODO : Irregular
 // increase randomess for iregular
+// TODO : eliptical
 // Fix interpolation of colors for nebulas using lerpColors and colorin out fix
 // TODO : sequence part 1 and 2 and 3
 // TODO : ask for UI/UX

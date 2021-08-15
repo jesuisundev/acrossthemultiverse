@@ -117,20 +117,20 @@ export default class Workers {
   _setWorkersDistribution () {
     this.workersDistribution = [
       {
-        chances: 100,
-        worker: this.spiralGalaxyWorker
-      },
-      {
-        chances: 45,
+        chances: 40,
         worker: this.openStarfieldWorker
       },
       {
-        chances: 25,
+        chances: 20,
         worker: this.globularStarfieldWorker
       },
       {
         chances: 15,
         worker: this.emissionNebulaWorker
+      },
+      {
+        chances: 10,
+        worker: this.spiralGalaxyWorker
       },
       {
         chances: 8,
@@ -154,7 +154,7 @@ export default class Workers {
 
   getWorkerDistributed (clusterToPopulate) {
     if (clusterToPopulate === '0,0,0') {
-      //return this.openStarfieldWorker.source
+      return this.openStarfieldWorker.source
     }
 
     let currentProbability = 0
