@@ -39,6 +39,12 @@ export default class Workers {
       source: new Worker(new URL('./nebula/SupernovaRemnantsNebulaWorker.js', import.meta.url))
     }
 
+    this.spiralGalaxyWorker = {
+      type: 'Galaxy',
+      subtype: 'Spiral',
+      source: new Worker(new URL('./galaxy/SpiralGalaxyWorker.js', import.meta.url))
+    }
+
     this.sunGiantWorker = {
       type: 'Giant',
       subtype: 'Sun',
@@ -64,6 +70,7 @@ export default class Workers {
       'starfield',
       'open'
     )
+
     this.globularStarfieldWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
       messageEvent.data,
       'starfield',
@@ -75,10 +82,17 @@ export default class Workers {
       'nebula',
       'emission'
     )
+
     this.supernovaRemnantsNebulaWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
       messageEvent.data,
       'nebula',
       'remnant'
+    )
+
+    this.spiralGalaxyWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
+      messageEvent.data,
+      'galaxy',
+      'spiral'
     )
 
     this.sunGiantWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
@@ -102,6 +116,10 @@ export default class Workers {
 
   _setWorkersDistribution () {
     this.workersDistribution = [
+      {
+        chances: 100,
+        worker: this.spiralGalaxyWorker
+      },
       {
         chances: 45,
         worker: this.openStarfieldWorker
@@ -136,7 +154,7 @@ export default class Workers {
 
   getWorkerDistributed (clusterToPopulate) {
     if (clusterToPopulate === '0,0,0') {
-      return this.openStarfieldWorker.source
+      //return this.openStarfieldWorker.source
     }
 
     let currentProbability = 0

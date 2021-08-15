@@ -21,15 +21,21 @@ renderer.domElement.id = 'multiverse'
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : build four types of galaxy https://theplanets.org/types-of-galaxies/
-// TODO : if time White Dwarf
+// TODO : build three types of galaxy https://theplanets.org/types-of-galaxies/ - wip
+// TODO : spiral - WIP
+// TODO : eliptical
+// TODO : Irregular
+// increase randomess for iregular
+// Fix interpolation of colors for nebulas using lerpColors
 // TODO : sequence part 1 and 2 and 3
 // TODO : ask for UI/UX
 // TODO : build tweark for others universes
 // TODO : build epiphany + sequence epiphany - filament interconnected of universes via shaders points
 // TODO : lock fps
-// TODO : performance, screen size
+// TODO : performance
+// TODO : handle mobile control
 // TODO : add UI and music
+// TODO : detect clavier
 // TODO : refactor clean up comment
 // TODO : push to cloudfare
 const camera = new THREE.PerspectiveCamera(
@@ -38,6 +44,8 @@ const camera = new THREE.PerspectiveCamera(
   parameters.global.camera.near,
   parameters.global.camera.far
 )
+
+camera.position.z = 10000
 
 const controls = new Controls(camera, parameters)
 const library = new Library()
