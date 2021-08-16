@@ -1,5 +1,7 @@
 import * as THREE from 'three'
 
+// TODO : no white color in, fix blur by reducing cloud
+
 self.onmessage = messageEvent => {
   const clustersToPopulate = messageEvent.data.clustersToPopulate
   const galaxyParameters = messageEvent.data.parameters.matters.galaxy
