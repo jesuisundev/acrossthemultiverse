@@ -44,8 +44,6 @@ const camera = new THREE.PerspectiveCamera(
   parameters.global.camera.far
 )
 
-camera.position.z = 10000
-
 const controls = new Controls(camera, parameters)
 const library = new Library()
 const grid = new Grid(camera, parameters)
