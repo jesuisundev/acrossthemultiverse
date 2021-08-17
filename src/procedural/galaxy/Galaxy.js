@@ -24,12 +24,18 @@ export default class Galaxy {
 
     const secondPassStarsGeometry = this._getRandomStarsGeometry(galaxiesAttributes.secondPassStarsRandomAttributes)
     const secondPassStarsTexture = this._getRandomStarsTextureByType('cloud')
-    const secondPassStarsmaterial = this._getRandomStarsMaterial(secondPassStarsTexture, 500, 0.02)
+    const secondPassStarsmaterial = this._getRandomStarsMaterial(secondPassStarsTexture, 800, 0.04)
     const secondPassStars = new THREE.Points(secondPassStarsGeometry, secondPassStarsmaterial)
 
     secondPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
     secondPassStars.rotateX(rotation)
 
+    const thirdPassStarsGeometry = this._getRandomStarsGeometry(galaxiesAttributes.thirdPassStarsRandomAttributes)
+    const thirdPassStarsTexture = this._getRandomStarsTexture()
+    const thirdPassStarsmaterial = this._getRandomStarsMaterial(thirdPassStarsTexture)
+    const thirdPassStars = new THREE.Points(thirdPassStarsGeometry, thirdPassStarsmaterial)
+
+    thirdPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
 
     const randomGalaxy = {
       firstPass: {
@@ -43,6 +49,12 @@ export default class Galaxy {
         texture: secondPassStarsTexture,
         material: secondPassStarsmaterial,
         points: secondPassStars
+      },
+      thirdPass: {
+        geometry: thirdPassStarsGeometry,
+        texture: thirdPassStarsTexture,
+        material: thirdPassStarsmaterial,
+        points: thirdPassStars
       }
     }
 
@@ -57,13 +69,16 @@ export default class Galaxy {
 
     this.galaxy.firstPass.geometry.dispose()
     this.galaxy.secondPass.geometry.dispose()
+    this.galaxy.thirdPass.geometry.dispose()
 
     this.galaxy.firstPass.material.dispose()
     this.galaxy.secondPass.material.dispose()
+    this.galaxy.thirdPass.material.dispose()
 
     this.scene.remove(
       this.galaxy.firstPass.points,
-      this.galaxy.secondPass.points
+      this.galaxy.secondPass.points,
+      this.galaxy.thirdPass.points
     )
 
     this.galaxy = null
@@ -77,7 +92,8 @@ export default class Galaxy {
 
     this.scene.add(
       this.galaxy.firstPass.points,
-      this.galaxy.secondPass.points
+      this.galaxy.secondPass.points,
+      this.galaxy.thirdPass.points
     )
   }
 

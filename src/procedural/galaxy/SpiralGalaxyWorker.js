@@ -1,17 +1,16 @@
 import * as THREE from 'three'
 
-// TODO : no white color in, fix blur by reducing cloud
-
 self.onmessage = messageEvent => {
   const clustersToPopulate = messageEvent.data.clustersToPopulate
   const galaxyParameters = messageEvent.data.parameters.matters.galaxy
   const clusterSize = messageEvent.data.parameters.grid.clusterSize
   const galaxyAttributes = {}
   const defaultBranchesNumber = THREE.MathUtils.randInt(galaxyParameters.spiral.branches.min, galaxyParameters.spiral.branches.max)
+  const chosenColors = _getTwoDifferentColors(galaxyParameters.galaxyColors)
 
   for (const clusterToPopulate of clustersToPopulate) {
     // base galaxy shaped
-    const firstPassStarsRandomAttributes = _getAttributesInRandomPosition(
+    const firstPassStarsRandomAttributes = _getGalaxyAttributesInRandomPosition(
       Math.floor(
         galaxyParameters.budget * THREE.MathUtils.randFloat(
           galaxyParameters.vertices.pass.min,
@@ -20,46 +19,60 @@ self.onmessage = messageEvent => {
       ),
       clusterSize,
       galaxyParameters,
+      chosenColors,
       defaultBranchesNumber
     )
 
     // gaz galaxy shaped
-    // todo - maybe i dont need to recalulte this. could i pass the other attributes; less random tho
-    const secondPassStarsRandomAttributes = _getAttributesInRandomPosition(
+    const secondPassStarsRandomAttributes = _getGalaxyAttributesInRandomPosition(
       Math.floor(
         galaxyParameters.budget * THREE.MathUtils.randFloat(
-          galaxyParameters.vertices.cloud.min * 0.7,
-          galaxyParameters.vertices.cloud.max * 0.7
+          galaxyParameters.vertices.cloud.min * 0.6,
+          galaxyParameters.vertices.cloud.max * 0.6
         )
       ),
       clusterSize,
       galaxyParameters,
+      chosenColors,
       defaultBranchesNumber
+    )
+
+    // low starfield density using color from galaxy
+    const thirdPassStarsRandomAttributes = _getAttributesInRandomPosition(
+      Math.floor(
+        galaxyParameters.budget * THREE.MathUtils.randFloat(
+          galaxyParameters.vertices.pass.min,
+          galaxyParameters.vertices.pass.max
+        )
+      ),
+      clusterSize,
+      galaxyParameters,
+      chosenColors
     )
 
     galaxyAttributes[clusterToPopulate] = {
       firstPassStarsRandomAttributes,
-      secondPassStarsRandomAttributes
+      secondPassStarsRandomAttributes,
+      thirdPassStarsRandomAttributes
     }
   }
 
   self.postMessage(galaxyAttributes)
 }
 
-function _getAttributesInRandomPosition (max, clusterSize, parameters, enforcedBranches) {
+function _getGalaxyAttributesInRandomPosition (max, clusterSize, parameters, chosenColors, enforcedBranches) {
   const positions = []
   const colors = []
   const radius = clusterSize / 1.8
   const branches = enforcedBranches || THREE.MathUtils.randInt(parameters.spiral.branches.min, parameters.spiral.branches.max)
   const spin = THREE.MathUtils.randInt(parameters.spiral.spin.min, parameters.spiral.spin.max)
-  const chosenColors = _getTwoDifferentColors(parameters.galaxyColors)
   const mixedColor = chosenColors.colorIn.clone()
 
   for (let i = 0; i < max; i++) {
     const i3 = i * 3
-    const randomRadiusPosition = Math.random() * radius
-    const spinAngle = (randomRadiusPosition * 0.0001) * spin
-    const branchAngle = (i % branches) / branches * Math.PI * 2
+    const randomRadiusPosition = Math.random() * radius + Math.random()
+    const spinAngle = (randomRadiusPosition * parameters.spiral.spinAmplitude) * spin
+    const branchAngle = (i % branches) / branches * Math.PI * parameters.spiral.branchesAmplitude
 
     const x = Math.pow(
       Math.random(),
@@ -83,12 +96,35 @@ function _getAttributesInRandomPosition (max, clusterSize, parameters, enforcedB
     mixedColor.lerpColors(
       chosenColors.colorIn,
       chosenColors.colorOut,
-      randomRadiusPosition / radius
+      (randomRadiusPosition / radius) + parameters.spiral.colorInterpolationAmplitude
     )
 
     colors[i3] = mixedColor.r
     colors[i3 + 1] = mixedColor.g
     colors[i3 + 2] = mixedColor.b
+  }
+
+  return {
+    positions: new Float32Array(positions),
+    colors: new Float32Array(colors)
+  }
+}
+
+function _getAttributesInRandomPosition (max, clusterSize, parameters, chosenColors) {
+  const positions = []
+  const colors = []
+
+  for (let i = 0; i < max; i++) {
+    // creating coordinate for the particles in random positions but confined in the current square cluster
+    const x = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
+    const y = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
+    const z = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
+
+    positions.push(x, y, z)
+
+    const color = chosenColors.colorOut
+
+    colors.push(color.r, color.g, color.b)
   }
 
   return {

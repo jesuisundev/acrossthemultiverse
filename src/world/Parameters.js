@@ -358,17 +358,20 @@ export default class Parameters {
       blackhole: {
       },
       galaxy: {
-        budget: 100000,
+        budget: 60000,
         spiral: {
           randomnessPower: 2.8,
-          randomness: 0.8,
+          randomness: 0.5,
+          spinAmplitude: 0.00008,
+          branchesAmplitude: 2.4,
+          colorInterpolationAmplitude: 0.5,
           spin: {
             min: 3,
             max: 3
           },
           branches: {
-            min: 5,
-            max: 8
+            min: 3,
+            max: 7
           }
         },
         vertices: {
@@ -393,7 +396,7 @@ export default class Parameters {
             },
             pass: {
               min: 50,
-              max: 50
+              max: 150
             }
           },
           opacity: {
@@ -417,11 +420,11 @@ export default class Parameters {
         ],
         galaxyColors: {
           in: [
-            '#f2f4ff',
-            '#c9d1fe',
+            "#F0491C",
             '#8ab1cf',
             '#b09bc7',
-            '#EFCEBD'
+            '#EFCEBD',
+            '#ffdf00'
           ],
           out: [
             '#24346c',
