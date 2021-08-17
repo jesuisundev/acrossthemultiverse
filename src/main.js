@@ -22,14 +22,16 @@ document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
 // TODO : build three types of galaxy https://theplanets.org/types-of-galaxies/ - wip
-// TODO : Irregular
-// increase randomess for iregular
 // TODO : eliptical
 // Fix interpolation of colors for nebulas using lerpColors and colorin out fix
 // TODO : sequence part 1 and 2 and 3
 // TODO : ask for UI/UX
 // TODO : build tweark for others universes
+// TODO : FILAMENT UNIVERSE before epiphany => irregular: {randomnessPower: 0.00002 }
 // TODO : build epiphany + sequence epiphany - filament interconnected of universes via shaders points
+// TODO - fix transparency issue (add a mesh inside to cover up?) on red giant and white dwarf
+// TODO - fix bug with fresnel far away
+// TODO - delete cloud inside supernova - put bright stars ?
 // TODO : lock fps
 // TODO : performance
 // TODO : handle mobile control
@@ -43,6 +45,8 @@ const camera = new THREE.PerspectiveCamera(
   parameters.global.camera.near,
   parameters.global.camera.far
 )
+
+//camera.position.z = 8000
 
 const controls = new Controls(camera, parameters)
 const library = new Library()

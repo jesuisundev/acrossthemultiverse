@@ -1,7 +1,5 @@
 import * as THREE from 'three'
 
-// TODO - delete cloud inside put bright stars ?
-
 self.onmessage = messageEvent => {
   const clustersToPopulate = messageEvent.data.clustersToPopulate
   const nebulaParameters = messageEvent.data.parameters.matters.nebula

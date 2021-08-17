@@ -45,6 +45,12 @@ export default class Workers {
       source: new Worker(new URL('./galaxy/SpiralGalaxyWorker.js', import.meta.url))
     }
 
+    this.irregularGalaxyWorker = {
+      type: 'Galaxy',
+      subtype: 'Irregular',
+      source: new Worker(new URL('./galaxy/IrregularGalaxyWorker.js', import.meta.url))
+    }
+
     this.sunGiantWorker = {
       type: 'Giant',
       subtype: 'Sun',
@@ -95,6 +101,12 @@ export default class Workers {
       'spiral'
     )
 
+    this.irregularGalaxyWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
+      messageEvent.data,
+      'galaxy',
+      'irregular'
+    )
+
     this.sunGiantWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
       messageEvent.data,
       'giant',
@@ -117,7 +129,7 @@ export default class Workers {
   _setWorkersDistribution () {
     this.workersDistribution = [
       {
-        chances: 40,
+        chances: 30,
         worker: this.openStarfieldWorker
       },
       {
@@ -125,8 +137,12 @@ export default class Workers {
         worker: this.globularStarfieldWorker
       },
       {
-        chances: 15,
+        chances: 13,
         worker: this.emissionNebulaWorker
+      },
+      {
+        chances: 12,
+        worker: this.irregularGalaxyWorker
       },
       {
         chances: 10,

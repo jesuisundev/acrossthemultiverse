@@ -1,7 +1,5 @@
 import * as THREE from 'three'
 
-// TODO - fix bug with fresnel far away
-
 self.onmessage = messageEvent => {
   const clustersToPopulate = messageEvent.data.clustersToPopulate
   const giantParameters = messageEvent.data.parameters.matters.giant

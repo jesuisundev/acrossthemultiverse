@@ -23,7 +23,6 @@ export default class Giant {
 
     const giantStarGeometry = new THREE.SphereGeometry(1, 64, 32)
     const brightStarTexture = null
-    // TODO - fix transparency issue (add a mesh inside to cover up?)
     const giantStarmaterial = this._getRandomSunShaderMaterial()
 
     giantStarmaterial.key = Math.floor(Date.now() + Math.random())
@@ -68,7 +67,6 @@ export default class Giant {
 
     const giantStarGeometry = new THREE.SphereGeometry(1, 64, 32)
     const brightStarTexture = null
-    // TODO - fix transparency issue (add a mesh inside to cover up?)
     const giantStarmaterial = this._getRandomWhiteDwarfShaderMaterial()
 
     giantStarmaterial.key = Math.floor(Date.now() + Math.random())

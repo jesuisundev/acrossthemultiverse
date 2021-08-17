@@ -374,6 +374,21 @@ export default class Parameters {
             max: 7
           }
         },
+        irregular: {
+          randomnessPower: 4,
+          randomness: 20,
+          spinAmplitude: 0.8,
+          branchesAmplitude: 2.4,
+          colorInterpolationAmplitude: 0.5,
+          spin: {
+            min: 3,
+            max: 3
+          },
+          branches: {
+            min: 3,
+            max: 7
+          }
+        },
         vertices: {
           bright: {
             min: 0.00001,
