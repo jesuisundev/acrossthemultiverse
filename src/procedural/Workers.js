@@ -1,8 +1,8 @@
 export default class Workers {
   constructor (grid) {
     /**
-         * Web worker used for heavy work on background. Critical to not block the event loop.
-         */
+    * Web worker used for heavy work on background. Critical to not block the event loop.
+    */
     if (!window.Worker) {
       throw new Error('You browser is shit. Do something about it.')
     }
