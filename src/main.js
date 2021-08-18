@@ -21,7 +21,6 @@ renderer.domElement.id = 'multiverse'
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// Fix interpolation of colors for nebulas using lerpColors and colorin out fix
 // TODO : sequence part 1 and 2 and 3
 // TODO - fix transparency issue (add a mesh inside to cover up?) on red giant and white dwarf
 // TODO - fix bug with fresnel far away
@@ -44,8 +43,6 @@ const camera = new THREE.PerspectiveCamera(
   parameters.global.camera.near,
   parameters.global.camera.far
 )
-
-//camera.position.z = 8000
 
 const controls = new Controls(camera, parameters)
 const library = new Library()

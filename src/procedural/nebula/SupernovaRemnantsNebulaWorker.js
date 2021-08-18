@@ -109,7 +109,7 @@ function _getRoundAttributesInRandomPosition (parameters, max, clusterSize, dist
 
     positions.push(x, y, z)
 
-    mixedColor.lerp(chosenColors.colorOut, i / (max * 1200))
+    mixedColor.lerpColors(chosenColors.colorIn, chosenColors.colorOut, Math.sin(i))
     colors.push(mixedColor.r, mixedColor.g, mixedColor.b)
   }
 
@@ -120,9 +120,8 @@ function _getRoundAttributesInRandomPosition (parameters, max, clusterSize, dist
 }
 
 function _getTwoDifferentColors (pool) {
-  const poolCloned = JSON.parse(JSON.stringify(pool))
-  const colorIn = new THREE.Color(poolCloned.splice(THREE.MathUtils.randInt(0, poolCloned.length - 1), 1).shift())
-  const colorOut = new THREE.Color(poolCloned.splice(THREE.MathUtils.randInt(0, poolCloned.length - 1), 1).shift())
+  const colorIn = new THREE.Color(pool.in[THREE.MathUtils.randInt(0, pool.in.length - 1)])
+  const colorOut = new THREE.Color(pool.out[THREE.MathUtils.randInt(0, pool.out.length - 1)])
 
   return { colorIn, colorOut }
 }

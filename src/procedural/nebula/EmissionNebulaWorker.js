@@ -54,11 +54,8 @@ self.onmessage = messageEvent => {
 function _getShapeAttributesInRandomPosition (parameters, enforcedPositions, enforcedColors) {
   const positions = enforcedPositions || []
   const colors = enforcedColors || []
-
-  // black magic
   const randomNess = 4
   const radius = 5
-  const colorRadius = 1200
 
   const geometry = new THREE.TubeGeometry(
     new Curves.CinquefoilKnot(),
@@ -77,7 +74,7 @@ function _getShapeAttributesInRandomPosition (parameters, enforcedPositions, enf
     for (let i = 0; i < geometry.attributes.position.array.length - 1; i++) {
       const i3 = i * 3
 
-      mixedColor.lerp(chosenColors.colorOut, i / (geometry.attributes.position.array.length * colorRadius))
+      mixedColor.lerpColors(chosenColors.colorIn, chosenColors.colorOut, Math.sin(i))
 
       if (geometry.attributes.position.array[i3]) {
         positions[i3] = geometry.attributes.position.array[i3] * (Math.random() * randomNess + radius)
@@ -103,9 +100,8 @@ function _getShapeAttributesInRandomPosition (parameters, enforcedPositions, enf
 }
 
 function _getTwoDifferentColors (pool) {
-  const poolCloned = JSON.parse(JSON.stringify(pool))
-  const colorIn = new THREE.Color(poolCloned.splice(THREE.MathUtils.randInt(0, poolCloned.length - 1), 1).shift())
-  const colorOut = new THREE.Color(poolCloned.splice(THREE.MathUtils.randInt(0, poolCloned.length - 1), 1).shift())
+  const colorIn = new THREE.Color(pool.in[THREE.MathUtils.randInt(0, pool.in.length - 1)])
+  const colorOut = new THREE.Color(pool.out[THREE.MathUtils.randInt(0, pool.out.length - 1)])
 
   return { colorIn, colorOut }
 }
