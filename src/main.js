@@ -46,6 +46,7 @@ const camera = new THREE.PerspectiveCamera(
   parameters.global.camera.near,
   parameters.global.camera.far
 )
+camera.rotation.z = 0.8
 
 const controls = new Controls(camera, parameters)
 const library = new Library()

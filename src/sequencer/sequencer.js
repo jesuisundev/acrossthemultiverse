@@ -43,6 +43,7 @@ export default class Sequencer {
     this.currentChapter++
 
     if (skipped) {
+      this.camera.rotation.z = 0
       sequencer.fadeOutWallById('#blackwall', 0)
     } else {
       this.stopAllSounds()
@@ -50,6 +51,8 @@ export default class Sequencer {
       this.library.audio['transcendent'].on('end', () => console.log('TODO : transcendent ended loop on ambient song'))
 
       await this.asyncWaitFor(2000)
+      gsap.to(this.camera.rotation, { duration: 40, ease: 'Power0.easeNone', z: 0 })
+
       await this.fadeOutWallById('#blackwall', 10, 'Power0.easeNone')
       await this.showThenHideStory(this.parameters.story.chapterone[0])
       await this.showThenHideStory(this.parameters.story.chapterone[1], 0)
