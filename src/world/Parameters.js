@@ -11,7 +11,7 @@ export default class Parameters {
       },
       camera: {
         fov: 100,
-        near: 0.01,
+        near: 100,
         far: 20000,
         defaultRotation: 0.00015,
         defaultForward: 0.5
@@ -54,6 +54,15 @@ export default class Parameters {
 
     this.grid = {
       clusterSize: 45000
+    }
+
+    this.story = {
+      chapterone: [
+        "Chapter One\nTranscendence",
+        "You are the pioneer of the human race.",
+        "Find a supermassive black hole and go beyond our universe.",
+        "Epiphany awaits."
+      ]
     }
 
     this.matters = {

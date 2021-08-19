@@ -50,6 +50,7 @@ export default class Library {
       audio: {
         baseUrl: '/audio/',
         pool: [
+          { title: 'transcendent', src: 'transcendent.mp3' },
           { title: 'wormhole', src: 'wormhole.mp3' }
         ]
       }

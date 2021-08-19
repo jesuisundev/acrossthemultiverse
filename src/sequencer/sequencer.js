@@ -15,10 +15,10 @@ export default class Sequencer {
     this.wormhole = new Wormhole(this.scene, this.library, this.parameters)
   }
 
-  async launchNextSequence () {
+  async launchNextSequence (skipped = false) {
     switch (this.currentChapter) {
       case 0:
-        await this.chapterOneSequence()
+        await this.chapterOneSequence(skipped)
         break
 
       case 1:
@@ -39,8 +39,23 @@ export default class Sequencer {
     }
   }
 
-  async chapterOneSequence () {
+  async chapterOneSequence (skipped = false) {
     this.currentChapter++
+
+    if (skipped) {
+      sequencer.fadeOutWallById('#blackwall', 0)
+    } else {
+      this.stopAllSounds()
+      this.library.audio['transcendent'].play()
+      this.library.audio['transcendent'].on('end', () => console.log('TODO : transcendent ended loop on ambient song'))
+
+      await this.asyncWaitFor(2000)
+      await this.fadeOutWallById('#blackwall', 10, 'Power0.easeNone')
+      await this.showThenHideStory(this.parameters.story.chapterone[0])
+      await this.showThenHideStory(this.parameters.story.chapterone[1], 0)
+      await this.showThenHideStory(this.parameters.story.chapterone[2], 0)
+      await this.showThenHideStory(this.parameters.story.chapterone[3], 0)
+    }
 
     this.active = false
   }
@@ -85,7 +100,7 @@ export default class Sequencer {
     await this.launchNextSequence()
   }
 
-  async fadeInWallById (id, duration = 2) {
+  async fadeInWallById (id, duration = 2, ease = 'power2.out') {
     const element = document.querySelector(id)
 
     element.style.opacity = 0
@@ -93,19 +108,19 @@ export default class Sequencer {
 
     return gsap.to(element.style, {
       duration: duration,
-      ease: 'power2.out',
+      ease: ease,
       opacity: 1
     }).then(() => true)
   }
 
-  async fadeOutWallById (id, duration = 2) {
+  async fadeOutWallById (id, duration = 2, ease = 'power2.out') {
     const element = document.querySelector(id)
 
     element.style.opacity = 1
 
     return gsap.to(element.style, {
       duration: duration,
-      ease: 'power2.out',
+      ease: ease,
       opacity: 0
     }).then(() => {
       element.style.zIndex = 7
@@ -119,6 +134,31 @@ export default class Sequencer {
 
   startSoundByTitle (title) {
     this.library.audio[title].play()
+  }
+
+  async showThenHideStory (story, delay=3, type='text') {
+    const element = document.querySelector("#story")
+
+    element.style.opacity = 0
+    element.style.zIndex = 10
+
+    if (type==='image')
+      story = `<img src='${story}' alt='' />`
+
+    element.innerHTML = story
+
+    const chapterOneTimeline = gsap.timeline()
+    chapterOneTimeline
+      .delay(delay)
+      .to(element.style, { duration: 3, opacity: 1 })
+      .to(element.style, { duration: 3, opacity: 0 }, 6)
+
+    return chapterOneTimeline.then(() => {
+      element.style.zIndex = 7
+      element.innerHTML = ''
+
+      return true
+    })
   }
 
   async asyncWaitFor (milliseconds) {

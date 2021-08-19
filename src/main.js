@@ -21,22 +21,25 @@ renderer.domElement.id = 'multiverse'
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : sequence part 1 and 2 and 3
+// TODO : sequence
+// part 2 - wip - load new music on demand
+// part 3
 // TODO - fix transparency issue (add a mesh inside to cover up?) on red giant and white dwarf
-// TODO - fix bug with fresnel far away
+// TODO - fix bug with fresnel far away - maybe a just black fog only for meshes?
 // TODO - delete cloud inside supernova - put bright stars ?
-// TODO : ask for UI/UX
 // TODO : build tweark for others universes
 // TODO : CHAPTER 2 WONDER UNIVERSE same but crazy colors
 // TODO : CHAPTER 3 FILAMENT UNIVERSE irregular: {randomnessPower: 0.00002 }
 // TODO : CHAPTER 4 build epiphany + sequence epiphany - filament interconnected of universes via shaders points
 // TODO : lock fps
 // TODO : performance
+// TODO : add UI -> back to cinema for perfo ?
+// TODO : add music control - > scroll volume
 // TODO : handle mobile control
-// TODO : add UI and music
 // TODO : detect clavier
 // TODO : refactor clean up comment
 // TODO : push to cloudfare
+// DEADLINE -> 13 sept
 const camera = new THREE.PerspectiveCamera(
   parameters.global.camera.fov, // can you fix the fov issue without sacrifying the wow effect ?
   window.innerWidth / window.innerHeight,
@@ -52,6 +55,8 @@ const multiverseFactory = new MultiverseFactory(scene, library, parameters)
 const effect = new Effect(camera, parameters)
 const sequencer = new Sequencer(scene, library, parameters, grid, camera)
 
+const skipIntro = false
+
 let lastClusterPosition
 let needRender = false
 let isRenderingClusterInProgress = false
@@ -61,6 +66,8 @@ let prevTimePerf = performance.now()
 library.preload()
 window.onload = () => {
   needRender = true
+
+  sequencer.launchNextSequence(skipIntro)
 }
 
 window.materialsToUpdate = {}
@@ -130,10 +137,6 @@ function animate (time) {
   const timePerf = performance.now()
   if (controls.pointerLockControls.isLocked === true) {
     controls.handleMovements(timePerf, prevTimePerf)
-  } else {
-    if (!window.wormhole.active) {
-      camera.rotation.z += parameters.global.camera.defaultRotation
-    }
   }
   prevTimePerf = time
 
@@ -208,4 +211,3 @@ function updatePositionInWormhole () {
 }
 
 animate()
-sequencer.launchNextSequence()

@@ -2,7 +2,7 @@ import * as dat from 'dat.gui'
 import * as POSTPROCESSING from 'postprocessing'
 
 export default class Postprocessing {
-  constructor (camera, parameters, isDebug = true) {
+  constructor (camera, parameters, isDebug = false) {
     this.camera = camera
     this.parameters = parameters
     this.isDebug = isDebug
