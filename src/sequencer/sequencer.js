@@ -48,7 +48,10 @@ export default class Sequencer {
     } else {
       this.stopAllSounds()
       this.library.audio['transcendent'].play()
-      this.library.audio['transcendent'].on('end', () => console.log('TODO : transcendent ended loop on ambient song'))
+      this.library.audio['transcendent'].on('end', () => {
+        this.library.audio['ghosts'].play()
+        this.library.audio['ghosts'].loop(true)
+      })
 
       await this.asyncWaitFor(2000)
       gsap.to(this.camera.rotation, { duration: 40, ease: 'Power0.easeNone', z: 0 })

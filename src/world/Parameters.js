@@ -12,7 +12,7 @@ export default class Parameters {
       camera: {
         fov: 100,
         near: 100,
-        far: 20000,
+        far: 20000, // 40000?
         defaultRotation: 0.00015,
         defaultForward: 0.5
       },
@@ -53,7 +53,7 @@ export default class Parameters {
     }
 
     this.grid = {
-      clusterSize: 45000
+      clusterSize: 45000 // 65000
     }
 
     this.story = {
