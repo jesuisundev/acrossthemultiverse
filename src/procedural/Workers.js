@@ -129,7 +129,7 @@ export default class Workers {
   _setWorkersDistribution () {
     this.workersDistribution = [
       {
-        chances: 30,
+        chances: 29,
         worker: this.openStarfieldWorker
       },
       {
@@ -159,14 +159,13 @@ export default class Workers {
       {
         chances: 2,
         worker: this.sunGiantWorker
+      },
+      {
+        chances: 1,
+        worker: this.blackholeWorker
       }
     ]
   }
-
-  // {
-  //   chances: 0, // this sould get updated to 1 after some time
-  //   worker: this.blackholeWorker
-  // }
 
   getWorkerDistributed (clusterToPopulate) {
     if (clusterToPopulate === '0,0,0') {

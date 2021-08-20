@@ -107,9 +107,12 @@ export default class Sequencer {
   async wormholeSequence () {
     this.stopAllSounds()
 
-    await this.fadeInWallById('#blackwall')
+    await this.fadeInWallById('#blackwall', 0.2)
 
     this.resetScene()
+
+    this.camera.near = 0.01
+    this.camera.updateProjectionMatrix()
 
     this.wormhole.generate()
     this.wormhole.active()
@@ -120,6 +123,9 @@ export default class Sequencer {
     await this.wormhole.animate()
 
     await this.fadeInWallById('#whitewall', 1)
+
+    this.camera.near = 100
+    this.camera.updateProjectionMatrix()
 
     this.wormhole.dispose()
 
