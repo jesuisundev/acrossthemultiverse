@@ -2,7 +2,7 @@ import * as THREE from 'three'
 
 self.onmessage = messageEvent => {
   const clustersToPopulate = messageEvent.data.clustersToPopulate
-  const giantParameters = messageEvent.data.parameters.matters.giant
+  const giantParameters = messageEvent.data.parameters.matters[messageEvent.data.currentUniverse].giant
   const clusterSize = messageEvent.data.parameters.grid.clusterSize
   const giantAttributes = {}
 

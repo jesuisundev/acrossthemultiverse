@@ -9,42 +9,39 @@ export default class Sequencer {
     this.grid = grid
     this.camera = camera
 
-    this.currentChapter = 0
     this.active = false
 
     this.wormhole = new Wormhole(this.scene, this.library, this.parameters)
   }
 
   async launchNextSequence (skipped = false) {
-    switch (this.currentChapter) {
+    switch (window.currentUniverse) {
       case 0:
         await this.chapterOneSequence(skipped)
         break
 
       case 1:
-        await this.chapterTwoSequence()
+        await this.chapterTwoSequence(skipped)
         break
 
       case 2:
-        await this.chapterThreeSequence()
+        await this.chapterThreeSequence(skipped)
         break
 
       case 3:
-        await this.epiphanySequence()
+        await this.epiphanySequence(skipped)
         break
 
       default:
-        console.error('Unknow chapter', this.currentChapter)
+        // TODO - you are not supposed to be here, as a matter of fact, you're not
         break
     }
   }
 
   async chapterOneSequence (skipped = false) {
-    this.currentChapter++
-
     if (skipped) {
       this.camera.rotation.z = 0
-      sequencer.fadeOutWallById('#blackwall', 0)
+      this.fadeOutWallById('#blackwall', 0)
     } else {
       this.stopAllSounds()
       this.library.audio['transcendent'].play()
@@ -66,20 +63,43 @@ export default class Sequencer {
     this.active = false
   }
 
-  async chapterTwoSequence () {
-    this.currentChapter++
+  async chapterTwoSequence (skipped = false) {
+    window.currentUniverse++
+
+    this.resetScene()
+    this.active = true
+
+    if (skipped) {
+      sequencer.fadeOutWallById('#whitewall', 0)
+    } else {
+      this.stopAllSounds()
+      this.library.audio['ghosts'].play()
+      this.library.audio['ghosts'].on('end', () => {
+        this.library.audio['ghosts'].play()
+        this.library.audio['ghosts'].loop(true)
+      })
+
+      await this.asyncWaitFor(2000)
+      gsap.to(this.camera.rotation, { duration: 40, ease: 'Power0.easeNone', z: 0 })
+
+      await this.fadeOutWallById('#whitewall', 10, 'Power0.easeNone')
+      await this.showThenHideStory(this.parameters.story.chapterone[0])
+      await this.showThenHideStory(this.parameters.story.chapterone[1], 0)
+      await this.showThenHideStory(this.parameters.story.chapterone[2], 0)
+      await this.showThenHideStory(this.parameters.story.chapterone[3], 0)
+    }
 
     this.active = false
   }
 
-  async chapterThreeSequence () {
-    this.currentChapter++
+  async chapterThreeSequence (skipped = false) {
+    window.currentUniverse++
 
     this.active = false
   }
 
-  async epiphanySequence () {
-    this.currentChapter++
+  async epiphanySequence (skipped = false) {
+    window.currentUniverse++
 
     this.active = false
   }

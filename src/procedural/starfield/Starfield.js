@@ -16,8 +16,8 @@ export default class StarField {
     const brightStarsGeometry = this._getRandomStarsGeometry(starfieldsAttributes.brightStarsRandomAttributes)
     const brightStarTexture = this._getRandomStarsTexture('bright')
     const brightStarsmaterial = this._getRandomStarsMaterial(brightStarTexture, THREE.MathUtils.randInt(
-      this.parameters.matters.starfield.material.size.bright.min,
-      this.parameters.matters.starfield.material.size.bright.max
+      this.parameters.matters[window.currentUniverse].starfield.material.size.bright.min,
+      this.parameters.matters[window.currentUniverse].starfield.material.size.bright.max
     ))
     const brightStars = new THREE.Points(brightStarsGeometry, brightStarsmaterial)
 
@@ -186,8 +186,8 @@ export default class StarField {
      * @returns
      */
   _getRandomStarsMaterial (randomMaterialTexture, enforcedSize, enforcedOpacity) {
-    const randomMaterialSize = enforcedSize || enforcedSize === 0 ? enforcedSize : THREE.MathUtils.randInt(this.parameters.matters.starfield.material.size.pass.min, this.parameters.matters.starfield.material.size.pass.max)
-    const randomMaterialOpacity = enforcedOpacity || enforcedOpacity === 0 ? enforcedOpacity : THREE.MathUtils.randInt(this.parameters.matters.starfield.material.opacity.pass.min, this.parameters.matters.starfield.material.opacity.pass.max)
+    const randomMaterialSize = enforcedSize || enforcedSize === 0 ? enforcedSize : THREE.MathUtils.randInt(this.parameters.matters[window.currentUniverse].starfield.material.size.pass.min, this.parameters.matters[window.currentUniverse].starfield.material.size.pass.max)
+    const randomMaterialOpacity = enforcedOpacity || enforcedOpacity === 0 ? enforcedOpacity : THREE.MathUtils.randInt(this.parameters.matters[window.currentUniverse].starfield.material.opacity.pass.min, this.parameters.matters[window.currentUniverse].starfield.material.opacity.pass.max)
 
     randomMaterialTexture.magFilter = THREE.NearestFilter
 

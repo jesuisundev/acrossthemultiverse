@@ -62,10 +62,63 @@ export default class Parameters {
         "You are the pioneer of the human race.",
         "Find a supermassive black hole and go beyond our universe.",
         "Epiphany awaits."
+      ],
+      chaptertwo: [
+        "Chapter Two\nWonder",
+        "Physics laws have slightly changed.",
+        "Find a supermassive black hole and go to the next universe.",
+        "Epiphany awaits."
+      ],
+      chapterthree: [
+        "Chapter Three\nFilaments",
+        "Physics laws have heavily changed.",
+        "Find a supermassive black hole and go to the next universe.",
+        "Epiphany awaits."
       ]
     }
 
-    this.matters = {
+    this.wormhole = {
+      speed: 5000,
+      wireframedStarsSpeeder: {
+        material: {
+          opacity: 0
+        }
+      },
+      auraSpeeder: {
+        material: {
+          opacity: 0
+        }
+      },
+      nebulaSpeeder: {
+        material: {
+          opacity: 0
+        }
+      },
+      starsSpeeder: {
+        material: {
+          opacity: 0
+        }
+      },
+      clusterSpeeder: {
+        material: {
+          opacity: 0
+        }
+      }
+    }
+
+    this.matters = []
+
+    this.setMattersByChapter()
+  }
+
+  setMattersByChapter() {
+    this.setMattersChapterOne()
+    this.setMattersChapterTwo()
+    this.setMattersChapterThree()
+  }
+
+  setMattersChapterOne() {
+    this.matters[0] = {
       starfield: {
         budget: 300000,
         vertices: {
@@ -456,34 +509,13 @@ export default class Parameters {
         }
       }
     }
+  }
 
-    this.wormhole = {
-      speed: 5000,
-      wireframedStarsSpeeder: {
-        material: {
-          opacity: 0
-        }
-      },
-      auraSpeeder: {
-        material: {
-          opacity: 0
-        }
-      },
-      nebulaSpeeder: {
-        material: {
-          opacity: 0
-        }
-      },
-      starsSpeeder: {
-        material: {
-          opacity: 0
-        }
-      },
-      clusterSpeeder: {
-        material: {
-          opacity: 0
-        }
-      }
-    }
+  setMattersChapterTwo() {
+    this.matters[1] = JSON.parse(JSON.stringify(this.matters[0]))
+  }
+
+  setMattersChapterThree() {
+    this.matters[2] = JSON.parse(JSON.stringify(this.matters[0]))
   }
 }

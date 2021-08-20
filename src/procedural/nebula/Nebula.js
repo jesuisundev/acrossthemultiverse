@@ -22,12 +22,12 @@ export default class Nebula {
     const cloudMaterial = this._getMaterial(
       cloudTexture,
       THREE.MathUtils.randInt(
-        this.parameters.matters.nebula.material.size.cloud.min,
-        this.parameters.matters.nebula.material.size.cloud.max
+        this.parameters.matters[window.currentUniverse].nebula.material.size.cloud.min,
+        this.parameters.matters[window.currentUniverse].nebula.material.size.cloud.max
       ),
       THREE.MathUtils.randInt(
-        this.parameters.matters.nebula.material.opacity.cloud.min,
-        this.parameters.matters.nebula.material.opacity.cloud.max
+        this.parameters.matters[window.currentUniverse].nebula.material.opacity.cloud.min,
+        this.parameters.matters[window.currentUniverse].nebula.material.opacity.cloud.max
       )
     )
     const cloud = new THREE.Points(cloudGeometry, cloudMaterial)
@@ -48,8 +48,8 @@ export default class Nebula {
     const secondPassStarsGeometry = this._getGeometry(nebulasAttributes.secondPassStarsRandomAttributes)
     const secondPassStarsTexture = this._getRandomTexture('bright')
     const secondPassStarsmaterial = this._getMaterial(secondPassStarsTexture, THREE.MathUtils.randInt(
-      this.parameters.matters.nebula.material.size.bright.min,
-      this.parameters.matters.nebula.material.size.bright.max
+      this.parameters.matters[window.currentUniverse].nebula.material.size.bright.min,
+      this.parameters.matters[window.currentUniverse].nebula.material.size.bright.max
     ))
     const secondPassStars = new THREE.Points(secondPassStarsGeometry, secondPassStarsmaterial)
 
@@ -106,12 +106,12 @@ export default class Nebula {
     const cloudMaterial = this._getMaterial(
       cloudTexture,
       THREE.MathUtils.randInt(
-        this.parameters.matters.nebula.material.size.cloud.min,
-        this.parameters.matters.nebula.material.size.cloud.max
+        this.parameters.matters[window.currentUniverse].nebula.material.size.cloud.min,
+        this.parameters.matters[window.currentUniverse].nebula.material.size.cloud.max
       ),
       THREE.MathUtils.randInt(
-        this.parameters.matters.nebula.material.opacity.cloud.min,
-        this.parameters.matters.nebula.material.opacity.cloud.max
+        this.parameters.matters[window.currentUniverse].nebula.material.opacity.cloud.min,
+        this.parameters.matters[window.currentUniverse].nebula.material.opacity.cloud.max
       )
     )
     const cloud = new THREE.Points(cloudGeometry, cloudMaterial)
@@ -138,12 +138,12 @@ export default class Nebula {
     const secondPassStarsmaterial = this._getMaterial(
       secondPassStarsTexture,
       THREE.MathUtils.randInt(
-        this.parameters.matters.nebula.material.size.cloud.min,
-        this.parameters.matters.nebula.material.size.cloud.max
+        this.parameters.matters[window.currentUniverse].nebula.material.size.cloud.min,
+        this.parameters.matters[window.currentUniverse].nebula.material.size.cloud.max
       ),
       THREE.MathUtils.randInt(
-        this.parameters.matters.nebula.material.opacity.cloud.min,
-        this.parameters.matters.nebula.material.opacity.cloud.max
+        this.parameters.matters[window.currentUniverse].nebula.material.opacity.cloud.min,
+        this.parameters.matters[window.currentUniverse].nebula.material.opacity.cloud.max
       ))
     const secondPassStars = new THREE.Points(secondPassStarsGeometry, secondPassStarsmaterial)
 
@@ -301,8 +301,8 @@ export default class Nebula {
      * @returns
      */
   _getMaterial (randomMaterialTexture, enforcedSize, enforcedOpacity) {
-    const randomMaterialSize = enforcedSize || enforcedSize === 0 ? enforcedSize : THREE.MathUtils.randInt(this.parameters.matters.nebula.material.size.pass.min, this.parameters.matters.nebula.material.size.pass.max)
-    const randomMaterialOpacity = enforcedOpacity || enforcedOpacity === 0 ? enforcedOpacity : THREE.MathUtils.randInt(this.parameters.matters.nebula.material.opacity.pass.min, this.parameters.matters.nebula.material.opacity.pass.max)
+    const randomMaterialSize = enforcedSize || enforcedSize === 0 ? enforcedSize : THREE.MathUtils.randInt(this.parameters.matters[window.currentUniverse].nebula.material.size.pass.min, this.parameters.matters[window.currentUniverse].nebula.material.size.pass.max)
+    const randomMaterialOpacity = enforcedOpacity || enforcedOpacity === 0 ? enforcedOpacity : THREE.MathUtils.randInt(this.parameters.matters[window.currentUniverse].nebula.material.opacity.pass.min, this.parameters.matters[window.currentUniverse].nebula.material.opacity.pass.max)
 
     randomMaterialTexture.magFilter = THREE.NearestFilter
 

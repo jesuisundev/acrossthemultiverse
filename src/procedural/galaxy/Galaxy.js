@@ -171,8 +171,8 @@ export default class Galaxy {
      * @returns
      */
   _getRandomStarsMaterial (randomMaterialTexture, enforcedSize, enforcedOpacity) {
-    const randomMaterialSize = enforcedSize || enforcedSize === 0 ? enforcedSize : THREE.MathUtils.randInt(this.parameters.matters.galaxy.material.size.pass.min, this.parameters.matters.galaxy.material.size.pass.max)
-    const randomMaterialOpacity = enforcedOpacity || enforcedOpacity === 0 ? enforcedOpacity : THREE.MathUtils.randInt(this.parameters.matters.galaxy.material.opacity.pass.min, this.parameters.matters.galaxy.material.opacity.pass.max)
+    const randomMaterialSize = enforcedSize || enforcedSize === 0 ? enforcedSize : THREE.MathUtils.randInt(this.parameters.matters[window.currentUniverse].galaxy.material.size.pass.min, this.parameters.matters[window.currentUniverse].galaxy.material.size.pass.max)
+    const randomMaterialOpacity = enforcedOpacity || enforcedOpacity === 0 ? enforcedOpacity : THREE.MathUtils.randInt(this.parameters.matters[window.currentUniverse].galaxy.material.opacity.pass.min, this.parameters.matters[window.currentUniverse].galaxy.material.opacity.pass.max)
 
     randomMaterialTexture.magFilter = THREE.NearestFilter
 

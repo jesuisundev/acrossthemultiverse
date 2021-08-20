@@ -22,15 +22,22 @@ document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
 // TODO : sequence
-// part 2 - wip - load new music on demand
+// part 2 - wip 
+// library preload new music on demand
+// test text story chapter 2
 // part 3
+// library preload new music on demand
+// test text story chapter 3
+// part 4
+// library preload new music on demand
+// test text story chapter 4
 // TODO - fix transparency issue (add a mesh inside to cover up?) on red giant and white dwarf
 // TODO - fix bug with fresnel far away - maybe a just black fog only for meshes?
-// TODO - delete cloud inside supernova - put bright stars ?
 // TODO : build tweark for others universes
-// TODO : CHAPTER 2 WONDER UNIVERSE same but crazy colors
-// TODO : CHAPTER 3 FILAMENT UNIVERSE irregular: {randomnessPower: 0.00002 }
-// TODO : CHAPTER 4 build epiphany + sequence epiphany - filament interconnected of universes via shaders points
+// CHAPTER 2 WONDER UNIVERSE same but crazy colors
+// CHAPTER 3 FILAMENT UNIVERSE irregular: {randomnessPower: 0.00002 }
+// CHAPTER 4 build epiphany - univers buble in a comet shape
+// TODO : Validate BETA
 // TODO : lock fps
 // TODO : performance
 // TODO : add UI -> back to cinema for perfo ?
@@ -63,14 +70,7 @@ let needRender = false
 let isRenderingClusterInProgress = false
 let prevTimePerf = performance.now()
 
-// preload every needed files before showing anything
-library.preload()
-window.onload = () => {
-  needRender = true
-
-  sequencer.launchNextSequence(skipIntro)
-}
-
+window.currentUniverse = 0
 window.materialsToUpdate = {}
 window.meshesToUpdate = {}
 window.wormhole = {
@@ -79,6 +79,15 @@ window.wormhole = {
   speed: parameters.wormhole.speed,
   active: false
 }
+
+// preload every needed files before showing anything
+library.preload()
+window.onload = () => {
+  needRender = true
+
+  sequencer.launchNextSequence(skipIntro)
+}
+
 
 scene.add(controls.pointerLockControls.getObject())
 
@@ -108,7 +117,8 @@ function buildMatters (clustersToPopulate) {
 
     randomDistributedWorker.postMessage({
       clustersToPopulate: [clusterToPopulate],
-      parameters: parameters
+      parameters: parameters,
+      currentUniverse: window.currentUniverse
     })
   }
 }

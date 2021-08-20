@@ -2,7 +2,7 @@ import * as THREE from 'three'
 
 self.onmessage = messageEvent => {
   const clustersToPopulate = messageEvent.data.clustersToPopulate
-  const starfieldParameters = messageEvent.data.parameters.matters.starfield
+  const starfieldParameters = messageEvent.data.parameters.matters[messageEvent.data.currentUniverse].starfield
   const clusterSize = messageEvent.data.parameters.grid.clusterSize
   const starfieldsAttributes = {}
 
