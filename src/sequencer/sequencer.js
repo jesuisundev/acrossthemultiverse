@@ -41,6 +41,10 @@ export default class Sequencer {
   async chapterOneSequence (skipped = false) {
     if (skipped) {
       this.camera.rotation.z = 0
+
+      this.library.audio['ghosts'].play()
+      this.library.audio['ghosts'].loop(true)
+
       this.fadeOutWallById('#blackwall', 0)
     } else {
       this.stopAllSounds()
@@ -66,42 +70,91 @@ export default class Sequencer {
   async chapterTwoSequence (skipped = false) {
     window.currentUniverse++
 
-    this.resetScene()
     this.active = true
+    this.resetScene()
 
     if (skipped) {
-      sequencer.fadeOutWallById('#whitewall', 0)
+      this.active = false
+
+      this.fadeOutWallById('#whitewall', 0)
     } else {
       this.stopAllSounds()
-      this.library.audio['ghosts'].play()
-      this.library.audio['ghosts'].on('end', () => {
-        this.library.audio['ghosts'].play()
-        this.library.audio['ghosts'].loop(true)
-      })
+      this.library.audio['discovery'].play()
+      this.library.audio['discovery'].loop(true)
+
+      this.active = false
+      this.grid.populateNewUniverse()
 
       await this.asyncWaitFor(2000)
-      gsap.to(this.camera.rotation, { duration: 40, ease: 'Power0.easeNone', z: 0 })
 
       await this.fadeOutWallById('#whitewall', 10, 'Power0.easeNone')
-      await this.showThenHideStory(this.parameters.story.chapterone[0])
-      await this.showThenHideStory(this.parameters.story.chapterone[1], 0)
-      await this.showThenHideStory(this.parameters.story.chapterone[2], 0)
-      await this.showThenHideStory(this.parameters.story.chapterone[3], 0)
+      await this.showThenHideStory(this.parameters.story.chaptertwo[0])
+      await this.showThenHideStory(this.parameters.story.chaptertwo[1], 0)
+      await this.showThenHideStory(this.parameters.story.chaptertwo[2], 0)
+      await this.showThenHideStory(this.parameters.story.chaptertwo[3], 0)
     }
-
-    this.active = false
   }
 
   async chapterThreeSequence (skipped = false) {
     window.currentUniverse++
 
-    this.active = false
+    this.active = true
+    this.resetScene()
+
+    if (skipped) {
+      this.active = false
+
+      this.fadeOutWallById('#whitewall', 0)
+    } else {
+      this.stopAllSounds()
+      this.library.audio['celestial'].play()
+      this.library.audio['celestial'].loop(true)
+
+      this.active = false
+      this.grid.populateNewUniverse()
+
+      await this.asyncWaitFor(2000)
+
+      await this.fadeOutWallById('#whitewall', 10, 'Power0.easeNone')
+      await this.showThenHideStory(this.parameters.story.chapterthree[0])
+      await this.showThenHideStory(this.parameters.story.chapterthree[1], 0)
+      await this.showThenHideStory(this.parameters.story.chapterthree[2], 0)
+      await this.showThenHideStory(this.parameters.story.chapterthree[3], 0)
+    }
   }
 
   async epiphanySequence (skipped = false) {
     window.currentUniverse++
 
-    this.active = false
+    this.active = true
+    this.resetScene()
+
+    if (skipped) {
+      this.active = false
+
+      this.fadeOutWallById('#whitewall', 0)
+    } else {
+      this.stopAllSounds()
+      this.library.audio['intothenight'].play()
+      this.library.audio['intothenight'].loop(true)
+
+      this.active = false
+      this.grid.populateNewUniverse()
+
+      await this.asyncWaitFor(2000)
+
+      await this.fadeOutWallById('#whitewall', 10, 'Power0.easeNone')
+      await this.showThenHideStory(this.parameters.story.epiphany[0])
+      await this.showThenHideStory(this.parameters.story.epiphany[1], 0)
+      await this.showThenHideStory(this.parameters.story.epiphany[2], 0)
+      await this.showThenHideStory(this.parameters.story.epiphany[3], 0)
+      await this.showThenHideStory(this.parameters.story.epiphany[4], 0)
+      await this.showThenHideStory(this.parameters.story.epiphany[5], 0)
+      await this.showThenHideStory(this.parameters.story.epiphany[6], 0)
+      await this.showThenHideStory(this.parameters.story.epiphany[7], 0)
+      await this.showThenHideStory(this.parameters.story.epiphany[8], 0)
+      await this.showThenHideStory(this.parameters.story.epiphany[9], 0)
+    }
   }
 
   async wormholeSequence () {

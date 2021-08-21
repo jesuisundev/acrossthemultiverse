@@ -2,8 +2,6 @@ import './style.css'
 import * as THREE from 'three'
 import * as POSTPROCESSING from 'postprocessing'
 
-import MultiverseFactory from './procedural/MultiverseFactory'
-import Workers from './procedural/Workers'
 import Grid from './world/Grid'
 import Controls from './world/Controls'
 import Library from './world/Library'
@@ -30,16 +28,7 @@ renderer.domElement.id = 'multiverse'
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : sequence
-// part 2 - wip 
-// library preload new music on demand
-// test text story chapter 2
-// part 3
-// library preload new music on demand
-// test text story chapter 3
-// part 4
-// library preload new music on demand
-// test text story chapter 4
+// Fix bug worker on change universe + bug wormhole
 // TODO : fix blackhole not rotating issue
 // TODO : build tweark for others universes
 // CHAPTER 2 WONDER UNIVERSE same but crazy colors
@@ -65,9 +54,7 @@ camera.rotation.z = 0.8
 
 const controls = new Controls(camera, parameters)
 const library = new Library()
-const grid = new Grid(camera, parameters)
-const workers = new Workers(grid)
-const multiverseFactory = new MultiverseFactory(scene, library, parameters)
+const grid = new Grid(camera, parameters, scene, library)
 const effect = new Effect(camera, parameters)
 const sequencer = new Sequencer(scene, library, parameters, grid, camera)
 
@@ -86,7 +73,6 @@ window.onload = () => {
 
   sequencer.launchNextSequence(skipIntro)
 }
-
 
 scene.add(controls.pointerLockControls.getObject())
 
@@ -114,34 +100,6 @@ function setDefaultGlobal() {
     speed: parameters.wormhole.speed,
     active: false
   }
-}
-
-function buildMatters (clustersToPopulate) {
-  for (const clusterToPopulate of clustersToPopulate) {
-    let randomDistributedWorker = workers.getWorkerDistributed(clusterToPopulate)
-
-    if (!randomDistributedWorker) {
-      console.error('randomDistributedWorker', randomDistributedWorker)
-      console.error('// TODO - why the fuck this happen, fix it')
-      randomDistributedWorker = workers.openStarfieldWorker.source
-    }
-
-    randomDistributedWorker.postMessage({
-      clustersToPopulate: [clusterToPopulate],
-      parameters: parameters,
-      currentUniverse: window.currentUniverse
-    })
-  }
-}
-
-function renderMatters (position, cluster) {
-  const matter = multiverseFactory.createMatter(cluster.type)
-
-  matter.generate(cluster.data, position, cluster.subtype)
-  matter.show()
-
-  grid.queueClusters.delete(position)
-  grid.activeClusters.set(position, matter)
 }
 
 function animate (time) {
@@ -176,14 +134,14 @@ function animate (time) {
     const clustersStatus = grid.getClustersStatus(currentClusterPosition)
 
     grid.disposeClusters(clustersStatus.clustersToDispose)
-    buildMatters(clustersStatus.clustersToPopulate)
+    grid.buildMatters(clustersStatus.clustersToPopulate)
   } else if (grid.queueClusters.size && !isRenderingClusterInProgress) {
     isRenderingClusterInProgress = true
 
     const clusterTorender = grid.queueClusters.keys().next().value
 
     setTimeout(() => {
-      renderMatters(clusterTorender, grid.queueClusters.get(clusterTorender))
+      grid.renderMatters(clusterTorender, grid.queueClusters.get(clusterTorender))
       isRenderingClusterInProgress = false
     }, parameters.global.clusterRenderTimeOut)
   }
@@ -216,16 +174,17 @@ function updatePositionInWormhole () {
   if (window.wormhole.CameraPositionIndex > window.wormhole.speed) {
     window.wormhole.CameraPositionIndex = 0
   }
-  const camPos = window.wormhole.shape.getPoint(window.wormhole.CameraPositionIndex / window.wormhole.speed)
-  const camRot = window.wormhole.shape.getTangent(window.wormhole.CameraPositionIndex / window.wormhole.speed)
 
-  camera.position.x = camPos.x
-  camera.position.y = camPos.y
-  camera.position.z = camPos.z
+  const wormholeCameraPosition = window.wormhole.shape.getPoint(window.wormhole.CameraPositionIndex / window.wormhole.speed)
+  const wormholeCameraRotation = window.wormhole.shape.getTangent(window.wormhole.CameraPositionIndex / window.wormhole.speed)
 
-  camera.rotation.x = camRot.x
-  camera.rotation.y = camRot.y
-  camera.rotation.z = camRot.z
+  camera.position.x = wormholeCameraPosition.x
+  camera.position.y = wormholeCameraPosition.y
+  camera.position.z = wormholeCameraPosition.z
+
+  camera.rotation.x = wormholeCameraRotation.x
+  camera.rotation.y = wormholeCameraRotation.y
+  camera.rotation.z = wormholeCameraRotation.z
 
   camera.lookAt(window.wormhole.shape.getPoint((window.wormhole.CameraPositionIndex + 1) / window.wormhole.speed))
 

@@ -80,6 +80,18 @@ export default class Parameters {
         "Physics laws have heavily changed.",
         "Find a supermassive black hole and go to the next universe.",
         "Epiphany awaits."
+      ],
+      epiphany: [
+        "Epiphany",
+        "No one knows how it started.",
+        "But we know how it is.",
+        "Every universe is created within the blackhole of another.",
+        "These baby universes change their physics laws to favor their own survival.",
+        "The more they create black holes, the more they create baby universes.",
+        "Which will create more black holes to create more baby universes.",
+        "Producing reality as we know it.",
+        "An infinite multiverse following the perpetual law of evolution.",
+        "The eternal loop of everything."
       ]
     }
 

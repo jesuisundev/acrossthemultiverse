@@ -52,7 +52,10 @@ export default class Library {
         pool: [
           { title: 'transcendent', src: 'transcendent.mp3' },
           { title: 'ghosts', src: 'ghosts.mp3' },
-          { title: 'wormhole', src: 'wormhole.mp3' }
+          { title: 'wormhole', src: 'wormhole.mp3' },
+          { title: 'discovery', src: 'discovery.mp3' },
+          { title: 'celestial', src: 'celestial.mp3' },
+          { title: 'intothenight', src: 'intothenight.mp3' }
         ]
       }
     }
@@ -78,6 +81,7 @@ export default class Library {
 
   preload () {
     // textures
+    // this will be re-used all over the universes
     for (const textureSourceType of Object.keys(this.source.textures)) {
       for (const textureObject of this.source.textures[textureSourceType].pool) {
         const currentTexture = new THREE.TextureLoader().load(
@@ -90,9 +94,11 @@ export default class Library {
     }
 
     // audio
+    // audio files are too huge, we dont download them, but we prepare them for streaming
     for (const audioObject of this.source.audio.pool) {
       this.audio[audioObject.title] = new Howl({
-        src: [`${this.source.audio.baseUrl}${audioObject.src}`]
+        src: [`${this.source.audio.baseUrl}${audioObject.src}`],
+        html5: true
       })
     }
   }
