@@ -1,4 +1,6 @@
 import * as THREE from 'three'
+import { gsap } from 'gsap'
+
 import giantSunVertexShader from '../../shaders/giant/sun/vertex.glsl'
 import giantSunFragmentShader from '../../shaders/giant/sun/fragment.glsl'
 import giantWhiteDwarfVertexShader from '../../shaders/giant/whitedwarf/vertex.glsl'
@@ -138,6 +140,9 @@ export default class Giant {
       this.giant.giant.mesh,
       this.giant.firstPass.points
     )
+
+    gsap.timeline()
+      .to(this.giant.firstPass.points.material, { duration: 10, opacity: 1 }, 0)
   }
 
   _getRandomSunShaderMaterial () {
@@ -163,9 +168,13 @@ export default class Giant {
             this.parameters.matters[window.currentUniverse].giant.shader.sun.uNoiseSpeed.min,
             this.parameters.matters[window.currentUniverse].giant.shader.sun.uNoiseSpeed.max
           )
-        }
+        },
+        fogColor: { value: this.scene.fog.color },
+        fogNear: { value: this.scene.fog.near },
+        fogFar: { value: this.scene.fog.far }
       },
-      side: THREE.DoubleSide
+      side: THREE.FrontSide,
+      fog: true
     })
   }
 
@@ -192,9 +201,13 @@ export default class Giant {
             this.parameters.matters[window.currentUniverse].giant.shader.whitedwarf.uNoiseSpeed.min,
             this.parameters.matters[window.currentUniverse].giant.shader.whitedwarf.uNoiseSpeed.max
           )
-        }
+        },
+        fogColor: { value: this.scene.fog.color },
+        fogNear: { value: this.scene.fog.near },
+        fogFar: { value: this.scene.fog.far }
       },
-      side: THREE.DoubleSide
+      side: THREE.FrontSide,
+      fog: true
     })
   }
 
@@ -275,7 +288,8 @@ export default class Giant {
       depthWrite: false,
       transparent: true,
       blending: THREE.AdditiveBlending,
-      vertexColors: true
+      vertexColors: true,
+      opacity: 0
     })
 
     return material

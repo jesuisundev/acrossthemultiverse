@@ -5,6 +5,9 @@ uniform float uTime;
 uniform float uBrightnessAmplifier;
 uniform float uNoiseIntensity;
 uniform float uNoiseSpeed;
+uniform vec3 fogColor;
+uniform float fogNear;
+uniform float fogFar;
 
 varying vec2 vUv;
 varying vec3 vPosition;
@@ -215,4 +218,9 @@ void main()
     vec3 noisesColored = convertToColor(noises * 1.0 + 0.2);
 
     gl_FragColor = vec4(noisesColored, 1.0);
+
+    // handling the fog effect
+    float depth = gl_FragCoord.z / gl_FragCoord.w;
+    float fogFactor = smoothstep( fogNear, fogFar, depth );
+    gl_FragColor.rgb = mix( gl_FragColor.rgb, fogColor, fogFactor );
 }

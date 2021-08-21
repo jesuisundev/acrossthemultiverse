@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { gsap } from 'gsap'
 
 export default class Nebula {
   constructor (scene, library, parameters) {
@@ -228,6 +229,12 @@ export default class Nebula {
       this.nebula.secondPass.points,
       this.nebula.thirdPass.points
     )
+
+    gsap.timeline()
+      .to(this.nebula.cloud.points.material, { duration: 4, opacity: this.parameters.matters[window.currentUniverse].nebula.material.opacity.cloud.min }, 0)
+      .to(this.nebula.firstPass.points.material, { duration: 4, opacity: 1 }, 0)
+      .to(this.nebula.secondPass.points.material, { duration: 4, opacity: this.parameters.matters[window.currentUniverse].nebula.material.opacity.cloud.min }, 0)
+      .to(this.nebula.thirdPass.points.material, { duration: 4, opacity: 1 }, 0)
   }
 
   _getCoordinateVectorByPosition (position) {
@@ -314,7 +321,8 @@ export default class Nebula {
       depthWrite: false,
       transparent: true,
       blending: THREE.AdditiveBlending,
-      vertexColors: true
+      vertexColors: true,
+      opacity: 0
     })
 
     return material

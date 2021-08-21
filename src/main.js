@@ -14,7 +14,16 @@ import Sequencer from './sequencer/sequencer'
 const clock = new THREE.Clock()
 const parameters = new Parameters()
 
+setDefaultGlobal()
+
 const scene = new THREE.Scene()
+scene.background = new THREE.Color(parameters.global.background[window.currentUniverse])
+scene.fog = new THREE.Fog(
+  parameters.global.background[window.currentUniverse],
+  parameters.global.camera.near,
+  parameters.global.camera.far
+)
+
 const renderer = new THREE.WebGLRenderer(parameters.global.webGlRenderer)
 renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.domElement.id = 'multiverse'
@@ -31,8 +40,7 @@ document.body.appendChild(renderer.domElement)
 // part 4
 // library preload new music on demand
 // test text story chapter 4
-// TODO - fix transparency issue (add a mesh inside to cover up?) on red giant and white dwarf
-// TODO - fix bug with fresnel far away - maybe a just black fog only for meshes?
+// TODO : fix blackhole not rotating issue
 // TODO : build tweark for others universes
 // CHAPTER 2 WONDER UNIVERSE same but crazy colors
 // CHAPTER 3 FILAMENT UNIVERSE irregular: {randomnessPower: 0.00002 }
@@ -70,15 +78,6 @@ let needRender = false
 let isRenderingClusterInProgress = false
 let prevTimePerf = performance.now()
 
-window.currentUniverse = 0
-window.materialsToUpdate = {}
-window.meshesToUpdate = {}
-window.wormhole = {
-  shape: null,
-  CameraPositionIndex: 0,
-  speed: parameters.wormhole.speed,
-  active: false
-}
 
 // preload every needed files before showing anything
 library.preload()
@@ -104,6 +103,18 @@ window.addEventListener('resize', () => {
 const composer = new POSTPROCESSING.EffectComposer(renderer)
 composer.addPass(new POSTPROCESSING.RenderPass(scene, camera))
 composer.addPass(effect.getEffectPass())
+
+function setDefaultGlobal() {
+  window.currentUniverse = 0
+  window.materialsToUpdate = {}
+  window.meshesToUpdate = {}
+  window.wormhole = {
+    shape: null,
+    CameraPositionIndex: 0,
+    speed: parameters.wormhole.speed,
+    active: false
+  }
+}
 
 function buildMatters (clustersToPopulate) {
   for (const clusterToPopulate of clustersToPopulate) {

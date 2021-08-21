@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { gsap } from 'gsap'
 
 export default class Galaxy {
   constructor (scene, library, parameters) {
@@ -95,6 +96,11 @@ export default class Galaxy {
       this.galaxy.secondPass.points,
       this.galaxy.thirdPass.points
     )
+
+    gsap.timeline()
+      .to(this.galaxy.firstPass.points.material, { duration: 3, opacity: 1 }, 0)
+      .to(this.galaxy.secondPass.points.material, { duration: 3, opacity: this.parameters.matters[window.currentUniverse].galaxy.material.opacity.min }, 0)
+      .to(this.galaxy.thirdPass.points.material, { duration: 3, opacity: 1 }, 0)
   }
 
   _getCoordinateVectorByPosition (position) {
@@ -184,7 +190,8 @@ export default class Galaxy {
       depthWrite: false,
       transparent: true,
       blending: THREE.AdditiveBlending,
-      vertexColors: true
+      vertexColors: true,
+      opacity: 0
     })
 
     return material

@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { gsap } from 'gsap'
 
 export default class StarField {
   constructor (scene, library, parameters) {
@@ -120,6 +121,12 @@ export default class StarField {
       this.starfield.secondPass.points,
       this.starfield.thirdPass.points
     )
+
+    gsap.timeline()
+      .to(this.starfield.bright.points.material, { duration: 3, opacity: 1 }, 0)
+      .to(this.starfield.firstPass.points.material, { duration: 3, opacity: 1 }, 0)
+      .to(this.starfield.secondPass.points.material, { duration: 3, opacity: 1 }, 0)
+      .to(this.starfield.thirdPass.points.material, { duration: 3, opacity: 1 }, 0)
   }
 
   _getCoordinateVectorByPosition (position) {
@@ -199,7 +206,8 @@ export default class StarField {
       depthWrite: false,
       transparent: true,
       blending: THREE.AdditiveBlending,
-      vertexColors: true
+      vertexColors: true,
+      opacity: 0
     })
 
     return material

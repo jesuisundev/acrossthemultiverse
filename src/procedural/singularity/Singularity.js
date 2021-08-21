@@ -1,4 +1,6 @@
 import * as THREE from 'three'
+import { gsap } from 'gsap'
+
 import singularityBlackholeVertexShader from '../../shaders/singularity/blackhole/vertex.glsl'
 import singularityBlackholeFragmentShader from '../../shaders/singularity/blackhole/fragment.glsl'
 
@@ -30,8 +32,9 @@ export default class Singularity {
     const blackholeGeometry = new THREE.SphereGeometry(1, 32, 16)
     const blackholeMaterial = new THREE.MeshBasicMaterial({
       color: 0x000000,
-      transparent: false,
-      side: THREE.DoubleSide
+      transparent: true,
+      side: THREE.DoubleSide,
+      opacity: 0
     })
     const blackholeMesh = new THREE.Mesh(blackholeGeometry, blackholeMaterial)
     blackholeMesh.scale.set(5000, 5000, 3000)
@@ -93,6 +96,10 @@ export default class Singularity {
       this.blackhole.disk.mesh,
       this.blackhole.blackhole.mesh
     )
+
+    gsap.timeline()
+      .to(this.blackhole.disk.material, { duration: 3, opacity: 1 }, 0)
+      .to(this.blackhole.blackhole.material, { duration: 3, opacity: 1 }, 0)
   }
 
   _getRandomBlackHoleShaderMaterial () {
@@ -101,9 +108,13 @@ export default class Singularity {
       fragmentShader: singularityBlackholeFragmentShader,
       uniforms: {
         uTime: { value: 0 },
-        uTexture: { value: this.library.textures.blackhole.disk[0] }
+        uTexture: { value: this.library.textures.blackhole.disk[0] },
+        fogColor: { value: this.scene.fog.color },
+        fogNear: { value: this.scene.fog.near },
+        fogFar: { value: this.scene.fog.far }
       },
-      side: THREE.DoubleSide
+      side: THREE.DoubleSide,
+      fog: true
     })
   }
 

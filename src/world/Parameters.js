@@ -12,11 +12,17 @@ export default class Parameters {
       camera: {
         fov: 100,
         near: 100,
-        far: 20000, // 40000?
+        far: 40000,
         defaultRotation: 0.00015,
         defaultForward: 0.5
       },
-      clusterRenderTimeOut: 50
+      clusterRenderTimeOut: 50,
+      background: [
+        0x000000,
+        0x000000,
+        0x000000,
+        0x000000
+      ]
     }
 
     this.postprocessing = {
@@ -45,10 +51,10 @@ export default class Parameters {
     }
 
     this.controls = {
-      velocity: 800.0,
+      velocity: 1500.0,
       speedLimit: {
-        up: 4000.0,
-        down: -4000.0
+        up: 5000.0,
+        down: -5000.0
       }
     }
 
