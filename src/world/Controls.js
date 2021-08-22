@@ -2,9 +2,11 @@ import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockCont
 import * as THREE from 'three'
 
 export default class Controls {
-  constructor (camera, parameters) {
+  constructor (camera, parameters, sequencer) {
     this.parameters = parameters
     this.camera = camera
+    this.sequencer = sequencer
+
     this.pointerLockControls = new PointerLockControls(this.camera, document.body)
     this.velocity = new THREE.Vector3()
     this.direction = new THREE.Vector3()
@@ -32,6 +34,9 @@ export default class Controls {
       case 'ArrowRight':
       case 'KeyD':
         this.moveRight = true
+        break
+      case 'KeyF':
+        this.sequencer.wormholeSequence()
         break
     }
   }

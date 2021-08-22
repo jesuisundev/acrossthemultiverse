@@ -15,6 +15,10 @@ export default class Sequencer {
   }
 
   async launchNextSequence (skipped = false) {
+    if(this.active) return
+
+    this.active = true
+
     switch (window.currentUniverse) {
       case 0:
         await this.chapterOneSequence(skipped)
@@ -33,7 +37,7 @@ export default class Sequencer {
         break
 
       default:
-        // TODO - you are not supposed to be here, as a matter of fact, you're not
+        await this.borealis()
         break
     }
   }
@@ -55,6 +59,7 @@ export default class Sequencer {
       })
 
       await this.asyncWaitFor(2000)
+
       gsap.to(this.camera.rotation, { duration: 40, ease: 'Power0.easeNone', z: 0 })
 
       await this.fadeOutWallById('#blackwall', 10, 'Power0.easeNone')
@@ -68,13 +73,12 @@ export default class Sequencer {
   }
 
   async chapterTwoSequence (skipped = false) {
-    window.currentUniverse++
-
-    this.active = true
-    this.resetScene()
-
     if (skipped) {
-      this.active = false
+      this.library.audio['discovery'].play()
+      this.library.audio['discovery'].loop(true)
+
+      window.currentUniverse++
+      this.changeUniverse()
 
       this.fadeOutWallById('#whitewall', 0)
     } else {
@@ -82,8 +86,7 @@ export default class Sequencer {
       this.library.audio['discovery'].play()
       this.library.audio['discovery'].loop(true)
 
-      this.active = false
-      this.grid.populateNewUniverse()
+      this.changeUniverse()
 
       await this.asyncWaitFor(2000)
 
@@ -93,16 +96,17 @@ export default class Sequencer {
       await this.showThenHideStory(this.parameters.story.chaptertwo[2], 0)
       await this.showThenHideStory(this.parameters.story.chaptertwo[3], 0)
     }
+  
+    this.active = false
   }
 
   async chapterThreeSequence (skipped = false) {
-    window.currentUniverse++
-
-    this.active = true
-    this.resetScene()
-
     if (skipped) {
-      this.active = false
+      this.library.audio['celestial'].play()
+      this.library.audio['celestial'].loop(true)
+
+      window.currentUniverse++
+      this.changeUniverse()
 
       this.fadeOutWallById('#whitewall', 0)
     } else {
@@ -110,8 +114,7 @@ export default class Sequencer {
       this.library.audio['celestial'].play()
       this.library.audio['celestial'].loop(true)
 
-      this.active = false
-      this.grid.populateNewUniverse()
+      this.changeUniverse()
 
       await this.asyncWaitFor(2000)
 
@@ -121,16 +124,17 @@ export default class Sequencer {
       await this.showThenHideStory(this.parameters.story.chapterthree[2], 0)
       await this.showThenHideStory(this.parameters.story.chapterthree[3], 0)
     }
+
+    this.active = false
   }
 
   async epiphanySequence (skipped = false) {
-    window.currentUniverse++
-
-    this.active = true
-    this.resetScene()
-
     if (skipped) {
-      this.active = false
+      this.library.audio['intothenight'].play()
+      this.library.audio['intothenight'].loop(true)
+
+      window.currentUniverse++
+      this.changeUniverse()
 
       this.fadeOutWallById('#whitewall', 0)
     } else {
@@ -138,8 +142,7 @@ export default class Sequencer {
       this.library.audio['intothenight'].play()
       this.library.audio['intothenight'].loop(true)
 
-      this.active = false
-      this.grid.populateNewUniverse()
+      this.changeUniverse()
 
       await this.asyncWaitFor(2000)
 
@@ -155,9 +158,13 @@ export default class Sequencer {
       await this.showThenHideStory(this.parameters.story.epiphany[8], 0)
       await this.showThenHideStory(this.parameters.story.epiphany[9], 0)
     }
+
+    this.active = false
   }
 
   async wormholeSequence () {
+    this.active = true
+
     this.stopAllSounds()
 
     await this.fadeInWallById('#blackwall', 0.2)
@@ -182,7 +189,25 @@ export default class Sequencer {
 
     this.wormhole.dispose()
 
+    window.currentUniverse++
+
+    this.active = false
+
     await this.launchNextSequence()
+  }
+
+  // you are not supposed to be here, as a matter of fact, you're not
+  async borealis () {
+    this.active = true
+    this.fadeOutWallById('#blackwall', 0)
+    this.stopAllSounds()
+    this.library.audio['borealis'].play()
+    this.library.audio['borealis'].on('end', () => {
+      window.currentUniverse = 0
+      this.changeUniverse()
+      this.active = false
+      this.launchNextSequence()
+    })
   }
 
   async fadeInWallById (id, duration = 2, ease = 'power2.out') {
@@ -256,5 +281,10 @@ export default class Sequencer {
     this.grid.disposeClusters(arrayActiveClusters)
 
     this.camera.position.set(0, 0, 0)
+  }
+
+  changeUniverse () {
+    this.resetScene()
+    this.grid.populateNewUniverse()
   }
 }

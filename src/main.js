@@ -52,13 +52,13 @@ const camera = new THREE.PerspectiveCamera(
 )
 camera.rotation.z = 0.8
 
-const controls = new Controls(camera, parameters)
 const library = new Library()
 const grid = new Grid(camera, parameters, scene, library)
-const effect = new Effect(camera, parameters)
 const sequencer = new Sequencer(scene, library, parameters, grid, camera)
+const controls = new Controls(camera, parameters, sequencer)
+const effect = new Effect(camera, parameters)
 
-const skipIntro = false
+const skipIntro = true
 
 let lastClusterPosition
 let needRender = false
