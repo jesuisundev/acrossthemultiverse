@@ -28,8 +28,6 @@ renderer.domElement.id = 'multiverse'
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// Fix bug worker on change universe + bug wormhole
-// TODO : fix blackhole not rotating issue
 // TODO : build tweark for others universes
 // CHAPTER 2 WONDER UNIVERSE same but crazy colors
 // CHAPTER 3 FILAMENT UNIVERSE irregular: {randomnessPower: 0.00002 }
@@ -157,11 +155,10 @@ function updateAnimatedObjects (elapsedTime) {
 
   // update mesh (object animation)
   if (Object.keys(window.meshesToUpdate).length) {
-    for (const meshesToUpdate of Object.values(window.meshesToUpdate)) {
-      meshesToUpdate.rotateZ(2)
+    for (const meshToUpdate of Object.values(window.meshesToUpdate)) {
+      meshToUpdate.rotateZ(2)
 
-      if (camera.position.distanceTo(meshesToUpdate.position) < 4000 && !sequencer.active) {
-        sequencer.active = true
+      if (camera.position.distanceTo(meshToUpdate.position) < 4000 && !sequencer.active) {
         sequencer.wormholeSequence()
       }
     }

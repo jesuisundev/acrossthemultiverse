@@ -62,6 +62,7 @@ export default class Sequencer {
 
       gsap.to(this.camera.rotation, { duration: 40, ease: 'Power0.easeNone', z: 0 })
 
+      this.fadeOutWallById('#whitewall', 10, 'Power0.easeNone')
       await this.fadeOutWallById('#blackwall', 10, 'Power0.easeNone')
       await this.showThenHideStory(this.parameters.story.chapterone[0])
       await this.showThenHideStory(this.parameters.story.chapterone[1], 0)
@@ -163,6 +164,8 @@ export default class Sequencer {
   }
 
   async wormholeSequence () {
+    if(this.active) return
+
     this.active = true
 
     this.stopAllSounds()
@@ -188,8 +191,10 @@ export default class Sequencer {
     this.camera.updateProjectionMatrix()
 
     this.wormhole.dispose()
+    window.wormhole.CameraPositionIndex = 0
 
     window.currentUniverse++
+    await this.asyncWaitFor(1000)
 
     this.active = false
 

@@ -133,6 +133,7 @@ export default class Parameters {
     this.setMattersChapterOne()
     this.setMattersChapterTwo()
     this.setMattersChapterThree()
+    this.setMattersEpiphany()
   }
 
   setMattersChapterOne() {
@@ -535,5 +536,9 @@ export default class Parameters {
 
   setMattersChapterThree() {
     this.matters[2] = JSON.parse(JSON.stringify(this.matters[0]))
+  }
+
+  setMattersEpiphany() {
+    this.matters[3] = JSON.parse(JSON.stringify(this.matters[0]))
   }
 }
