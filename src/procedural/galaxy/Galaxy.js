@@ -17,7 +17,7 @@ export default class Galaxy {
 
     const firstPassStarsGeometry = this._getRandomStarsGeometry(galaxiesAttributes.firstPassStarsRandomAttributes)
     const firstPassStarsTexture = this._getRandomStarsTexture()
-    const firstPassStarsmaterial = this._getRandomStarsMaterial(firstPassStarsTexture)
+    const firstPassStarsmaterial = this._getRandomStarsMaterial(firstPassStarsTexture, currentUniverse === 2 ? 300 : false)
     const firstPassStars = new THREE.Points(firstPassStarsGeometry, firstPassStarsmaterial)
 
     firstPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)

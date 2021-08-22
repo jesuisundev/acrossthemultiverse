@@ -5,14 +5,14 @@ export default class Parameters {
     this.global = {
       webGlRenderer: {
         powerPreference: 'high-performance',
-        logarithmicDepthBuffer: true,
         antialias: false,
-        stencil: false
+        stencil: false,
+        depth: false
       },
       camera: {
         fov: 100,
         near: 100,
-        far: 40000,
+        far: 60000,
         defaultRotation: 0.00015,
         defaultForward: 0.5
       },
@@ -532,10 +532,91 @@ export default class Parameters {
 
   setMattersChapterTwo() {
     this.matters[1] = JSON.parse(JSON.stringify(this.matters[0]))
+
+    this.matters[1].starfield.vertices.bright = { min: 0.001, max: 0.01 }
+    this.matters[1].starfield.material.size.pass = { min: 70, max: 80 }
+    this.matters[1].starfield.vertices.colors = [
+      '#0C8D9F',
+      '#F9EF2E',
+      '#08F7FE',
+      '#09FBD3',
+      '#FE53BB',
+      '#F5D300',
+      '#FFACFC',
+      '#F148FB',
+      '#FF2281',
+      '#FDC7D7',
+      '#E8E500',
+      '#4deeea',
+      '#00FECA',
+      '#FFD300',
+      '#E847AE',
+      '#13CA91',
+      '#FF9472',
+      '#FFDEF3',
+      '#FF61BE',
+      '#F85125',
+      '#EBF875',
+      '#28CF75',
+      '#FE6B35',
+      '#CE0000',
+      '#7FFF00',
+      '#E92EFB',
+      '#74ee15'
+    ]
+    this.matters[1].starfield.vertices.globularColors = this.matters[1].starfield.vertices.colors
+
+    this.matters[1].nebula.cloud = { min: 0.20, max: 0.30 }
+    this.matters[1].nebula.bright = { min: 0.0002, max: 0.002 }
+    this.matters[1].nebula.vertices.emission.radiusSegments = 100
+    this.matters[1].nebula.colors.in = [
+      '#0C8D9F',
+      '#F9EF2E',
+      '#08F7FE',
+      '#09FBD3',
+      '#FE53BB',
+      '#F5D300',
+      '#FFACFC',
+      '#F148FB',
+      '#FF2281',
+      '#FDC7D7',
+      '#E8E500',
+      '#00FECA',
+      '#FFD300',
+      '#4DEEEA'
+    ]
+
+    this.matters[1].nebula.colors.out = [
+      '#E847AE',
+      '#13CA91',
+      '#FF9472',
+      '#FFDEF3',
+      '#FF61BE',
+      '#F85125',
+      '#EBF875',
+      '#28CF75',
+      '#FE6B35',
+      '#CE0000',
+      '#7FFF00',
+      '#E92EFB',
+      '#74ee15'
+    ]
+
+    this.matters[1].nebula.remnantColors.in = this.matters[1].nebula.colors.in
+    this.matters[1].nebula.remnantColors.out = this.matters[1].nebula.colors.out
   }
 
   setMattersChapterThree() {
     this.matters[2] = JSON.parse(JSON.stringify(this.matters[0]))
+
+    this.matters[2].galaxy.budget = 100000
+    this.matters[2].galaxy.spiral.randomnessPower = 0.0002
+    this.matters[2].galaxy.spiral.branchesAmplitude = 0.00008
+    this.matters[2].galaxy.spiral.branches = { min: 300, max: 500 }
+    this.matters[2].galaxy.material.size.pass = {
+      min: 10,
+      max: 20
+    }
   }
 
   setMattersEpiphany() {

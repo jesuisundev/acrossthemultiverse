@@ -8,6 +8,7 @@ export default class Workers {
     }
 
     this.grid = grid
+    this.workersDistribution = []
 
     this._setWorkers()
     this._setWorkersListener()
@@ -127,7 +128,7 @@ export default class Workers {
   }
 
   _setWorkersDistribution () {
-    this.workersDistribution = [
+    this.workersDistribution[0] = [
       {
         chances: 29,
         worker: this.openStarfieldWorker
@@ -165,6 +166,47 @@ export default class Workers {
         worker: this.blackholeWorker
       }
     ]
+
+    this.workersDistribution[1] = [
+      {
+        chances: 40,
+        worker: this.globularStarfieldWorker
+      },
+      {
+        chances: 40,
+        worker: this.emissionNebulaWorker
+      },
+      {
+        chances: 10,
+        worker: this.openStarfieldWorker
+      },
+      {
+        chances: 8,
+        worker: this.supernovaRemnantsNebulaWorker
+      },
+      {
+        chances: 1,
+        worker: this.blackholeWorker
+      }
+    ]
+
+    this.workersDistribution[2] = [
+      {
+        chances: 99,
+        worker: this.spiralGalaxyWorker
+      },
+      {
+        chances: 1,
+        worker: this.blackholeWorker
+      }
+    ]
+
+    this.workersDistribution[3] = [
+      {
+        chances: 100,
+        worker: this.openStarfieldWorker
+      }
+    ]
   }
 
   getWorkerDistributed (clusterToPopulate) {
@@ -175,7 +217,7 @@ export default class Workers {
     let currentProbability = 0
     const pourcentage = Math.random() * 100
 
-    for (const workerDistributed of this.workersDistribution) {
+    for (const workerDistributed of this.workersDistribution[window.currentUniverse]) {
       currentProbability += workerDistributed.chances
 
       if (pourcentage < currentProbability) {

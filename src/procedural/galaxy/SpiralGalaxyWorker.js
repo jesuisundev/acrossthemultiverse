@@ -2,7 +2,8 @@ import * as THREE from 'three'
 
 self.onmessage = messageEvent => {
   const clustersToPopulate = messageEvent.data.clustersToPopulate
-  const galaxyParameters = messageEvent.data.parameters.matters[messageEvent.data.currentUniverse].galaxy
+  const currentUniverse = messageEvent.data.currentUniverse
+  const galaxyParameters = messageEvent.data.parameters.matters[currentUniverse].galaxy
   const clusterSize = messageEvent.data.parameters.grid.clusterSize
   const galaxyAttributes = {}
   const defaultBranchesNumber = THREE.MathUtils.randInt(galaxyParameters.spiral.branches.min, galaxyParameters.spiral.branches.max)
@@ -20,7 +21,8 @@ self.onmessage = messageEvent => {
       clusterSize,
       galaxyParameters,
       chosenColors,
-      defaultBranchesNumber
+      defaultBranchesNumber,
+      currentUniverse
     )
 
     // gaz galaxy shaped
@@ -34,7 +36,8 @@ self.onmessage = messageEvent => {
       clusterSize,
       galaxyParameters,
       chosenColors,
-      defaultBranchesNumber
+      defaultBranchesNumber,
+      currentUniverse
     )
 
     // low starfield density using color from galaxy
@@ -60,10 +63,10 @@ self.onmessage = messageEvent => {
   self.postMessage(galaxyAttributes)
 }
 
-function _getGalaxyAttributesInRandomPosition (max, clusterSize, parameters, chosenColors, enforcedBranches) {
+function _getGalaxyAttributesInRandomPosition (max, clusterSize, parameters, chosenColors, enforcedBranches, currentUniverse) {
   const positions = []
   const colors = []
-  const radius = clusterSize / 1.8
+  const radius = currentUniverse === 2 ? clusterSize * 4 : clusterSize / 1.8
   const branches = enforcedBranches || THREE.MathUtils.randInt(parameters.spiral.branches.min, parameters.spiral.branches.max)
   const spin = THREE.MathUtils.randInt(parameters.spiral.spin.min, parameters.spiral.spin.max)
   const mixedColor = chosenColors.colorIn.clone()

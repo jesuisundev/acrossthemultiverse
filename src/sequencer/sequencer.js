@@ -2,12 +2,13 @@ import Wormhole from './wormhole/Wormhole'
 import { gsap } from 'gsap'
 
 export default class Sequencer {
-  constructor (scene, library, parameters, grid, camera) {
+  constructor (scene, library, parameters, grid, camera, postProcessor) {
     this.scene = scene
     this.library = library
     this.parameters = parameters
     this.grid = grid
     this.camera = camera
+    this.postProcessor = postProcessor
 
     this.active = false
 
@@ -75,13 +76,13 @@ export default class Sequencer {
 
   async chapterTwoSequence (skipped = false) {
     if (skipped) {
+      this.camera.rotation.z = 0
+
       this.library.audio['discovery'].play()
       this.library.audio['discovery'].loop(true)
 
-      window.currentUniverse++
-      this.changeUniverse()
-
       this.fadeOutWallById('#whitewall', 0)
+      this.fadeOutWallById('#blackwall', 0)
     } else {
       this.stopAllSounds()
       this.library.audio['discovery'].play()
@@ -103,18 +104,23 @@ export default class Sequencer {
 
   async chapterThreeSequence (skipped = false) {
     if (skipped) {
+      this.camera.rotation.z = 0
+
       this.library.audio['celestial'].play()
       this.library.audio['celestial'].loop(true)
 
-      window.currentUniverse++
-      this.changeUniverse()
+      this.camera.far = 20000
+      this.camera.updateProjectionMatrix()
 
       this.fadeOutWallById('#whitewall', 0)
+      this.fadeOutWallById('#blackwall', 0)
     } else {
       this.stopAllSounds()
       this.library.audio['celestial'].play()
       this.library.audio['celestial'].loop(true)
 
+      this.camera.far = 20000
+      this.camera.updateProjectionMatrix()
       this.changeUniverse()
 
       await this.asyncWaitFor(2000)
@@ -135,6 +141,8 @@ export default class Sequencer {
       this.library.audio['intothenight'].loop(true)
 
       window.currentUniverse++
+      this.camera.far = 60000
+      this.camera.updateProjectionMatrix()
       this.changeUniverse()
 
       this.fadeOutWallById('#whitewall', 0)
@@ -143,6 +151,8 @@ export default class Sequencer {
       this.library.audio['intothenight'].play()
       this.library.audio['intothenight'].loop(true)
 
+      this.camera.far = 60000
+      this.camera.updateProjectionMatrix()
       this.changeUniverse()
 
       await this.asyncWaitFor(2000)
@@ -290,6 +300,7 @@ export default class Sequencer {
 
   changeUniverse () {
     this.resetScene()
+    this.postProcessor.updateProcessingRenderer()
     this.grid.populateNewUniverse()
   }
 }

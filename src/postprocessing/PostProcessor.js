@@ -1,18 +1,33 @@
 import * as dat from 'dat.gui'
 import * as POSTPROCESSING from 'postprocessing'
 
-export default class Postprocessing {
-  constructor (camera, parameters, isDebug = false) {
+export default class PostProcessor {
+  constructor (camera, scene, parameters, renderer, isDebug = false) {
     this.camera = camera
+    this.scene = scene
     this.parameters = parameters
+    this.renderer = renderer
     this.isDebug = isDebug
+
+    this.composer = new POSTPROCESSING.EffectComposer(this.renderer)
+    this.composer.addPass(new POSTPROCESSING.RenderPass(this.scene, this.camera))
+    this.composer.addPass(this.getEffectPass(window.currentUniverse))
 
     if (this.isDebug) {
       this.gui = new dat.GUI()
     }
   }
 
-  getEffectPass () {
+  updateProcessingRenderer() {
+    this.composer = new POSTPROCESSING.EffectComposer(this.renderer)
+    this.composer.addPass(new POSTPROCESSING.RenderPass(this.scene, this.camera))
+    this.composer.addPass(this.getEffectPass(window.currentUniverse))
+  }
+
+  getEffectPass (currentUniverse) {
+    if (currentUniverse === 1 || currentUniverse === 2) {
+      this.parameters.postprocessing.bloomEffect.intensity = 4
+    }
     const bloomEffect = new POSTPROCESSING.BloomEffect(this.parameters.postprocessing.bloomEffect)
     bloomEffect.blendMode.opacity.value = this.parameters.postprocessing.bloomEffect.opacity
 

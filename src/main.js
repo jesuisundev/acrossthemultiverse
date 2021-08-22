@@ -6,7 +6,7 @@ import Grid from './world/Grid'
 import Controls from './world/Controls'
 import Library from './world/Library'
 import Parameters from './world/Parameters'
-import Effect from './postprocessing/Effect'
+import PostProcessor from './postprocessing/PostProcessor'
 import Sequencer from './sequencer/sequencer'
 
 const clock = new THREE.Clock()
@@ -29,9 +29,8 @@ document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
 // TODO : build tweark for others universes
-// CHAPTER 2 WONDER UNIVERSE same but crazy colors
-// CHAPTER 3 FILAMENT UNIVERSE irregular: {randomnessPower: 0.00002 }
 // CHAPTER 4 build epiphany - univers buble in a comet shape
+// GSAP speed effect when entering universe
 // TODO : Validate BETA
 // TODO : lock fps
 // TODO : performance
@@ -40,6 +39,7 @@ document.body.appendChild(renderer.domElement)
 // TODO : handle mobile control
 // TODO : detect clavier
 // TODO : refactor clean up comment
+// EXTRA? : Elliptical galaxy, planetary nebula
 // TODO : push to cloudfare
 // DEADLINE -> 13 sept
 const camera = new THREE.PerspectiveCamera(
@@ -52,11 +52,11 @@ camera.rotation.z = 0.8
 
 const library = new Library()
 const grid = new Grid(camera, parameters, scene, library)
-const sequencer = new Sequencer(scene, library, parameters, grid, camera)
+const postProcessor = new PostProcessor(camera, scene, parameters, renderer)
+const sequencer = new Sequencer(scene, library, parameters, grid, camera, postProcessor)
 const controls = new Controls(camera, parameters, sequencer)
-const effect = new Effect(camera, parameters)
 
-const skipIntro = true
+const skipIntro = false
 
 let lastClusterPosition
 let needRender = false
@@ -80,24 +80,15 @@ document.addEventListener('click', (event) => controls.pointerLockControls.lock(
 window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight)
   camera.aspect = window.innerWidth / window.innerHeight
-  composer.setSize(window.innerWidth, window.innerHeight)
+  postProcessor.composer.setSize(window.innerWidth, window.innerHeight)
   camera.updateProjectionMatrix()
 })
-
-const composer = new POSTPROCESSING.EffectComposer(renderer)
-composer.addPass(new POSTPROCESSING.RenderPass(scene, camera))
-composer.addPass(effect.getEffectPass())
 
 function setDefaultGlobal() {
   window.currentUniverse = 0
   window.materialsToUpdate = {}
   window.meshesToUpdate = {}
-  window.wormhole = {
-    shape: null,
-    CameraPositionIndex: 0,
-    speed: parameters.wormhole.speed,
-    active: false
-  }
+  window.wormhole = { shape: null, CameraPositionIndex: 0, speed: parameters.wormhole.speed, active: false }
 }
 
 function animate (time) {
@@ -105,7 +96,7 @@ function animate (time) {
     if (window.wormhole.active) {
       updatePositionInWormhole()
     } else {
-      composer.render()
+      postProcessor.composer.render()
     }
   }
 
@@ -185,7 +176,7 @@ function updatePositionInWormhole () {
 
   camera.lookAt(window.wormhole.shape.getPoint((window.wormhole.CameraPositionIndex + 1) / window.wormhole.speed))
 
-  composer.render()
+  postProcessor.composer.render()
 }
 
 animate()
