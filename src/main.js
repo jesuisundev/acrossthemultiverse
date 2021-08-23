@@ -29,7 +29,7 @@ document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
 // TODO : build tweark for others universes
-// CHAPTER 4 build epiphany - univers buble in a comet shape
+// CHAPTER 4 build epiphany - univers buble in a comet shape - WIP
 // GSAP speed effect when entering universe
 // TODO : Validate BETA
 // TODO : lock fps
@@ -56,7 +56,7 @@ const postProcessor = new PostProcessor(camera, scene, parameters, renderer)
 const sequencer = new Sequencer(scene, library, parameters, grid, camera, postProcessor)
 const controls = new Controls(camera, parameters, sequencer)
 
-const skipIntro = false
+const skipIntro = true
 
 let lastClusterPosition
 let needRender = false
@@ -85,7 +85,7 @@ window.addEventListener('resize', () => {
 })
 
 function setDefaultGlobal() {
-  window.currentUniverse = 0
+  window.currentUniverse = 3
   window.materialsToUpdate = {}
   window.meshesToUpdate = {}
   window.wormhole = { shape: null, CameraPositionIndex: 0, speed: parameters.wormhole.speed, active: false }

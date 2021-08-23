@@ -1,4 +1,5 @@
 import Wormhole from './wormhole/Wormhole'
+import Epiphany from './epiphany/Epiphany'
 import { gsap } from 'gsap'
 
 export default class Sequencer {
@@ -13,6 +14,7 @@ export default class Sequencer {
     this.active = false
 
     this.wormhole = new Wormhole(this.scene, this.library, this.parameters)
+    this.epiphany = new Epiphany(this.scene, this.library, this.parameters)
   }
 
   async launchNextSequence (skipped = false) {
@@ -140,20 +142,28 @@ export default class Sequencer {
       this.library.audio['intothenight'].play()
       this.library.audio['intothenight'].loop(true)
 
-      window.currentUniverse++
       this.camera.far = 60000
       this.camera.updateProjectionMatrix()
-      this.changeUniverse()
+      this.resetScene()
+      this.postProcessor.updateProcessingRenderer()
+
+      this.epiphany.generate()
 
       this.fadeOutWallById('#whitewall', 0)
+      this.fadeOutWallById('#blackwall', 0)
     } else {
       this.stopAllSounds()
       this.library.audio['intothenight'].play()
       this.library.audio['intothenight'].loop(true)
 
+      this.camera.near = 0.00001
       this.camera.far = 60000
       this.camera.updateProjectionMatrix()
-      this.changeUniverse()
+      this.resetScene()
+      this.postProcessor.updateProcessingRenderer()
+
+      this.epiphany.generate()
+      this.camera.lookAt(0,0,0)
 
       await this.asyncWaitFor(2000)
 
