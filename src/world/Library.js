@@ -43,8 +43,7 @@ export default class Library {
             { type: 'galaxy', src: 'galaxy2.png' },
             { type: 'galaxy', src: 'galaxy3.jpg' },
             { type: 'galaxy', src: 'galaxy4.jpg' },
-            { type: 'galaxy', src: 'galaxy5.jpeg' },
-            { type: 'galaxy', src: 'test.png' }
+            { type: 'galaxy', src: 'galaxy5.jpeg' }
           ]
         },
         universe: {
@@ -83,7 +82,8 @@ export default class Library {
         galaxy: []
       },
       universe: {
-        universe: []
+        universe: [],
+        water: []
       }
     }
 

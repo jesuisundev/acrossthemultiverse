@@ -2,10 +2,12 @@ import * as THREE from 'three'
 import { gsap } from 'gsap'
 
 export default class Epiphany {
-  constructor (scene, library, parameters) {
+  constructor (scene, library, parameters, camera, sequencer) {
     this.scene = scene
     this.library = library
     this.parameters = parameters
+    this.camera = camera
+    this.sequencer = sequencer
   }
 
   generate () {
@@ -17,15 +19,17 @@ export default class Epiphany {
             window.currentUniverse
         )
     )
-
-    this.library.textures.wormhole.galaxy[2].wrapS = THREE.RepeatWrapping
-    this.library.textures.wormhole.galaxy[2].wrapT = THREE.MirroredRepeatWrapping
-
     this.epiphanyMaterial = this._getEpiphanyMaterial(this.library.textures.universe.universe[0])
-
     this.epiphany = new THREE.Points(this.epiphanyGeometry, this.epiphanyMaterial)
 
-    this.scene.add(this.epiphany)
+    this.epiphanySourceGeometry = new THREE.PlaneGeometry(1000000, 1000000)
+    this.epiphanySourceMaterial = new THREE.MeshBasicMaterial({color: 0xFFFFFF, side: THREE.DoubleSide})
+    this.epiphanySourceMesh = new THREE.Mesh(this.epiphanySourceGeometry, this.epiphanySourceMaterial)
+
+    this.epiphanySourceMesh.rotation.y = -150
+    this.scene.add(this.epiphany, this.epiphanySourceMesh)
+
+    window.epiphany = this
   }
 
   _getEpiphanyAttributesInRandomPosition (max, clusterSize, parameters) {
@@ -99,18 +103,15 @@ export default class Epiphany {
   }
 
   _getEpiphanyMaterial (texture, enforcedSize, enforcedOpacity) {
-    const randomMaterialSize = enforcedSize || enforcedSize === 0 ? enforcedSize : THREE.MathUtils.randInt(this.parameters.matters[window.currentUniverse].starfield.material.size.pass.min, this.parameters.matters[window.currentUniverse].starfield.material.size.pass.max)
-    const randomMaterialOpacity = enforcedOpacity || enforcedOpacity === 0 ? enforcedOpacity : THREE.MathUtils.randInt(this.parameters.matters[window.currentUniverse].starfield.material.opacity.pass.min, this.parameters.matters[window.currentUniverse].starfield.material.opacity.pass.max)
-
     texture.magFilter = THREE.NearestFilter
 
     const material = new THREE.PointsMaterial({
       size: 200,
-      opacity: randomMaterialOpacity,
+      opacity: 1,
       map: texture,
       sizeAttenuation: true,
       depthWrite: false,
-      transparent: false,
+      transparent: true,
       blending: THREE.AdditiveBlending,
       vertexColors: false
     })
@@ -119,20 +120,61 @@ export default class Epiphany {
   }
 
   async animate () {
-  }
+    this.epiphanyTimeline = gsap.timeline()
 
-  active () {
-    window.epiphany.active = true
+    // initial position
+    this.camera.position.x = 41933.344083521246
+    this.camera.position.y = 2601.9473229586356
+    this.camera.position.z = -41610.88345738852
+    this.camera.rotation.x = -1.5819946141795853
+    this.camera.rotation.y = -0.01142823229729023
+    this.camera.rotation.z = -2.3460639896805997
+
+    // first step, moving to epiphany
+    this.epiphanyTimeline
+      .to(this.camera.position, { duration: 70, x: 5073.649103134025 }, 0)
+      .to(this.camera.position, { duration: 70, y: 2601.9473229586356 }, 0)
+      .to(this.camera.position, { duration: 70, z: 3463.0872659983047 }, 0)
+      .to(this.camera.rotation, { duration: 70, x: -2.152754981377802 }, 0)
+      .to(this.camera.rotation, { duration: 70, y: 0.4933583002859766 }, 0)
+      .to(this.camera.rotation, { duration: 70, z: 2.517722836064396 }, 0)
+
+    // second step, diving to epiphany
+    this.epiphanyTimeline
+      .to(this.camera.position, { duration: 70, x: 43502.35769250616 }, 70)
+      .to(this.camera.position, { duration: 70, y: 2601.9461793450773 }, 70)
+      .to(this.camera.position, { duration: 70, z: 40744.89427643778 }, 70)
+      .to(this.camera.rotation, { duration: 70, x: 3.0245027035506347 }, 70)
+      .to(this.camera.rotation, { duration: 70, y: -0.8722113376562891 }, 70)
+      .to(this.camera.rotation, { duration: 70, z: 3.0517609576969265 }, 70)
+
+    // parallel story telling
+    await this.sequencer.fadeOutWallById('#whitewall', 10, 'Power0.easeNone')
+    await this.sequencer.showThenHideStory(this.parameters.story.epiphany[0])
+    await this.sequencer.showThenHideStory(this.parameters.story.epiphany[1], 0)
+    await this.sequencer.showThenHideStory(this.parameters.story.epiphany[2], 0)
+    await this.sequencer.showThenHideStory(this.parameters.story.epiphany[3], 0)
+    await this.sequencer.showThenHideStory(this.parameters.story.epiphany[4], 0)
+    await this.sequencer.showThenHideStory(this.parameters.story.epiphany[5], 0)
+    await this.sequencer.showThenHideStory(this.parameters.story.epiphany[6], 0)
+    await this.sequencer.showThenHideStory(this.parameters.story.epiphany[7], 0)
+    await this.sequencer.showThenHideStory(this.parameters.story.epiphany[8], 0)
+    await this.sequencer.showThenHideStory(this.parameters.story.epiphany[9], 0)
+
+    // TODO : show credits
   }
 
   dispose () {
-    window.epiphany.active = false
-
     this.epiphanyGeometry.dispose()
     this.epiphanyMaterial.dispose()
 
-    this.scene.remove(this.epiphany)
+    this.epiphanySourceGeometry.dispose()
+    this.epiphanySourceMaterial.dispose()
+
+    this.scene.remove(this.epiphany, this.epiphanySourceMesh)
 
     this.epiphany = null
+    this.epiphanySourceMesh = null
+    window.epiphany = null
   }
 }

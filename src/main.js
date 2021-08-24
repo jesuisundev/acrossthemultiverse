@@ -28,8 +28,6 @@ renderer.domElement.id = 'multiverse'
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : build tweark for others universes
-// CHAPTER 4 build epiphany - univers buble in a comet shape - WIP
 // GSAP speed effect when entering universe
 // TODO : Validate BETA
 // TODO : lock fps

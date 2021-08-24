@@ -14,7 +14,7 @@ export default class Sequencer {
     this.active = false
 
     this.wormhole = new Wormhole(this.scene, this.library, this.parameters)
-    this.epiphany = new Epiphany(this.scene, this.library, this.parameters)
+    this.epiphany = new Epiphany(this.scene, this.library, this.parameters, this.camera, this)
   }
 
   async launchNextSequence (skipped = false) {
@@ -138,6 +138,8 @@ export default class Sequencer {
   }
 
   async epiphanySequence (skipped = false) {
+    this.active = true
+
     if (skipped) {
       this.library.audio['intothenight'].play()
       this.library.audio['intothenight'].loop(true)
@@ -151,6 +153,8 @@ export default class Sequencer {
 
       this.fadeOutWallById('#whitewall', 0)
       this.fadeOutWallById('#blackwall', 0)
+    
+      await this.epiphany.animate()
     } else {
       this.stopAllSounds()
       this.library.audio['intothenight'].play()
@@ -163,21 +167,9 @@ export default class Sequencer {
       this.postProcessor.updateProcessingRenderer()
 
       this.epiphany.generate()
-      this.camera.lookAt(0,0,0)
 
       await this.asyncWaitFor(2000)
-
-      await this.fadeOutWallById('#whitewall', 10, 'Power0.easeNone')
-      await this.showThenHideStory(this.parameters.story.epiphany[0])
-      await this.showThenHideStory(this.parameters.story.epiphany[1], 0)
-      await this.showThenHideStory(this.parameters.story.epiphany[2], 0)
-      await this.showThenHideStory(this.parameters.story.epiphany[3], 0)
-      await this.showThenHideStory(this.parameters.story.epiphany[4], 0)
-      await this.showThenHideStory(this.parameters.story.epiphany[5], 0)
-      await this.showThenHideStory(this.parameters.story.epiphany[6], 0)
-      await this.showThenHideStory(this.parameters.story.epiphany[7], 0)
-      await this.showThenHideStory(this.parameters.story.epiphany[8], 0)
-      await this.showThenHideStory(this.parameters.story.epiphany[9], 0)
+      await this.epiphany.animate()
     }
 
     this.active = false
@@ -193,6 +185,8 @@ export default class Sequencer {
     await this.fadeInWallById('#blackwall', 0.2)
 
     this.resetScene()
+
+    if(window.epiphany) window.epiphany.dispose()
 
     this.camera.near = 0.01
     this.camera.updateProjectionMatrix()
