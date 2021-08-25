@@ -19,6 +19,7 @@ export default class PostProcessor {
   }
 
   updateProcessingRenderer() {
+    this.composer.reset()
     this.composer = new POSTPROCESSING.EffectComposer(this.renderer)
     this.composer.addPass(new POSTPROCESSING.RenderPass(this.scene, this.camera))
     this.composer.addPass(this.getEffectPass(window.currentUniverse))
@@ -27,6 +28,8 @@ export default class PostProcessor {
   getEffectPass (currentUniverse) {
     if (currentUniverse === 1 || currentUniverse === 2) {
       this.parameters.postprocessing.bloomEffect.intensity = 4
+    } else {
+      this.parameters.postprocessing.bloomEffect.intensity = 2
     }
     const bloomEffect = new POSTPROCESSING.BloomEffect(this.parameters.postprocessing.bloomEffect)
     bloomEffect.blendMode.opacity.value = this.parameters.postprocessing.bloomEffect.opacity

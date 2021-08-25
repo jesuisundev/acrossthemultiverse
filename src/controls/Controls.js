@@ -1,4 +1,4 @@
-import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js'
+import { PointerLockControls } from './PointerLockControls.js'
 import * as THREE from 'three'
 
 export default class Controls {
@@ -8,6 +8,7 @@ export default class Controls {
     this.sequencer = sequencer
 
     this.pointerLockControls = new PointerLockControls(this.camera, document.body)
+
     this.velocity = new THREE.Vector3()
     this.direction = new THREE.Vector3()
 
@@ -62,7 +63,10 @@ export default class Controls {
     }
   }
 
+
   handleMovements (timePerf, prevTimePerf) {
+    if (window.sequencer.active) return
+
     const delta = (timePerf - prevTimePerf) / 1000
 
     this.direction.z = Number(this.moveForward) - Number(this.moveBackward)

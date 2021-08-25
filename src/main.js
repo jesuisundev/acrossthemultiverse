@@ -1,9 +1,8 @@
 import './style.css'
 import * as THREE from 'three'
-import * as POSTPROCESSING from 'postprocessing'
 
 import Grid from './world/Grid'
-import Controls from './world/Controls'
+import Controls from './controls/Controls'
 import Library from './world/Library'
 import Parameters from './world/Parameters'
 import PostProcessor from './postprocessing/PostProcessor'
@@ -28,12 +27,10 @@ renderer.domElement.id = 'multiverse'
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// GSAP speed effect when entering universe
-// TODO : Validate BETA
 // TODO : lock fps
 // TODO : performance
-// TODO : add UI -> back to cinema for perfo ?
-// TODO : add music control - > scroll volume
+// TODO : add UI -> arno
+// TODO : add music control - > mute
 // TODO : handle mobile control
 // TODO : detect clavier
 // TODO : refactor clean up comment
@@ -53,8 +50,9 @@ const grid = new Grid(camera, parameters, scene, library)
 const postProcessor = new PostProcessor(camera, scene, parameters, renderer)
 const sequencer = new Sequencer(scene, library, parameters, grid, camera, postProcessor)
 const controls = new Controls(camera, parameters, sequencer)
+sequencer.controls = controls
 
-const skipIntro = true
+const skipIntro = false
 
 let lastClusterPosition
 let needRender = false
@@ -75,6 +73,7 @@ scene.add(controls.pointerLockControls.getObject())
 document.addEventListener('keydown', (event) => controls.onKeyDown(event))
 document.addEventListener('keyup', (event) => controls.onKeyUp(event))
 document.addEventListener('click', (event) => controls.pointerLockControls.lock())
+
 window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight)
   camera.aspect = window.innerWidth / window.innerHeight
@@ -83,10 +82,11 @@ window.addEventListener('resize', () => {
 })
 
 function setDefaultGlobal() {
-  window.currentUniverse = 3
+  window.currentUniverse = 0
   window.materialsToUpdate = {}
   window.meshesToUpdate = {}
   window.wormhole = { shape: null, CameraPositionIndex: 0, speed: parameters.wormhole.speed, active: false }
+  window.sequencer = { active: false}
 }
 
 function animate (time) {
@@ -115,7 +115,7 @@ function animate (time) {
 
   const currentClusterPosition = grid.getCurrentClusterPosition()
 
-  if (lastClusterPosition !== currentClusterPosition && !sequencer.active) {
+  if (lastClusterPosition !== currentClusterPosition && !window.sequencer.active) {
     lastClusterPosition = currentClusterPosition
 
     const clustersStatus = grid.getClustersStatus(currentClusterPosition)
@@ -147,7 +147,7 @@ function updateAnimatedObjects (elapsedTime) {
     for (const meshToUpdate of Object.values(window.meshesToUpdate)) {
       meshToUpdate.rotateZ(2)
 
-      if (camera.position.distanceTo(meshToUpdate.position) < 4000 && !sequencer.active) {
+      if (camera.position.distanceTo(meshToUpdate.position) < 4000 && !window.sequencer.active) {
         sequencer.wormholeSequence()
       }
     }

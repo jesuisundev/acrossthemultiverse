@@ -10,17 +10,16 @@ export default class Sequencer {
     this.grid = grid
     this.camera = camera
     this.postProcessor = postProcessor
-
-    this.active = false
+    this.controls = null
 
     this.wormhole = new Wormhole(this.scene, this.library, this.parameters)
     this.epiphany = new Epiphany(this.scene, this.library, this.parameters, this.camera, this)
   }
 
   async launchNextSequence (skipped = false) {
-    if(this.active) return
+    if(window.sequencer.active) return
 
-    this.active = true
+    window.sequencer.active = true
 
     switch (window.currentUniverse) {
       case 0:
@@ -73,7 +72,7 @@ export default class Sequencer {
       await this.showThenHideStory(this.parameters.story.chapterone[3], 0)
     }
 
-    this.active = false
+    window.sequencer.active = false
   }
 
   async chapterTwoSequence (skipped = false) {
@@ -94,6 +93,7 @@ export default class Sequencer {
 
       await this.asyncWaitFor(2000)
 
+      this.onEnteringUniverse()
       await this.fadeOutWallById('#whitewall', 10, 'Power0.easeNone')
       await this.showThenHideStory(this.parameters.story.chaptertwo[0])
       await this.showThenHideStory(this.parameters.story.chaptertwo[1], 0)
@@ -101,7 +101,7 @@ export default class Sequencer {
       await this.showThenHideStory(this.parameters.story.chaptertwo[3], 0)
     }
   
-    this.active = false
+    window.sequencer.active = false
   }
 
   async chapterThreeSequence (skipped = false) {
@@ -127,6 +127,7 @@ export default class Sequencer {
 
       await this.asyncWaitFor(2000)
 
+      this.onEnteringUniverse()
       await this.fadeOutWallById('#whitewall', 10, 'Power0.easeNone')
       await this.showThenHideStory(this.parameters.story.chapterthree[0])
       await this.showThenHideStory(this.parameters.story.chapterthree[1], 0)
@@ -134,11 +135,11 @@ export default class Sequencer {
       await this.showThenHideStory(this.parameters.story.chapterthree[3], 0)
     }
 
-    this.active = false
+    window.sequencer.active = false
   }
 
   async epiphanySequence (skipped = false) {
-    this.active = true
+    window.sequencer.active = true
 
     if (skipped) {
       this.library.audio['intothenight'].play()
@@ -158,9 +159,7 @@ export default class Sequencer {
     } else {
       this.stopAllSounds()
       this.library.audio['intothenight'].play()
-      this.library.audio['intothenight'].loop(true)
 
-      this.camera.near = 0.00001
       this.camera.far = 60000
       this.camera.updateProjectionMatrix()
       this.resetScene()
@@ -172,13 +171,13 @@ export default class Sequencer {
       await this.epiphany.animate()
     }
 
-    this.active = false
+    window.sequencer.active = false
   }
 
   async wormholeSequence () {
-    if(this.active) return
+    if(window.sequencer.active) return
 
-    this.active = true
+    window.sequencer.active = true
 
     this.stopAllSounds()
 
@@ -210,21 +209,21 @@ export default class Sequencer {
     window.currentUniverse++
     await this.asyncWaitFor(1000)
 
-    this.active = false
+    window.sequencer.active = false
 
     await this.launchNextSequence()
   }
 
   // you are not supposed to be here, as a matter of fact, you're not
   async borealis () {
-    this.active = true
+    window.sequencer.active = true
     this.fadeOutWallById('#blackwall', 0)
     this.stopAllSounds()
     this.library.audio['borealis'].play()
     this.library.audio['borealis'].on('end', () => {
       window.currentUniverse = 0
       this.changeUniverse()
-      this.active = false
+      window.sequencer.active = false
       this.launchNextSequence()
     })
   }
@@ -306,5 +305,9 @@ export default class Sequencer {
     this.resetScene()
     this.postProcessor.updateProcessingRenderer()
     this.grid.populateNewUniverse()
+  }
+
+  onEnteringUniverse() {
+    this.camera.rotation.set(0,0,0)
   }
 }
