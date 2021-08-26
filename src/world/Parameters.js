@@ -31,7 +31,7 @@ export default class Parameters {
         kernelSize: POSTPROCESSING.KernelSize.HUGE,
         luminanceThreshold: 0,
         luminanceSmoothing: 0,
-        intensity: 2,
+        intensity: 4,
         scale: 1,
         height: 1080,
         opacity: 1
@@ -161,8 +161,8 @@ export default class Parameters {
               max: 400
             },
             pass: {
-              min: 50,
-              max: 60
+              min: 55,
+              max: 65
             }
           },
           opacity: {

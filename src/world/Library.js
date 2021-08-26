@@ -26,8 +26,7 @@ export default class Library {
           baseUrl: '/textures/nebula/',
           pool: [
             { type: 'cloud', src: 'cloud1.png' },
-            { type: 'cloud', src: 'cloud2.png' },
-            { type: 'cloud', src: 'cloud3.png' }
+            { type: 'cloud', src: 'cloud2.png' }
           ]
         },
         blackhole: {
@@ -40,7 +39,7 @@ export default class Library {
           baseUrl: '/textures/wormhole/',
           pool: [
             { type: 'galaxy', src: 'galaxy1.jpg' },
-            { type: 'galaxy', src: 'galaxy2.png' },
+            { type: 'galaxy', src: 'galaxy2.jpg' },
             { type: 'galaxy', src: 'galaxy3.jpg' },
             { type: 'galaxy', src: 'galaxy4.jpg' },
             { type: 'galaxy', src: 'galaxy5.jpeg' }

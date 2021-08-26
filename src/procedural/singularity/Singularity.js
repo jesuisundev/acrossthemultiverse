@@ -23,16 +23,13 @@ export default class Singularity {
     blackholeDiskMesh.scale.set(1000, 1000, 1000)
     blackholeDiskMesh.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
 
-    blackholeDiskMaterial.needsUpdate = true
-    blackholeDiskMaterial.key = Math.floor(Date.now() + Math.random())
-    blackholeDiskMesh.key = blackholeDiskMaterial.key
-    window.materialsToUpdate[blackholeDiskMaterial.key] = blackholeDiskMaterial
-    window.meshesToUpdate[blackholeDiskMesh.key] = blackholeDiskMesh
+    window.materialsToUpdate[blackholeDiskMaterial.uuid] = blackholeDiskMaterial
+    window.meshesToUpdate[blackholeDiskMesh.uuid] = blackholeDiskMesh
 
-    const blackholeGeometry = new THREE.SphereGeometry(1, 32, 16)
+    const blackholeGeometry = new THREE.SphereGeometry(1.5, 32, 16)
     const blackholeMaterial = new THREE.MeshBasicMaterial({
       color: 0x000000,
-      transparent: true,
+      transparent: false,
       side: THREE.DoubleSide,
       opacity: 0
     })
@@ -40,8 +37,7 @@ export default class Singularity {
     blackholeMesh.scale.set(5000, 5000, 3000)
     blackholeMesh.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
 
-    blackholeMesh.key = Math.floor(Date.now() + Math.random())
-    window.meshesToUpdate[blackholeMesh.key] = blackholeMesh
+    window.meshesToUpdate[blackholeMesh.uuid] = blackholeMesh
 
     const randomBlackhole = {
       disk: {
@@ -67,10 +63,10 @@ export default class Singularity {
       return
     }
 
-    delete window.materialsToUpdate[this.blackhole.disk.material.key]
+    delete window.materialsToUpdate[this.blackhole.disk.material.uuid]
 
-    delete window.meshesToUpdate[this.blackhole.disk.mesh.key]
-    delete window.meshesToUpdate[this.blackhole.blackhole.mesh.key]
+    delete window.meshesToUpdate[this.blackhole.disk.mesh.uuid]
+    delete window.meshesToUpdate[this.blackhole.blackhole.mesh.uuid]
 
     this.blackhole.disk.geometry.dispose()
     this.blackhole.blackhole.geometry.dispose()
@@ -104,6 +100,7 @@ export default class Singularity {
 
   _getRandomBlackHoleShaderMaterial () {
     return new THREE.ShaderMaterial({
+      precision: 'lowp',
       vertexShader: singularityBlackholeVertexShader,
       fragmentShader: singularityBlackholeFragmentShader,
       uniforms: {

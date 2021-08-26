@@ -319,7 +319,7 @@ export default class Nebula {
       map: randomMaterialTexture,
       sizeAttenuation: true,
       depthWrite: false,
-      transparent: true,
+      transparent: false,
       blending: THREE.AdditiveBlending,
       vertexColors: true,
       opacity: 0

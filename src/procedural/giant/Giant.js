@@ -27,8 +27,7 @@ export default class Giant {
     const brightStarTexture = null
     const giantStarmaterial = this._getRandomSunShaderMaterial()
 
-    giantStarmaterial.key = Math.floor(Date.now() + Math.random())
-    window.materialsToUpdate[giantStarmaterial.key] = giantStarmaterial
+    window.materialsToUpdate[giantStarmaterial.uuid] = giantStarmaterial
     const giantStar = new THREE.Mesh(giantStarGeometry, giantStarmaterial)
     const giantStarScale = THREE.MathUtils.randInt(
       this.parameters.matters[window.currentUniverse].giant.shader.sun.scale.min,
@@ -71,8 +70,7 @@ export default class Giant {
     const brightStarTexture = null
     const giantStarmaterial = this._getRandomWhiteDwarfShaderMaterial()
 
-    giantStarmaterial.key = Math.floor(Date.now() + Math.random())
-    window.materialsToUpdate[giantStarmaterial.key] = giantStarmaterial
+    window.materialsToUpdate[giantStarmaterial.uuid] = giantStarmaterial
     const giantStar = new THREE.Mesh(giantStarGeometry, giantStarmaterial)
     const giantStarScale = THREE.MathUtils.randInt(
       this.parameters.matters[window.currentUniverse].giant.shader.whitedwarf.scale.min,
@@ -114,7 +112,7 @@ export default class Giant {
       return
     }
 
-    delete window.materialsToUpdate[this.giant.giant.material.key]
+    delete window.materialsToUpdate[this.giant.giant.material.uuid]
 
     this.giant.giant.geometry.dispose()
     this.giant.firstPass.geometry.dispose()
@@ -147,6 +145,7 @@ export default class Giant {
 
   _getRandomSunShaderMaterial () {
     return new THREE.ShaderMaterial({
+      precision: 'lowp',
       vertexShader: giantSunVertexShader,
       fragmentShader: giantSunFragmentShader,
       uniforms: {
@@ -180,6 +179,7 @@ export default class Giant {
 
   _getRandomWhiteDwarfShaderMaterial () {
     return new THREE.ShaderMaterial({
+      precision: 'lowp',
       vertexShader: giantWhiteDwarfVertexShader,
       fragmentShader: giantWhiteDwarfFragmentShader,
       uniforms: {
@@ -286,7 +286,7 @@ export default class Giant {
       map: randomMaterialTexture,
       sizeAttenuation: true,
       depthWrite: false,
-      transparent: true,
+      transparent: false,
       blending: THREE.AdditiveBlending,
       vertexColors: true,
       opacity: 0

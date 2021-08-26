@@ -11,8 +11,16 @@ export default class Wormhole {
   }
 
   generate () {
-    window.wormhole.shape = new Curves.TorusKnot()
-    window.wormhole.shape.scale = 500
+    const curveShape = 500
+    const random = Math.random()
+
+    if (random < 0.33) {
+      window.wormhole.shape = new Curves.TorusKnot(curveShape)
+    } else if (random < 0.66) {
+      window.wormhole.shape = new Curves.CinquefoilKnot(curveShape)
+    } else {
+      window.wormhole.shape = new Curves.TrefoilKnot(curveShape)
+    }
 
     this.library.textures.wormhole.galaxy[0].wrapS = THREE.RepeatWrapping
     this.library.textures.wormhole.galaxy[0].wrapT = THREE.MirroredRepeatWrapping
@@ -20,7 +28,7 @@ export default class Wormhole {
 
     this.wireframedStarsSpeederMaterial = new THREE.MeshBasicMaterial({
       map: this.library.textures.wormhole.galaxy[0],
-      transparent: true,
+      transparent: false,
       opacity: this.parameters.wormhole.wireframedStarsSpeeder.material.opacity,
       blending: THREE.AdditiveBlending,
       side: THREE.BackSide,
@@ -33,7 +41,7 @@ export default class Wormhole {
 
     this.auraSpeederMaterial = new THREE.MeshBasicMaterial({
       map: this.library.textures.wormhole.galaxy[1],
-      transparent: true,
+      transparent: false,
       opacity: this.parameters.wormhole.auraSpeeder.material.opacity,
       blending: THREE.AdditiveBlending,
       side: THREE.DoubleSide
@@ -45,7 +53,7 @@ export default class Wormhole {
 
     this.nebulaSpeederMaterial = new THREE.MeshBasicMaterial({
       map: this.library.textures.wormhole.galaxy[2],
-      transparent: true,
+      transparent: false,
       opacity: this.parameters.wormhole.nebulaSpeeder.material.opacity,
       blending: THREE.AdditiveBlending,
       side: THREE.BackSide
@@ -57,7 +65,7 @@ export default class Wormhole {
 
     this.starsSpeederMaterial = new THREE.MeshBasicMaterial({
       map: this.library.textures.wormhole.galaxy[3],
-      transparent: true,
+      transparent: false,
       opacity: this.parameters.wormhole.starsSpeeder.material.opacity,
       blending: THREE.AdditiveBlending,
       side: THREE.BackSide
@@ -69,7 +77,7 @@ export default class Wormhole {
 
     this.clusterSpeederMaterial = new THREE.MeshBasicMaterial({
       map: this.library.textures.wormhole.galaxy[4],
-      transparent: true,
+      transparent: false,
       opacity: this.parameters.wormhole.clusterSpeeder.material.opacity,
       blending: THREE.AdditiveBlending,
       side: THREE.BackSide

@@ -67,7 +67,7 @@ export default class Controls {
   handleMovements (timePerf, prevTimePerf) {
     if (window.sequencer.active) return
 
-    const delta = (timePerf - prevTimePerf) / 1000
+    const delta = timePerf - prevTimePerf
 
     this.direction.z = Number(this.moveForward) - Number(this.moveBackward)
     this.direction.x = Number(this.moveRight) - Number(this.moveLeft)

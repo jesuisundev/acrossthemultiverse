@@ -1,4 +1,5 @@
 import './style.css'
+//import Stats from 'stats.js'
 import * as THREE from 'three'
 
 import Grid from './world/Grid'
@@ -8,6 +9,9 @@ import Parameters from './world/Parameters'
 import PostProcessor from './postprocessing/PostProcessor'
 import Sequencer from './sequencer/sequencer'
 
+//const stats = new Stats()
+//stats.showPanel(0)
+//document.body.appendChild(stats.dom)
 const clock = new THREE.Clock()
 const parameters = new Parameters()
 
@@ -15,24 +19,22 @@ setDefaultGlobal()
 
 const scene = new THREE.Scene()
 scene.background = new THREE.Color(parameters.global.background[window.currentUniverse])
-scene.fog = new THREE.Fog(
-  parameters.global.background[window.currentUniverse],
-  parameters.global.camera.near,
-  parameters.global.camera.far
-)
+scene.fog = new THREE.Fog(parameters.global.background[window.currentUniverse], parameters.global.camera.near, parameters.global.camera.far)
 
 const renderer = new THREE.WebGLRenderer(parameters.global.webGlRenderer)
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 renderer.setSize(window.innerWidth, window.innerHeight)
+renderer.shadowMap.autoUpdate = false
+renderer.shadowMap.needsUpdate = true
 renderer.domElement.id = 'multiverse'
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : lock fps
-// TODO : performance
 // TODO : add UI -> arno
 // TODO : add music control - > mute
 // TODO : handle mobile control
 // TODO : detect clavier
+// TODO : TECHNICAL TEST - FIX perf and bugs
 // TODO : refactor clean up comment
 // EXTRA? : Elliptical galaxy, planetary nebula
 // TODO : push to cloudfare
@@ -57,7 +59,7 @@ const skipIntro = false
 let lastClusterPosition
 let needRender = false
 let isRenderingClusterInProgress = false
-let prevTimePerf = performance.now()
+let previousElapsedTime = clock.getElapsedTime()
 
 
 // preload every needed files before showing anything
@@ -89,7 +91,10 @@ function setDefaultGlobal() {
   window.sequencer = { active: false}
 }
 
-function animate (time) {
+function animate () {
+  //stats.begin()
+  const currentElapsedTime = clock.getElapsedTime()
+
   if (needRender) {
     if (window.wormhole.active) {
       updatePositionInWormhole()
@@ -98,14 +103,12 @@ function animate (time) {
     }
   }
 
-  const elapsedTime = clock.getElapsedTime()
-  updateAnimatedObjects(elapsedTime)
+  updateAnimatedObjects(currentElapsedTime)
 
-  const timePerf = performance.now()
   if (controls.pointerLockControls.isLocked === true) {
-    controls.handleMovements(timePerf, prevTimePerf)
+    controls.handleMovements(currentElapsedTime, previousElapsedTime)
   }
-  prevTimePerf = time
+  previousElapsedTime = currentElapsedTime
 
   if (!window.wormhole.active) {
     camera.position.z -= parameters.global.camera.defaultForward
@@ -152,6 +155,7 @@ function updateAnimatedObjects (elapsedTime) {
       }
     }
   }
+  //stats.end()
 }
 
 function updatePositionInWormhole () {
