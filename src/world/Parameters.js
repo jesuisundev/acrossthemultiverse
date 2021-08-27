@@ -59,30 +59,30 @@ export default class Parameters {
     }
 
     this.grid = {
-      clusterSize: 45000 // 65000
+      clusterSize: 45000 // 65000?
     }
 
     this.story = {
       chapterone: [
-        "Chapter One\nTranscendence",
+        "TRANSCENDENCE<br /><span class='chapter'>chapter 1</span>",
         "You are the pioneer of the human race.",
         "Find a supermassive black hole and go beyond our universe.",
         "Epiphany awaits."
       ],
       chaptertwo: [
-        "Chapter Two\nWonder",
+        "WONDER<br /><span class='chapter'>chapter 2</span>",
         "Physics laws have slightly changed.",
         "Find a supermassive black hole and go to the next universe.",
         "Epiphany awaits."
       ],
       chapterthree: [
-        "Chapter Three\nFilaments",
+        "FILAMENTS<br /><span class='chapter'>chapter 3</span>",
         "Physics laws have heavily changed.",
         "Find a supermassive black hole and go to the next universe.",
         "Epiphany awaits."
       ],
       epiphany: [
-        "Epiphany",
+        "EPIPHANY",
         "No one knows how it started.",
         "But we know how it is.",
         "Every universe is created within the blackhole of another.",
