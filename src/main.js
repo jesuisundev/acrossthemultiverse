@@ -64,17 +64,34 @@ let previousElapsedTime = clock.getElapsedTime()
 
 // preload every needed files before showing anything
 library.preload()
-window.onload = () => {
-  needRender = true
 
-  sequencer.launchNextSequence(skipIntro)
+/**
+ * Handle preload of assets and show launch call to action
+ */
+async function init() {
+    window.onload = () => {
+        needRender = true
+        document.getElementById('loading').remove()
+        document.getElementById('launch').className = 'fadeIn'
+    }
+
+    await controls.showElementById("title")
+    await controls.showElementById("description")
+    await controls.showElementById("notice")
+    await controls.showElementById("entrypoint")
 }
 
 scene.add(controls.pointerLockControls.getObject())
 
 document.addEventListener('keydown', (event) => controls.onKeyDown(event))
 document.addEventListener('keyup', (event) => controls.onKeyUp(event))
-document.addEventListener('click', (event) => controls.pointerLockControls.lock())
+document.getElementById('multiverse').addEventListener('click', (event) => controls.pointerLockControls.lock())
+document.getElementById('launch').addEventListener('click', (event) => {
+  event.preventDefault()
+  controls.pointerLockControls.lock()
+  document.getElementById('intro').className = 'fadeOut'
+  sequencer.launchNextSequence()
+})
 
 window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight)
@@ -182,3 +199,4 @@ function updatePositionInWormhole () {
 }
 
 animate()
+init()

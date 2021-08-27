@@ -4,13 +4,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Across The Multiverse - A web experience across the multiverse.</title>
-    <meta name="description" content="A web experience across the multiverse.">
+    <title>Across The Multiverse - An infinite, freely explorable, 3D game across the universe -and beyond- procedurally generated in-browser.</title>
+    <meta name="description" content="An infinite, freely explorable, 3D game across the universe -and beyond- procedurally generated in-browser.">
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 
     <meta property="og:type" content="website">
     <meta property="og:title" content="Across The Multiverse">
-    <meta property="og:description" content="A web experience across the multiverse.">
+    <meta property="og:description" content="An infinite, freely explorable, 3D game across the universe -and beyond- procedurally generated in-browser.">
     <meta property="og:url" content="https://www.across-multiverse.com/">
     <meta property="og:site_name" content="Across The Multiverse">
     <meta property="og:image" content="https://s3.eu-west-3.amazonaws.com/www.across-universe.com/misc/preview.jpg">
@@ -20,12 +20,47 @@
     <meta name="twitter:image" content="https://s3.eu-west-3.amazonaws.com/www.across-universe.com/misc/preview.jpg">
     <meta name="twitter:creator" content="@jesuisundev">
     <meta name="author" content="Mehdi ZOGHLAMI">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
 </head>
 
 <body id="global">
     <div id="blackwall"></div>
     <div id="whitewall"></div>
     <div id="story"></div>
+    <div id="intro">
+        <div id="title" class="fadeOut">
+            <h1 style="display: none;">Across The Multiverse</h1>
+            <!-- webpackIgnore: true -->
+            <img id="logo" src="/ui/logo.png" alt="Across The Multiverse" />
+        </div>
+        <div id="description" class="fadeOut">
+            <hr />
+            An infinite, freely explorable, 3D game across the universe -and beyond- procedurally generated in-browser.<br />
+            <strong>Go from universe to universe and discover the origin of everything.</strong><br />
+            A four chapter story with an epic revelation at the end.
+        </div>
+        <div id="notice" class="fadeOut">
+            <div id="sound">
+                <div class="dashed-circle">
+                    <div class="circle">
+                        <!-- webpackIgnore: true -->
+                        <img id="headphone" src="/ui/headphone.svg" alt="headphone" />
+                    </div>
+                </div>
+            </div>
+            <p id="turnup">
+                <strong>Turn up sound</strong> <br />before launch
+            </p>
+        </div>
+        <div id="entrypoint" class="fadeOut">
+            <img id="loading" src="https://i.stack.imgur.com/qq8AE.gif" width="32" />
+            <br />
+            <a id="launch" href="" class="fadeOut">
+                LAUNCH GAME
+            </a>
+        </div>
+    </div>
 </body>
 
 </html>

@@ -1,12 +1,12 @@
 * {
     margin: 0;
     padding: 0;
-    background: black;
 }
 
 html,
 body {
     overflow: hidden;
+    font-family: Roboto;
 }
 
 #multiverse {
@@ -56,4 +56,166 @@ body {
 
 .dg.ac {
     z-index: 9999 !important;
+}
+
+.fadeIn {
+    opacity: 1;
+}
+
+.fadeOut {
+    opacity: 0;
+}
+
+.centered {
+    z-index: 1;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+h1 {
+    font-size: 100px;
+    margin-bottom: 0;
+}
+
+h2 {
+    font-family: Roboto, Times New Roman;
+    font-size: 24px;
+    margin-top: 5px;
+}
+
+hr {
+    width: 190px;
+    margin: 10px auto 10px auto;
+    border: 0px;
+}
+
+#title,
+#launch,
+#notice,
+#entrypoint,
+#intro #description,
+.background-container {
+    -webkit-transition: opacity 2s;
+    -moz-transition: opacity 2s;
+    -o-transition: opacity 2s;
+    transition: opacity 2s;
+}
+
+#intro {
+    z-index: 101;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+    -webkit-transition: opacity 2s;
+    -moz-transition: opacity 2s;
+    -o-transition: opacity 2s;
+    transition: opacity 2s;
+}
+
+#intro #description {
+    font-family: Roboto, Times New Roman;
+    font-size: 15px;
+}
+
+#intro #description strong {
+    margin: 2px 0;
+    display: inline-block;
+}
+
+#intro .sound {
+    font-size: 35px;
+}
+
+#intro #launch {
+    font-size: 50px;
+    background-color: transparent;
+    font-family: Roboto;
+    padding: 25px 45px;
+    text-decoration: none;
+    font-size: 16px;
+    color: white;
+    border-radius: 10px;
+    letter-spacing: 5px;
+    border: 2px dashed white;
+    -webkit-transition: background-color 1s ease, color 1s ease;
+    -moz-transition: background-color 1s ease, color 1s ease;
+    -o-transition: background-color 1s ease, color 1s ease;
+    transition: background-color 1s ease, color 1s ease;
+}
+
+#intro #launch:hover {
+    background: #FFFFFF;
+    color: black;
+}
+
+#intro .soundOn {
+    width: 150px;
+}
+
+#sound {
+    width: 150px;
+    height: 150px;
+    margin: auto;
+    margin-top: 40px;
+}
+
+.dashed-circle {
+    position: relative;
+    margin: 20px;
+    height: 120px;
+    width: 120px;
+    border-radius: 50%;
+}
+
+.dashed-circle:before {
+    position: absolute;
+    content: '';
+    height: calc(100% + 10px);
+    width: calc(100% + 10px);
+    border: 2px dashed white;
+    top: 7px;
+    left: -13px;
+    border-radius: inherit;
+    animation: spin 10s linear infinite;
+}
+
+.circle {
+    position: relative;
+    margin: 20px;
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+}
+
+.circle:before {
+    position: absolute;
+    content: '';
+    height: calc(100% + 10px);
+    width: calc(100% + 10px);
+    border: 2px solid white;
+    top: 16px;
+    left: -23px;
+    border-radius: inherit;
+}
+
+#headphone {
+    position: absolute;
+    top: 32px;
+    left: 8px;
+}
+
+#turnup {
+    font-family: Roboto;
+    margin-bottom: 50px;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotateZ(360deg);
+    }
 }
