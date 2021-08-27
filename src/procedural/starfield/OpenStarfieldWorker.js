@@ -9,7 +9,8 @@ self.onmessage = messageEvent => {
 
   for (const clusterToPopulate of clustersToPopulate) {
     // first impressions are crucial
-    const verticesPassmin = clusterToPopulate === '0,0,0' ? starfieldParameters.vertices.pass.max : starfieldParameters.vertices.pass.min
+    const verticesPassmin = clusterToPopulate === '0,0,0' ? starfieldParameters.vertices.pass.max * 1.5 : starfieldParameters.vertices.pass.min
+    const verticesPassmax = clusterToPopulate === '0,0,0' ? starfieldParameters.vertices.pass.max * 1.5 : starfieldParameters.vertices.pass.max
 
     const brightStarsRandomAttributes = _getAttributesInRandomPosition(
       Math.floor(
@@ -27,7 +28,7 @@ self.onmessage = messageEvent => {
       Math.floor(
         starfieldParameters.budget * THREE.MathUtils.randFloat(
           verticesPassmin,
-          starfieldParameters.vertices.pass.max
+          verticesPassmax
         )
       ),
       clusterSize,
@@ -39,7 +40,7 @@ self.onmessage = messageEvent => {
       Math.floor(
         starfieldParameters.budget * THREE.MathUtils.randFloat(
           verticesPassmin,
-          starfieldParameters.vertices.pass.max
+          verticesPassmax
         )
       ),
       clusterSize,
@@ -51,7 +52,7 @@ self.onmessage = messageEvent => {
       Math.floor(
         starfieldParameters.budget * THREE.MathUtils.randFloat(
           verticesPassmin,
-          starfieldParameters.vertices.pass.max
+          verticesPassmax
         )
       ),
       clusterSize,

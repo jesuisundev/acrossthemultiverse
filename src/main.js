@@ -30,7 +30,7 @@ renderer.domElement.id = 'multiverse'
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : add UI -> arno
+// TODO : add UI -> arno - WIP
 // TODO : add music control - > mute
 // TODO : handle mobile control
 // TODO : detect clavier
@@ -62,15 +62,13 @@ let isRenderingClusterInProgress = false
 let previousElapsedTime = clock.getElapsedTime()
 
 
-// preload every needed files before showing anything
-library.preload()
-
 /**
  * Handle preload of assets and show launch call to action
  */
 async function init() {
+    library.preload()
+
     window.onload = () => {
-        needRender = true
         document.getElementById('loading').remove()
         document.getElementById('launch').className = 'fadeIn'
     }
@@ -88,6 +86,7 @@ document.addEventListener('keyup', (event) => controls.onKeyUp(event))
 document.getElementById('multiverse').addEventListener('click', (event) => controls.pointerLockControls.lock())
 document.getElementById('launch').addEventListener('click', (event) => {
   event.preventDefault()
+  needRender = true
   controls.pointerLockControls.lock()
   document.getElementById('intro').className = 'fadeOut'
   sequencer.launchNextSequence()

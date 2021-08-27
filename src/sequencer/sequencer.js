@@ -10,7 +10,6 @@ export default class Sequencer {
     this.grid = grid
     this.camera = camera
     this.postProcessor = postProcessor
-    this.controls = null
 
     this.wormhole = new Wormhole(this.scene, this.library, this.parameters)
     this.epiphany = new Epiphany(this.scene, this.library, this.parameters, this.camera, this)
@@ -61,11 +60,13 @@ export default class Sequencer {
       })
 
       await this.asyncWaitFor(2000)
+      document.getElementById('intro').remove()
 
       gsap.to(this.camera.rotation, { duration: 40, ease: 'Power0.easeNone', z: 0 })
 
       this.fadeOutWallById('#whitewall', 10, 'Power0.easeNone')
       await this.fadeOutWallById('#blackwall', 10, 'Power0.easeNone')
+      
       await this.showThenHideStory(this.parameters.story.chapterone[0])
       await this.showThenHideStory(this.parameters.story.chapterone[1], 0)
       await this.showThenHideStory(this.parameters.story.chapterone[2], 0)
