@@ -227,3 +227,49 @@ hr {
         transform: rotateZ(360deg);
     }
 }
+
+nav {
+    position: fixed;
+    bottom: 28px;
+    width: 100%;
+    z-index: 999;
+    z-index: 7;
+    opacity: 0;
+}
+
+nav #menu {
+    margin: auto;
+    padding: 12px 24px;
+    width: 480px;
+    height: 79px;
+    bottom: 15px;
+    background: linear-gradient(
+0deg
+, rgba(0, 0, 0, 0.2624) 62.66%, rgba(0, 0, 0, 0.1024) 114.44%);
+    box-shadow: 0px 0px 30px rgb(153 153 153 / 24%), 0px 0px 19.1111px rgb(10 12 15 / 15%), 0px 0px 4.88889px rgb(0 0 0 / 9%);
+    border-radius: 8px;
+}
+
+nav #menu .cell {
+    justify-content: center;
+    align-items: center;
+    width: 48px;
+    display: block;
+    height: 73px;
+    margin: 5px 10px;
+    float: left;
+    text-align: center;
+}
+
+nav #menu .cell .button {
+    background: white;
+    border-radius: 5px;
+    padding: 2px 0;
+}
+
+nav #menu .cell .description {
+    color: white;
+    font-size: 14px;
+    display: inline-block;
+    margin-top: 10px;
+}

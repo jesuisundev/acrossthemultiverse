@@ -50,7 +50,7 @@ export default class Sequencer {
       this.library.audio['ghosts'].play()
       this.library.audio['ghosts'].loop(true)
 
-      this.fadeOutWallById('#blackwall', 0)
+      this.fadeOutById('#blackwall', 0)
     } else {
       this.stopAllSounds()
       this.library.audio['transcendent'].play()
@@ -64,13 +64,14 @@ export default class Sequencer {
 
       gsap.to(this.camera.rotation, { duration: 40, ease: 'Power0.easeNone', z: 0 })
 
-      this.fadeOutWallById('#whitewall', 10, 'Power0.easeNone')
-      await this.fadeOutWallById('#blackwall', 10, 'Power0.easeNone')
+      this.fadeOutById('#whitewall', 10, 'Power0.easeNone')
+      await this.fadeOutById('#blackwall', 10, 'Power0.easeNone')
       
       await this.showThenHideStory(this.parameters.story.chapterone[0])
       await this.showThenHideStory(this.parameters.story.chapterone[1], 0)
       await this.showThenHideStory(this.parameters.story.chapterone[2], 0)
       await this.showThenHideStory(this.parameters.story.chapterone[3], 0)
+      await this.fadeInById('#nav', 2, 'Power0.easeNone')
     }
 
     window.sequencer.active = false
@@ -83,8 +84,8 @@ export default class Sequencer {
       this.library.audio['discovery'].play()
       this.library.audio['discovery'].loop(true)
 
-      this.fadeOutWallById('#whitewall', 0)
-      this.fadeOutWallById('#blackwall', 0)
+      this.fadeOutById('#whitewall', 0)
+      this.fadeOutById('#blackwall', 0)
     } else {
       this.stopAllSounds()
       this.library.audio['discovery'].play()
@@ -95,11 +96,12 @@ export default class Sequencer {
       await this.asyncWaitFor(2000)
 
       this.onEnteringUniverse()
-      await this.fadeOutWallById('#whitewall', 10, 'Power0.easeNone')
+      await this.fadeOutById('#whitewall', 10, 'Power0.easeNone')
       await this.showThenHideStory(this.parameters.story.chaptertwo[0])
       await this.showThenHideStory(this.parameters.story.chaptertwo[1], 0)
       await this.showThenHideStory(this.parameters.story.chaptertwo[2], 0)
       await this.showThenHideStory(this.parameters.story.chaptertwo[3], 0)
+      await this.fadeInById('#nav', 2, 'Power0.easeNone')
     }
   
     window.sequencer.active = false
@@ -115,8 +117,8 @@ export default class Sequencer {
       this.camera.far = 20000
       this.camera.updateProjectionMatrix()
 
-      this.fadeOutWallById('#whitewall', 0)
-      this.fadeOutWallById('#blackwall', 0)
+      this.fadeOutById('#whitewall', 0)
+      this.fadeOutById('#blackwall', 0)
     } else {
       this.stopAllSounds()
       this.library.audio['celestial'].play()
@@ -129,11 +131,12 @@ export default class Sequencer {
       await this.asyncWaitFor(2000)
 
       this.onEnteringUniverse()
-      await this.fadeOutWallById('#whitewall', 10, 'Power0.easeNone')
+      await this.fadeOutById('#whitewall', 10, 'Power0.easeNone')
       await this.showThenHideStory(this.parameters.story.chapterthree[0])
       await this.showThenHideStory(this.parameters.story.chapterthree[1], 0)
       await this.showThenHideStory(this.parameters.story.chapterthree[2], 0)
       await this.showThenHideStory(this.parameters.story.chapterthree[3], 0)
+      await this.fadeInById('#nav', 2, 'Power0.easeNone')
     }
 
     window.sequencer.active = false
@@ -153,8 +156,8 @@ export default class Sequencer {
 
       this.epiphany.generate()
 
-      this.fadeOutWallById('#whitewall', 0)
-      this.fadeOutWallById('#blackwall', 0)
+      this.fadeOutById('#whitewall', 0)
+      this.fadeOutById('#blackwall', 0)
     
       await this.epiphany.animate()
     } else {
@@ -182,7 +185,9 @@ export default class Sequencer {
 
     this.stopAllSounds()
 
-    await this.fadeInWallById('#blackwall', 0.2)
+    await this.fadeInById('#blackwall', 0.2)
+    document.querySelector('#nav').style.zIndex = 7
+    document.querySelector('#nav').style.opacity = 0
 
     this.resetScene()
 
@@ -195,11 +200,11 @@ export default class Sequencer {
     this.wormhole.active()
 
     this.startSoundByTitle('wormhole')
-    this.fadeOutWallById('#blackwall', 0.5)
+    this.fadeOutById('#blackwall', 0.5)
 
     await this.wormhole.animate()
 
-    await this.fadeInWallById('#whitewall', 1)
+    await this.fadeInById('#whitewall', 1)
 
     this.camera.near = 100
     this.camera.updateProjectionMatrix()
@@ -218,7 +223,7 @@ export default class Sequencer {
   // you are not supposed to be here, as a matter of fact, you're not
   async borealis () {
     window.sequencer.active = true
-    this.fadeOutWallById('#blackwall', 0)
+    this.fadeOutById('#blackwall', 0)
     this.stopAllSounds()
     this.library.audio['borealis'].play()
     this.library.audio['borealis'].on('end', () => {
@@ -229,7 +234,7 @@ export default class Sequencer {
     })
   }
 
-  async fadeInWallById (id, duration = 2, ease = 'power2.out') {
+  async fadeInById (id, duration = 2, ease = 'power2.out') {
     const element = document.querySelector(id)
 
     element.style.opacity = 0
@@ -242,7 +247,7 @@ export default class Sequencer {
     }).then(() => true)
   }
 
-  async fadeOutWallById (id, duration = 2, ease = 'power2.out') {
+  async fadeOutById (id, duration = 2, ease = 'power2.out') {
     const element = document.querySelector(id)
 
     element.style.opacity = 1

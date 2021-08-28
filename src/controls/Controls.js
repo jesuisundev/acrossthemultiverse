@@ -16,6 +16,9 @@ export default class Controls {
     this.moveBackward = false
     this.moveLeft = false
     this.moveRight = false
+
+    this.uiVisible = true
+    this.toggleUiInProgress = false
   }
 
   onKeyDown (event) {
@@ -38,6 +41,9 @@ export default class Controls {
         break
       case 'KeyF':
         this.sequencer.wormholeSequence()
+        break
+      case 'KeyH':
+        this.toggleUi()
         break
     }
   }
@@ -101,5 +107,21 @@ export default class Controls {
             resolve()
         }, fadeInTime)
     })
+  }
+
+  async toggleUi() {
+    if (this.toggleUiInProgress) return
+
+    this.toggleUiInProgress = true
+
+    if (this.uiVisible) {
+      await this.sequencer.fadeOutById('#nav', 2, 'Power0.easeNone')
+      this.uiVisible = false
+    } else {
+      await this.sequencer.fadeInById('#nav', 2, 'Power0.easeNone')
+      this.uiVisible = true
+    }
+
+    this.toggleUiInProgress = false
   }
 }

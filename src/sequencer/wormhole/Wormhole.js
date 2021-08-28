@@ -11,16 +11,7 @@ export default class Wormhole {
   }
 
   generate () {
-    const curveShape = 500
-    const random = Math.random()
-
-    if (random < 0.33) {
-      window.wormhole.shape = new Curves.TorusKnot(curveShape)
-    } else if (random < 0.66) {
-      window.wormhole.shape = new Curves.CinquefoilKnot(curveShape)
-    } else {
-      window.wormhole.shape = new Curves.TrefoilKnot(curveShape)
-    }
+    window.wormhole.shape = new Curves.TorusKnot(500)
 
     this.library.textures.wormhole.galaxy[0].wrapS = THREE.RepeatWrapping
     this.library.textures.wormhole.galaxy[0].wrapT = THREE.MirroredRepeatWrapping

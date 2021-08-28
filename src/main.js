@@ -31,6 +31,11 @@ document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
 // TODO : add UI -> arno - WIP
+// TODO : S BECOME F UI
+// TODO : ADD ONE CHAPTER
+// TODO ONLY ONE WORMHOLE
+// TODO : FILAMENT FAR AWAY VIEW AND FILAMENT CLOUD
+// TODO :  WHITE FADE ON END
 // TODO : add music control - > mute
 // TODO : handle mobile control
 // TODO : detect clavier

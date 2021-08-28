@@ -149,7 +149,7 @@ export default class Epiphany {
       .to(this.camera.rotation, { duration: 70, z: 3.0517609576969265 }, 70)
 
     // parallel story telling
-    await this.sequencer.fadeOutWallById('#whitewall', 10, 'Power0.easeNone')
+    await this.sequencer.fadeOutById('#whitewall', 10, 'Power0.easeNone')
     await this.sequencer.showThenHideStory(this.parameters.story.epiphany[0])
     await this.sequencer.showThenHideStory(this.parameters.story.epiphany[1], 0)
     await this.sequencer.showThenHideStory(this.parameters.story.epiphany[2], 0)
