@@ -60,7 +60,8 @@ export default class Sequencer {
       })
 
       await this.asyncWaitFor(2000)
-      document.getElementById('intro').remove()
+      const introElement = document.getElementById('intro')
+      if(introElement) introElement.remove()
 
       gsap.to(this.camera.rotation, { duration: 40, ease: 'Power0.easeNone', z: 0 })
 
