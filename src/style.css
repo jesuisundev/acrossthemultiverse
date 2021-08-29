@@ -273,3 +273,214 @@ nav #menu .cell .description {
     display: inline-block;
     margin-top: 10px;
 }
+
+#credits {
+    z-index: 9999;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color:black;
+    text-align: center;
+    border-radius: 12px;
+    padding: 24px;
+    width: 456px;
+    height: 500px;
+    -webkit-transition: opacity 2s;
+    -moz-transition: opacity 2s;
+    -o-transition: opacity 2s;
+    transition: opacity 2s;
+}
+
+#credits .title {
+    background: #EFF3F5;
+    width: 406px;
+    margin: auto;
+    border-radius: 12px 12px 0 0;
+    padding: 10px 0;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #050A18;
+}
+
+#credits .content {
+    background: white;
+    border-radius: 12px;
+}
+
+#credits .content #share {
+    width: 408px;
+    background: #EFF3F5;
+    border-radius: 8px;
+    padding: 12px 0;
+    margin: auto;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 29px;
+    text-align: center;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #050A18;
+}
+
+#credits .content #creator {
+    width: 408px;
+    padding: 14px 0;
+    margin: auto;
+}
+
+#credits .content #source {
+    color:black;
+}
+
+#credits .content #creator h3, #credits .content #music h3 {
+    margin: auto;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 29px;
+    text-align: center;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #050A18;
+}
+
+#credits .content #creator .content {
+    margin: 15px 0 0 0;
+    padding: 0 45px;
+}
+
+#credits .content #creator #picture {
+    float: left;
+    width: 150px;
+}
+
+#credits .content #creator #picture img {
+    width: 130px;
+    border-radius: 130px;
+}
+
+#credits .content #creator #contact {
+    float: left;
+    height: 100px;
+    width: 150px;
+    margin-top: 20px;
+}
+
+#credits .content #creator #contact h4 {
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 29px;
+    text-align: center;
+    color: #050A18;
+}
+
+#credits .content #creator #contact ul {
+    padding-top: 5px;
+    width: 75px;
+    margin: auto;
+}
+
+#credits .content #creator #contact ul li {
+    float: left;
+    list-style-type: none;
+    margin: 0 5px;
+}
+
+#credits .content #creator #contact ul li a {
+    color: #000;
+}
+
+#credits .content #music {
+    font-size: 15px;
+}
+
+#credits .content #music p.cc {
+    padding-bottom: 15px;
+}
+
+#credits .content #music p.cc a {
+    color:black;
+}
+
+#credits .content #music ul {
+    padding: 0 0 15px 0;
+}
+
+#credits .content #music ul li {
+    list-style-type: none;
+}
+
+#credits .content #music ul li a {
+    color:black;
+}
+
+.bwp-single-post-share {
+    border-top: 1px solid #eeefef;
+    border-top-color: #2e3034;
+    padding-top: 20px;
+    width: 100%;
+    margin: 25px 0;
+    text-align: left;
+    display: inline-block;
+    min-height: 1px;
+}
+
+.bwp-single-post-share-list {
+    margin: 10px 0 0 0;
+    display: inline-block;
+}
+
+.list-unstyled {
+    padding-left: 0;
+    list-style: none;
+}
+
+.bwp-single-post-share-list li {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.bwp-single-post-share-list .bwp-twitter-share {
+    background-color: #43b1ff;
+}
+
+.bwp-single-post-share-list .bwp-facebook-share {
+    background-color: #7b9be0;
+}
+
+.bwp-single-post-share-list .bwp-messenger-share {
+    background-color: #0e76a8;
+}
+
+.bwp-single-post-share-list .bwp-whatapp-share {
+    background-color: #44c654;
+}
+
+.bwp-single-post-share-list .bwp-linkedin-share {
+    background-color: #0e76a8;
+}
+
+.bwp-single-post-share-list .bwp-reddit-share {
+    background-color: #fe5f40;
+}
+
+.bwp-single-post-share-list li a {
+    display: inline-block;
+    width: 49px;
+    height: 49px;
+    line-height: 49px;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: #fff;
+    border-radius: 50%;
+}
+
+.bwp-single-post-share-list li a i {
+    padding-left: 3px;
+}
