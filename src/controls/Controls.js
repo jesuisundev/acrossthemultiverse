@@ -22,50 +22,57 @@ export default class Controls {
   }
 
   onKeyDown (event) {
-    switch (event.code) {
-      case 'ArrowUp':
-      case 'KeyW':
-        this.moveForward = true
-        break
-      case 'ArrowLeft':
-      case 'KeyA':
-        this.moveLeft = true
-        break
-      case 'ArrowDown':
-      case 'KeyS':
-        this.moveBackward = true
-        break
-      case 'ArrowRight':
-      case 'KeyD':
-        this.moveRight = true
-        break
-      case 'KeyF':
-        this.sequencer.wormholeSequence()
-        break
-      case 'KeyH':
-        this.toggleUi()
-        break
+    if (this.pointerLockControls.isLocked) {
+      switch (event.code) {
+        case 'ArrowUp':
+        case 'KeyW':
+          this.moveForward = true
+          break
+        case 'ArrowLeft':
+        case 'KeyA':
+          this.moveLeft = true
+          break
+        case 'ArrowDown':
+        case 'KeyS':
+          this.moveBackward = true
+          break
+        case 'ArrowRight':
+        case 'KeyD':
+          this.moveRight = true
+          break
+        case 'KeyF':
+          this.sequencer.wormholeSequence()
+          break
+        case 'KeyH':
+          this.toggleUi()
+          break
+        case 'KeyC':
+          this.toggleCredits()
+          break
+      }
     }
   }
 
   onKeyUp (event) {
-    switch (event.code) {
-      case 'ArrowUp':
-      case 'KeyW':
-        this.moveForward = false
-        break
-      case 'ArrowLeft':
-      case 'KeyA':
-        this.moveLeft = false
-        break
-      case 'ArrowDown':
-      case 'KeyS':
-        this.moveBackward = false
-        break
-      case 'ArrowRight':
-      case 'KeyD':
-        this.moveRight = false
-        break
+    if (this.pointerLockControls.isLocked) {
+      switch (event.code) {
+        case 'ArrowUp':
+        case 'KeyW':
+          this.moveForward = false
+          break
+        case 'ArrowLeft':
+        case 'KeyA':
+          this.moveLeft = false
+          break
+        case 'ArrowDown':
+        case 'KeyS':
+          this.moveBackward = false
+          break
+        case 'ArrowRight':
+        case 'KeyD':
+          this.moveRight = false
+          break
+      }
     }
   }
 
@@ -110,7 +117,7 @@ export default class Controls {
   }
 
   async toggleUi() {
-    if (this.toggleUiInProgress) return
+    if (this.toggleUiInProgress || window.sequencer.active) return
 
     this.toggleUiInProgress = true
 
@@ -123,5 +130,21 @@ export default class Controls {
     }
 
     this.toggleUiInProgress = false
+  }
+
+  async toggleCredits() {
+    if (this.toggleCreditsInProgress || window.sequencer.active) return
+
+    this.toggleCreditsInProgress = true
+
+    if (this.creditsVisible) {
+      await this.sequencer.fadeOutById('#credits', 2, 'Power0.easeNone')
+      this.creditsVisible = false
+    } else {
+      await this.sequencer.fadeInById('#credits', 2, 'Power0.easeNone')
+      this.creditsVisible = true
+    }
+
+    this.toggleCreditsInProgress = false
   }
 }

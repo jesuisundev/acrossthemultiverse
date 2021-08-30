@@ -275,8 +275,9 @@ nav #menu .cell .description {
 }
 
 #credits {
-    z-index: 9999;
+    z-index: 7;
     position: fixed;
+    opacity: 0;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -286,10 +287,6 @@ nav #menu .cell .description {
     padding: 24px;
     width: 456px;
     height: 500px;
-    -webkit-transition: opacity 2s;
-    -moz-transition: opacity 2s;
-    -o-transition: opacity 2s;
-    transition: opacity 2s;
 }
 
 #credits .title {
@@ -315,7 +312,7 @@ nav #menu .cell .description {
 #credits .content #share {
     width: 408px;
     background: #EFF3F5;
-    border-radius: 8px;
+    border-radius: 8px 8px 0px 0px;
     padding: 12px 0;
     margin: auto;
     font-weight: bold;
@@ -331,6 +328,7 @@ nav #menu .cell .description {
     width: 408px;
     padding: 14px 0;
     margin: auto;
+    box-shadow: 0px 3.08148px 12.7407px rgba(11, 13, 35, 0.0728889), 0px 0.651852px 3.25926px rgba(11, 13, 35, 0.0471111);
 }
 
 #credits .content #source {
@@ -338,7 +336,7 @@ nav #menu .cell .description {
 }
 
 #credits .content #creator h3, #credits .content #music h3 {
-    margin: auto;
+    margin: auto auto 10px auto;
     font-weight: bold;
     font-size: 24px;
     line-height: 29px;
@@ -349,7 +347,6 @@ nav #menu .cell .description {
 }
 
 #credits .content #creator .content {
-    margin: 15px 0 0 0;
     padding: 0 45px;
 }
 
@@ -396,10 +393,11 @@ nav #menu .cell .description {
 
 #credits .content #music {
     font-size: 15px;
-}
-
-#credits .content #music p.cc {
-    padding-bottom: 15px;
+    background: #EFF3F5;
+    border-radius: 8px;
+    width: 408px;
+    padding: 12px 0;
+    margin:auto;
 }
 
 #credits .content #music p.cc a {

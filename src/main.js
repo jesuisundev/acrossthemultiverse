@@ -31,11 +31,10 @@ document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
 // TODO : add UI -> arno - WIP
-// TOGGLE CREDITS
 // TODO : S BECOME F UI
+// TODO : add music control - > mute
 // TODO : ADD ONE CHAPTER
 // TODO : FILAMENT FAR AWAY VIEW AND FILAMENT CLOUD
-// TODO : add music control - > mute
 // TODO : handle mobile control
 // TODO : detect clavier
 // TODO : TECHNICAL TEST - FIX perf and bugs
