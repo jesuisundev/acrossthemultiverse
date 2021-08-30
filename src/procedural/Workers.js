@@ -203,6 +203,17 @@ export default class Workers {
 
     this.workersDistribution[3] = [
       {
+        chances: 90,
+        worker: this.openStarfieldWorker
+      },
+      {
+        chances: 10,
+        worker: this.blackholeWorker
+      }
+    ]
+
+    this.workersDistribution[4] = [
+      {
         chances: 100,
         worker: this.openStarfieldWorker
       }

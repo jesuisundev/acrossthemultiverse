@@ -21,6 +21,7 @@ export default class Parameters {
         0x000000,
         0x000000,
         0x000000,
+        0x00008B,
         0x000000
       ]
     }
@@ -77,8 +78,14 @@ export default class Parameters {
       ],
       chapterthree: [
         "FILAMENTS<br /><span class='chapter'>chapter 3</span>",
-        "Physics laws have heavily changed.",
+        "Physics laws have greatly changed.",
         "Find a supermassive black hole and go to the next universe.",
+        "Epiphany awaits."
+      ],
+      chapterfour: [
+        "FRONTIERS<br /><span class='chapter'>chapter 4</span>",
+        "Physics laws have heavily changed.",
+        "You are close to the origin.",
         "Epiphany awaits."
       ],
       epiphany: [
@@ -133,6 +140,7 @@ export default class Parameters {
     this.setMattersChapterOne()
     this.setMattersChapterTwo()
     this.setMattersChapterThree()
+    this.setMattersChapterFour()
     this.setMattersEpiphany()
   }
 
@@ -535,36 +543,6 @@ export default class Parameters {
 
     this.matters[1].starfield.vertices.bright = { min: 0.001, max: 0.01 }
     this.matters[1].starfield.material.size.pass = { min: 70, max: 80 }
-    this.matters[1].starfield.vertices.colors = [
-      '#0C8D9F',
-      '#F9EF2E',
-      '#08F7FE',
-      '#09FBD3',
-      '#FE53BB',
-      '#F5D300',
-      '#FFACFC',
-      '#F148FB',
-      '#FF2281',
-      '#FDC7D7',
-      '#E8E500',
-      '#4deeea',
-      '#00FECA',
-      '#FFD300',
-      '#E847AE',
-      '#13CA91',
-      '#FF9472',
-      '#FFDEF3',
-      '#FF61BE',
-      '#F85125',
-      '#EBF875',
-      '#28CF75',
-      '#FE6B35',
-      '#CE0000',
-      '#7FFF00',
-      '#E92EFB',
-      '#74ee15'
-    ]
-    this.matters[1].starfield.vertices.globularColors = this.matters[1].starfield.vertices.colors
 
     this.matters[1].nebula.cloud = { min: 0.20, max: 0.30 }
     this.matters[1].nebula.bright = { min: 0.0002, max: 0.002 }
@@ -619,7 +597,15 @@ export default class Parameters {
     }
   }
 
-  setMattersEpiphany() {
+  setMattersChapterFour() {
     this.matters[3] = JSON.parse(JSON.stringify(this.matters[0]))
+
+    this.matters[3].starfield.colors = ['#FFFFFF']
+    this.matters[3].starfield.globularColors = ['#FFFFFF']
+    this.matters[3].starfield.material.size.pass = { min: 100, max: 100 }
+  }
+
+  setMattersEpiphany() {
+    this.matters[4] = JSON.parse(JSON.stringify(this.matters[0]))
   }
 }

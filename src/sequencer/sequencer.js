@@ -32,8 +32,12 @@ export default class Sequencer {
       case 2:
         await this.chapterThreeSequence(skipped)
         break
-
+      
       case 3:
+        await this.chapterFourSequence(skipped)
+        break
+
+      case 4:
         await this.epiphanySequence(skipped)
         break
 
@@ -139,6 +143,47 @@ export default class Sequencer {
     window.sequencer.active = false
   }
 
+  async chapterFourSequence (skipped = false) {
+    if (skipped) {
+      this.camera.rotation.z = 0
+
+      this.library.audio['omega'].play()
+      this.library.audio['omega'].loop(true)
+
+      this.scene.background = "#00008B"
+      this.camera.far = 200000
+      this.camera.updateProjectionMatrix()
+      this.postProcessor.updateProcessingRenderer()
+
+      this.fadeOutById('#whitewall', 0)
+      this.fadeOutById('#blackwall', 0)
+    } else {
+      this.stopAllSounds()
+      this.library.audio['omega'].play()
+      this.library.audio['omega'].loop(true)
+
+      this.scene.background = "#00008B"
+      this.camera.far = 200000
+      this.camera.updateProjectionMatrix()
+      this.postProcessor.updateProcessingRenderer()
+
+      this.changeUniverse()
+      
+      await this.asyncWaitFor(2000)
+
+      this.onEnteringUniverse()
+      this.fadeOutById('#blackwall', 0)
+      await this.fadeOutById('#whitewall', 10, 'Power0.easeNone')
+      await this.showThenHideStory(this.parameters.story.chapterfour[0])
+      await this.showThenHideStory(this.parameters.story.chapterfour[1], 0)
+      await this.showThenHideStory(this.parameters.story.chapterfour[2], 0)
+      await this.showThenHideStory(this.parameters.story.chapterfour[3], 0)
+      await this.fadeInById('#nav', 2, 'Power0.easeNone')
+    }
+
+    window.sequencer.active = false
+  }
+
   async epiphanySequence (skipped = false) {
     window.sequencer.active = true
 
@@ -161,6 +206,7 @@ export default class Sequencer {
       this.stopAllSounds()
       this.library.audio['intothenight'].play()
 
+      this.scene.background = "#000000"
       this.camera.far = 60000
       this.camera.updateProjectionMatrix()
       this.resetScene()
@@ -191,6 +237,7 @@ export default class Sequencer {
 
     if(window.epiphany) window.epiphany.dispose()
 
+    this.scene.background = "#000000"
     this.camera.near = 0.01
     this.camera.updateProjectionMatrix()
 

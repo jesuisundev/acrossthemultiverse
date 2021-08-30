@@ -74,12 +74,31 @@ self.onmessage = messageEvent => {
 function _getAttributesInRandomPosition (max, clusterSize, parameters, currentUniverse = 0) {
   const positions = []
   const colors = []
+  let x, y, z, alpha, theta
 
   for (let i = 0; i < max; i++) {
-    // creating coordinate for the particles in random positions but confined in the current square cluster
-    const x = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
-    const y = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
-    const z = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
+    if(currentUniverse === 3) {
+      if(Math.random() > 0.5) {
+        // spheric cluster
+        alpha = Math.random()*(Math.PI)
+        theta = Math.random()*(Math.PI*2)
+        x = clusterSize * (Math.cos(alpha) * Math.sin(theta)) - (clusterSize / 2)
+        y = clusterSize * (Math.sin(alpha) * Math.sin(theta)) - (clusterSize / 2)
+        z = clusterSize * (Math.cos(theta)) - (clusterSize / 2)
+      } else {
+        // octo cluster
+        alpha = Math.random()*(Math.PI*2)-(Math.random()*Math.PI*2)
+        theta = Math.random()*(Math.PI)-(Math.random()*Math.PI*2)
+        x = clusterSize * (Math.pow(Math.cos(alpha)*Math.cos(theta), 3)) - (clusterSize / 2)
+        y = clusterSize * (Math.pow(Math.sin(alpha)*Math.cos(theta), 3))
+        z = clusterSize * (Math.pow(Math.sin(theta), 3)) - (clusterSize / 2)
+      }
+    } else {
+      // random positions but confined in the current square cluster
+      x = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
+      y = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
+      z = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
+    }
 
     positions.push(x, y, z)
     const color = new THREE.Color(

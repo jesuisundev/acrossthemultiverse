@@ -60,6 +60,7 @@ export default class Library {
           { title: 'wormhole', src: 'wormhole.mp3' },
           { title: 'discovery', src: 'discovery.mp3' },
           { title: 'celestial', src: 'celestial.mp3' },
+          { title: 'omega', src: 'omega.mp3' },
           { title: 'intothenight', src: 'intothenight.mp3' },
           { title: 'borealis', src: 'borealis.mp3' }
         ]

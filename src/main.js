@@ -30,7 +30,7 @@ renderer.domElement.id = 'multiverse'
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : ADD ONE CHAPTER
+// TODO : background chapter4 fix it ?
 // TODO : handle mobile control
 // TODO : detect clavier
 // TODO : TECHNICAL TEST - FIX perf and bugs
@@ -53,7 +53,7 @@ const sequencer = new Sequencer(scene, library, parameters, grid, camera, postPr
 const controls = new Controls(camera, parameters, sequencer, library)
 window.controls = controls
 
-const skipIntro = true
+const skipIntro = false
 
 let lastClusterPosition
 let needRender = false
@@ -100,7 +100,7 @@ window.addEventListener('resize', () => {
 
 // i'm lazy, we could refactor some code and avoid globals
 function setDefaultGlobal() {
-  window.currentUniverse = 2
+  window.currentUniverse = 0
   window.materialsToUpdate = {}
   window.meshesToUpdate = {}
   window.wormhole = { shape: null, CameraPositionIndex: 0, speed: parameters.wormhole.speed, active: false }
