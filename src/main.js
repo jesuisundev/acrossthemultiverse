@@ -30,11 +30,7 @@ renderer.domElement.id = 'multiverse'
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : add UI -> arno - WIP
-// TODO : S BECOME F UI
-// TODO : add music control - > mute
 // TODO : ADD ONE CHAPTER
-// TODO : FILAMENT FAR AWAY VIEW AND FILAMENT CLOUD
 // TODO : handle mobile control
 // TODO : detect clavier
 // TODO : TECHNICAL TEST - FIX perf and bugs
@@ -54,10 +50,10 @@ const library = new Library()
 const grid = new Grid(camera, parameters, scene, library)
 const postProcessor = new PostProcessor(camera, scene, parameters, renderer)
 const sequencer = new Sequencer(scene, library, parameters, grid, camera, postProcessor)
-const controls = new Controls(camera, parameters, sequencer)
-sequencer.controls = controls
+const controls = new Controls(camera, parameters, sequencer, library)
+window.controls = controls
 
-const skipIntro = false
+const skipIntro = true
 
 let lastClusterPosition
 let needRender = false
@@ -102,12 +98,13 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix()
 })
 
+// i'm lazy, we could refactor some code and avoid globals
 function setDefaultGlobal() {
-  window.currentUniverse = 0
+  window.currentUniverse = 2
   window.materialsToUpdate = {}
   window.meshesToUpdate = {}
   window.wormhole = { shape: null, CameraPositionIndex: 0, speed: parameters.wormhole.speed, active: false }
-  window.sequencer = { active: false}
+  window.sequencer = { active: false }
 }
 
 function animate () {

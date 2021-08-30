@@ -115,9 +115,6 @@ export default class Sequencer {
       this.library.audio['celestial'].play()
       this.library.audio['celestial'].loop(true)
 
-      this.camera.far = 20000
-      this.camera.updateProjectionMatrix()
-
       this.fadeOutById('#whitewall', 0)
       this.fadeOutById('#blackwall', 0)
     } else {
@@ -125,13 +122,12 @@ export default class Sequencer {
       this.library.audio['celestial'].play()
       this.library.audio['celestial'].loop(true)
 
-      this.camera.far = 20000
-      this.camera.updateProjectionMatrix()
       this.changeUniverse()
 
       await this.asyncWaitFor(2000)
 
       this.onEnteringUniverse()
+      this.fadeOutById('#blackwall', 0)
       await this.fadeOutById('#whitewall', 10, 'Power0.easeNone')
       await this.showThenHideStory(this.parameters.story.chapterthree[0])
       await this.showThenHideStory(this.parameters.story.chapterthree[1], 0)
@@ -186,6 +182,7 @@ export default class Sequencer {
 
     this.stopAllSounds()
 
+    this.fadeOutById('#credits', 0.1)
     await this.fadeInById('#blackwall', 0.2)
     document.querySelector('#nav').style.zIndex = 7
     document.querySelector('#nav').style.opacity = 0

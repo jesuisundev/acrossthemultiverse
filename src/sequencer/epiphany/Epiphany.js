@@ -141,14 +141,21 @@ export default class Epiphany {
 
     // second step, diving to epiphany
     this.epiphanyTimeline
-      .to(this.camera.position, { duration: 70, x: 43502.35769250616 }, 70)
-      .to(this.camera.position, { duration: 70, y: 2601.9461793450773 }, 70)
-      .to(this.camera.position, { duration: 70, z: 40744.89427643778 }, 70)
-      .to(this.camera.rotation, { duration: 70, x: 3.0245027035506347 }, 70)
-      .to(this.camera.rotation, { duration: 70, y: -0.8722113376562891 }, 70)
-      .to(this.camera.rotation, { duration: 70, z: 3.0517609576969265 }, 70)
+      .to(this.camera.position, { duration: 70, x: 43502.35769250616 }, 65)
+      .to(this.camera.position, { duration: 70, y: 2601.9461793450773 }, 65)
+      .to(this.camera.position, { duration: 70, z: 40744.89427643778 }, 65)
+      .to(this.camera.rotation, { duration: 70, x: 3.0245027035506347 }, 65)
+      .to(this.camera.rotation, { duration: 70, y: -0.8722113376562891 }, 65)
+      .to(this.camera.rotation, { duration: 70, z: 3.0517609576969265 }, 65)
+
+    // final step, across the multiverse
+    this.epiphanyTimeline
+      .to(this.camera.position, { duration: 600, x: 593635.3548790453 }, 120)
+      .to(this.camera.position, { duration: 600, y: 2601.946179 }, 120)
+      .to(this.camera.position, { duration: 600, z: 495067.01445157954 }, 120)
 
     // parallel story telling
+    this.sequencer.fadeOutById('#blackwall', 10, 'Power0.easeNone')
     await this.sequencer.fadeOutById('#whitewall', 10, 'Power0.easeNone')
     await this.sequencer.showThenHideStory(this.parameters.story.epiphany[0])
     await this.sequencer.showThenHideStory(this.parameters.story.epiphany[1], 0)
@@ -160,8 +167,10 @@ export default class Epiphany {
     await this.sequencer.showThenHideStory(this.parameters.story.epiphany[7], 0)
     await this.sequencer.showThenHideStory(this.parameters.story.epiphany[8], 0)
     await this.sequencer.showThenHideStory(this.parameters.story.epiphany[9], 0)
+    await this.sequencer.asyncWaitFor(5000)
+    await this.sequencer.fadeInById('#credits', 2, 'Power0.easeNone')
 
-    // TODO : show credits
+    window.controls.pointerLockControls.unlock()
   }
 
   dispose () {

@@ -2,10 +2,11 @@ import { PointerLockControls } from './PointerLockControls.js'
 import * as THREE from 'three'
 
 export default class Controls {
-  constructor (camera, parameters, sequencer) {
+  constructor (camera, parameters, sequencer, library) {
     this.parameters = parameters
     this.camera = camera
     this.sequencer = sequencer
+    this.library = library
 
     this.pointerLockControls = new PointerLockControls(this.camera, document.body)
 
@@ -19,6 +20,12 @@ export default class Controls {
 
     this.uiVisible = true
     this.toggleUiInProgress = false
+
+    this.creditsVisible = false
+    this.toggleCreditsInProgress = false
+
+    this.soundMuted = false
+    this.toggleSoundInProgress = false
   }
 
   onKeyDown (event) {
@@ -51,6 +58,9 @@ export default class Controls {
           break
       }
     }
+
+    // sound control should be free or people will freak out
+    if(event.code === 'KeyM') this.toggleSound()
   }
 
   onKeyUp (event) {
@@ -146,5 +156,21 @@ export default class Controls {
     }
 
     this.toggleCreditsInProgress = false
+  }
+
+  async toggleSound() {
+    if (this.toggleSoundInProgress) return
+
+    this.toggleSoundInProgress = true
+
+    if (this.soundMuted) {
+      Object.keys(this.library.audio).forEach(key => this.library.audio[key].mute(false))
+      this.soundMuted = false
+    } else {
+      Object.keys(this.library.audio).forEach(key => this.library.audio[key].mute(true))
+      this.soundMuted = true
+    }
+
+    this.toggleSoundInProgress = false
   }
 }
