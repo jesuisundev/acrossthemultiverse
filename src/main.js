@@ -21,9 +21,11 @@ const scene = new THREE.Scene()
 scene.background = new THREE.Color(parameters.global.background[window.currentUniverse])
 scene.fog = new THREE.Fog(parameters.global.background[window.currentUniverse], parameters.global.camera.near, parameters.global.camera.far)
 
+const renderWidth = Math.floor(window.innerWidth / 1.2)
+const renderHeight = Math.floor(window.innerHeight / 1.2)
 const renderer = new THREE.WebGLRenderer(parameters.global.webGlRenderer)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-renderer.setSize(window.innerWidth, window.innerHeight)
+renderer.setSize(renderWidth, renderHeight)
 renderer.shadowMap.autoUpdate = false
 renderer.shadowMap.needsUpdate = true
 renderer.domElement.id = 'multiverse'
@@ -40,7 +42,7 @@ document.body.appendChild(renderer.domElement)
 // DEADLINE -> 13 sept
 const camera = new THREE.PerspectiveCamera(
   parameters.global.camera.fov, // can you fix the fov issue without sacrifying the wow effect ?
-  window.innerWidth / window.innerHeight,
+  renderWidth / renderHeight,
   parameters.global.camera.near,
   parameters.global.camera.far
 )
@@ -92,9 +94,9 @@ document.getElementById('launch').addEventListener('click', (event) => {
 })
 
 window.addEventListener('resize', () => {
-  renderer.setSize(window.innerWidth, window.innerHeight)
-  camera.aspect = window.innerWidth / window.innerHeight
-  postProcessor.composer.setSize(window.innerWidth, window.innerHeight)
+  renderer.setSize(renderWidth, renderHeight)
+  camera.aspect = renderWidth / renderHeight
+  postProcessor.composer.setSize(renderWidth, renderHeight)
   camera.updateProjectionMatrix()
 })
 

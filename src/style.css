@@ -15,6 +15,8 @@ body {
     left: 0;
     outline: none;
     z-index: 8;
+    width: 100% !important;
+    height: 100% !important;
 }
 
 #blackwall {
