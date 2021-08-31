@@ -150,7 +150,6 @@ export default class Sequencer {
       this.library.audio['omega'].play()
       this.library.audio['omega'].loop(true)
 
-      this.scene.background = "#00008B"
       this.camera.far = 200000
       this.camera.updateProjectionMatrix()
       this.postProcessor.updateProcessingRenderer()
@@ -162,10 +161,8 @@ export default class Sequencer {
       this.library.audio['omega'].play()
       this.library.audio['omega'].loop(true)
 
-      this.scene.background = "#00008B"
       this.camera.far = 200000
       this.camera.updateProjectionMatrix()
-      this.postProcessor.updateProcessingRenderer()
 
       this.changeUniverse()
       
@@ -191,6 +188,7 @@ export default class Sequencer {
       this.library.audio['intothenight'].play()
       this.library.audio['intothenight'].loop(true)
 
+      this.scene.background = "#000F34"
       this.camera.far = 60000
       this.camera.updateProjectionMatrix()
       this.resetScene()
@@ -206,7 +204,7 @@ export default class Sequencer {
       this.stopAllSounds()
       this.library.audio['intothenight'].play()
 
-      this.scene.background = "#000000"
+      this.scene.background = "#000F34"
       this.camera.far = 60000
       this.camera.updateProjectionMatrix()
       this.resetScene()

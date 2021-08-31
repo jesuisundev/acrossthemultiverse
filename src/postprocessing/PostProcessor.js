@@ -1,3 +1,4 @@
+import * as THREE from 'three'
 import * as dat from 'dat.gui'
 import * as POSTPROCESSING from 'postprocessing'
 
@@ -20,6 +21,7 @@ export default class PostProcessor {
 
   updateProcessingRenderer() {
     this.composer.reset()
+    this.renderer.setClearColor(new THREE.Color(this.parameters.global.background[window.currentUniverse]))
     this.composer = new POSTPROCESSING.EffectComposer(this.renderer)
     this.composer.addPass(new POSTPROCESSING.RenderPass(this.scene, this.camera))
     this.composer.addPass(this.getEffectPass(window.currentUniverse))

@@ -18,11 +18,11 @@ export default class Parameters {
       },
       clusterRenderTimeOut: 50,
       background: [
-        0x000000,
-        0x000000,
-        0x000000,
-        0x00008B,
-        0x000000
+        "#000000",
+        "#000000",
+        "#000000",
+        "#000F34",
+        "#000000"
       ]
     }
 
@@ -52,7 +52,7 @@ export default class Parameters {
     }
 
     this.controls = {
-      velocity: 1500.0,
+      velocity: 2000.0,
       speedLimit: {
         up: 5000.0,
         down: -5000.0
@@ -600,9 +600,9 @@ export default class Parameters {
   setMattersChapterFour() {
     this.matters[3] = JSON.parse(JSON.stringify(this.matters[0]))
 
-    this.matters[3].starfield.colors = ['#FFFFFF']
-    this.matters[3].starfield.globularColors = ['#FFFFFF']
-    this.matters[3].starfield.material.size.pass = { min: 100, max: 100 }
+    this.matters[3].starfield.colors = this.matters[1].nebula.colors.in
+    this.matters[3].starfield.globularColors = this.matters[1].nebula.colors.out
+    this.matters[3].starfield.material.size.pass = { min: 130, max: 130 }
   }
 
   setMattersEpiphany() {

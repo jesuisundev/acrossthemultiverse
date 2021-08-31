@@ -18,12 +18,12 @@ const parameters = new Parameters()
 setDefaultGlobal()
 
 const scene = new THREE.Scene()
-scene.background = new THREE.Color(parameters.global.background[window.currentUniverse])
 scene.fog = new THREE.Fog(parameters.global.background[window.currentUniverse], parameters.global.camera.near, parameters.global.camera.far)
 
 const renderWidth = Math.floor(window.innerWidth / 1.2)
 const renderHeight = Math.floor(window.innerHeight / 1.2)
 const renderer = new THREE.WebGLRenderer(parameters.global.webGlRenderer)
+renderer.setClearColor(new THREE.Color(parameters.global.background[window.currentUniverse]))
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 renderer.setSize(renderWidth, renderHeight)
 renderer.shadowMap.autoUpdate = false
@@ -32,13 +32,23 @@ renderer.domElement.id = 'multiverse'
 document.body.appendChild(renderer.domElement)
 
 // ROAD MAP
-// TODO : background chapter4 fix it ?
 // TODO : handle mobile control
 // TODO : detect clavier
 // TODO : TECHNICAL TEST - FIX perf and bugs
+// BC
+// - I would like the speed to significatively drop when I don't press any button.
+// - It was lagging on my big screen 27
+// - I did not find the blue black hole so I had to press f
+// - F11 BUTTON It would be so nice to have a real fullscreen mode like when you watch a video on YouTube you don't have the adress bar nor the tabs
+// Simon
+// Suggestion: Entre les niveau, reset le mouvement du joueur (je garde le même momentum)
+// Suggestion: Appuyer sur Space arrête le mouvement.
+// Suggestion: Bouton pour prendre un screenshot.
+// Physics should impact gameplay
+// Simon2
+// Weird collider that’s too close to the camera that obscures objects before they leave the field of view
+// Esc should say: Release Mouse Cursor
 // TODO : refactor clean up comment
-// EXTRA? : Elliptical galaxy, planetary nebula
-// TODO : push to cloudfare
 // DEADLINE -> 13 sept
 const camera = new THREE.PerspectiveCamera(
   parameters.global.camera.fov, // can you fix the fov issue without sacrifying the wow effect ?

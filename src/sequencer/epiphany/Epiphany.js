@@ -102,7 +102,7 @@ export default class Epiphany {
     return geometry
   }
 
-  _getEpiphanyMaterial (texture, enforcedSize, enforcedOpacity) {
+  _getEpiphanyMaterial (texture) {
     texture.magFilter = THREE.NearestFilter
 
     const material = new THREE.PointsMaterial({
