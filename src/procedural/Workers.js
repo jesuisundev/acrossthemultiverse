@@ -155,7 +155,7 @@ export default class Workers {
       },
       {
         chances: 4,
-        worker: this.whiteDwarfGiantWorker
+        worker: this.blackholeWorker
       },
       {
         chances: 2,
@@ -163,17 +163,17 @@ export default class Workers {
       },
       {
         chances: 1,
-        worker: this.blackholeWorker
+        worker: this.whiteDwarfGiantWorker
       }
     ]
 
     this.workersDistribution[1] = [
       {
-        chances: 40,
+        chances: 38,
         worker: this.globularStarfieldWorker
       },
       {
-        chances: 40,
+        chances: 38,
         worker: this.emissionNebulaWorker
       },
       {
@@ -185,18 +185,18 @@ export default class Workers {
         worker: this.supernovaRemnantsNebulaWorker
       },
       {
-        chances: 1,
+        chances: 5,
         worker: this.blackholeWorker
       }
     ]
 
     this.workersDistribution[2] = [
       {
-        chances: 99,
+        chances: 90,
         worker: this.spiralGalaxyWorker
       },
       {
-        chances: 1,
+        chances: 10,
         worker: this.blackholeWorker
       }
     ]
@@ -232,8 +232,25 @@ export default class Workers {
       currentProbability += workerDistributed.chances
 
       if (pourcentage < currentProbability) {
+        if (workerDistributed.worker.subtype === 'Blackhole' && !this.isClusterEligibleForBlackhole(clusterToPopulate))
+          return this.openStarfieldWorker.source
+
         return workerDistributed.worker.source
       }
     }
+  }
+
+  isClusterEligibleForBlackhole(clusterToPopulate) {
+    const coordinates = clusterToPopulate.split(',')
+
+    for(let coordinate of coordinates) {
+      coordinate = Number(coordinate)
+
+      if(coordinate > 2 || coordinate < -2) {
+        return true
+      }
+    }
+
+    return false
   }
 }

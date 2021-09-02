@@ -148,10 +148,10 @@ export default class Controls {
     this.toggleCreditsInProgress = true
 
     if (this.creditsVisible) {
-      await this.sequencer.fadeOutById('#credits', 2, 'Power0.easeNone')
+      await this.sequencer.fadeOutById('#credits', 0.3, 'Power0.easeNone')
       this.creditsVisible = false
     } else {
-      await this.sequencer.fadeInById('#credits', 2, 'Power0.easeNone')
+      await this.sequencer.fadeInById('#credits', 0.3, 'Power0.easeNone')
       this.creditsVisible = true
     }
 

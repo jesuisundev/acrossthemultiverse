@@ -16,11 +16,8 @@ import Sequencer from './sequencer/sequencer'
 //  - hide ui
 //  - reduce size font
 //  - reduce far and budgets
-// TODO : detect clavier
-// TODO : between level reset momentum
-// TODO : Toggle ui/credits more fast
-// TODO : refactor clean up comment
 // TODO : Analytics
+// TODO : refactor clean up comment
 // DEADLINE -> 13 sept
 
 const clock = new THREE.Clock()
@@ -57,8 +54,6 @@ const sequencer = new Sequencer(scene, library, parameters, grid, camera, postPr
 const controls = new Controls(camera, parameters, sequencer, library)
 window.controls = controls
 
-const skipIntro = false
-
 let lastClusterPosition
 let needRender = false
 let isRenderingClusterInProgress = false
@@ -66,15 +61,15 @@ let previousElapsedTime = clock.getElapsedTime()
 
 scene.add(controls.pointerLockControls.getObject())
 
-document.addEventListener('keydown', (event) => controls.onKeyDown(event))
-document.addEventListener('keyup', (event) => controls.onKeyUp(event))
-document.getElementById('multiverse').addEventListener('click', (event) => controls.pointerLockControls.lock())
-document.getElementById('launch').addEventListener('click', (event) => {
+document.addEventListener('keydown', event => controls.onKeyDown(event))
+document.addEventListener('keyup', event => controls.onKeyUp(event))
+document.getElementById('multiverse').addEventListener('click', event => controls.pointerLockControls.lock())
+document.getElementById('launch').addEventListener('click', event => {
   event.preventDefault()
   needRender = true
   controls.pointerLockControls.lock()
   document.getElementById('intro').className = 'fadeOut'
-  sequencer.launchNextSequence()
+  sequencer.launchNextSequence(false)
 })
 
 window.addEventListener('resize', () => {
