@@ -1,111 +1,107 @@
 'use strict'
 
-function MovementPad (container) {
-  let mouseDown = false
-  let eventRepeatTimeout
-  let newLeft, newTop, distance, angle
-  let self = this
+export default class MovementPad {
+  constructor(container) {
+    this.container = container
 
-  self.container = container
-  self.regionData = {}
-  self.handleData = {}
-  self.movementPad = $('<div class="movement-pad"></div>')
-  self.region = $('<div class="region"></div>')
-  self.handle = $('<div class="handle"></div>')
+    this.mouseDown = false
+    this.eventRepeatTimeout
+    this.newLeft
+    this.newTop
+    this.distance
+    this.angle
+    this.regionData = {}
+    this.handleData = {}
+    this.movementPad = document.getElementById('movement-pad')
+    this.region = document.getElementById('movement-pad-region')
+    this.handle = document.getElementById('movement-pad-handle')
 
-  self.movementPad.append(self.region).append(self.handle)
-  self.container.append(self.movementPad)
-
-  // Aligning pad:
-  self.movementPad.css({
-    top: self.container.find('canvas').height() + self.container.position().top - self.region.outerHeight() - 10,
-    left: 20
-  })
-
-  self.regionData.width = self.region.outerWidth()
-  self.regionData.height = self.region.outerHeight()
-  self.regionData.position = self.region.position()
-  self.regionData.offset = self.region.offset()
-  self.regionData.radius = self.regionData.width / 2
-  self.regionData.centerX = self.regionData.position.left + self.regionData.radius
-  self.regionData.centerY = self.regionData.position.top + self.regionData.radius
-
-  self.handleData.width = self.handle.outerWidth()
-  self.handleData.height = self.handle.outerHeight()
-  self.handleData.radius = self.handleData.width / 2
-
-  self.regionData.radius = self.regionData.width / 2 - self.handleData.radius
-
-  // Mouse events:
-  self.region.on('mousedown', function (event) {
-    mouseDown = true
-    self.handle.css('opacity', '1.0')
-    update(event.pageX, event.pageY)
-  })
-
-  $(document).on('mouseup', function () {
-    mouseDown = false
-    self.resetHandlePosition()
-  })
-
-  $(document).on('mousemove', function (event) {
-    if (!mouseDown) return
-    update(event.pageX, event.pageY)
-  })
-
-  // Touch events:
-  self.region.on('touchstart', function (event) {
-    mouseDown = true
-    self.handle.css('opacity', '1.0')
-    update(event.originalEvent.targetTouches[0].pageX, event.originalEvent.targetTouches[0].pageY)
-  })
-
-  $(document).on('touchend touchcancel', function () {
-    mouseDown = false
-    self.resetHandlePosition()
-  })
-
-  $(document).on('touchmove', function (event) {
-    if (!mouseDown) return
-    update(event.originalEvent.touches[0].pageX, event.originalEvent.touches[0].pageY)
-  })
-
-  function update (pageX, pageY) {
-    newLeft = (pageX - self.regionData.offset.left)
-    newTop = (pageY - self.regionData.offset.top)
-
-    // If handle reaches the pad boundaries.
-    distance = Math.pow(self.regionData.centerX - newLeft, 2) + Math.pow(self.regionData.centerY - newTop, 2)
-    if (distance > Math.pow(self.regionData.radius, 2)) {
-      angle = Math.atan2((newTop - self.regionData.centerY), (newLeft - self.regionData.centerX))
-      newLeft = (Math.cos(angle) * self.regionData.radius) + self.regionData.centerX
-      newTop = (Math.sin(angle) * self.regionData.radius) + self.regionData.centerY
-    }
-    newTop = Math.round(newTop * 10) / 10
-    newLeft = Math.round(newLeft * 10) / 10
-
-    self.handle.css({
-      top: newTop - self.handleData.radius,
-      left: newLeft - self.handleData.radius
-    })
-    // console.log(newTop , newLeft)
-
-    // Providing event and data for handling camera movement.
-    let deltaX = self.regionData.centerX - parseInt(newLeft)
-    let deltaY = self.regionData.centerY - parseInt(newTop)
-    // Normalize x,y between -2 to 2 range.
-    deltaX = -2 + (2 + 2) * (deltaX - (-self.regionData.radius)) / (self.regionData.radius - (-self.regionData.radius))
-    deltaY = -2 + (2 + 2) * (deltaY - (-self.regionData.radius)) / (self.regionData.radius - (-self.regionData.radius))
-    deltaX = Math.round(deltaX * 10) / 10
-    deltaY = Math.round(deltaY * 10) / 10
-    // console.log(deltaX, deltaY)
-
-    sendEvent(deltaX, deltaY, 0)
+    this.aligningPad()
+    this.addEventListener()
   }
 
-  function sendEvent (dx, dy, middle) {
-    if (!mouseDown) {
-      clearTimeout(eventRepeatTimeout)
+  aligningPad() {
+    this.movementPad.style.top = this.container.style.height + this.container.style.top - this.region.style.height - 10
+    this.movementPad.style.left = 20
+    this.regionData.width = this.region.style.width
+    this.regionData.height = this.region.style.height
+    this.regionData.position = this.region.style.position
+    this.regionData.offset = this.region.style.offset
+    this.regionData.radius = this.regionData.width / 2
+    this.regionData.centerX = this.regionData.position.left + this.regionData.radius
+    this.regionData.centerY = this.regionData.position.top + this.regionData.radius
+    this.handleData.width = this.handle.style.width
+    this.handleData.height = this.handle.style.height
+    this.handleData.radius = this.handleData.width / 2
+    this.regionData.radius = this.regionData.width / 2 - this.handleData.radius  
+  }
+
+  addEventListener() {
+    this.region.addEventListener('mousedown', event => {
+      this.mouseDown = true
+      this.handle.css('opacity', '1.0')
+      this.update(event.pageX, event.pageY)
+    })
+
+    document.addEventListener('mouseup', () => {
+      this.mouseDown = false
+      this.resetHandlePosition()
+    })
+
+    document.addEventListener('mousemove', event => {
+      if (!this.mouseDown) return
+      this.update(event.pageX, event.pageY)
+    })
+
+    this.region.addEventListener('touchstart', event => {
+      this.mouseDown = true
+      this.handle.css('opacity', '1.0')
+      this.update(event.originalEvent.targetTouches[0].pageX, event.originalEvent.targetTouches[0].pageY)
+    })
+
+    document.addEventListener('touchend touchcancel', () => {
+      this.mouseDown = false
+      this.resetHandlePosition()
+    })
+
+    document.addEventListener('touchmove', event => {
+      if (!this.mouseDown) return
+      this.update(event.originalEvent.touches[0].pageX, event.originalEvent.touches[0].pageY)
+    })
+  }
+
+  update (pageX, pageY) {
+    this.newLeft = (pageX - this.regionData.offset.left)
+    this.newTop = (pageY - this.regionData.offset.top)
+
+    this.distance = Math.pow(this.regionData.centerX - this.newLeft, 2) + Math.pow(this.regionData.centerY - this.newTop, 2)
+    if (this.distance > Math.pow(this.regionData.radius, 2)) {
+      this.angle = Math.atan2((this.newTop - this.regionData.centerY), (this.newLeft - this.regionData.centerX))
+      this.newLeft = (Math.cos(this.angle) * this.regionData.radius) + this.regionData.centerX
+      this.newTop = (Math.sin(this.angle) * this.regionData.radius) + this.regionData.centerY
+    }
+    this.newTop = Math.round(this.newTop * 10) / 10
+    this.newLeft = Math.round(this.newLeft * 10) / 10
+
+    this.handle.css({
+      top: this.newTop - this.handleData.radius,
+      left: this.newLeft - this.handleData.radius
+    })
+
+    let deltaX = this.regionData.centerX - parseInt(this.newLeft)
+    let deltaY = this.regionData.centerY - parseInt(this.newTop)
+
+    deltaX = -2 + (2 + 2) * (deltaX - (-this.regionData.radius)) / (this.regionData.radius - (-this.regionData.radius))
+    deltaY = -2 + (2 + 2) * (deltaY - (-this.regionData.radius)) / (this.regionData.radius - (-this.regionData.radius))
+    deltaX = Math.round(deltaX * 10) / 10
+    deltaY = Math.round(deltaY * 10) / 10
+
+    this.sendEvent(deltaX, deltaY, 0)
+  }
+
+  sendEvent (dx, dy, middle) {
+    if (!this.mouseDown) {
+      clearTimeout(this.eventRepeatTimeout)
       let stopEvent = $.Event('stopMove', {
         bubbles: false
       })
@@ -116,7 +112,7 @@ function MovementPad (container) {
 
     clearTimeout(eventRepeatTimeout)
     eventRepeatTimeout = setTimeout(function () {
-      sendEvent(dx, dy, middle)
+      this.sendEvent(dx, dy, middle)
     }, 5)
 
     let moveEvent = $.Event('move', {
@@ -130,11 +126,7 @@ function MovementPad (container) {
     $(self).trigger(moveEvent)
   }
 
-  self.resetHandlePosition()
-}
-
-MovementPad.prototype = {
-  resetHandlePosition: function () {
+  resetHandlePosition() {
     this.handle.animate({
       top: this.regionData.centerY - this.handleData.radius,
       left: this.regionData.centerX - this.handleData.radius,

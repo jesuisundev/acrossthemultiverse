@@ -490,3 +490,177 @@ nav #menu .cell .description {
 .bwp-single-post-share-list li a i {
     padding-left: 3px;
 }
+
+#rotation-pad {
+    position: absolute;
+}
+
+#rotation-pad-region {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border: 2px solid rgba(218, 225, 230, 0.25);
+    border-radius: 90px;
+    box-shadow: 0px 0px 5px rgba(194, 200, 204, 0.55);
+    -webkit-user-select: none;
+}
+
+#rotation-pad-handle {
+    opacity: 0.1;
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    top: 0px;
+    left: 0px;
+    background: radial-gradient(rgba(215, 225, 255, 0.70) 0%, rgba(215, 225, 255, 0.50) 100%);
+    /*border: 1px solid rgba(145, 105, 245, 0.90);*/
+    border-radius: 50%;
+    box-shadow: 0px 0px 7px rgba(195, 205, 245, 0.9);
+    text-align: center;
+    font: 24px/44px"Courier New", Courier, monospace;
+    -webkit-user-select: none;
+}
+
+#movement-pad {
+    position: absolute;
+}
+
+#movement-pad-region {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border: 2px solid rgba(218, 225, 230, 0.25);
+    border-radius: 90px;
+    box-shadow: 0px 0px 5px rgba(194, 200, 204, 0.55);
+    -webkit-user-select: none;
+}
+
+#movement-pad-handle {
+    opacity: 0.1;
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    top: 0px;
+    left: 0px;
+    background: radial-gradient(rgba(215, 225, 255, 0.70) 0%, rgba(215, 225, 255, 0.50) 100%);
+    /*border: 1px solid rgba(145, 105, 245, 0.90);*/
+    border-radius: 50%;
+    box-shadow: 0px 0px 7px rgba(195, 205, 245, 0.9);
+    text-align: center;
+    font: 24px/44px"Courier New", Courier, monospace;
+    -webkit-user-select: none;
+}
+
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.428571429;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.btn:focus {
+    outline: thin dotted;
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+}
+
+.btn:hover,
+.btn:focus {
+    color: #333333;
+    text-decoration: none;
+}
+
+.btn:active,
+.btn.active {
+    background-image: none;
+    outline: 0;
+    -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+
+.btn-default {
+  text-shadow: 0 1px 0 #fff;
+  background-image: -webkit-linear-gradient(top, #f2f2f2 0%, #acbfce 100%);
+  background-image: linear-gradient(to bottom, #f2f2f2 0%, #acbfce 100%);
+  background-repeat: repeat-x;
+  border-color: #ccc;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff2f2f2', endColorstr='#ffacbfce', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+
+.btn-default:hover,
+.btn-default:focus {
+  background-color: #acbfce;
+  background-position: 0 -15px;
+}
+
+.btn-default:active,
+.btn-default.active {
+  background-color: #acbfce;
+  border-color: #9a9a9a;
+}
+
+.navpad {
+    position: absolute;
+    bottom: 4px;
+    text-align: center;
+    z-index: 99;
+    /*border: 1px solid blue;*/
+}
+
+.navpad.rotation-handle {
+    cursor: pointer;
+    /*border: 1px solid red;*/
+    /*opacity: 0.6;*/
+}
+
+.navKey {
+    direction: ltr;
+    position: absolute;
+    width: 100px;
+    text-align: center;
+    vertical-align: middle;
+    /*border: 1px solid red;*/
+}
+
+.navKey button {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    font-family: monospace, "Century Gothic", sans;
+    font-size: 12px;
+    border-radius: 2px;
+}
+
+.navKey button>span {
+    font-family: "Tahoma";
+    font-size: 11px;
+    vertical-align: super;
+    margin: 0 -4px 0 -2px;
+}
+
+.navKey div:first-child {
+    margin: 0 1px 3px 1px;
+    /*border: 1px solid blue;*/
+}
+
+.navKey div:nth-child(2) button {
+
+    margin: 0 1px 0 1px;
+    /*padding: 0;*/
+    /*border: 1px solid green;*/
+}

@@ -3,6 +3,7 @@ import * as THREE from 'three'
 
 import Grid from './world/Grid'
 import Controls from './controls/Controls'
+import TouchControls from './controls/mobile/touch-controls'
 import Library from './world/Library'
 import Parameters from './world/Parameters'
 import PostProcessor from './postprocessing/PostProcessor'
@@ -17,6 +18,7 @@ import Helper from './world/Helper'
 //  - hide ui
 //  - reduce size font
 //  - reduce far and budgets
+// TODO : PINK GIANTS IN LAST UNI
 // TODO : Analytics
 // TODO : refactor clean up comment
 // DEADLINE -> 13 sept
@@ -54,7 +56,10 @@ const library = new Library()
 const grid = new Grid(camera, parameters, scene, library)
 const postProcessor = new PostProcessor(camera, scene, parameters, renderer)
 const sequencer = new Sequencer(scene, library, parameters, grid, camera, postProcessor)
-const controls = new Controls(camera, parameters, sequencer, library)
+//const controls = new Controls(camera, parameters, sequencer, library)
+
+const container = document.getElementById('multiverse')
+const controls = new TouchControls(container, camera, scene)
 window.controls = controls
 
 let lastClusterPosition
@@ -62,17 +67,19 @@ let needRender = false
 let isRenderingClusterInProgress = false
 let previousElapsedTime = clock.getElapsedTime()
 
-scene.add(controls.pointerLockControls.getObject())
+// scene.add(controls.pointerLockControls.getObject())
 
-document.addEventListener('keydown', event => controls.onKeyDown(event))
-document.addEventListener('keyup', event => controls.onKeyUp(event))
-document.getElementById('multiverse').addEventListener('click', event => controls.pointerLockControls.lock())
+// document.addEventListener('keydown', event => controls.onKeyDown(event))
+// document.addEventListener('keyup', event => controls.onKeyUp(event))
+// document.getElementById('multiverse').addEventListener('click', event => controls.pointerLockControls.lock())
+
+
 document.getElementById('launch').addEventListener('click', event => {
   event.preventDefault()
   needRender = true
   controls.pointerLockControls.lock()
   document.getElementById('intro').className = 'fadeOut'
-  sequencer.launchNextSequence(false)
+  sequencer.launchNextSequence(true)
 })
 
 window.addEventListener('resize', () => {
@@ -95,9 +102,9 @@ function animate () {
 
   updateAnimatedObjects(currentElapsedTime)
 
-  if (controls.pointerLockControls.isLocked === true) {
-    controls.handleMovements(currentElapsedTime, previousElapsedTime)
-  }
+  // if (controls.pointerLockControls.isLocked === true) {
+  //   controls.handleMovements(currentElapsedTime, previousElapsedTime)
+  // }
   previousElapsedTime = currentElapsedTime
 
   if (!window.wormhole.active) {
@@ -136,12 +143,16 @@ function animate () {
   window.onload = () => {
       document.getElementById('loading').remove()
       document.getElementById('launch').className = 'fadeIn'
+      needRender = true
+      document.getElementById('intro').remove()
+      document.getElementById('blackwall').remove()
+      //document.getElementById('intro').remove()
   }
 
-  await controls.showElementById("title")
-  await controls.showElementById("description")
-  await controls.showElementById("notice")
-  await controls.showElementById("entrypoint")
+  // await controls.showElementById("title")
+  // await controls.showElementById("description")
+  // await controls.showElementById("notice")
+  // await controls.showElementById("entrypoint")
 }
 
 function updateAnimatedObjects (elapsedTime) {

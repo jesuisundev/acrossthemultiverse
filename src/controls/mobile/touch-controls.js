@@ -1,220 +1,221 @@
-'use strict'
-
 import * as THREE from 'three'
+import RotationPad from './rotation-pad'
+import MovementPad from './movement-pad'
 
-function TouchControls (container, camera, options) {
-  let self = this
-  self.config = $.extend({
-    speedFactor: 0.5,
-    delta: 1,
-    rotationFactor: 0.002,
-    maxPitch: 55,
-    hitTest: true,
-    hitTestDistance: 40
-  }, options)
-
-  let container = container
-  let isRightMouseDown = false
-  let rotationMatrices = []
-  let hitObjects = []
-
-  let moveForward = false
-  let moveBackward = false
-  let moveLeft = false
-  let moveRight = false
-  let lockMoveForward = false
-  let lockMoveBackward = false
-  let lockMoveLeft = false
-  let lockMoveRight = false
-
-  let ztouch = 1, xtouch = 1
-  let PI_2 = Math.PI / 2
-  let maxPitch = self.config.maxPitch * Math.PI / 180
-  let velocity = new THREE.Vector3(0, 0, 0)
-
-  let cameraHolder = new THREE.Object3D()
-  cameraHolder.name = 'cameraHolder'
-  cameraHolder.add(camera)
-
-  self.scene = null
-  self.fpsBody = new THREE.Object3D()
-  self.fpsBody.add(cameraHolder)
-  self.enabled = true
-
-  self.mouse = new THREE.Vector2()
-
-  // Creating rotation pad:
-  self.rotationPad = new RotationPad(container)
-  $(self.rotationPad).on('YawPitch', function (event) {
-    let rotation = calculateCameraRotation(event.detail.deltaX, event.detail.deltaY)
-    self.setRotation(rotation.rx, rotation.ry)
-  })
-
-  // Creating movement pad:
-  self.movementPad = new MovementPad(container)
-  $(self.movementPad).on('move', function (event) {
-    ztouch = Math.abs(event.detail.deltaY)
-    xtouch = Math.abs(event.detail.deltaX)
-
-    if (event.detail.deltaY == event.detail.middle) {
-      ztouch = 1
-      moveForward = moveBackward = false
-    } else {
-      if (event.detail.deltaY > event.detail.middle) {
-        moveForward = true
-        moveBackward = false
-      }
-      else if (event.detail.deltaY < event.detail.middle) {
-        moveForward = false
-        moveBackward = true
-      }
+export default class TouchControls {
+  constructor(container, camera, scene) {
+    this.container = container
+    this.camera = camera
+    this.scene = scene
+    this.config = {
+      speedFactor: 0.5,
+      delta: 1,
+      rotationFactor: 0.002,
+      maxPitch: 55,
+      hitTest: true,
+      hitTestDistance: 40
     }
+    this.isRightMouseDown = false
+    this.rotationMatrices = []
+    this.hitObjects = []
+    this.moveForward = false
+    this.moveBackward = false
+    this.moveLeft = false
+    this.moveRight = false
+    this.lockMoveForward = false
+    this.lockMoveBackward = false
+    this.lockMoveLeft = false
+    this.lockMoveRight = false
+    this.ztouch = 1
+    this.xtouch = 1
+    this.PI_2 = Math.PI / 2
+    this.maxPitch = this.config.maxPitch * Math.PI / 180
+    this.velocity = new THREE.Vector3(0, 0, 0)
+    this.cameraHolder = new THREE.Object3D()
+    this.cameraHolder.name = 'cameraHolder'
+    this.cameraHolder.add(this.camera)
+    this.fpsBody = new THREE.Object3D()
+    this.fpsBody.add(this.cameraHolder)
+    this.enabled = true
+    this.mouse = new THREE.Vector2()
 
-    if (event.detail.deltaX == event.detail.middle) {
-      xtouch = 1
-      moveRight = moveLeft = false
-    } else {
-      if (event.detail.deltaX < event.detail.middle) {
-        moveRight = true
-        moveLeft = false
+    this.createRotationPad()
+    this.createMovementPad()
+    this.addEventListener()
+    this.prepareRotationMatrices()
+  }
+
+  createRotationPad () {
+    this.rotationPad = new RotationPad(this.container)
+
+    this.rotationPad.addEventListener('YawPitch', event => {
+      let rotation = this.calculateCameraRotation(event.detail.deltaX, event.detail.deltaY)
+      this.rotationPad.setRotation(rotation.rx, rotation.ry)
+    })
+  }
+
+  createMovementPad () {
+    this.movementPad = new MovementPad(this.container)
+
+    this.movementPad.addEventListener('move', event => {
+      this.ztouch = Math.abs(event.detail.deltaY)
+      this.xtouch = Math.abs(event.detail.deltaX)
+  
+      if (event.detail.deltaY == event.detail.middle) {
+        this.ztouch = 1
+        this.moveForward = this.moveBackward = false
+      } else {
+        if (event.detail.deltaY > event.detail.middle) {
+          this.moveForward = true
+          this.moveBackward = false
+        }
+        else if (event.detail.deltaY < event.detail.middle) {
+          this.moveForward = false
+          this.moveBackward = true
+        }
       }
-      else if (event.detail.deltaX > event.detail.middle) {
-        moveRight = false
-        moveLeft = true
+  
+      if (event.detail.deltaX == event.detail.middle) {
+        this.xtouch = 1
+        this.moveRight = this.moveLeft = false
+      } else {
+        if (event.detail.deltaX < event.detail.middle) {
+          this.moveRight = true
+          this.moveLeft = false
+        }
+        else if (event.detail.deltaX > event.detail.middle) {
+          this.moveRight = false
+          this.moveLeft = true
+        }
       }
-    }
-  })
-  $(self.movementPad).on('stopMove', function (event) {
-    ztouch = xtouch = 1
-    moveForward = moveBackward = moveLeft = moveRight = false
-  })
+    })
 
-  container.on('contextmenu', onContextMenu)
-  container.on('mousedown', onMouseDown)
-  container.on('mouseup', onMouseUp)
+    this.movementPad.addEventListener('stopMove', event => {
+      this.ztouch = this.xtouch = 1
+      this.moveForward = this.moveBackward = this.moveLeft = this.moveRight = false
+    })
+  }
 
-  $(document).on('keydown', onKeyDown)
-  $(document).on('keyup', onKeyUp)
-  $(document).on('mousemove', onMouseMove)
-  $(document).on('mouseout', onMouseOut)
+  addEventListener() {
+    this.container.addEventListener('contextmenu', this.onContextMenu)
+    this.container.addEventListener('mousedown', this.onMouseDown)
+    this.container.addEventListener('mouseup', this.onMouseUp)
 
-  prepareRotationMatrices()
+    document.addEventListener('keydown', this.onKeyDown)
+    document.addEventListener('keyup', this.onKeyUp)
+    document.addEventListener('mousemove', this.onMouseMove)
+    document.addEventListener('mouseout', this.onMouseOut)
+  }
 
-  //
-  // Events:
-  //
-  function onContextMenu (event) {
+  onContextMenu (event) {
     event.preventDefault()
   }
 
-  function onMouseDown (event) {
-    if (self.enabled && event.button === 2) {
-      isRightMouseDown = true
+  onMouseDown (event) {
+    if (this.enabled && event.button === 2) {
+      this.isRightMouseDown = true
       event.preventDefault()
       event.stopPropagation()
     }
   }
 
-  function onMouseUp (event) {
-    if (self.enabled && event.button === 2) {
-      isRightMouseDown = false
+  onMouseUp (event) {
+    if (this.enabled && event.button === 2) {
+      this.isRightMouseDown = false
     }
   }
 
-  function onMouseMove (event) {
-    self.mouse.x = (event.clientX / window.innerWidth) * 2 - 1
-    self.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+  onMouseMove (event) {
+    this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1
+    this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
 
-    if (!self.enabled || !isRightMouseDown) return
+    if (!this.enabled || !this.isRightMouseDown) return
 
     let movementX = event.originalEvent.movementX || event.originalEvent.mozMovementX || event.originalEvent.webkitMovementX || 0
     let movementY = event.originalEvent.movementY || event.originalEvent.mozMovementY || event.originalEvent.webkitMovementY || 0
-    let rotation = calculateCameraRotation(-1 * movementX, -1 * movementY)
+    let rotation = this.calculateCameraRotation(-1 * movementX, -1 * movementY)
 
-    self.setRotation(rotation.rx, rotation.ry)
+    this.setRotation(rotation.rx, rotation.ry)
   }
 
-  function onMouseOut (e) {
-    isRightMouseDown = false
+  onMouseOut (event) {
+    this.isRightMouseDown = false
   }
 
-  function onKeyDown (e) {
-    if (!self.enabled) return
+  onKeyDown (event) {
+    if (!this.enabled) return
 
-    switch (e.keyCode) {
+    switch (event.keyCode) {
       case 38: // up
       case 87: // w
-        moveForward = true
+        this.moveForward = true
         break
 
       case 37: // left
       case 65: // a
-        moveLeft = true
+        this.moveLeft = true
         break
 
       case 40: // down
       case 83: // s
-        moveBackward = true
+        this.moveBackward = true
         break
 
       case 39: // right
       case 68: // d
-        moveRight = true
+        this.moveRight = true
         break
     }
   }
 
-  function onKeyUp (e) {
-    switch (e.keyCode) {
+  onKeyUp (event) {
+    switch (event.keyCode) {
       case 38: // up
       case 87: // w
-        moveForward = false
+        this.moveForward = false
         break
 
       case 37: // left
       case 65: // a
-        moveLeft = false
+        this.moveLeft = false
         break
 
       case 40: // down
       case 83: // a
-        moveBackward = false
+        this.moveBackward = false
         break
 
       case 39: // right
       case 68: // d
-        moveRight = false
+        this.moveRight = false
         break
 
     }
   }
 
-  //
-  // Private functions:
-  //
-  function prepareRotationMatrices () {
+  prepareRotationMatrices () {
     let rotationMatrixF = new THREE.Matrix4()
     rotationMatrixF.makeRotationY(0)
-    rotationMatrices.push(rotationMatrixF); // forward direction.
+    this.rotationMatrices.push(rotationMatrixF); // forward direction.
 
     let rotationMatrixB = new THREE.Matrix4()
     rotationMatrixB.makeRotationY(180 * Math.PI / 180)
-    rotationMatrices.push(rotationMatrixB)
+    this.rotationMatrices.push(rotationMatrixB)
 
     let rotationMatrixL = new THREE.Matrix4()
     rotationMatrixL.makeRotationY(90 * Math.PI / 180)
-    rotationMatrices.push(rotationMatrixL)
+    this.rotationMatrices.push(rotationMatrixL)
 
     let rotationMatrixR = new THREE.Matrix4()
     rotationMatrixR.makeRotationY((360 - 90) * Math.PI / 180)
-    rotationMatrices.push(rotationMatrixR)
+    this.rotationMatrices.push(rotationMatrixR)
   }
 
-  function calculateCameraRotation (dx, dy, factor) {
-    let factor = factor ? factor : self.config.rotationFactor
-    let ry = self.fpsBody.rotation.y - (dx * factor)
-    let rx = cameraHolder.rotation.x - (dy * factor)
-    rx = Math.max(-maxPitch, Math.min(maxPitch, rx))
+  calculateCameraRotation (dx, dy, factor) {
+    let factorFinal = factor ? factor : this.config.rotationFactor
+    let ry = this.fpsBody.rotation.y - (dx * factorFinal)
+    let rx = this.cameraHolder.rotation.x - (dy * factorFinal)
+    rx = Math.max(-this.maxPitch, Math.min(this.maxPitch, rx))
 
     return {
       rx: rx,
@@ -222,83 +223,77 @@ function TouchControls (container, camera, options) {
     }
   }
 
-  function lockDirectionByIndex (index) {
+  lockDirectionByIndex (index) {
     if (index == 0)
-      self.lockMoveForward(true)
+      this.lockMoveForward(true)
     else if (index == 1)
-      self.lockMoveBackward(true)
+      this.lockMoveBackward(true)
     else if (index == 2)
-      self.lockMoveLeft(true)
+      this.lockMoveLeft(true)
     else if (index == 3)
-      self.lockMoveRight(true)
+      this.lockMoveRight(true)
   }
 
-  //
-  // Public functions:
-  //
-  self.update = function () {
-    if (self.config.hitTest)
-      self.hitTest()
+  update () {
+    if (this.config.hitTest)
+      this.hitTest()
 
-    velocity.x += (-1 * velocity.x) * 0.75 * self.config.delta
-    velocity.z += (-1 * velocity.z) * 0.75 * self.config.delta
+    this.velocity.x += (-1 * this.velocity.x) * 0.75 * this.config.delta
+    this.velocity.z += (-1 * this.velocity.z) * 0.75 * this.config.delta
 
-    if (moveForward && !lockMoveForward) velocity.z -= ztouch * self.config.speedFactor * self.config.delta
-    if (moveBackward && !lockMoveBackward) velocity.z += ztouch * self.config.speedFactor * self.config.delta
+    if (this.moveForward && !this.lockMoveForward) this.velocity.z -= this.ztouch * this.config.speedFactor * this.config.delta
+    if (this.moveBackward && !this.lockMoveBackward) this.velocity.z += this.ztouch * this.config.speedFactor * this.config.delta
 
-    if (moveLeft && !lockMoveLeft) velocity.x -= xtouch * self.config.speedFactor * self.config.delta
-    if (moveRight && !lockMoveRight) velocity.x += xtouch * self.config.speedFactor * self.config.delta
+    if (this.moveLeft && !this.lockMoveLeft) this.velocity.x -= this.xtouch * this.config.speedFactor * this.config.delta
+    if (this.moveRight && !this.lockMoveRight) this.velocity.x += this.xtouch * this.config.speedFactor * this.config.delta
 
-    self.fpsBody.translateX(velocity.x)
-    self.fpsBody.translateY(velocity.y)
-    self.fpsBody.translateZ(velocity.z)
+    this.fpsBody.translateX(this.velocity.x)
+    this.fpsBody.translateY(this.velocity.y)
+    this.fpsBody.translateZ(this.velocity.z)
   }
 
-  self.hitTest = function () {
-    self.unlockAllDirections()
-    hitObjects = []
-    let cameraDirection = self.getDirection2(new THREE.Vector3(0, 0, 0)).clone()
+  hitTest () {
+    this.unlockAllDirections()
+    this.hitObjects = []
+    let cameraDirection = this.getDirection2(new THREE.Vector3(0, 0, 0)).clone()
 
     for (let i = 0; i < 4; i++) {
       // Applying rotation for each direction:
       let direction = cameraDirection.clone()
-      direction.applyMatrix4(rotationMatrices[i])
+      direction.applyMatrix4(this.rotationMatrices[i])
 
-      let rayCaster = new THREE.Raycaster(self.fpsBody.position, direction)
-      let intersects = rayCaster.intersectObject(self.scene, true)
-      if ( (intersects.length > 0 && intersects[0].distance < self.config.hitTestDistance)) {
-        lockDirectionByIndex(i)
-        hitObjects.push(intersects[0])
+      let rayCaster = new THREE.Raycaster(this.fpsBody.position, direction)
+      let intersects = rayCaster.intersectObject(this.scene, true)
+      if ( (intersects.length > 0 && intersects[0].distance < this.config.hitTestDistance)) {
+        this.lockDirectionByIndex(i)
+        this.hitObjects.push(intersects[0])
       }
     }
 
     return hitObjects
   }
 
-  self.getDirection2 = function (v) {
-    let self = this
+  getDirection2 (vector) {
     let direction = new THREE.Vector3(0, 0, -1)
     let rotation = new THREE.Euler(0, 0, 0, 'YXZ')
-    let rx = self.fpsBody.getObjectByName('cameraHolder').rotation.x
-    let ry = self.fpsBody.rotation.y
+    let rx = this.fpsBody.getObjectByName('cameraHolder').rotation.x
+    let ry = this.fpsBody.rotation.y
 
     rotation.set(rx, ry, 0)
-    v.copy(direction).applyEuler(rotation)
+    vector.copy(direction).applyEuler(rotation)
 
-    return v
+    return vector
   }
 
-  self.getDirection = function () {
-    let self = this
+  getDirection () {
     let rx = 0
     let ry = 0
     let direction = new THREE.Vector3(0, 0, -1)
     let rotation = new THREE.Euler(0, 0, 0, 'YXZ')
 
-    if (self != undefined) {
-      rx = self.fpsBody.getObjectByName('cameraHolder').rotation.x
-      ry = self.fpsBody.rotation.y
-      console.log(rx, ry)
+    if (this != undefined) {
+      rx = this.fpsBody.getObjectByName('cameraHolder').rotation.x
+      ry = this.fpsBody.rotation.y
     }
 
     return function (v) {
@@ -306,74 +301,38 @@ function TouchControls (container, camera, options) {
       v.copy(direction).applyEuler(rotation)
       return v
     }
-  }()
-
-  self.moveLeft = function () {
-    return moveLeft
   }
 
-  self.moveRight = function () {
-    return moveRight
+  unlockAllDirections () {
+    this.lockMoveForward = false
+    this.lockMoveBackward= false
+    this.lockMoveLeft = false
+    this.lockMoveRight = false
   }
 
-  self.moveForward = function () {
-    return moveForward
+  addToScene (scene) {
+    this.scene.add(this.fpsBody)
   }
 
-  self.moveBackward = function () {
-    return moveBackward
-  }
-
-  self.lockMoveForward = function (boolean) {
-    lockMoveForward = boolean
-  }
-
-  self.lockMoveBackward = function (boolean) {
-    lockMoveBackward = boolean
-  }
-
-  self.lockMoveLeft = function (boolean) {
-    lockMoveLeft = boolean
-  }
-
-  self.lockMoveRight = function (boolean) {
-    lockMoveRight = boolean
-  }
-
-  self.unlockAllDirections = function () {
-    self.lockMoveForward(false)
-    self.lockMoveBackward(false)
-    self.lockMoveLeft(false)
-    self.lockMoveRight(false)
-  }
-}
-
-TouchControls.prototype = {
-  addToScene: function (scene) {
-    this.scene = scene
-    scene.add(this.fpsBody)
-  },
-
-  setPosition: function (x, y, z) {
+  setPosition (x, y, z) {
     this.fpsBody.position.set(x, y, z)
-  },
+  }
 
-  stopMouseMoving: function () {
-    isRightMouseDown = false
-  },
+  stopMouseMoving () {
+    this.isRightMouseDown = false
+  }
 
-  setRotation: function (x, y) {
+  setRotation (x, y) {
     let camHolder = this.fpsBody.getObjectByName('cameraHolder')
 
     if (x !== null)
-      camHolder.rotation.x = x
+      this.camHolder.rotation.x = x
 
     if (y !== null)
       this.fpsBody.rotation.y = y
-  },
-
-  getHitObjects: function () {
-    return hitObjects
   }
 
+  getHitObjects () {
+    return this.hitObjects
+  }
 }
