@@ -48,10 +48,9 @@ export default class TouchControls {
   createRotationPad () {
     this.rotationPad = new RotationPad(this.container)
 
-    this.rotationPad.addEventListener('YawPitch', event => {
-      console.log('YawPitch RotationPad', event)
-      let rotation = this.calculateCameraRotation(event.detail.deltaX, event.detail.deltaY)
-      this.rotationPad.setRotation(rotation.rx, rotation.ry)
+    document.getElementById('rotation-pad').addEventListener('YawPitch', event => {
+      const rotation = this.calculateCameraRotation(event.detail.deltaX, event.detail.deltaY)
+      this.setRotation(rotation.rx, rotation.ry)
     })
   }
 
@@ -251,39 +250,6 @@ export default class TouchControls {
     this.camera.translateZ(this.velocity.z)
   }
 
-  hitTest () {
-    this.unlockAllDirections()
-    this.hitObjects = []
-    let cameraDirection = this.getDirection2(new THREE.Vector3(0, 0, 0)).clone()
-
-    for (let i = 0; i < 4; i++) {
-      // Applying rotation for each direction:
-      let direction = cameraDirection.clone()
-      direction.applyMatrix4(this.rotationMatrices[i])
-
-      let rayCaster = new THREE.Raycaster(this.fpsBody.position, direction)
-      let intersects = rayCaster.intersectObject(this.scene, true)
-      if ( (intersects.length > 0 && intersects[0].distance < this.config.hitTestDistance)) {
-        this.lockDirectionByIndex(i)
-        this.hitObjects.push(intersects[0])
-      }
-    }
-
-    return hitObjects
-  }
-
-  getDirection2 (vector) {
-    let direction = new THREE.Vector3(0, 0, -1)
-    let rotation = new THREE.Euler(0, 0, 0, 'YXZ')
-    let rx = this.fpsBody.getObjectByName('cameraHolder').rotation.x
-    let ry = this.fpsBody.rotation.y
-
-    rotation.set(rx, ry, 0)
-    vector.copy(direction).applyEuler(rotation)
-
-    return vector
-  }
-
   getDirection () {
     let rx = 0
     let ry = 0
@@ -322,16 +288,10 @@ export default class TouchControls {
   }
 
   setRotation (x, y) {
-    let camHolder = this.fpsBody.getObjectByName('cameraHolder')
-
     if (x !== null)
-      this.camHolder.rotation.x = x
+      this.camera.rotateX(x)
 
     if (y !== null)
-      this.fpsBody.rotation.y = y
-  }
-
-  getHitObjects () {
-    return this.hitObjects
+      this.camera.rotateY(y)
   }
 }

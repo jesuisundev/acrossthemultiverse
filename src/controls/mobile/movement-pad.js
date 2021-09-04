@@ -59,10 +59,6 @@ export default class MovementPad {
       this.update(event.targetTouches[0].pageX, event.targetTouches[0].pageY)
     })
 
-    this.region.addEventListener('touchend touchcancel', () => {
-      this.mouseDown = false
-    })
-
     this.region.addEventListener('touchmove', event => {
       if (!this.mouseDown) return
       this.update(event.touches[0].pageX, event.touches[0].pageY)

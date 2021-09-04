@@ -12,12 +12,13 @@ import Helper from './world/Helper'
 
 // ROAD MAP
 // TODO : handle mobile control - wip 
-// Add touchControls - make it work - wip - https://github.com/mese79/TouchControls/blob/master/js/example.js
 //  - show mobile control
 //  - homepage hide logo, headphone
 //  - hide ui
 //  - reduce size font
 //  - reduce far and budgets
+//  - clean up mobile module from garbage
+//  - merge it to prroject
 // TODO : PINK GIANTS IN LAST UNI
 // TODO : Analytics
 // TODO : refactor clean up comment

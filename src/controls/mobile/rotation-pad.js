@@ -21,17 +21,17 @@ export default class RotationPad {
   }
 
   aligningPad() {
-    this.rotationPad.style.top = this.container.style.height + this.container.style.top - this.region.style.height - 10
-    this.rotationPad.style.left = this.container.style.width - this.region.style.width - 20
-    this.regionData.width = this.region.style.width
-    this.regionData.height = this.region.style.height
-    this.regionData.position = this.region.style.position
-    this.regionData.offset = this.region.style.offset
+    this.regionData.width = this.rotationPad.offsetWidth
+    this.regionData.height = this.rotationPad.offsetHeight
+    this.regionData.position = { left: 0, bottom: 0}
+
+    this.regionData.offset = { left: this.rotationPad.offsetLeft, top: this.rotationPad.offsetTop }
     this.regionData.radius = this.regionData.width / 2
     this.regionData.centerX = this.regionData.position.left + this.regionData.radius
-    this.regionData.centerY = this.regionData.position.top + this.regionData.radius
-    this.handleData.width = this.handle.style.width
-    this.handleData.height = this.handle.style.height
+    this.regionData.centerY = this.regionData.position.bottom + this.regionData.radius
+
+    this.handleData.width = this.handle.clientWidth
+    this.handleData.height = this.handle.clientHeight
     this.handleData.radius = this.handleData.width / 2
     this.regionData.radius = this.regionData.width / 2 - this.handleData.radius
   }
@@ -59,11 +59,10 @@ export default class RotationPad {
       this.update(event.targetTouches[0].pageX, event.targetTouches[0].pageY)
     })
 
-    document.addEventListener('touchend touchcancel', () => {
-      this.mouseDown = false
-    })
+    this.region.addEventListener('touchend', () => this.mouseDown = false)
+    this.region.addEventListener('touchcancel', () => this.mouseDown = false)
 
-    document.addEventListener('touchmove', event => {
+    this.region.addEventListener('touchmove', event => {
       if (!this.mouseDown) return
       this.update(event.touches[0].pageX, event.touches[0].pageY)
     })
@@ -72,8 +71,8 @@ export default class RotationPad {
   update (pageX, pageY) {
     this.newLeft = (pageX - this.regionData.offset.left)
     this.newTop = (pageY - this.regionData.offset.top)
-
     this.distance = Math.pow(this.regionData.centerX - this.newLeft, 2) + Math.pow(this.regionData.centerY - this.newTop, 2)
+    
     if (this.distance > Math.pow(this.regionData.radius, 2)) {
       this.angle = Math.atan2((this.newTop - this.regionData.centerY), (this.newLeft - this.regionData.centerX))
       this.newLeft = (Math.cos(this.angle) * this.regionData.radius) + this.regionData.centerX
@@ -82,8 +81,8 @@ export default class RotationPad {
     this.newTop = Math.round(this.newTop * 10) / 10
     this.newLeft = Math.round(this.newLeft * 10) / 10
 
-    this.handle.style.top = this.newTop - this.handleData.radius
-    this.handle.style.left = this.newLeft - this.handleData.radius
+    this.handle.style.top = `${this.newTop - this.handleData.radius}px`
+    this.handle.style.left = `${this.newLeft - this.handleData.radius}px`
     let deltaX = this.regionData.centerX - parseInt(this.newLeft)
     let deltaY = this.regionData.centerY - parseInt(this.newTop)
 

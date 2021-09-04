@@ -23,6 +23,7 @@ body {
     z-index: 8;
     width: 100% !important;
     height: 100% !important;
+    touch-action: none !important;
 }
 
 #blackwall {
@@ -496,6 +497,10 @@ nav #menu .cell .description {
     z-index: 9999;
     bottom: 110px;
     right: 110px;
+    width: 100px;
+    bottom: 0;
+    height: 100px;
+    right: 0;
 }
 
 #rotation-pad-region {
@@ -516,7 +521,6 @@ nav #menu .cell .description {
     top: 0px;
     left: 0px;
     background: radial-gradient(rgba(215, 225, 255, 0.70) 0%, rgba(215, 225, 255, 0.50) 100%);
-    /*border: 1px solid rgba(145, 105, 245, 0.90);*/
     border-radius: 50%;
     box-shadow: 0px 0px 7px rgba(195, 205, 245, 0.9);
     text-align: center;
@@ -551,7 +555,6 @@ nav #menu .cell .description {
     top: 0px;
     left: 0px;
     background: radial-gradient(rgba(215, 225, 255, 0.70) 0%, rgba(215, 225, 255, 0.50) 100%);
-    /*border: 1px solid rgba(145, 105, 245, 0.90);*/
     border-radius: 50%;
     box-shadow: 0px 0px 7px rgba(195, 205, 245, 0.9);
     text-align: center;
@@ -627,13 +630,10 @@ nav #menu .cell .description {
     bottom: 4px;
     text-align: center;
     z-index: 99;
-    /*border: 1px solid blue;*/
 }
 
 .navpad.rotation-handle {
     cursor: pointer;
-    /*border: 1px solid red;*/
-    /*opacity: 0.6;*/
 }
 
 .navKey {
@@ -642,7 +642,6 @@ nav #menu .cell .description {
     width: 100px;
     text-align: center;
     vertical-align: middle;
-    /*border: 1px solid red;*/
 }
 
 .navKey button {
@@ -663,12 +662,8 @@ nav #menu .cell .description {
 
 .navKey div:first-child {
     margin: 0 1px 3px 1px;
-    /*border: 1px solid blue;*/
 }
 
 .navKey div:nth-child(2) button {
-
     margin: 0 1px 0 1px;
-    /*padding: 0;*/
-    /*border: 1px solid green;*/
 }
