@@ -8,7 +8,7 @@ export default class TouchControls {
     this.camera = camera
     this.scene = scene
     this.config = {
-      speedFactor: 0.5,
+      speedFactor: 6,
       delta: 1,
       rotationFactor: 0.002,
       maxPitch: 55,
@@ -37,7 +37,7 @@ export default class TouchControls {
     this.fpsBody = new THREE.Object3D()
     this.fpsBody.add(this.cameraHolder)
     this.enabled = true
-    this.mouse = new THREE.Vector2()
+    this.mouse = new THREE.Vector2(0,0)
 
     this.createRotationPad()
     this.createMovementPad()
@@ -49,6 +49,7 @@ export default class TouchControls {
     this.rotationPad = new RotationPad(this.container)
 
     this.rotationPad.addEventListener('YawPitch', event => {
+      console.log('YawPitch RotationPad', event)
       let rotation = this.calculateCameraRotation(event.detail.deltaX, event.detail.deltaY)
       this.rotationPad.setRotation(rotation.rx, rotation.ry)
     })
@@ -57,7 +58,7 @@ export default class TouchControls {
   createMovementPad () {
     this.movementPad = new MovementPad(this.container)
 
-    this.movementPad.addEventListener('move', event => {
+    document.getElementById('movement-pad').addEventListener('move', event => {
       this.ztouch = Math.abs(event.detail.deltaY)
       this.xtouch = Math.abs(event.detail.deltaX)
   
@@ -88,6 +89,8 @@ export default class TouchControls {
           this.moveLeft = true
         }
       }
+
+      this.update()
     })
 
     this.movementPad.addEventListener('stopMove', event => {
@@ -97,14 +100,14 @@ export default class TouchControls {
   }
 
   addEventListener() {
-    this.container.addEventListener('contextmenu', this.onContextMenu)
-    this.container.addEventListener('mousedown', this.onMouseDown)
-    this.container.addEventListener('mouseup', this.onMouseUp)
+    this.container.addEventListener('contextmenu', () => this.onContextMenu)
+    this.container.addEventListener('mousedown', () => this.onMouseDown)
+    this.container.addEventListener('mouseup', () => this.onMouseUp)
 
-    document.addEventListener('keydown', this.onKeyDown)
-    document.addEventListener('keyup', this.onKeyUp)
-    document.addEventListener('mousemove', this.onMouseMove)
-    document.addEventListener('mouseout', this.onMouseOut)
+    document.addEventListener('keydown', () => this.onKeyDown)
+    document.addEventListener('keyup', () => this.onKeyUp)
+    document.addEventListener('mousemove', () => this.onMouseMove)
+    document.addEventListener('mouseout', () => this.onMouseOut)
   }
 
   onContextMenu (event) {
@@ -235,9 +238,6 @@ export default class TouchControls {
   }
 
   update () {
-    if (this.config.hitTest)
-      this.hitTest()
-
     this.velocity.x += (-1 * this.velocity.x) * 0.75 * this.config.delta
     this.velocity.z += (-1 * this.velocity.z) * 0.75 * this.config.delta
 
@@ -246,10 +246,9 @@ export default class TouchControls {
 
     if (this.moveLeft && !this.lockMoveLeft) this.velocity.x -= this.xtouch * this.config.speedFactor * this.config.delta
     if (this.moveRight && !this.lockMoveRight) this.velocity.x += this.xtouch * this.config.speedFactor * this.config.delta
-
-    this.fpsBody.translateX(this.velocity.x)
-    this.fpsBody.translateY(this.velocity.y)
-    this.fpsBody.translateZ(this.velocity.z)
+    this.camera.translateX(this.velocity.x)
+    this.camera.translateY(this.velocity.y)
+    this.camera.translateZ(this.velocity.z)
   }
 
   hitTest () {

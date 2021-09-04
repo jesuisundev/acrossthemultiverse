@@ -21,60 +21,59 @@ export default class MovementPad {
   }
 
   aligningPad() {
-    this.movementPad.style.top = this.container.style.height + this.container.style.top - this.region.style.height - 10
-    this.movementPad.style.left = 20
-    this.regionData.width = this.region.style.width
-    this.regionData.height = this.region.style.height
-    this.regionData.position = this.region.style.position
-    this.regionData.offset = this.region.style.offset
+    this.regionData.width = this.movementPad.offsetWidth
+    this.regionData.height = this.movementPad.offsetHeight
+    this.regionData.position = { left: 0, bottom: 0}
+
+    this.regionData.offset = { left: this.movementPad.offsetLeft, top: this.movementPad.offsetTop }
     this.regionData.radius = this.regionData.width / 2
     this.regionData.centerX = this.regionData.position.left + this.regionData.radius
-    this.regionData.centerY = this.regionData.position.top + this.regionData.radius
-    this.handleData.width = this.handle.style.width
-    this.handleData.height = this.handle.style.height
+    this.regionData.centerY = this.regionData.position.bottom + this.regionData.radius
+
+
+    this.handleData.width = this.handle.clientWidth
+    this.handleData.height = this.handle.clientHeight
     this.handleData.radius = this.handleData.width / 2
-    this.regionData.radius = this.regionData.width / 2 - this.handleData.radius  
+    this.regionData.radius = this.regionData.width / 2 - this.handleData.radius
   }
 
   addEventListener() {
     this.region.addEventListener('mousedown', event => {
       this.mouseDown = true
-      this.handle.css('opacity', '1.0')
+      this.handle.style.opacity = 1
       this.update(event.pageX, event.pageY)
     })
 
-    document.addEventListener('mouseup', () => {
+    this.region.addEventListener('mouseup', () => {
       this.mouseDown = false
-      this.resetHandlePosition()
     })
 
-    document.addEventListener('mousemove', event => {
+    this.region.addEventListener('mousemove', event => {
       if (!this.mouseDown) return
       this.update(event.pageX, event.pageY)
     })
 
     this.region.addEventListener('touchstart', event => {
       this.mouseDown = true
-      this.handle.css('opacity', '1.0')
-      this.update(event.originalEvent.targetTouches[0].pageX, event.originalEvent.targetTouches[0].pageY)
+      this.handle.style.opacity = 1
+      this.update(event.targetTouches[0].pageX, event.targetTouches[0].pageY)
     })
 
-    document.addEventListener('touchend touchcancel', () => {
+    this.region.addEventListener('touchend touchcancel', () => {
       this.mouseDown = false
-      this.resetHandlePosition()
     })
 
-    document.addEventListener('touchmove', event => {
+    this.region.addEventListener('touchmove', event => {
       if (!this.mouseDown) return
-      this.update(event.originalEvent.touches[0].pageX, event.originalEvent.touches[0].pageY)
+      this.update(event.touches[0].pageX, event.touches[0].pageY)
     })
   }
 
   update (pageX, pageY) {
     this.newLeft = (pageX - this.regionData.offset.left)
     this.newTop = (pageY - this.regionData.offset.top)
-
     this.distance = Math.pow(this.regionData.centerX - this.newLeft, 2) + Math.pow(this.regionData.centerY - this.newTop, 2)
+    
     if (this.distance > Math.pow(this.regionData.radius, 2)) {
       this.angle = Math.atan2((this.newTop - this.regionData.centerY), (this.newLeft - this.regionData.centerX))
       this.newLeft = (Math.cos(this.angle) * this.regionData.radius) + this.regionData.centerX
@@ -83,14 +82,11 @@ export default class MovementPad {
     this.newTop = Math.round(this.newTop * 10) / 10
     this.newLeft = Math.round(this.newLeft * 10) / 10
 
-    this.handle.css({
-      top: this.newTop - this.handleData.radius,
-      left: this.newLeft - this.handleData.radius
-    })
-
+    this.handle.style.top = `${this.newTop - this.handleData.radius}px`
+    this.handle.style.left = `${this.newLeft - this.handleData.radius}px`
     let deltaX = this.regionData.centerX - parseInt(this.newLeft)
     let deltaY = this.regionData.centerY - parseInt(this.newTop)
-
+  
     deltaX = -2 + (2 + 2) * (deltaX - (-this.regionData.radius)) / (this.regionData.radius - (-this.regionData.radius))
     deltaY = -2 + (2 + 2) * (deltaY - (-this.regionData.radius)) / (this.regionData.radius - (-this.regionData.radius))
     deltaX = Math.round(deltaX * 10) / 10
@@ -102,35 +98,25 @@ export default class MovementPad {
   sendEvent (dx, dy, middle) {
     if (!this.mouseDown) {
       clearTimeout(this.eventRepeatTimeout)
-      let stopEvent = $.Event('stopMove', {
-        bubbles: false
-      })
-      $(self).trigger(stopEvent)
+      this.movementPad.dispatchEvent(new CustomEvent('stopMove', { bubbles: false }))
 
       return
     }
 
-    clearTimeout(eventRepeatTimeout)
-    eventRepeatTimeout = setTimeout(function () {
+    clearTimeout(this.eventRepeatTimeout)
+    this.eventRepeatTimeout = setTimeout(() => {
       this.sendEvent(dx, dy, middle)
     }, 5)
 
-    let moveEvent = $.Event('move', {
-      detail: {
-        'deltaX': dx,
-        'deltaY': dy,
-        'middle': middle
-      },
-      bubbles: false
-    })
-    $(self).trigger(moveEvent)
-  }
-
-  resetHandlePosition() {
-    this.handle.animate({
-      top: this.regionData.centerY - this.handleData.radius,
-      left: this.regionData.centerX - this.handleData.radius,
-      opacity: 0.1
-    }, 'fast')
+    this.movementPad.dispatchEvent(
+      new CustomEvent('move', {
+        detail: {
+          'deltaX': dx,
+          'deltaY': dy,
+          'middle': middle
+        },
+        bubbles: false
+      })
+    )
   }
 }

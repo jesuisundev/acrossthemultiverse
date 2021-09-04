@@ -39,13 +39,12 @@ export default class RotationPad {
   addEventListener() {
     this.region.addEventListener('mousedown', event => {
       this.mouseDown = true
-      this.handle.css('opacity', '1.0')
+      this.handle.style.opacity = 1
       this.update(event.pageX, event.pageY)
     })
 
     document.addEventListener('mouseup', () => {
       this.mouseDown = false
-      this.resetHandlePosition()
     })
 
     document.addEventListener('mousemove', event => {
@@ -56,18 +55,17 @@ export default class RotationPad {
 
     this.region.addEventListener('touchstart', event => {
       this.mouseDown = true
-      this.handle.css('opacity', '1.0')
-      this.update(event.originalEvent.targetTouches[0].pageX, event.originalEvent.targetTouches[0].pageY)
+      this.handle.style.opacity = 1
+      this.update(event.targetTouches[0].pageX, event.targetTouches[0].pageY)
     })
 
     document.addEventListener('touchend touchcancel', () => {
       this.mouseDown = false
-      this.resetHandlePosition()
     })
 
     document.addEventListener('touchmove', event => {
       if (!this.mouseDown) return
-      this.update(event.originalEvent.touches[0].pageX, event.originalEvent.touches[0].pageY)
+      this.update(event.touches[0].pageX, event.touches[0].pageY)
     })
   }
 
@@ -84,11 +82,8 @@ export default class RotationPad {
     this.newTop = Math.round(this.newTop * 10) / 10
     this.newLeft = Math.round(this.newLeft * 10) / 10
 
-    this.handle.css({
-      top: this.newTop - this.handleData.radius,
-      left: this.newLeft - this.handleData.radius
-    })
-
+    this.handle.style.top = this.newTop - this.handleData.radius
+    this.handle.style.left = this.newLeft - this.handleData.radius
     let deltaX = this.regionData.centerX - parseInt(this.newLeft)
     let deltaY = this.regionData.centerY - parseInt(this.newTop)
 
@@ -111,21 +106,14 @@ export default class RotationPad {
       this.sendEvent(dx, dy)
     }, 5)
 
-    let moveEvent = $.Event('YawPitch', {
-      detail: {
-        'deltaX': dx,
-        'deltaY': dy
-      },
-      bubbles: false
-    })
-    $(this).trigger(moveEvent)
-  }
-
-  resetHandlePosition() {
-    this.handle.animate({
-      top: this.regionData.centerY - this.handleData.radius,
-      left: this.regionData.centerX - this.handleData.radius,
-      opacity: 0.1
-    }, 'fast')
+    this.rotationPad.dispatchEvent(
+      new CustomEvent('YawPitch', {
+        detail: {
+          'deltaX': dx,
+          'deltaY': dy
+        },
+        bubbles: false
+      })
+    )
   }
 }
