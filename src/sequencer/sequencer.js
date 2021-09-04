@@ -76,7 +76,7 @@ export default class Sequencer {
       await this.showThenHideStory(this.parameters.story.chapterone[1], 0)
       await this.showThenHideStory(this.parameters.story.chapterone[2], 0)
       await this.showThenHideStory(this.parameters.story.chapterone[3], 0)
-      await this.fadeInById('#nav', 2, 'Power0.easeNone')
+      await this.showNavigation()
     }
 
     window.sequencer.active = false
@@ -106,7 +106,7 @@ export default class Sequencer {
       await this.showThenHideStory(this.parameters.story.chaptertwo[1], 0)
       await this.showThenHideStory(this.parameters.story.chaptertwo[2], 0)
       await this.showThenHideStory(this.parameters.story.chaptertwo[3], 0)
-      await this.fadeInById('#nav', 2, 'Power0.easeNone')
+      await this.showNavigation()
     }
   
     window.sequencer.active = false
@@ -137,7 +137,7 @@ export default class Sequencer {
       await this.showThenHideStory(this.parameters.story.chapterthree[1], 0)
       await this.showThenHideStory(this.parameters.story.chapterthree[2], 0)
       await this.showThenHideStory(this.parameters.story.chapterthree[3], 0)
-      await this.fadeInById('#nav', 2, 'Power0.easeNone')
+      await this.showNavigation()
     }
 
     window.sequencer.active = false
@@ -175,7 +175,7 @@ export default class Sequencer {
       await this.showThenHideStory(this.parameters.story.chapterfour[1], 0)
       await this.showThenHideStory(this.parameters.story.chapterfour[2], 0)
       await this.showThenHideStory(this.parameters.story.chapterfour[3], 0)
-      await this.fadeInById('#nav', 2, 'Power0.easeNone')
+      await this.showNavigation()
     }
 
     window.sequencer.active = false
@@ -228,8 +228,7 @@ export default class Sequencer {
 
     this.fadeOutById('#credits', 0.1)
     await this.fadeInById('#blackwall', 0.2)
-    document.querySelector('#nav').style.zIndex = 7
-    document.querySelector('#nav').style.opacity = 0
+    this.hideNavigation()
 
     this.resetScene()
 
@@ -358,5 +357,26 @@ export default class Sequencer {
 
   onEnteringUniverse() {
     this.camera.rotation.set(0,0,0)
+  }
+
+  async showNavigation() {
+    if (window.isMobileOrTabletFlag) {
+      this.fadeInById('#movement-pad', 2, 'Power0.easeNone')
+      this.fadeInById('#rotation-pad', 2, 'Power0.easeNone')
+    } else {
+      await this.fadeInById('#nav', 2, 'Power0.easeNone')
+    }
+  }
+
+  hideNavigation() {
+    if (window.isMobileOrTabletFlag) {
+      document.querySelector('#movement-pad').style.zIndex = 7
+      document.querySelector('#rotation-pad').style.zIndex = 7
+      document.querySelector('#movement-pad').style.opacity = 0
+      document.querySelector('#rotation-pad').style.opacity = 0
+    } else {
+      document.querySelector('#nav').style.zIndex = 7
+      document.querySelector('#nav').style.opacity = 0
+    }
   }
 }

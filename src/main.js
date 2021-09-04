@@ -11,14 +11,10 @@ import Sequencer from './sequencer/sequencer'
 import Helper from './world/Helper'
 
 // ROAD MAP
-// TODO : handle mobile control - wip 
-//  - show mobile control
-//  - homepage hide logo, headphone
-//  - hide ui
+// TODO : handle mobile control - wip
+//  - Reset translation, velocity and orientation before wormhole
 //  - reduce size font
 //  - reduce far and budgets
-//  - clean up mobile module from garbage
-//  - merge it to prroject
 // TODO : PINK GIANTS IN LAST UNI
 // TODO : Analytics
 // TODO : refactor clean up comment
@@ -150,10 +146,10 @@ function animate () {
       document.getElementById('launch').className = 'fadeIn'
   }
 
-  await controls.showElementById("title")
-  await controls.showElementById("description")
-  await controls.showElementById("notice")
-  await controls.showElementById("entrypoint")
+  await helper.showElementById("title")
+  await helper.showElementById("description")
+  await helper.showElementById("notice")
+  await helper.showElementById("entrypoint")
 }
 
 function updateAnimatedObjects (elapsedTime) {

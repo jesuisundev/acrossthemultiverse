@@ -111,21 +111,6 @@ export default class Controls {
     this.pointerLockControls.moveForward(-this.velocity.z * delta)
   }
 
-  /**
-   * show document element by seting the class fadeIn
-   * 
-   * @param {String} id id of the element in the document
-   * @param {Number} fadeInTime time in millisecond before fadein
-   */
-  async showElementById(id, fadeInTime = 1000) {
-    return await new Promise(resolve => {
-        setTimeout(() => {
-            document.getElementById(id).className = 'fadeIn'
-            resolve()
-        }, fadeInTime)
-    })
-  }
-
   async toggleUi() {
     if (this.toggleUiInProgress || window.sequencer.active) return
 
