@@ -57,30 +57,34 @@ const library = new Library()
 const grid = new Grid(camera, parameters, scene, library)
 const postProcessor = new PostProcessor(camera, scene, parameters, renderer)
 const sequencer = new Sequencer(scene, library, parameters, grid, camera, postProcessor)
-//const controls = new Controls(camera, parameters, sequencer, library)
 
-const container = document.getElementById('multiverse')
-const controls = new TouchControls(container, camera, scene)
-window.controls = controls
-
+let controls
 let lastClusterPosition
 let needRender = false
 let isRenderingClusterInProgress = false
 let previousElapsedTime = clock.getElapsedTime()
 
-// scene.add(controls.pointerLockControls.getObject())
+if (window.isMobileOrTabletFlag) {
+  controls = new TouchControls(camera)
+} else {
+  controls = new Controls(camera, parameters, sequencer, library)
+  scene.add(controls.pointerLockControls.getObject())
 
-// document.addEventListener('keydown', event => controls.onKeyDown(event))
-// document.addEventListener('keyup', event => controls.onKeyUp(event))
-// document.getElementById('multiverse').addEventListener('click', event => controls.pointerLockControls.lock())
-
+  document.addEventListener('keydown', event => controls.onKeyDown(event))
+  document.addEventListener('keyup', event => controls.onKeyUp(event))
+  document.getElementById('multiverse').addEventListener('click', event => controls.pointerLockControls.lock())
+}
+window.controls = controls
 
 document.getElementById('launch').addEventListener('click', event => {
   event.preventDefault()
   needRender = true
-  controls.pointerLockControls.lock()
+
+  if (!window.isMobileOrTabletFlag)
+    controls.pointerLockControls.lock()
+
   document.getElementById('intro').className = 'fadeOut'
-  sequencer.launchNextSequence(true)
+  sequencer.launchNextSequence()
 })
 
 window.addEventListener('resize', () => {
@@ -103,9 +107,9 @@ function animate () {
 
   updateAnimatedObjects(currentElapsedTime)
 
-  // if (controls.pointerLockControls.isLocked === true) {
-  //   controls.handleMovements(currentElapsedTime, previousElapsedTime)
-  // }
+  if (!window.isMobileOrTabletFlag && controls.pointerLockControls.isLocked === true) {
+    controls.handleMovements(currentElapsedTime, previousElapsedTime)
+  }
   previousElapsedTime = currentElapsedTime
 
   if (!window.wormhole.active) {
@@ -144,16 +148,12 @@ function animate () {
   window.onload = () => {
       document.getElementById('loading').remove()
       document.getElementById('launch').className = 'fadeIn'
-      needRender = true
-      document.getElementById('intro').remove()
-      document.getElementById('blackwall').remove()
-      //document.getElementById('intro').remove()
   }
 
-  // await controls.showElementById("title")
-  // await controls.showElementById("description")
-  // await controls.showElementById("notice")
-  // await controls.showElementById("entrypoint")
+  await controls.showElementById("title")
+  await controls.showElementById("description")
+  await controls.showElementById("notice")
+  await controls.showElementById("entrypoint")
 }
 
 function updateAnimatedObjects (elapsedTime) {

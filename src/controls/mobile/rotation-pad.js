@@ -1,9 +1,12 @@
-'use strict'
-
+/*
+just force myself to handle mobile devices.
+this is a rewrite of http://mese79.github.io/TouchControls/
+can you fix the bug with double touch ? i dont wanna deal with this shit
+i hate mobile devices with a fierce passion of a millions suns
+ */
 
 export default class RotationPad {
-  constructor(container) {
-    this.container = container
+  constructor() {
     this.mouseDown = false
     this.eventRepeatTimeout
     this.newLeft
@@ -37,35 +40,26 @@ export default class RotationPad {
   }
 
   addEventListener() {
-    this.region.addEventListener('mousedown', event => {
-      this.mouseDown = true
-      this.handle.style.opacity = 1
-      this.update(event.pageX, event.pageY)
-    })
-
-    document.addEventListener('mouseup', () => {
-      this.mouseDown = false
-    })
-
-    document.addEventListener('mousemove', event => {
-      if (!this.mouseDown) return
-
-      this.update(event.pageX, event.pageY)
-    })
-
     this.region.addEventListener('touchstart', event => {
       this.mouseDown = true
       this.handle.style.opacity = 1
       this.update(event.targetTouches[0].pageX, event.targetTouches[0].pageY)
+    }, { passive: true })
+
+    this.region.addEventListener('touchend', () => {
+      this.handle.style.opacity = 0
+      this.mouseDown = false
     })
 
-    this.region.addEventListener('touchend', () => this.mouseDown = false)
-    this.region.addEventListener('touchcancel', () => this.mouseDown = false)
+    this.region.addEventListener('touchcancel', () => {
+      this.handle.style.opacity = 0
+      this.mouseDown = false
+    })
 
     this.region.addEventListener('touchmove', event => {
       if (!this.mouseDown) return
       this.update(event.touches[0].pageX, event.touches[0].pageY)
-    })
+    }, { passive: true })
   }
 
   update (pageX, pageY) {

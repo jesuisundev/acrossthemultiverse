@@ -495,12 +495,10 @@ nav #menu .cell .description {
 #rotation-pad {
     position: absolute;
     z-index: 9999;
-    bottom: 110px;
-    right: 110px;
-    width: 100px;
-    bottom: 0;
-    height: 100px;
-    right: 0;
+    width: 104px;
+    bottom: 5px;
+    height: 104px;
+    right: 5px;
 }
 
 #rotation-pad-region {
@@ -531,8 +529,8 @@ nav #menu .cell .description {
 #movement-pad {
     position: absolute;
     z-index: 9999;
-    bottom: 0;
-    left: 0;
+    bottom: 5px;
+    left: 5px;
     width: 104px;
     height: 104px;
 }
