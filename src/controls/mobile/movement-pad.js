@@ -62,6 +62,8 @@ export default class MovementPad {
   }
 
   update (pageX, pageY) {
+    if(window.sequencer.active) return
+
     this.newLeft = (pageX - this.regionData.offset.left)
     this.newTop = (pageY - this.regionData.offset.top)
     this.distance = Math.pow(this.regionData.centerX - this.newLeft, 2) + Math.pow(this.regionData.centerY - this.newTop, 2)

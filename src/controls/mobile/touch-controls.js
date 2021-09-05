@@ -13,12 +13,10 @@ export default class TouchControls {
   constructor(camera) {
     this.camera = camera
     this.config = {
-      speedFactor: 6,
+      speedFactor: 12,
       delta: 1,
       rotationFactor: 0.002,
-      maxPitch: 55,
-      hitTest: true,
-      hitTestDistance: 40
+      maxPitch: 25
     }
 
     this.moveForward = false
@@ -36,17 +34,19 @@ export default class TouchControls {
     this.velocity = new THREE.Vector3(0, 0, 0)
     this.cameraHolder = new THREE.Object3D()
     this.cameraHolder.name = 'cameraHolder'
-    this.cameraHolder.add(this.camera)
+    this.cameraHolder.add(this.camera.clone())
     this.fpsBody = new THREE.Object3D()
     this.fpsBody.add(this.cameraHolder)
+
+
+    this.rotationPad = new RotationPad()
+    this.movementPad = new MovementPad()
 
     this.createRotationPad()
     this.createMovementPad()
   }
 
   createRotationPad () {
-    this.rotationPad = new RotationPad()
-
     document.getElementById('rotation-pad').addEventListener('YawPitch', event => {
       const rotation = this.calculateCameraRotation(event.detail.deltaX, event.detail.deltaY)
       this.setRotation(rotation.rx, rotation.ry)
@@ -54,8 +54,6 @@ export default class TouchControls {
   }
 
   createMovementPad () {
-    this.movementPad = new MovementPad()
-
     document.getElementById('movement-pad').addEventListener('move', event => {
       this.ztouch = Math.abs(event.detail.deltaY)
       this.xtouch = Math.abs(event.detail.deltaX)
@@ -91,7 +89,7 @@ export default class TouchControls {
       this.update()
     })
 
-    this.movementPad.addEventListener('stopMove', event => {
+    document.getElementById('movement-pad').addEventListener('stopMove', event => {
       this.ztouch = this.xtouch = 1
       this.moveForward = this.moveBackward = this.moveLeft = this.moveRight = false
     })
@@ -110,6 +108,8 @@ export default class TouchControls {
   }
 
   update () {
+    if(window.sequencer.active) return
+
     this.velocity.x += (-1 * this.velocity.x) * 0.75 * this.config.delta
     this.velocity.z += (-1 * this.velocity.z) * 0.75 * this.config.delta
 
@@ -117,13 +117,15 @@ export default class TouchControls {
     if (this.moveBackward && !this.lockMoveBackward) this.velocity.z += this.ztouch * this.config.speedFactor * this.config.delta
     if (this.moveLeft && !this.lockMoveLeft) this.velocity.x -= this.xtouch * this.config.speedFactor * this.config.delta
     if (this.moveRight && !this.lockMoveRight) this.velocity.x += this.xtouch * this.config.speedFactor * this.config.delta
-    
+
     this.camera.translateX(this.velocity.x)
     this.camera.translateY(this.velocity.y)
     this.camera.translateZ(this.velocity.z)
   }
 
   setRotation (x, y) {
+    if(window.sequencer.active) return
+
     if (x !== null)
       this.camera.rotateX(x)
 

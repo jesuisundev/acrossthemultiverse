@@ -1,6 +1,7 @@
+import { gsap } from 'gsap'
+
 import Wormhole from './wormhole/Wormhole'
 import Epiphany from './epiphany/Epiphany'
-import { gsap } from 'gsap'
 
 export default class Sequencer {
   constructor (scene, library, parameters, grid, camera, postProcessor) {
@@ -231,6 +232,7 @@ export default class Sequencer {
     this.hideNavigation()
 
     this.resetScene()
+    this.resetPlayer()
 
     if(window.epiphany) window.epiphany.dispose()
 
@@ -347,6 +349,16 @@ export default class Sequencer {
     this.grid.disposeClusters(arrayActiveClusters)
 
     this.camera.position.set(0, 0, 0)
+  }
+
+  resetPlayer() {
+    this.camera.rotation.set(0, 0, 0)
+    this.camera.position.set(0, 0, 0)
+    this.camera.lookAt(0, 0, 0)
+    this.camera.translateX(0)
+    this.camera.translateY(0)
+    this.camera.translateZ(0)
+    this.camera.updateProjectionMatrix()
   }
 
   changeUniverse () {

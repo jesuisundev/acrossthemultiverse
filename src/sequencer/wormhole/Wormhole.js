@@ -109,8 +109,10 @@ export default class Wormhole {
       .to(this.auraSpeederMaterial, { duration: 6, opacity: 0.7 }, 13)
       .to(window.wormhole, { duration: 6, speed: 1800 }, 13)
 
-    window.controls.velocity.x = 0
-    window.controls.velocity.z = 0
+    if (!window.isMobileOrTabletFlag) {
+      window.controls.velocity.x = 0
+      window.controls.velocity.z = 0
+    }
 
     return this.wormholeTimeline.then(() => true)
   }

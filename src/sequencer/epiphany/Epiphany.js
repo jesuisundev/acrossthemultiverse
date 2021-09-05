@@ -185,5 +185,7 @@ export default class Epiphany {
     this.epiphany = null
     this.epiphanySourceMesh = null
     window.epiphany = null
+
+    this.epiphanyTimeline.kill()
   }
 }

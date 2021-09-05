@@ -11,11 +11,9 @@ import Sequencer from './sequencer/sequencer'
 import Helper from './world/Helper'
 
 // ROAD MAP
-// TODO : handle mobile control - wip
-//  - Reset translation, velocity and orientation before wormhole
-//  - reduce size font
-//  - reduce far and budgets
-// TODO : PINK GIANTS IN LAST UNI
+
+
+// TODO : Fix double touch mobile
 // TODO : Analytics
 // TODO : refactor clean up comment
 // DEADLINE -> 13 sept
@@ -84,9 +82,11 @@ document.getElementById('launch').addEventListener('click', event => {
 })
 
 window.addEventListener('resize', () => {
-  renderer.setSize(renderWidth, renderHeight)
-  camera.aspect = renderWidth / renderHeight
-  postProcessor.composer.setSize(renderWidth, renderHeight)
+  const resizedRenderResolution = helper.getRenderResolution()
+
+  renderer.setSize(resizedRenderResolution.renderWidth, resizedRenderResolution.renderHeight)
+  camera.aspect = resizedRenderResolution.renderWidth / resizedRenderResolution.renderHeight
+  postProcessor.composer.setSize(resizedRenderResolution.renderWidth, resizedRenderResolution.renderHeight)
   camera.updateProjectionMatrix()
 })
 

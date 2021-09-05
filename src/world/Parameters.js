@@ -66,39 +66,39 @@ export default class Parameters {
     this.story = {
       chapterone: [
         "TRANSCENDENCE<br /><span class='chapter'>chapter 1</span>",
-        "You are the pioneer of the human race.",
-        "Find a supermassive black hole and go beyond our universe.",
-        "Epiphany awaits."
+        "You are the pioneer of the human race",
+        "Find a supermassive black hole and go beyond our universe",
+        "Epiphany awaits"
       ],
       chaptertwo: [
         "WONDER<br /><span class='chapter'>chapter 2</span>",
-        "Physics laws have slightly changed.",
-        "Find a supermassive black hole and go to the next universe.",
-        "Epiphany awaits."
+        "Physics laws have slightly changed",
+        "Find a supermassive black hole and go to the next universe",
+        "Epiphany awaits"
       ],
       chapterthree: [
         "FILAMENTS<br /><span class='chapter'>chapter 3</span>",
-        "Physics laws have greatly changed.",
-        "Find a supermassive black hole and go to the next universe.",
-        "Epiphany awaits."
+        "Physics laws have greatly changed",
+        "Find a supermassive black hole and go to the next universe",
+        "Epiphany awaits"
       ],
       chapterfour: [
         "FRONTIERS<br /><span class='chapter'>chapter 4</span>",
-        "Physics laws have heavily changed.",
-        "You are close to the origin.",
-        "Epiphany awaits."
+        "Physics laws have heavily changed",
+        "You are close to the origin",
+        "Epiphany awaits"
       ],
       epiphany: [
         "EPIPHANY",
-        "No one knows how it started.",
-        "But we know how it is.",
-        "Every universe is created within the blackhole of another.",
-        "These baby universes change their physics laws to favor their own survival.",
-        "The more they create black holes, the more they create baby universes.",
-        "Which will create more black holes to create more baby universes.",
-        "Producing reality as we know it.",
-        "An infinite multiverse following the perpetual law of evolution.",
-        "The eternal loop of everything."
+        "No one knows how it started",
+        "But we know how it is",
+        "Every universe is created within the blackhole of another",
+        "These baby universes change their physics laws to favor their own survival",
+        "The more they create black holes, the more they create baby universes",
+        "Which will create more black holes to create more baby universes",
+        "Producing reality as we know it",
+        "An infinite multiverse following the perpetual law of evolution",
+        "The eternal loop of everything"
       ]
     }
 
