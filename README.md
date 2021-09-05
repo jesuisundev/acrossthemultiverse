@@ -1,5 +1,5 @@
 # acrossthemultiverse
 
 # TODO
-- Screenshot button
-- Physics should impact gameplay
+- Fix double touch mobile issue
+- Screenshot button feature

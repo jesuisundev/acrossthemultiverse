@@ -117,10 +117,10 @@ export default class Controls {
     this.toggleUiInProgress = true
 
     if (this.uiVisible) {
-      await this.sequencer.fadeOutById('#nav', 2, 'Power0.easeNone')
+      await this.sequencer.fadeOutById('#nav', 0.3, 'Power0.easeNone')
       this.uiVisible = false
     } else {
-      await this.sequencer.fadeInById('#nav', 2, 'Power0.easeNone')
+      await this.sequencer.fadeInById('#nav', 0.3, 'Power0.easeNone')
       this.uiVisible = true
     }
 

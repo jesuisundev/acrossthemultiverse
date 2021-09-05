@@ -373,10 +373,10 @@ export default class Sequencer {
 
   async showNavigation() {
     if (window.isMobileOrTabletFlag) {
-      this.fadeInById('#movement-pad', 2, 'Power0.easeNone')
-      this.fadeInById('#rotation-pad', 2, 'Power0.easeNone')
+      this.fadeInById('#movement-pad', 0.3, 'Power0.easeNone')
+      this.fadeInById('#rotation-pad', 0.3, 'Power0.easeNone')
     } else {
-      await this.fadeInById('#nav', 2, 'Power0.easeNone')
+      await this.fadeInById('#nav', 0.3, 'Power0.easeNone')
     }
   }
 

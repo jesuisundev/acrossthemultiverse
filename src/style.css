@@ -670,6 +670,11 @@ nav #menu .cell .description {
     margin: 0 1px 0 1px;
 }
 
+#warning-mobile {
+    margin-top: 30px;
+    display: none;
+}
+
 @media (max-width:960px) {
     #story {
         font-size: 2em !important;
@@ -681,5 +686,9 @@ nav #menu .cell .description {
 
     #notice, #intro hr {
         display: none;
+    }
+
+    #warning-mobile {
+        display: inline-block;
     }
 }

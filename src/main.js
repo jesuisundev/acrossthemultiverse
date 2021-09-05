@@ -10,9 +10,6 @@ import PostProcessor from './postprocessing/PostProcessor'
 import Sequencer from './sequencer/sequencer'
 import Helper from './world/Helper'
 
-// TODO : Fix double touch mobile
-// TODO : refactor clean up comment
-
 const clock = new THREE.Clock()
 const parameters = new Parameters()
 const helper = new Helper(parameters)
