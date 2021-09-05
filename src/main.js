@@ -10,13 +10,8 @@ import PostProcessor from './postprocessing/PostProcessor'
 import Sequencer from './sequencer/sequencer'
 import Helper from './world/Helper'
 
-// ROAD MAP
-
-
 // TODO : Fix double touch mobile
-// TODO : Analytics
 // TODO : refactor clean up comment
-// DEADLINE -> 13 sept
 
 const clock = new THREE.Clock()
 const parameters = new Parameters()
@@ -45,7 +40,7 @@ const camera = new THREE.PerspectiveCamera(
   parameters.global.camera.near,
   parameters.global.camera.far
 )
-camera.rotation.z = 0.8
+camera.rotation.z = 1
 
 const library = new Library()
 const grid = new Grid(camera, parameters, scene, library)
