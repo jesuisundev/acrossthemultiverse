@@ -707,6 +707,10 @@ nav #menu .cell .description {
     #warning-mobile {
         display: inline-block;
     }
+
+    #credits {
+        top: 45%;
+    }
 }
 
 @media (max-width:1000px) {

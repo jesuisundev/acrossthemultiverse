@@ -1,6 +1,7 @@
 {
-    "repository": "#",
-    "license": "UNLICENSED",
+    "repository": "https://github.com/jesuisundev/acrosstheuniverse",
+    "license": "MIT, CC BY-NC-SA 3.0, CC BY 4.0",
+    "version": "1.0.0",
     "scripts": {
         "build": "webpack --config ./bundler/webpack.prod.js",
         "start": "webpack serve --config ./bundler/webpack.dev.js"
