@@ -59,6 +59,6 @@ npm run-script build
 
 Across The Multiverse is an **Open Source Project**. This means that:
 
-> Individuals making significant and valuable contributions are given commit-access to the project to contribute as they see fit. This project is more fun experience than a standard guarded open source project.
+> Individuals making significant and valuable contributions are given commit-access to the project to contribute as they see fit. This project is more a fun experience than a standard guarded open source project.
 
 Every commit on the main branch automatically deploy a new build on [cloudfare pages](https://pages.cloudflare.com/) which is accesible at https://across-multiverse.com/
