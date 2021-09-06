@@ -1,7 +1,7 @@
 /*
-just force myself to handle mobile devices.
+just force myself to handle fucking mobile devices.
 this is a rewrite of http://mese79.github.io/TouchControls/
-can you fix the bug with double touch ? i dont wanna deal with this shit
+it's working but its shit, make it better before using it
 i hate mobile devices with a fierce passion of a millions suns
  */
 

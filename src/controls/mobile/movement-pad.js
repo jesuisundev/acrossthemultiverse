@@ -1,7 +1,7 @@
 /*
 just force myself to handle mobile devices.
 this is a rewrite of http://mese79.github.io/TouchControls/
-can you fix the bug with double touch ? i dont wanna deal with this shit
+it's working but its shit, make it better before using it
 i hate mobile devices with a fierce passion of a millions suns
  */
 
@@ -57,8 +57,18 @@ export default class MovementPad {
 
     this.region.addEventListener('touchmove', event => {
       if (!this.mouseDown) return
-      this.update(event.touches[0].pageX, event.touches[0].pageY)
-    }, { passive: true})
+
+      // this does not exist in Safari, well then FUCK YOU SAFARI
+      if(event.changedTouches) {
+        if(event.changedTouches[0]?.target?.id == 'movement-pad-region') {
+          this.update(event.changedTouches[0].pageX, event.changedTouches[0].pageY)
+        } else {
+          this.update(event.changedTouches[1].pageX, event.changedTouches[1].pageY)
+        }
+      } else {
+        this.update(event.touches[0].pageX, event.touches[0].pageY)
+      }
+    })
   }
 
   update (pageX, pageY) {
