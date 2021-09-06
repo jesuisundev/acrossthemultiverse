@@ -678,8 +678,17 @@ nav #menu .cell .description {
 }
 
 @media (max-width:960px) {
+    #logo {
+        width: 350px;
+        margin-bottom: 15px;
+    }
+
     #story {
         font-size: 2em !important;
+    }
+
+    #intro #description strong {
+        margin: 10px 0;
     }
 
     #entrypoint {

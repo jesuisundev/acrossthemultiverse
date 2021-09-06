@@ -19,7 +19,7 @@ helper.setDefaultGlobal()
 const scene = new THREE.Scene()
 scene.fog = new THREE.Fog(parameters.global.background[window.currentUniverse], parameters.global.camera.near, parameters.global.camera.far)
 
-const resizedRenderResolution = helper.getResizedRenderResolution()
+let resizedRenderResolution = helper.getResizedRenderResolution()
 const renderWidth = resizedRenderResolution.renderWidth
 const renderHeight = resizedRenderResolution.renderHeight
 const renderer = new THREE.WebGLRenderer(parameters.global.webGlRenderer)
@@ -87,12 +87,19 @@ function onResize() {
   if (window.highend) {
     resizedRenderResolution.renderWidth = window.innerWidth
     resizedRenderResolution.renderHeight = window.innerHeight
+  } else {
+    resizedRenderResolution = helper.getResizedRenderResolution()
   }
 
   renderer.setSize(resizedRenderResolution.renderWidth, resizedRenderResolution.renderHeight)
   camera.aspect = resizedRenderResolution.renderWidth / resizedRenderResolution.renderHeight
   postProcessor.composer.setSize(resizedRenderResolution.renderWidth, resizedRenderResolution.renderHeight)
   camera.updateProjectionMatrix()
+
+  if (window.isMobileOrTabletFlag) {
+    controls = new TouchControls(camera)
+    window.controls = controls
+  }
 }
 
 function animate () {
