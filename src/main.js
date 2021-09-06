@@ -19,9 +19,9 @@ helper.setDefaultGlobal()
 const scene = new THREE.Scene()
 scene.fog = new THREE.Fog(parameters.global.background[window.currentUniverse], parameters.global.camera.near, parameters.global.camera.far)
 
-const renderResolution = helper.getRenderResolution()
-const renderWidth = renderResolution.renderWidth
-const renderHeight = renderResolution.renderHeight
+const resizedRenderResolution = helper.getResizedRenderResolution()
+const renderWidth = resizedRenderResolution.renderWidth
+const renderHeight = resizedRenderResolution.renderHeight
 const renderer = new THREE.WebGLRenderer(parameters.global.webGlRenderer)
 renderer.setClearColor(new THREE.Color(parameters.global.background[window.currentUniverse]))
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
@@ -62,25 +62,38 @@ if (window.isMobileOrTabletFlag) {
 }
 window.controls = controls
 
-document.getElementById('launch').addEventListener('click', event => {
+document.getElementById('launch').addEventListener('click', event => onLaunch(event))
+document.getElementById('launchUltra').addEventListener('click', event => onLaunch(event, true))
+window.addEventListener('resize', () => onResize())
+
+function onLaunch(event, isHighEnd = false) {
   event.preventDefault()
-  needRender = true
 
   if (!window.isMobileOrTabletFlag)
     controls.pointerLockControls.lock()
 
-  document.getElementById('intro').className = 'fadeOut'
-  sequencer.launchNextSequence()
-})
+  if (isHighEnd) {
+    window.highend = isHighEnd
+    onResize()
+  }
 
-window.addEventListener('resize', () => {
-  const resizedRenderResolution = helper.getRenderResolution()
+  document.getElementById('intro').className = 'fadeOut'
+
+  needRender = true
+  sequencer.launchNextSequence()
+}
+
+function onResize() {
+  if (window.highend) {
+    resizedRenderResolution.renderWidth = window.innerWidth
+    resizedRenderResolution.renderHeight = window.innerHeight
+  }
 
   renderer.setSize(resizedRenderResolution.renderWidth, resizedRenderResolution.renderHeight)
   camera.aspect = resizedRenderResolution.renderWidth / resizedRenderResolution.renderHeight
   postProcessor.composer.setSize(resizedRenderResolution.renderWidth, resizedRenderResolution.renderHeight)
   camera.updateProjectionMatrix()
-})
+}
 
 function animate () {
   const currentElapsedTime = clock.getElapsedTime()
@@ -136,6 +149,7 @@ function animate () {
   window.onload = () => {
       document.getElementById('loading').remove()
       document.getElementById('launch').className = 'fadeIn'
+      document.getElementById('launchUltra').className = 'fadeIn'
   }
 
   await helper.showElementById("title")

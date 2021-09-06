@@ -3,7 +3,7 @@ export default class Helper {
     this.parameters = parameters
   }
 
-  getRenderResolution () {
+  getResizedRenderResolution () {
     let renderResolution = {
       renderWidth: window.innerWidth,
       renderHeight: window.innerHeight,
@@ -28,6 +28,7 @@ export default class Helper {
 
   // i'm lazy, we could refactor some code and avoid globals
   setDefaultGlobal () {
+    window.highend = false
     window.currentUniverse = 0
     window.materialsToUpdate = {}
     window.meshesToUpdate = {}
