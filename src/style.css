@@ -70,6 +70,11 @@ body {
 
 #story span {
     font-size: 0.5em;
+    line-height: 30px;
+}
+
+#story span strong {
+    font-size: 15px;
 }
 
 .dg.ac {

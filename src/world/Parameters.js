@@ -65,25 +65,25 @@ export default class Parameters {
 
     this.story = {
       chapterone: [
-        "TRANSCENDENCE<br /><span class='chapter'>chapter 1</span>",
+        "TRANSCENDENCE<br /><span class='chapter'>chapter 1<br/><strong>- The Known Universe -</strong></span>",
         "You are the pioneer of the human race",
         "Find a supermassive black hole and go beyond our universe",
         "Epiphany awaits"
       ],
       chaptertwo: [
-        "WONDER<br /><span class='chapter'>chapter 2</span>",
+        "WONDER<br /><span class='chapter'>chapter 2<br/><strong>- Epsilon Aristaeus -</strong></span>",
         "Physics laws have slightly changed",
         "Find a supermassive black hole and go to the next universe",
         "Epiphany awaits"
       ],
       chapterthree: [
-        "FILAMENTS<br /><span class='chapter'>chapter 3</span>",
+        "FILAMENTS<br /><span class='chapter'>chapter 3<br/><strong>- Ursa Borysthenis -</strong></span>",
         "Physics laws have greatly changed",
         "Find a supermassive black hole and go to the next universe",
         "Epiphany awaits"
       ],
       chapterfour: [
-        "FRONTIERS<br /><span class='chapter'>chapter 4</span>",
+        "FRONTIERS<br /><span class='chapter'>chapter 4<br/><strong>- Unknown Universe -</strong></span>",
         "Physics laws have heavily changed",
         "You are close to the origin",
         "Epiphany awaits"
