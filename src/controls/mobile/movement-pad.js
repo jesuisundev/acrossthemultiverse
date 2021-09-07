@@ -77,7 +77,7 @@ export default class MovementPad {
     this.newLeft = (pageX - this.regionData.offset.left)
     this.newTop = (pageY - this.regionData.offset.top)
     this.distance = Math.pow(this.regionData.centerX - this.newLeft, 2) + Math.pow(this.regionData.centerY - this.newTop, 2)
-    
+
     if (this.distance > Math.pow(this.regionData.radius, 2)) {
       this.angle = Math.atan2((this.newTop - this.regionData.centerY), (this.newLeft - this.regionData.centerX))
       this.newLeft = (Math.cos(this.angle) * this.regionData.radius) + this.regionData.centerX

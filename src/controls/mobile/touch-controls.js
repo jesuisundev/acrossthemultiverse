@@ -13,7 +13,7 @@ export default class TouchControls {
   constructor(camera) {
     this.camera = camera
     this.config = {
-      speedFactor: 12,
+      speedFactor: 15,
       delta: 1,
       rotationFactor: 0.002,
       maxPitch: 25
@@ -119,7 +119,6 @@ export default class TouchControls {
     if (this.moveRight && !this.lockMoveRight) this.velocity.x += this.xtouch * this.config.speedFactor * this.config.delta
 
     this.camera.translateX(this.velocity.x)
-    this.camera.translateY(this.velocity.y)
     this.camera.translateZ(this.velocity.z)
   }
 

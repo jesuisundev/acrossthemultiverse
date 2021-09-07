@@ -97,7 +97,11 @@ export default class RotationPad {
     deltaX = -1 * Math.round(deltaX * 10) / 10
     deltaY = -1 * Math.round(deltaY * 10) / 10
 
-    this.sendEvent(deltaX, deltaY)
+    // intentionaly ignore Y value to block player the possibility to go up or down
+    // i do that for performance optimisation, memory could explode on some devices
+    // if you wish the full control back to the player you should use this line of code
+    // this.sendEvent(deltaX, deltaY)
+    this.sendEvent(deltaX, 0)
   }
 
   sendEvent (dx, dy) {
