@@ -19,7 +19,6 @@ export default class Library {
             { type: 'pass', src: 'star9.png' },
             { type: 'pass', src: 'star10.png' },
             { type: 'pass', src: 'star11.png' },
-            { type: 'pass', src: 'star12.png' },
             { type: 'bright', src: 'brightstar1.png' },
             { type: 'bright', src: 'brightstar2.png' },
             { type: 'bright', src: 'brightstar3.png' },

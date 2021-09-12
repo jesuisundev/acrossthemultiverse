@@ -54,13 +54,13 @@ export default class Parameters {
     this.controls = {
       velocity: 2000.0,
       speedLimit: {
-        up: 5000.0,
-        down: -5000.0
+        up: 6000.0,
+        down: -6000.0
       }
     }
 
     this.grid = {
-      clusterSize: 45000 // 65000?
+      clusterSize: 45000
     }
 
     this.story = {
