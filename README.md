@@ -9,6 +9,9 @@ A four chapter story with an epic revelation at the end.**
 
 https://across-multiverse.com/
 
+
+A blog post explaining how everything works is available [here](https://www.jesuisundev.com/en/i-built-the-entire-universe-in-javascript/) !
+
 # License
 
 

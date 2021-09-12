@@ -212,3 +212,4 @@ animate()
 init()
 
 console.log('Ho hi fellow developer ! You\'ll find the source code over here => https://github.com/jesuisundev/acrossthemultiverse.')
+console.log('There is also a blog post explaining how everything works => https://www.jesuisundev.com/en/i-built-the-entire-universe-in-javascript/')
