@@ -376,7 +376,8 @@ export default class Sequencer {
       this.fadeInById('#movement-pad', 0.3, 'Power0.easeNone')
       this.fadeInById('#rotation-pad', 0.3, 'Power0.easeNone')
     } else {
-      await this.fadeInById('#nav', 0.3, 'Power0.easeNone')
+      if(window.controls.uiVisible)
+        await this.fadeInById('#nav', 0.3, 'Power0.easeNone')
     }
   }
 

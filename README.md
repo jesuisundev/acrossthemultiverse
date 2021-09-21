@@ -70,8 +70,9 @@ Every commit on the main branch automatically deploy a new build on [cloudfare p
 
 - Elliptic Galaxy
 - Eye Nebula
-- Blazar
-- Pulsar
 - Ship in Starfield
 - Procedural planets
+- Blazar
+- Pulsar
+- Discovery mode (no story, universes generated, multiverse map graph to unlock)
 - Multiplayer using Mercure
