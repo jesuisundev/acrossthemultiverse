@@ -80,7 +80,7 @@ function onLaunch(event, isHighEnd = false) {
   document.getElementById('intro').className = 'fadeOut'
 
   needRender = true
-  sequencer.launchNextSequence()
+  sequencer.launchNextSequence(true)
 }
 
 function onResize() {

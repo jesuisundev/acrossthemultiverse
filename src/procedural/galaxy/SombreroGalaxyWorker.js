@@ -70,12 +70,12 @@ function _getGalaxyAttributesInRandomPosition (max, clusterSize, parameters, cho
   const randomNess = 5
   const amplitude = 4
   const mixedColor = chosenColors.colorIn.clone()
-  const geometry = new THREE.RingGeometry(14, 6, 300, 300)
+  const geometry = new THREE.RingGeometry(14, 15, 300, 300)
 
   geometry.scale(200, 200, 200)
 
   for (let i = 0; i < geometry.attributes.position.array.length - 1; i++) {
-    if(i > 80000) continue;
+    if(i > 80000 || Math.random() > 0.7) continue;
   
     const i3 = i * 3
     
@@ -89,20 +89,17 @@ function _getGalaxyAttributesInRandomPosition (max, clusterSize, parameters, cho
       currentValueX = geometry.attributes.position.array[i3] * (Math.random() * randomNess + amplitude )
 
       if(currentValueX && !isNaN(currentValueX)) {
-        positions[i3] = currentValueX
-        colors[i3] = mixedColor.r
+        positions[i3] = currentValueX + (THREE.MathUtils.randInt(3000, 8000) * Math.random()) + randomNess
+        colors[i3] = mixedColor.b
       }
-    } else {
-      positions[i3] = (randomNess + 3000) * Math.random()
-      colors[i3] = mixedColor.b
     }
 
     if (geometry.attributes.position.array[i3 + 1]) {
       currentValueY = geometry.attributes.position.array[i3 + 1] * (Math.random() * randomNess + amplitude )
 
       if(currentValueY && !isNaN(currentValueY)) {
-        positions[i3 + 1] = currentValueY
-        colors[i3 + 1] = mixedColor.g
+        positions[i3 + 1] = currentValueY + (THREE.MathUtils.randInt(3000, 8000) * Math.random()) + randomNess
+        colors[i3 + 1] = mixedColor.b
       }
     } else {
       positions[i3 + 1] = (randomNess + 3000) * Math.random()
@@ -113,11 +110,11 @@ function _getGalaxyAttributesInRandomPosition (max, clusterSize, parameters, cho
       currentValueZ = geometry.attributes.position.array[i3 + 2] * (Math.random() * randomNess + amplitude )
 
       if(currentValueZ && !isNaN(currentValueZ)) {
-        positions[i3 + 2] = currentValueZ
+        positions[i3 + 2] = currentValueZ + ((THREE.MathUtils.randInt(3000, 8000) * Math.random()) + randomNess) * (Math.random() > 0.5 ? 1 : -1)
         colors[i3 + 2] = mixedColor.b
       }
     } else {
-      positions[i3 + 2] = (randomNess + 3000) * Math.random()
+      positions[i3 + 2] = (randomNess + THREE.MathUtils.randInt(3000, 8000)) * Math.random() * (Math.random() > 0.5 ? 1 : -1)
       colors[i3 + 2] = mixedColor.b
     }
   }
