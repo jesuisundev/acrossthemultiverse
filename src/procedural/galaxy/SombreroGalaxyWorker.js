@@ -49,9 +49,12 @@ function _getGalaxyAttributesInRandomPosition () {
   const amplitude = 4
   const minPositionAmplitude = 3000
   const maxPositionAmplitude = 8000
-  const geometry = new THREE.RingGeometry(14, 15, 300, 300)
+  const size = THREE.MathUtils.randInt(10, 16)
+  const density = 300
+  const scale = 200
+  const geometry = new THREE.RingGeometry(size, size + 1, density, density)
 
-  geometry.scale(200, 200, 200)
+  geometry.scale(scale, scale, scale)
 
   for (let i = 0; i < geometry.attributes.position.array.length - 1; i++) {
     if(i > 80000) continue;

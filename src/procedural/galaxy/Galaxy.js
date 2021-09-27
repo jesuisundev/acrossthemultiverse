@@ -96,7 +96,8 @@ export default class Galaxy {
       this.galaxy.secondPass.points,
       this.galaxy.thirdPass.points
     )
-
+      // TODO : add lensflare
+      // TODO : if sombrero change opacity cloud
     gsap.timeline()
       .to(this.galaxy.firstPass.points.material, { duration: 3, opacity: 1 }, 0)
       .to(this.galaxy.secondPass.points.material, {

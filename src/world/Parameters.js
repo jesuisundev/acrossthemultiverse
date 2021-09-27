@@ -506,7 +506,7 @@ export default class Parameters {
             },
             pass: {
               min: 0.0001,
-              max: 0.025
+              max: 0.0002
             }
           }
         },
