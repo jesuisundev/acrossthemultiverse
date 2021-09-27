@@ -10,32 +10,10 @@ self.onmessage = messageEvent => {
 
   for (const clusterToPopulate of clustersToPopulate) {
     // base galaxy shaped
-    const firstPassStarsRandomAttributes = _getGalaxyAttributesInRandomPosition(
-      Math.floor(
-        galaxyParameters.budget * THREE.MathUtils.randFloat(
-          galaxyParameters.vertices.pass.min,
-          galaxyParameters.vertices.pass.max
-        )
-      ),
-      clusterSize,
-      galaxyParameters,
-      chosenColors,
-      currentUniverse
-    )
+    const firstPassStarsRandomAttributes = _getGalaxyAttributesInRandomPosition()
 
     // gaz galaxy shaped
-    const secondPassStarsRandomAttributes = _getGalaxyAttributesInRandomPosition(
-      Math.floor(
-        galaxyParameters.budget * THREE.MathUtils.randFloat(
-          galaxyParameters.vertices.cloud.min * 0.6,
-          galaxyParameters.vertices.cloud.max * 0.6
-        )
-      ),
-      clusterSize,
-      galaxyParameters,
-      chosenColors,
-      currentUniverse
-    )
+    const secondPassStarsRandomAttributes = _getGalaxyAttributesInRandomPosition()
 
     // low starfield density using color from galaxy
     const thirdPassStarsRandomAttributes = _getAttributesInRandomPosition(
@@ -60,7 +38,7 @@ self.onmessage = messageEvent => {
   self.postMessage(galaxyAttributes)
 }
 
-function _getGalaxyAttributesInRandomPosition (max, clusterSize, parameters, chosenColors, currentUniverse) {
+function _getGalaxyAttributesInRandomPosition () {
   let currentValueX
   let currentValueY
   let currentValueZ
@@ -69,28 +47,23 @@ function _getGalaxyAttributesInRandomPosition (max, clusterSize, parameters, cho
   const colors = []
   const randomNess = 5
   const amplitude = 4
-  const mixedColor = chosenColors.colorIn.clone()
+  const minPositionAmplitude = 3000
+  const maxPositionAmplitude = 8000
   const geometry = new THREE.RingGeometry(14, 15, 300, 300)
 
   geometry.scale(200, 200, 200)
 
   for (let i = 0; i < geometry.attributes.position.array.length - 1; i++) {
-    if(i > 80000 || Math.random() > 0.7) continue;
+    if(i > 80000) continue;
   
     const i3 = i * 3
-    
-    mixedColor.lerpColors(
-      chosenColors.colorIn,
-      chosenColors.colorOut,
-      Math.sin(i) / clusterSize
-    )
 
     if (geometry.attributes.position.array[i3]) {
       currentValueX = geometry.attributes.position.array[i3] * (Math.random() * randomNess + amplitude )
 
       if(currentValueX && !isNaN(currentValueX)) {
-        positions[i3] = currentValueX + (THREE.MathUtils.randInt(3000, 8000) * Math.random()) + randomNess
-        colors[i3] = mixedColor.b
+        positions[i3] = currentValueX + (THREE.MathUtils.randInt(minPositionAmplitude, maxPositionAmplitude) * Math.random()) + randomNess
+        colors[i3] = 1
       }
     }
 
@@ -98,24 +71,24 @@ function _getGalaxyAttributesInRandomPosition (max, clusterSize, parameters, cho
       currentValueY = geometry.attributes.position.array[i3 + 1] * (Math.random() * randomNess + amplitude )
 
       if(currentValueY && !isNaN(currentValueY)) {
-        positions[i3 + 1] = currentValueY + (THREE.MathUtils.randInt(3000, 8000) * Math.random()) + randomNess
-        colors[i3 + 1] = mixedColor.b
+        positions[i3 + 1] = currentValueY + (THREE.MathUtils.randInt(minPositionAmplitude, maxPositionAmplitude) * Math.random()) + randomNess
+        colors[i3 + 1] = 1
       }
     } else {
-      positions[i3 + 1] = (randomNess + 3000) * Math.random()
-      colors[i3 + 1] = mixedColor.b
+      positions[i3 + 1] = (randomNess + minPositionAmplitude) * Math.random()
+      colors[i3 + 1] = 1
     }
 
     if (geometry.attributes.position.array[i3 + 2]) {
       currentValueZ = geometry.attributes.position.array[i3 + 2] * (Math.random() * randomNess + amplitude )
 
       if(currentValueZ && !isNaN(currentValueZ)) {
-        positions[i3 + 2] = currentValueZ + ((THREE.MathUtils.randInt(3000, 8000) * Math.random()) + randomNess) * (Math.random() > 0.5 ? 1 : -1)
-        colors[i3 + 2] = mixedColor.b
+        positions[i3 + 2] = currentValueZ + ((THREE.MathUtils.randInt(minPositionAmplitude, maxPositionAmplitude) * Math.random()) + randomNess) * (Math.random() > 0.5 ? 1 : -1)
+        colors[i3 + 2] = 1
       }
     } else {
-      positions[i3 + 2] = (randomNess + THREE.MathUtils.randInt(3000, 8000)) * Math.random() * (Math.random() > 0.5 ? 1 : -1)
-      colors[i3 + 2] = mixedColor.b
+      positions[i3 + 2] = (randomNess + THREE.MathUtils.randInt(minPositionAmplitude, maxPositionAmplitude)) * Math.random() * (Math.random() > 0.5 ? 1 : -1)
+      colors[i3 + 2] = 1
     }
   }
 

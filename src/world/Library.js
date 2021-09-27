@@ -29,7 +29,14 @@ export default class Library {
           baseUrl: '/textures/nebula/',
           pool: [
             { type: 'cloud', src: 'cloud1.png' },
-            { type: 'cloud', src: 'cloud2.png' }
+            { type: 'cloud', src: 'cloud2.png' },
+            { type: 'cloud', src: 'cloud3.png' },
+            { type: 'cloud', src: 'cloud4.png' },
+            { type: 'cloud', src: 'cloud5.png' },
+            { type: 'cloud', src: 'cloud6.png' },
+            { type: 'cloud', src: 'cloud7.png' },
+            { type: 'cloud', src: 'cloud8.png' },
+            { type: 'cloud', src: 'cloud9.png' }
           ]
         },
         blackhole: {

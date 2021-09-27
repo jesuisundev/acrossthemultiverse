@@ -99,7 +99,13 @@ export default class Galaxy {
 
     gsap.timeline()
       .to(this.galaxy.firstPass.points.material, { duration: 3, opacity: 1 }, 0)
-      .to(this.galaxy.secondPass.points.material, { duration: 3, opacity: this.parameters.matters[window.currentUniverse].galaxy.material.opacity.min }, 0)
+      .to(this.galaxy.secondPass.points.material, {
+        duration: 3,
+        opacity: THREE.MathUtils.randFloat(
+          this.parameters.matters[window.currentUniverse].galaxy.material.opacity.pass.min,
+          this.parameters.matters[window.currentUniverse].galaxy.material.opacity.pass.max
+        ) 
+      }, 0)
       .to(this.galaxy.thirdPass.points.material, { duration: 3, opacity: 1 }, 0)
   }
 
