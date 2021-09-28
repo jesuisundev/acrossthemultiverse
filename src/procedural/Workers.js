@@ -142,16 +142,8 @@ export default class Workers {
   _setWorkersDistribution () {
     this.workersDistribution[0] = [
       {
-        chances: 100,
-        worker: this.sombreroGalaxyWorker
-      },
-      {
         chances: 29,
         worker: this.openStarfieldWorker
-      },
-      {
-        chances: 20,
-        worker: this.globularStarfieldWorker
       },
       {
         chances: 13,
@@ -162,8 +154,16 @@ export default class Workers {
         worker: this.irregularGalaxyWorker
       },
       {
+        chances: 11,
+        worker: this.globularStarfieldWorker
+      },
+      {
         chances: 10,
         worker: this.spiralGalaxyWorker
+      },
+      {
+        chances: 9,
+        worker: this.sombreroGalaxyWorker
       },
       {
         chances: 8,

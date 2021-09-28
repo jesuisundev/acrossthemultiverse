@@ -6,27 +6,20 @@ self.onmessage = messageEvent => {
   const galaxyParameters = messageEvent.data.parameters.matters[currentUniverse].galaxy
   const clusterSize = messageEvent.data.parameters.grid.clusterSize
   const galaxyAttributes = {}
-    const chosenColors = _getTwoDifferentColors(galaxyParameters.galaxyColors)
+  const chosenColors = _getTwoDifferentColors(galaxyParameters.galaxyColors)
+  const innerSize = THREE.MathUtils.randInt(14, 15)
+  const outerSize = THREE.MathUtils.randInt(3, 4)
 
   for (const clusterToPopulate of clustersToPopulate) {
     // base galaxy shaped
-    const firstPassStarsRandomAttributes = _getGalaxyAttributesInRandomPosition()
+    const firstPassStarsRandomAttributes = _getGalaxyAttributesInRandomPosition(innerSize, outerSize, 6000, 12000)
 
     // gaz galaxy shaped
-    const secondPassStarsRandomAttributes = _getGalaxyAttributesInRandomPosition()
+    const secondPassStarsRandomAttributes = _getGalaxyAttributesInRandomPosition(innerSize, outerSize, 1000, 3000)
 
-    // low starfield density using color from galaxy
-    const thirdPassStarsRandomAttributes = _getAttributesInRandomPosition(
-      Math.floor(
-        galaxyParameters.budget * THREE.MathUtils.randFloat(
-          galaxyParameters.vertices.pass.min,
-          galaxyParameters.vertices.pass.max
-        )
-      ),
-      clusterSize,
-      galaxyParameters,
-      chosenColors
-    )
+    // center
+    const thirdPassStarsRandomAttributes = _getGalaxyAttributesInRandomPosition(4, 0.00001, 1000, 3000)
+    
 
     galaxyAttributes[clusterToPopulate] = {
       firstPassStarsRandomAttributes,
@@ -38,21 +31,17 @@ self.onmessage = messageEvent => {
   self.postMessage(galaxyAttributes)
 }
 
-function _getGalaxyAttributesInRandomPosition () {
+function _getGalaxyAttributesInRandomPosition (innerSize, outerSize, minPositionAmplitude = 1000, maxPositionAmplitude = 6000, density = 300) {
   let currentValueX
   let currentValueY
   let currentValueZ
 
   const positions = []
   const colors = []
-  const randomNess = 5
-  const amplitude = 4
-  const minPositionAmplitude = 3000
-  const maxPositionAmplitude = 8000
-  const size = THREE.MathUtils.randInt(10, 16)
-  const density = 300
+  const randomNess = THREE.MathUtils.randInt(5, 7)
+  const amplitude = THREE.MathUtils.randInt(4, 6)
   const scale = 200
-  const geometry = new THREE.RingGeometry(size, size + 1, density, density)
+  const geometry = new THREE.RingGeometry(innerSize, outerSize, density, density)
 
   geometry.scale(scale, scale, scale)
 
@@ -93,29 +82,6 @@ function _getGalaxyAttributesInRandomPosition () {
       positions[i3 + 2] = (randomNess + THREE.MathUtils.randInt(minPositionAmplitude, maxPositionAmplitude)) * Math.random() * (Math.random() > 0.5 ? 1 : -1)
       colors[i3 + 2] = 1
     }
-  }
-
-  return {
-    positions: new Float32Array(positions),
-    colors: new Float32Array(colors)
-  }
-}
-
-function _getAttributesInRandomPosition (max, clusterSize, parameters, chosenColors) {
-  const positions = []
-  const colors = []
-
-  for (let i = 0; i < max; i++) {
-    // creating coordinate for the particles in random positions but confined in the current square cluster
-    const x = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
-    const y = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
-    const z = clusterSize * Math.random() - (clusterSize / 2) + THREE.MathUtils.randFloat(0, Math.floor(clusterSize / 5))
-
-    positions.push(x, y, z)
-
-    const color = chosenColors.colorOut
-
-    colors.push(color.r, color.g, color.b)
   }
 
   return {

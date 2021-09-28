@@ -507,6 +507,10 @@ export default class Parameters {
             pass: {
               min: 0.0001,
               max: 0.0002
+            },
+            sombrero: {
+              min: 0.01,
+              max: 0.01
             }
           }
         },

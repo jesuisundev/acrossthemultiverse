@@ -6,13 +6,16 @@ export default class Galaxy {
     this.scene = scene
     this.library = library
     this.parameters = parameters
-
+    this.currentCoordinateVector = null
     this.textureSeen = []
     this.galaxy = null
+    this.subtype = null
   }
 
-  generate (galaxiesAttributes, position) {
-    const currentCoordinateVector = this._getCoordinateVectorByPosition(position)
+  generate (galaxiesAttributes, position, subtype = null) {
+    this.currentCoordinateVector = this._getCoordinateVectorByPosition(position)
+    this.subtype = subtype
+
     const rotation = THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360))
 
     const firstPassStarsGeometry = this._getRandomStarsGeometry(galaxiesAttributes.firstPassStarsRandomAttributes)
@@ -20,7 +23,7 @@ export default class Galaxy {
     const firstPassStarsmaterial = this._getRandomStarsMaterial(firstPassStarsTexture, currentUniverse === 2 ? 300 : false)
     const firstPassStars = new THREE.Points(firstPassStarsGeometry, firstPassStarsmaterial)
 
-    firstPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
+    firstPassStars.position.set(this.currentCoordinateVector.x, this.currentCoordinateVector.y, this.currentCoordinateVector.z)
     firstPassStarsGeometry.rotateX(rotation)
 
     const secondPassStarsGeometry = this._getRandomStarsGeometry(galaxiesAttributes.secondPassStarsRandomAttributes)
@@ -28,15 +31,16 @@ export default class Galaxy {
     const secondPassStarsmaterial = this._getRandomStarsMaterial(secondPassStarsTexture, 800, 0.04)
     const secondPassStars = new THREE.Points(secondPassStarsGeometry, secondPassStarsmaterial)
 
-    secondPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
+    secondPassStars.position.set(this.currentCoordinateVector.x, this.currentCoordinateVector.y, this.currentCoordinateVector.z)
     secondPassStars.rotateX(rotation)
 
     const thirdPassStarsGeometry = this._getRandomStarsGeometry(galaxiesAttributes.thirdPassStarsRandomAttributes)
     const thirdPassStarsTexture = this._getRandomStarsTexture()
     const thirdPassStarsmaterial = this._getRandomStarsMaterial(thirdPassStarsTexture)
     const thirdPassStars = new THREE.Points(thirdPassStarsGeometry, thirdPassStarsmaterial)
+    thirdPassStars.rotateX(rotation)
 
-    thirdPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
+    thirdPassStars.position.set(this.currentCoordinateVector.x, this.currentCoordinateVector.y, this.currentCoordinateVector.z)
 
     const randomGalaxy = {
       firstPass: {
@@ -96,16 +100,20 @@ export default class Galaxy {
       this.galaxy.secondPass.points,
       this.galaxy.thirdPass.points
     )
-      // TODO : add lensflare
-      // TODO : if sombrero change opacity cloud
+
+    let minCloudOpacity = this.parameters.matters[window.currentUniverse].galaxy.material.opacity.pass.min
+    let maxCloudOpacity = this.parameters.matters[window.currentUniverse].galaxy.material.opacity.pass.max
+
+    if(this.subtype === 'sombrero') {
+      minCloudOpacity = this.parameters.matters[window.currentUniverse].galaxy.material.opacity.sombrero.min
+      maxCloudOpacity = this.parameters.matters[window.currentUniverse].galaxy.material.opacity.sombrero.max
+    }
+
     gsap.timeline()
       .to(this.galaxy.firstPass.points.material, { duration: 3, opacity: 1 }, 0)
       .to(this.galaxy.secondPass.points.material, {
         duration: 3,
-        opacity: THREE.MathUtils.randFloat(
-          this.parameters.matters[window.currentUniverse].galaxy.material.opacity.pass.min,
-          this.parameters.matters[window.currentUniverse].galaxy.material.opacity.pass.max
-        ) 
+        opacity: THREE.MathUtils.randFloat(minCloudOpacity, maxCloudOpacity)
       }, 0)
       .to(this.galaxy.thirdPass.points.material, { duration: 3, opacity: 1 }, 0)
   }
