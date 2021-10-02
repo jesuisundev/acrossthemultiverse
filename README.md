@@ -66,15 +66,17 @@ Across The Multiverse is an **Open Source Project**. This means that:
 
 Every commit on the main branch automatically deploy a new build on [cloudflare pages](https://pages.cloudflare.com/) which is accesible at https://across-multiverse.com/
 
-# TODO
+# ROADMAP
 
-- Multiplayer using Mercure or simple websocket
-- Eye Nebula
+- Add simple discovery mode
+- Discovery mode : Multiplayer using Mercure or simple websocket
+- Discovery mode : Galactic map
+- Discovery mode : Wormhole to coordinate
+- Discovery mode : Eye Nebula to coordinate
 - Ship in Starfield
 - Procedural planets
 - Blazar
 - Pulsar
 - Magnetar
-- Discovery mode (no story, universes generated, multiverse map graph to unlock)
 - Add NFT indicator
 - NFT api open sea
