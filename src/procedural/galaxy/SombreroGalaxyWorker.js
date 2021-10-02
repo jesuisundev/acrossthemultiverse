@@ -12,14 +12,19 @@ self.onmessage = messageEvent => {
 
   for (const clusterToPopulate of clustersToPopulate) {
     // base galaxy shaped
-    const firstPassStarsRandomAttributes = _getGalaxyAttributesInRandomPosition(innerSize, outerSize, 6000, 12000)
+    const firstPassStarsRandomAttributes = _getGalaxyAttributesInRandomPosition(innerSize, outerSize, 5000, 1500)
 
     // gaz galaxy shaped
     const secondPassStarsRandomAttributes = _getGalaxyAttributesInRandomPosition(innerSize, outerSize, 1000, 3000)
 
     // center
-    const thirdPassStarsRandomAttributes = _getGalaxyAttributesInRandomPosition(4, 0.00001, 1000, 3000)
-    
+    const thirdPassStarsRandomAttributes = _getSpiralGalaxyAttributesInRandomPosition(
+      300000,
+      clusterSize,
+      galaxyParameters,
+      chosenColors,
+      200
+    )
 
     galaxyAttributes[clusterToPopulate] = {
       firstPassStarsRandomAttributes,
@@ -40,7 +45,7 @@ function _getGalaxyAttributesInRandomPosition (innerSize, outerSize, minPosition
   const colors = []
   const randomNess = THREE.MathUtils.randInt(5, 7)
   const amplitude = THREE.MathUtils.randInt(4, 6)
-  const scale = 200
+  const scale = 250
   const geometry = new THREE.RingGeometry(innerSize, outerSize, density, density)
 
   geometry.scale(scale, scale, scale)
@@ -82,6 +87,56 @@ function _getGalaxyAttributesInRandomPosition (innerSize, outerSize, minPosition
       positions[i3 + 2] = (randomNess + THREE.MathUtils.randInt(minPositionAmplitude, maxPositionAmplitude)) * Math.random() * (Math.random() > 0.5 ? 1 : -1)
       colors[i3 + 2] = 1
     }
+  }
+
+  return {
+    positions: new Float32Array(positions),
+    colors: new Float32Array(colors)
+  }
+}
+
+function _getSpiralGalaxyAttributesInRandomPosition (max, clusterSize, parameters, chosenColors, enforcedBranches, currentUniverse) {
+  const positions = []
+  const colors = []
+  const radius = currentUniverse === 2 ? clusterSize * 4 : clusterSize / 1.8
+  const branches = enforcedBranches || THREE.MathUtils.randInt(parameters.spiral.branches.min, parameters.spiral.branches.max)
+  const spin = THREE.MathUtils.randInt(parameters.spiral.spin.min, parameters.spiral.spin.max)
+  const mixedColor = chosenColors.colorIn.clone()
+
+  for (let i = 0; i < max; i++) {
+    const i3 = i * 3
+    const randomRadiusPosition = Math.random() * radius + Math.random()
+    const spinAngle = (randomRadiusPosition * 100000) * spin
+    const branchAngle = (i % branches) / branches * Math.PI * parameters.spiral.branchesAmplitude
+
+    const x = Math.pow(
+      Math.random(),
+      parameters.spiral.randomnessPower
+    ) * (Math.random() < 0.5 ? 1 : -1) * parameters.spiral.randomness * randomRadiusPosition
+
+    const y = Math.pow(
+      Math.random(),
+      parameters.spiral.randomnessPower
+    ) * (Math.random() < 0.5 ? 1 : -1) * parameters.spiral.randomness * randomRadiusPosition
+
+    const z = Math.pow(
+      Math.random(),
+      parameters.spiral.randomnessPower
+    ) * (Math.random() < 0.5 ? 1 : -1) * parameters.spiral.randomness * randomRadiusPosition
+
+    positions[i3] = Math.cos(branchAngle + spinAngle) * randomRadiusPosition + x
+    positions[i3 + 1] = y
+    positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * randomRadiusPosition + z
+
+    mixedColor.lerpColors(
+      chosenColors.colorIn,
+      chosenColors.colorOut,
+      (randomRadiusPosition / radius) + parameters.spiral.colorInterpolationAmplitude
+    )
+
+    colors[i3] = mixedColor.r
+    colors[i3 + 1] = mixedColor.g
+    colors[i3 + 2] = mixedColor.b
   }
 
   return {

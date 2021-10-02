@@ -38,7 +38,12 @@ export default class Galaxy {
     const thirdPassStarsTexture = this._getRandomStarsTexture()
     const thirdPassStarsmaterial = this._getRandomStarsMaterial(thirdPassStarsTexture)
     const thirdPassStars = new THREE.Points(thirdPassStarsGeometry, thirdPassStarsmaterial)
-    thirdPassStars.rotateX(rotation)
+
+    if (this.subtype === "sombrero") {
+      thirdPassStars.rotateX(rotation - 80)
+    } else {
+      thirdPassStars.rotateX(rotation)
+    }
 
     thirdPassStars.position.set(this.currentCoordinateVector.x, this.currentCoordinateVector.y, this.currentCoordinateVector.z)
 
