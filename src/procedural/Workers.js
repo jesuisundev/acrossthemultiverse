@@ -46,6 +46,12 @@ export default class Workers {
       source: new Worker(new URL('./galaxy/SpiralGalaxyWorker.js', import.meta.url))
     }
 
+    this.sombreroGalaxyWorker = {
+      type: 'Galaxy',
+      subtype: 'Sombrero',
+      source: new Worker(new URL('./galaxy/SombreroGalaxyWorker.js', import.meta.url))
+    }
+
     this.irregularGalaxyWorker = {
       type: 'Galaxy',
       subtype: 'Irregular',
@@ -102,6 +108,12 @@ export default class Workers {
       'spiral'
     )
 
+    this.sombreroGalaxyWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
+      messageEvent.data,
+      'galaxy',
+      'sombrero'
+    )
+
     this.irregularGalaxyWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
       messageEvent.data,
       'galaxy',
@@ -134,10 +146,6 @@ export default class Workers {
         worker: this.openStarfieldWorker
       },
       {
-        chances: 20,
-        worker: this.globularStarfieldWorker
-      },
-      {
         chances: 13,
         worker: this.emissionNebulaWorker
       },
@@ -146,8 +154,16 @@ export default class Workers {
         worker: this.irregularGalaxyWorker
       },
       {
+        chances: 11,
+        worker: this.globularStarfieldWorker
+      },
+      {
         chances: 10,
         worker: this.spiralGalaxyWorker
+      },
+      {
+        chances: 9,
+        worker: this.sombreroGalaxyWorker
       },
       {
         chances: 8,
