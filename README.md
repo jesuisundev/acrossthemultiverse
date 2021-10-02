@@ -68,13 +68,13 @@ Every commit on the main branch automatically deploy a new build on [cloudflare 
 
 # TODO
 
-- Elliptic Galaxy
+- Multiplayer using Mercure or simple websocket
 - Eye Nebula
 - Ship in Starfield
 - Procedural planets
 - Blazar
 - Pulsar
+- Magnetar
 - Discovery mode (no story, universes generated, multiverse map graph to unlock)
 - Add NFT indicator
 - NFT api open sea
-- Multiplayer using Mercure
