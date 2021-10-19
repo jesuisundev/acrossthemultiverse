@@ -15,7 +15,7 @@ module.exports = merge(
       port: portFinderSync.getPort(8080),
       contentBase: './dist',
       watchContentBase: true,
-      open: true,
+      open: false,
       https: false,
       useLocalIp: true,
       disableHostCheck: true,

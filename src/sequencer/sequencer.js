@@ -1,3 +1,4 @@
+import * as THREE from 'three'
 import { gsap } from 'gsap'
 
 import Wormhole from './wormhole/Wormhole'
@@ -23,23 +24,31 @@ export default class Sequencer {
 
     switch (window.currentUniverse) {
       case 0:
-        await this.chapterOneSequence(skipped)
+        await this.chapterOneSequence(window.isDiscoveryMode)
         break
 
       case 1:
-        await this.chapterTwoSequence(skipped)
+        await this.chapterTwoSequence(window.isDiscoveryMode)
         break
 
       case 2:
-        await this.chapterThreeSequence(skipped)
+        await this.chapterThreeSequence(window.isDiscoveryMode)
         break
       
       case 3:
-        await this.chapterFourSequence(skipped)
+        await this.chapterFourSequence(window.isDiscoveryMode)
         break
 
       case 4:
-        await this.epiphanySequence(skipped)
+        if(window.isDiscoveryMode) {
+          window.currentUniverse = 0
+          window.sequencer.active = false
+          this.changeUniverse()
+          this.onEnteringUniverse()
+          this.launchNextSequence()
+        } else {
+          await this.epiphanySequence(skipped)
+        }
         break
 
       default:
@@ -55,7 +64,9 @@ export default class Sequencer {
       this.library.audio['ghosts'].play()
       this.library.audio['ghosts'].loop(true)
 
-      this.fadeOutById('#blackwall', 0)
+      this.fadeOutById('#whitewall', 2)
+      this.fadeOutById('#blackwall', 2)
+      await this.showNavigation()
     } else {
       this.stopAllSounds()
       this.library.audio['transcendent'].play()
@@ -87,11 +98,19 @@ export default class Sequencer {
     if (skipped) {
       this.camera.rotation.z = 0
 
+      this.stopAllSounds()
       this.library.audio['discovery'].play()
       this.library.audio['discovery'].loop(true)
 
-      this.fadeOutById('#whitewall', 0)
-      this.fadeOutById('#blackwall', 0)
+      this.changeUniverse()
+      await this.asyncWaitFor(2000)
+
+      this.fadeOutById('#whitewall', 2)
+      this.fadeOutById('#blackwall', 2)
+
+      this.onEnteringUniverse()
+
+      await this.showNavigation()
     } else {
       this.stopAllSounds()
       this.library.audio['discovery'].play()
@@ -117,11 +136,19 @@ export default class Sequencer {
     if (skipped) {
       this.camera.rotation.z = 0
 
+      this.stopAllSounds()
       this.library.audio['celestial'].play()
       this.library.audio['celestial'].loop(true)
 
-      this.fadeOutById('#whitewall', 0)
-      this.fadeOutById('#blackwall', 0)
+      this.changeUniverse()
+      await this.asyncWaitFor(2000)
+
+      this.fadeOutById('#whitewall', 2)
+      this.fadeOutById('#blackwall', 2)
+
+      this.onEnteringUniverse()
+
+      await this.showNavigation()
     } else {
       this.stopAllSounds()
       this.library.audio['celestial'].play()
@@ -148,15 +175,19 @@ export default class Sequencer {
     if (skipped) {
       this.camera.rotation.z = 0
 
+      this.stopAllSounds()
       this.library.audio['omega'].play()
       this.library.audio['omega'].loop(true)
 
-      this.camera.far = 200000
-      this.camera.updateProjectionMatrix()
-      this.postProcessor.updateProcessingRenderer()
+      this.changeUniverse()
+      await this.asyncWaitFor(2000)
 
-      this.fadeOutById('#whitewall', 0)
-      this.fadeOutById('#blackwall', 0)
+      this.fadeOutById('#whitewall', 2)
+      this.fadeOutById('#blackwall', 2)
+
+      this.onEnteringUniverse()
+
+      await this.showNavigation()
     } else {
       this.stopAllSounds()
       this.library.audio['omega'].play()

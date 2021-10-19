@@ -155,7 +155,14 @@ hr {
     font-size: 35px;
 }
 
-#intro #launch, #intro #launchUltra {
+#launcher {
+    display: none;
+}
+
+#intro #launch,
+#intro #launchUltra,
+#intro #storyMode,
+#intro #discoveryMode {
     font-size: 50px;
     background-color: transparent;
     font-family: Roboto;
@@ -172,7 +179,10 @@ hr {
     transition: background-color 1s ease, color 1s ease;
 }
 
-#intro #launch:hover, #intro #launchUltra:hover {
+#intro #launch:hover,
+#intro #launchUltra:hover,
+#intro #storyMode:hover,
+#intro #discoveryMode:hover {
     background: #FFFFFF;
     color: black;
 }

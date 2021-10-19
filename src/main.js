@@ -62,6 +62,8 @@ if (window.isMobileOrTabletFlag) {
 }
 window.controls = controls
 
+document.getElementById('storyMode').addEventListener('click', event => helper.onModeChosen(event))
+document.getElementById('discoveryMode').addEventListener('click', event => helper.onModeChosen(event, true))
 document.getElementById('launch').addEventListener('click', event => onLaunch(event))
 document.getElementById('launchUltra').addEventListener('click', event => onLaunch(event, true))
 window.addEventListener('resize', () => onResize())
