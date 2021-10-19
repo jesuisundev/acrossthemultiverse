@@ -64,21 +64,35 @@
             </p>
         </div>
         <div id="entrypoint" class="fadeOut">
-            <img id="loading" src="https://i.stack.imgur.com/qq8AE.gif" width="32" />
-            <br /><br />
-            <a id="launch" href="" class="fadeOut">
-                PLAY GAME
-            </a>
-            <br />
-
-            <div id="highend">
-                <br /><br /><br /><br />
-                <a id="launchUltra" href="" class="fadeOut">
-                    PLAY GAME - FULL RESOLUTION
+            <div id="mode">
+                <br /><br />
+                <a class="mode-select" id="storyMode" href="">
+                    STORY MODE
                 </a>
-                <br /><br /><br />
-                <span id="warning-pc">only for high-end hardware</span>
+                <br /><br /><br /><br /><br />
+                <a class="mode-select" id="discoveryMode" href="">
+                    DISCOVERY MODE
+                </a>
+                <br /><br /><br /><br />
             </div>
+            <div id="launcher">
+                <img id="loading" src="https://i.stack.imgur.com/qq8AE.gif" width="32" />
+                <br /><br />
+                <a id="launch" href="" class="fadeOut">
+                    OPTIMIZED RESOLUTION
+                </a>
+                <br />
+
+                <div id="highend">
+                    <br /><br /><br /><br />
+                    <a id="launchUltra" href="" class="fadeOut">
+                        FULL RESOLUTION
+                    </a>
+                    <br /><br /><br />
+                    <span id="warning-pc">only for high-end hardware</span>
+                </div>
+            </div>
+        </div>
         </div>
     </div>
     <div id="credits">
@@ -193,9 +207,9 @@
             <li class="cell">
                 <div class="button">
                     <!-- webpackIgnore: true -->
-                    <img id="echapBtn" src="/ui/esc.png" alt="echap" />
+                    <img id="hideBtn" src="/ui/hide.png" alt="move" />
                 </div>
-                <span class="description">Quit</span>
+                <span class="description">Hide UI</span>
             </li>
             <li class="cell">
                 <div class="button">
@@ -228,16 +242,16 @@
             <li class="cell">
                 <div class="button">
                     <!-- webpackIgnore: true -->
+                    <img id="echapBtn" src="/ui/esc.png" alt="echap" />
+                </div>
+                <span class="description">Quit</span>
+            </li>
+            <li class="cell" id="skipCell">
+                <div class="button">
+                    <!-- webpackIgnore: true -->
                     <img id="skipBtn" src="/ui/skip.png" alt="move" />
                 </div>
                 <span class="description">Skip</span>
-            </li>
-            <li class="cell">
-                <div class="button">
-                    <!-- webpackIgnore: true -->
-                    <img id="hideBtn" src="/ui/hide.png" alt="move" />
-                </div>
-                <span class="description">Hide UI</span>
             </li>
         </ul>
     </nav>
