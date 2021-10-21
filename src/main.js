@@ -9,6 +9,7 @@ import Parameters from './world/Parameters'
 import PostProcessor from './postprocessing/PostProcessor'
 import Sequencer from './sequencer/sequencer'
 import Helper from './world/Helper'
+import Player from './player/Player'
 
 const clock = new THREE.Clock()
 const parameters = new Parameters()
@@ -43,6 +44,8 @@ const library = new Library()
 const grid = new Grid(camera, parameters, scene, library)
 const postProcessor = new PostProcessor(camera, scene, parameters, renderer)
 const sequencer = new Sequencer(scene, library, parameters, grid, camera, postProcessor)
+const player = new Player(camera, scene, library, parameters)
+camera.add(player.character)
 
 let controls
 let lastClusterPosition
@@ -116,6 +119,7 @@ function animate () {
   }
 
   updateAnimatedObjects(currentElapsedTime)
+  player.update(camera)
 
   if (!window.isMobileOrTabletFlag && controls.pointerLockControls.isLocked === true) {
     controls.handleMovements(currentElapsedTime, previousElapsedTime)
