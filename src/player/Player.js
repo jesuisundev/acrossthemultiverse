@@ -13,6 +13,7 @@ export default class Player {
   initialize() {
     this.geometry = new THREE.BoxGeometry(500, 500, 500)
     this.material = new THREE.MeshBasicMaterial({color: 0x7777ff, wireframe: false})
+    
     this.character = new THREE.Mesh(this.geometry, this.material)
     this.character.frustumCulled = false
     this.character.position.set(
@@ -22,6 +23,5 @@ export default class Player {
     )
   }
 
-  update(camera) {
-  }
+  update(camera) {}
 }

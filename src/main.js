@@ -10,8 +10,10 @@ import PostProcessor from './postprocessing/PostProcessor'
 import Sequencer from './sequencer/sequencer'
 import Helper from './world/Helper'
 import Player from './player/Player'
+import MultiplayerClient from './multiplayer/client'
 
 const clock = new THREE.Clock()
+const multiplayerClient = new MultiplayerClient()
 const parameters = new Parameters()
 const helper = new Helper(parameters)
 
