@@ -22,6 +22,4 @@ export default class Player {
       this.camera.position.z - 2000
     )
   }
-
-  update(camera) {}
 }

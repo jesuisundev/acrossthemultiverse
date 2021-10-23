@@ -13,7 +13,6 @@ import Player from './player/Player'
 import MultiplayerClient from './multiplayer/client'
 
 const clock = new THREE.Clock()
-const multiplayerClient = new MultiplayerClient()
 const parameters = new Parameters()
 const helper = new Helper(parameters)
 
@@ -54,6 +53,9 @@ let lastClusterPosition
 let needRender = false
 let isRenderingClusterInProgress = false
 let previousElapsedTime = clock.getElapsedTime()
+let isMultiplayer = true
+
+const multiplayerClient = new MultiplayerClient(camera, scene, isMultiplayer)
 
 if (window.isMobileOrTabletFlag) {
   controls = new TouchControls(camera)
@@ -117,11 +119,11 @@ function animate () {
       updatePositionInWormhole()
     } else {
       postProcessor.composer.render()
+      multiplayerClient.update()
     }
   }
 
   updateAnimatedObjects(currentElapsedTime)
-  player.update(camera)
 
   if (!window.isMobileOrTabletFlag && controls.pointerLockControls.isLocked === true) {
     controls.handleMovements(currentElapsedTime, previousElapsedTime)
