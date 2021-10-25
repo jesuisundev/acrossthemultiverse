@@ -9,8 +9,8 @@ import Parameters from './world/Parameters'
 import PostProcessor from './postprocessing/PostProcessor'
 import Sequencer from './sequencer/sequencer'
 import Helper from './world/Helper'
-import Player from './player/Player'
-import MultiplayerClient from './multiplayer/client'
+import Player from './multiplayer/Player'
+import Multiplayer from './multiplayer/Multiplayer'
 
 const clock = new THREE.Clock()
 const parameters = new Parameters()
@@ -41,21 +41,20 @@ const camera = new THREE.PerspectiveCamera(
 )
 camera.rotation.z = 1
 
-const library = new Library()
-const grid = new Grid(camera, parameters, scene, library)
-const postProcessor = new PostProcessor(camera, scene, parameters, renderer)
-const sequencer = new Sequencer(scene, library, parameters, grid, camera, postProcessor)
-const player = new Player(camera, scene, library, parameters)
-camera.add(player.character)
-
 let controls
 let lastClusterPosition
 let needRender = false
 let isRenderingClusterInProgress = false
+let isMultiplayerModeEnable = true
 let previousElapsedTime = clock.getElapsedTime()
-let isMultiplayer = true
 
-const multiplayerClient = new MultiplayerClient(camera, scene, isMultiplayer)
+const library = new Library()
+const grid = new Grid(camera, parameters, scene, library)
+const postProcessor = new PostProcessor(camera, scene, parameters, renderer)
+const sequencer = new Sequencer(scene, library, parameters, grid, camera, postProcessor)
+const localPlayer = new Player(camera, scene, library, parameters)
+const multiplayer = new Multiplayer(camera, scene, isMultiplayerModeEnable)
+
 
 if (window.isMobileOrTabletFlag) {
   controls = new TouchControls(camera)
@@ -119,7 +118,7 @@ function animate () {
       updatePositionInWormhole()
     } else {
       postProcessor.composer.render()
-      multiplayerClient.update()
+      multiplayer.update()
     }
   }
 
@@ -164,6 +163,7 @@ function animate () {
   library.preload()
 
   window.onload = () => {
+      setupMultiplayer()
       document.getElementById('loading').remove()
       document.getElementById('launch').className = 'fadeIn'
       document.getElementById('launchUltra').className = 'fadeIn'
@@ -174,6 +174,13 @@ function animate () {
   await helper.showElementById("notice")
   await helper.showElementById("entrypoint")
 }
+
+ async function setupMultiplayer() {
+  if(isMultiplayerModeEnable) {
+    await localPlayer._setLocalPlayer()
+    await multiplayer.connect()
+  }
+ }
 
 function updateAnimatedObjects (elapsedTime) {
   // update materials (shaders animation)

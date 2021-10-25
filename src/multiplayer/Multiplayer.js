@@ -1,16 +1,19 @@
 import * as THREE from 'three'
 import geckos from '@geckos.io/client'
+import { FontLoader } from 'three/src/loaders/FontLoader'
+import Player from './Player'
 
-export default class MultiplayerClient {
+export default class Multiplayer {
   constructor (camera, scene, enable = false) {
     this.camera = camera
     this.scene = scene
     this.players = []
+    this.playerBuilder = new Player(camera, scene)
+    this.channel = {}
+    this.loader = new FontLoader()
 
     this.isConnected = false
     this.isEnable = enable
-
-    this._initialize()
   }
 
   isReady () {
@@ -23,19 +26,12 @@ export default class MultiplayerClient {
 
     this.channel.emit('onPlayerUpdate', this._getPlayerData())
   }
-  
-  render () {
-    if (!this.isReady())
-      return
-
-    this.channel.emit('onPlayerRender', this._getPlayerData())
-  }
 
   getPlayerById (id) {
     return this.players.find(player => player.id === id)
   }
 
-  _initialize () {
+  async connect () {
     this.channel = geckos({ port: 3000 })
 
     this.channel.onConnect(error => {
@@ -66,31 +62,28 @@ export default class MultiplayerClient {
     }
   }
 
-  _onPlayerConnect (data) {
+  async _onPlayerConnect (data) {
     if(!data || this.channel.id === data.id)
       return
 
-    this._addPlayer(data)
+    await this._addPlayer(data)
   }
 
-  _addPlayer(data) {
-    const playerModel = this._createPlayerModel()
-    this.scene.add(playerModel.mesh)
+  async _addPlayer(data) {
+    const playerModel = await this.playerBuilder.getNewPlayerModel()
+    const playerName = await this.playerBuilder.getNewPlayerName(data.id)
+
+    // TODO: align player name with player model
+    playerName.playerNameMesh.position.set(800, 650, 0)
+
+    playerModel.playerModelMesh.add(playerName.playerNameMesh)
+    this.scene.add(playerModel.playerModelMesh)
+
     this.players.push({
       id: data.id, 
-      playerModel: playerModel
+      playerModel: playerModel,
+      playerName: playerName
     })
-  }
-
-  _createPlayerModel() {
-    const geometry = new THREE.BoxGeometry(500, 500, 500)
-    const material = new THREE.MeshBasicMaterial({color: 0x7777ff, wireframe: false})
-
-    return {
-      geometry: geometry,
-      material: material,
-      mesh: new THREE.Mesh(geometry, material)
-    }
   }
 
   _onPlayerUpdate(data) {
@@ -104,8 +97,12 @@ export default class MultiplayerClient {
       playerToUpdate = this.getPlayerById(data.id)
     }
 
-    playerToUpdate.playerModel.mesh.position.set(data.xPosition, data.yPosition, data.zPosition)
-    playerToUpdate.playerModel.mesh.rotation.set(data.xRotation, data.yRotation, data.zRotation)
+    if (!playerToUpdate)
+      return
+
+    playerToUpdate.playerModel.playerModelMesh.position.set(data.xPosition, data.yPosition, data.zPosition)
+    playerToUpdate.playerModel.playerModelMesh.rotation.set(data.xRotation, data.yRotation, data.zRotation)
+    playerToUpdate.playerName.playerNameMesh.lookAt(this.camera.position)
   }
 
   _onPlayerDisconnect (id) {
@@ -125,8 +122,12 @@ export default class MultiplayerClient {
       return
     }
 
-    playerDisconnected.playerModel.geometry.dispose()
-    playerDisconnected.playerModel.material.dispose()
-    this.scene.remove(playerDisconnected.playerModel.mesh)
+    playerDisconnected.playerModel.playerModelGeometry.dispose()
+    playerDisconnected.playerModel.playerModelMaterial.dispose()
+
+    playerDisconnected.playerName.playerNameGeometry.dispose()
+    playerDisconnected.playerName.playerNameMaterial.dispose()
+
+    this.scene.remove(playerDisconnected.playerModel.playerModelMesh)
   }
 }
