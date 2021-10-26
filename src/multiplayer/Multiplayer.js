@@ -73,10 +73,7 @@ export default class Multiplayer {
     const playerModel = await this.playerBuilder.getNewPlayerModel()
     const playerName = await this.playerBuilder.getNewPlayerName(data.id)
 
-    // TODO: align player name with player model
-    playerName.playerNameMesh.position.set(800, 650, 0)
-
-    playerModel.playerModelMesh.add(playerName.playerNameMesh)
+    this.scene.add(playerName.playerNameMesh)
     this.scene.add(playerModel.playerModelMesh)
 
     this.players.push({
@@ -103,6 +100,13 @@ export default class Multiplayer {
     playerToUpdate.playerModel.playerModelMesh.position.set(data.xPosition, data.yPosition, data.zPosition)
     playerToUpdate.playerModel.playerModelMesh.rotation.set(data.xRotation, data.yRotation, data.zRotation)
     playerToUpdate.playerName.playerNameMesh.lookAt(this.camera.position)
+    playerToUpdate.playerName.playerNameGeometry.center()
+
+    playerToUpdate.playerName.playerNameMesh.position.set(
+      data.xPosition,
+      data.yPosition + 650,
+      data.zPosition
+    )
   }
 
   _onPlayerDisconnect (id) {

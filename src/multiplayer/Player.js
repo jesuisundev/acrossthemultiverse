@@ -38,6 +38,7 @@ export default class Player {
       curveSegments: 10,
       bevelEnabled: false
     })
+
     const playerNameMaterial = new THREE.MeshBasicMaterial({color: 0xffffff})
 
     return {
@@ -61,12 +62,6 @@ export default class Player {
     this.localPlayerModelGeometry = localPlayerModel.playerModelGeometry
     this.localPlayerModelMaterial = localPlayerModel.playerModelMaterial
     this.localPlayerModelMesh = localPlayerModel.playerModelMesh
-
-    this.localPlayerModelMesh.position.set(
-      this.camera.position.x,
-      this.camera.position.y,
-      this.camera.position.z
-    )
   }
 
   async _setLocalPlayerName() {
@@ -75,13 +70,5 @@ export default class Player {
     this.localPlayerNameGeometry = localPlayerName.playerNameGeometry
     this.localPlayerNameMaterial = localPlayerName.playerNameMaterial
     this.localPlayerNameMesh = localPlayerName.playerNameMesh
-
-    // TODO: align player name with player model
-    this.localPlayerNameMesh.position.set(
-      this.camera.position.x,
-      this.camera.position.y + 650,
-      this.camera.position.z
-    )
-    this.localPlayerNameMesh.rotation.set(0, 0, 0)
   }
 }
