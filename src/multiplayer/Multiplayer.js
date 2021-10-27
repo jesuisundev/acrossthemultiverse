@@ -4,14 +4,15 @@ import { FontLoader } from 'three/src/loaders/FontLoader'
 import Player from './Player'
 
 export default class Multiplayer {
-  constructor (camera, scene, enable = false) {
+  constructor (camera, scene, library, enable = false) {
     this.camera = camera
     this.scene = scene
+    this.library = library
+
     this.players = []
-    this.playerBuilder = new Player(camera, scene)
+    this.playerBuilder = new Player(camera, scene, library)
     this.channel = {}
     this.loader = new FontLoader()
-
     this.isConnected = false
     this.isEnable = enable
   }

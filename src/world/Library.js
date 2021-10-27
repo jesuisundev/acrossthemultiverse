@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { Howl, Howler } from 'howler'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 export default class Library {
   constructor () {
@@ -56,6 +57,18 @@ export default class Library {
           pool: [
             { type: 'universe', src: 'universe1.png' }
           ]
+        },
+        player: {
+          baseUrl: '/textures/player/',
+          pool: [
+            { type: 'map', src: 'sphere_albedo.jpg' },
+            { type: 'emissive', src: 'sphere_emissive.jpg' },
+            { type: 'ao', src: 'sphere_AO.jpg' },
+            { type: 'metalness', src: 'sphere_metallic.jpg' },
+            { type: 'normal', src: 'sphere_normal.png' },
+            { type: 'opacity', src: 'sphere_opacity.jpg' },
+            { type: 'roughness', src: 'sphere_roughness.jpg' }
+          ]
         }
       },
       audio: {
@@ -69,6 +82,12 @@ export default class Library {
           { title: 'omega', src: 'omega.mp3' },
           { title: 'intothenight', src: 'intothenight.mp3' },
           { title: 'borealis', src: 'borealis.mp3' }
+        ]
+      },
+      player: {
+        baseUrl: '/models/player',
+        pool: [
+          { title: 'sphere', src: 'sphere.glb' }
         ]
       }
     }
@@ -90,10 +109,21 @@ export default class Library {
       universe: {
         universe: [],
         water: []
+      },
+      player: {
+        map: [],
+        emissive: [],
+        ao: [],
+        metalness: [],
+        normal: [],
+        opacity: [],
+        roughness: []
       }
     }
 
     this.audio = {}
+
+    this.player = {}
   }
 
   preload () {
@@ -118,5 +148,27 @@ export default class Library {
         html5: true
       })
     }
+
+    // load player model
+    const loader = new GLTFLoader()
+    loader.load(
+      `${this.source.player.baseUrl}/${this.source.player.pool[0].src}`,
+      gltf => {
+        this.player.model = gltf.scene
+        this.player.model.traverse((child) => {
+          if (child.isMesh) {
+            child.material.blending = THREE.NormalBlending
+            child.material.map = this.textures.starfield.bright[THREE.MathUtils.randInt(0, this.textures.starfield.bright.length - 1)]
+            child.material.emissiveMap = this.textures.player.emissive[0]
+            child.material.aoMap = this.textures.player.ao[0]
+            child.material.metalnessMap = this.textures.player.metalness[0]
+            child.material.normalMap = this.textures.player.normal[0]
+            child.material.lightMap = this.textures.player.opacity[0]
+            child.material.roughnessMap = this.textures.player.roughness[0]
+          }
+        })
+        this.player.model.scale.set(500, 500, 500)
+      }
+    )
   }
 }

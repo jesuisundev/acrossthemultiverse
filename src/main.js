@@ -53,7 +53,7 @@ const grid = new Grid(camera, parameters, scene, library)
 const postProcessor = new PostProcessor(camera, scene, parameters, renderer)
 const sequencer = new Sequencer(scene, library, parameters, grid, camera, postProcessor)
 const localPlayer = new Player(camera, scene, library, parameters)
-const multiplayer = new Multiplayer(camera, scene, isMultiplayerModeEnable)
+const multiplayer = new Multiplayer(camera, scene, library, isMultiplayerModeEnable)
 
 
 if (window.isMobileOrTabletFlag) {
@@ -177,7 +177,6 @@ function animate () {
 
  async function setupMultiplayer() {
   if(isMultiplayerModeEnable) {
-    await localPlayer._setLocalPlayer()
     await multiplayer.connect()
   }
  }
