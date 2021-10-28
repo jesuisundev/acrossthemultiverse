@@ -17,7 +17,7 @@ A blog post explaining how everything works is available [here](https://www.jesu
 
 ## Source Code
 
-Under [MIT license](https://opensource.org/licenses/MIT).
+Under [BSD 3-Clause License](https://opensource.org/licenses/BSD-3-Clause).
 
 ## Music
 

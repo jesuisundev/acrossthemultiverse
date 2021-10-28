@@ -5,13 +5,14 @@ import Wormhole from './wormhole/Wormhole'
 import Epiphany from './epiphany/Epiphany'
 
 export default class Sequencer {
-  constructor (scene, library, parameters, grid, camera, postProcessor) {
+  constructor (scene, library, parameters, grid, camera, postProcessor, multiplayer) {
     this.scene = scene
     this.library = library
     this.parameters = parameters
     this.grid = grid
     this.camera = camera
     this.postProcessor = postProcessor
+    this.multiplayer = multiplayer
 
     this.wormhole = new Wormhole(this.scene, this.library, this.parameters)
     this.epiphany = new Epiphany(this.scene, this.library, this.parameters, this.camera, this)
@@ -21,6 +22,7 @@ export default class Sequencer {
     if(window.sequencer.active) return
 
     window.sequencer.active = true
+    this.multiplayer.hideMultiplayer()
 
     switch (window.currentUniverse) {
       case 0:
@@ -92,6 +94,7 @@ export default class Sequencer {
     }
 
     window.sequencer.active = false
+    this.multiplayer.showMultiplayer()
   }
 
   async chapterTwoSequence (skipped = false) {
@@ -130,6 +133,7 @@ export default class Sequencer {
     }
   
     window.sequencer.active = false
+    this.multiplayer.showMultiplayer()
   }
 
   async chapterThreeSequence (skipped = false) {
@@ -169,6 +173,7 @@ export default class Sequencer {
     }
 
     window.sequencer.active = false
+    this.multiplayer.showMultiplayer()
   }
 
   async chapterFourSequence (skipped = false) {
@@ -211,6 +216,7 @@ export default class Sequencer {
     }
 
     window.sequencer.active = false
+    this.multiplayer.showMultiplayer()
   }
 
   async epiphanySequence (skipped = false) {
@@ -255,6 +261,7 @@ export default class Sequencer {
     if(window.sequencer.active) return
 
     window.sequencer.active = true
+    this.multiplayer.hideMultiplayer()
 
     this.stopAllSounds()
 

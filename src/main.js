@@ -9,6 +9,7 @@ import Parameters from './world/Parameters'
 import PostProcessor from './postprocessing/PostProcessor'
 import Sequencer from './sequencer/sequencer'
 import Helper from './world/Helper'
+import Multiplayer from './multiplayer/Multiplayer'
 
 const clock = new THREE.Clock()
 const parameters = new Parameters()
@@ -39,16 +40,19 @@ const camera = new THREE.PerspectiveCamera(
 )
 camera.rotation.z = 1
 
-const library = new Library()
-const grid = new Grid(camera, parameters, scene, library)
-const postProcessor = new PostProcessor(camera, scene, parameters, renderer)
-const sequencer = new Sequencer(scene, library, parameters, grid, camera, postProcessor)
-
 let controls
 let lastClusterPosition
 let needRender = false
 let isRenderingClusterInProgress = false
+let isMultiplayerModeEnable = true
 let previousElapsedTime = clock.getElapsedTime()
+
+const library = new Library()
+const grid = new Grid(camera, parameters, scene, library)
+const postProcessor = new PostProcessor(camera, scene, parameters, renderer)
+const multiplayer = new Multiplayer(camera, scene, library, isMultiplayerModeEnable)
+const sequencer = new Sequencer(scene, library, parameters, grid, camera, postProcessor, multiplayer)
+
 
 if (window.isMobileOrTabletFlag) {
   controls = new TouchControls(camera)
@@ -77,6 +81,10 @@ function onLaunch(event, isHighEnd = false) {
   if (isHighEnd) {
     window.highend = isHighEnd
     onResize()
+  }
+
+  if(window.isDiscoveryMode) {
+    setupMultiplayer()
   }
 
   document.getElementById('intro').className = 'fadeOut'
@@ -112,6 +120,7 @@ function animate () {
       updatePositionInWormhole()
     } else {
       postProcessor.composer.render()
+      multiplayer.update()
     }
   }
 
@@ -166,6 +175,16 @@ function animate () {
   await helper.showElementById("notice")
   await helper.showElementById("entrypoint")
 }
+
+ async function setupMultiplayer() {
+  if (isMultiplayerModeEnable) {
+    try {
+      await multiplayer.connect()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+ }
 
 function updateAnimatedObjects (elapsedTime) {
   // update materials (shaders animation)
