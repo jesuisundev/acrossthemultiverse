@@ -15,25 +15,13 @@ export default class Multiplayer {
     this.loader = new FontLoader()
     this.isConnected = false
     this.isEnable = enable
-  }
 
-  isReady () {
-    return this.isConnected && this.isEnable
-  }
-
-  update () {
-    if (!this.isReady())
-      return
-
-    this.channel.emit('onPlayerUpdate', this._getPlayerData())
-  }
-
-  getPlayerById (id) {
-    return this.players.find(player => player.id === id)
+    this.showPlayer = true
+    this.showOtherPlayers = true
   }
 
   async connect () {
-    this.channel = geckos({ port: 3000 })
+    this.channel = geckos({ url: "http://195.154.113.94", port: 3000 })
 
     this.channel.onConnect(error => {
       if (error) {
@@ -51,6 +39,31 @@ export default class Multiplayer {
     })
   }
 
+  isReady () {
+    return this.isConnected && this.isEnable
+  }
+
+  update () {
+    if (!this.isReady())
+      return
+
+    this.channel.emit('onPlayerUpdate', this._getPlayerData())
+  }
+
+  getPlayerById (id) {
+    return this.players.find(player => player.id === id)
+  }
+
+  hideMultiplayer() {
+    this.showPlayer = false
+    this.showOtherPlayers = false
+  }
+
+  showMultiplayer() {
+    this.showPlayer = true
+    this.showOtherPlayers = true
+  }
+
   _getPlayerData () {
     return {
       id: this.channel.id,
@@ -59,7 +72,9 @@ export default class Multiplayer {
       zPosition: this.camera.position.z,
       xRotation: this.camera.rotation.x,
       yRotation: this.camera.rotation.y,
-      zRotation: this.camera.rotation.z
+      zRotation: this.camera.rotation.z,
+      showPlayer: this.showPlayer,
+      universePlayer: window.currentUniverse
     }
   }
 
@@ -88,6 +103,17 @@ export default class Multiplayer {
     if(!data || this.channel.id === data.id)
       return
 
+    if(!this.showOtherPlayers) {
+      this._hideAllPlayers()
+      return
+    }
+
+    if(!data.showPlayer || window.currentUniverse ==! data.universePlayer) {
+      playerToUpdate.playerModel.playerModelMesh.visible = false
+      playerToUpdate.playerName.playerNameMesh.visible = false
+      return
+    }
+
     let playerToUpdate = this.getPlayerById(data.id)
 
     if (!playerToUpdate) {
@@ -100,14 +126,17 @@ export default class Multiplayer {
 
     playerToUpdate.playerModel.playerModelMesh.position.set(data.xPosition, data.yPosition, data.zPosition)
     playerToUpdate.playerModel.playerModelMesh.rotation.set(data.xRotation, data.yRotation, data.zRotation)
+
     playerToUpdate.playerName.playerNameMesh.lookAt(this.camera.position)
     playerToUpdate.playerName.playerNameGeometry.center()
-
     playerToUpdate.playerName.playerNameMesh.position.set(
       data.xPosition,
       data.yPosition + 650,
       data.zPosition
     )
+
+    playerToUpdate.playerModel.playerModelMesh.visible = true
+    playerToUpdate.playerName.playerNameMesh.visible = true
   }
 
   _onPlayerDisconnect (id) {
@@ -134,5 +163,13 @@ export default class Multiplayer {
     playerDisconnected.playerName.playerNameMaterial.dispose()
 
     this.scene.remove(playerDisconnected.playerModel.playerModelMesh)
+    this.scene.remove(playerDisconnected.playerName.playerNameMesh)
+  }
+
+  _hideAllPlayers () {
+    this.players.forEach(player => {
+      player.playerModel.playerModelMesh.visible = false
+      player.playerName.playerNameMesh.visible = false
+    })
   }
 }

@@ -17,12 +17,9 @@ export default class Player {
   async getNewPlayerModel() {
     const playerModelGeometry = new THREE.SphereGeometry(500, 500, 500)
     const playerModelMaterial = new THREE.MeshBasicMaterial({color: 0x7777ff, wireframe: false})
+    const playerModelMesh = this.library.player.model.clone()
 
-    return {
-      playerModelGeometry: playerModelGeometry,
-      playerModelMaterial: playerModelMaterial,
-      playerModelMesh: this.library.player.model
-    }
+    return { playerModelGeometry, playerModelMaterial, playerModelMesh }
   }
 
   async getNewPlayerName(name=null) {
@@ -38,11 +35,8 @@ export default class Player {
     })
 
     const playerNameMaterial = new THREE.MeshBasicMaterial({color: 0xffffff})
+    const playerNameMesh = new THREE.Mesh(playerNameGeometry, playerNameMaterial)
 
-    return {
-      playerNameGeometry: playerNameGeometry,
-      playerNameMaterial: playerNameMaterial,
-      playerNameMesh: new THREE.Mesh(playerNameGeometry, playerNameMaterial)
-    }
+    return { playerNameGeometry, playerNameMaterial, playerNameMesh }
   }
 }

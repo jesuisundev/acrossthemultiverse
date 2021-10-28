@@ -150,6 +150,7 @@ export default class Library {
     }
 
     // load player model
+    // TODO: we should maybe add it to the scene hidden to avoid blocking the loop at first render
     const loader = new GLTFLoader()
     loader.load(
       `${this.source.player.baseUrl}/${this.source.player.pool[0].src}`,
@@ -158,6 +159,7 @@ export default class Library {
         this.player.model.traverse((child) => {
           if (child.isMesh) {
             child.material.blending = THREE.NormalBlending
+            // TODO: find a way to make the color dynamic
             child.material.map = this.textures.starfield.bright[THREE.MathUtils.randInt(0, this.textures.starfield.bright.length - 1)]
             child.material.emissiveMap = this.textures.player.emissive[0]
             child.material.aoMap = this.textures.player.ao[0]
