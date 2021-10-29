@@ -9,7 +9,7 @@ export default class Player {
 
     this.fontLoader = new FontLoader()
     this.fontLoader.load(
-      'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/fonts/helvetiker_regular.typeface.json',
+      'fonts/helvetiker_regular.typeface.json',
       font => { this.font = font}
     )
   }

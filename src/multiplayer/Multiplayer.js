@@ -1,18 +1,22 @@
-import * as THREE from 'three'
 import geckos from '@geckos.io/client'
-import { FontLoader } from 'three/src/loaders/FontLoader'
 import Player from './Player'
 
 export default class Multiplayer {
-  constructor (camera, scene, library, enable = false) {
+  constructor (camera, scene, library, propertySign, enable = false) {
     this.camera = camera
     this.scene = scene
     this.library = library
 
-    this.players = []
+    this.server = {
+      url: "https://195-154-113-94.rev.poneytelecom.eu",
+      //url: "http://192.168.2.138",
+      port: 3000
+    }
+
+    this.propertySign = propertySign
     this.playerBuilder = new Player(camera, scene, library)
+    this.players = []
     this.channel = {}
-    this.loader = new FontLoader()
     this.isConnected = false
     this.isEnable = enable
 
@@ -21,7 +25,7 @@ export default class Multiplayer {
   }
 
   async connect () {
-    this.channel = geckos({ url: "https://195-154-113-94.rev.poneytelecom.eu", port: 3000 })
+    this.channel = geckos({ url: this.server.url, port: this.server.port })
 
     this.channel.onConnect(error => {
       if (error) {
@@ -36,6 +40,8 @@ export default class Multiplayer {
       this.channel.on('onPlayerConnect', data => this._onPlayerConnect(data))
       this.channel.on('onPlayerUpdate', data => this._onPlayerUpdate(data))
       this.channel.on('onPlayerDisconnect', id => this._onPlayerDisconnect(id))
+
+      this.propertySign.addPropertySign()
     })
   }
 

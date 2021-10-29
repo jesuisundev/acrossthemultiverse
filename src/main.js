@@ -10,6 +10,7 @@ import PostProcessor from './postprocessing/PostProcessor'
 import Sequencer from './sequencer/sequencer'
 import Helper from './world/Helper'
 import Multiplayer from './multiplayer/Multiplayer'
+import PropertySign from './blockchain/PropertySign'
 
 const clock = new THREE.Clock()
 const parameters = new Parameters()
@@ -50,8 +51,9 @@ let previousElapsedTime = clock.getElapsedTime()
 const library = new Library()
 const grid = new Grid(camera, parameters, scene, library)
 const postProcessor = new PostProcessor(camera, scene, parameters, renderer)
-const multiplayer = new Multiplayer(camera, scene, library, isMultiplayerModeEnable)
-const sequencer = new Sequencer(scene, library, parameters, grid, camera, postProcessor, multiplayer)
+const propertySign = new PropertySign(camera, scene)
+const multiplayer = new Multiplayer(camera, scene, library, propertySign, isMultiplayerModeEnable)
+const sequencer = new Sequencer(scene, library, parameters, grid, camera, postProcessor, multiplayer, propertySign)
 
 
 if (window.isMobileOrTabletFlag) {
@@ -231,6 +233,3 @@ function updatePositionInWormhole () {
 
 animate()
 init()
-
-console.log('Ho hi fellow developer ! You\'ll find the source code over here => https://github.com/jesuisundev/acrossthemultiverse.')
-console.log('There is also a blog post explaining how everything works => https://www.jesuisundev.com/en/i-built-the-entire-universe-in-javascript/')

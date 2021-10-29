@@ -5,7 +5,7 @@ import Wormhole from './wormhole/Wormhole'
 import Epiphany from './epiphany/Epiphany'
 
 export default class Sequencer {
-  constructor (scene, library, parameters, grid, camera, postProcessor, multiplayer) {
+  constructor (scene, library, parameters, grid, camera, postProcessor, multiplayer, propertySign) {
     this.scene = scene
     this.library = library
     this.parameters = parameters
@@ -13,6 +13,7 @@ export default class Sequencer {
     this.camera = camera
     this.postProcessor = postProcessor
     this.multiplayer = multiplayer
+    this.propertySign = propertySign
 
     this.wormhole = new Wormhole(this.scene, this.library, this.parameters)
     this.epiphany = new Epiphany(this.scene, this.library, this.parameters, this.camera, this)
@@ -21,8 +22,7 @@ export default class Sequencer {
   async launchNextSequence (skipped = false) {
     if(window.sequencer.active) return
 
-    window.sequencer.active = true
-    this.multiplayer.hideMultiplayer()
+    this._onLaunchNextSequence()
 
     switch (window.currentUniverse) {
       case 0:
@@ -56,6 +56,25 @@ export default class Sequencer {
       default:
         await this.borealis()
         break
+    }
+  }
+
+  _onLaunchNextSequence() {
+    window.sequencer.active = true
+    this._handleMultiplayerDisplay()
+  }
+
+  _onEndingSequence() {
+    window.sequencer.active = false
+    this._handleMultiplayerDisplay()
+
+    if(window.currentUniverse != 0)
+      this.propertySign.addPropertySign()
+  }
+
+  _handleMultiplayerDisplay() {
+    if(window.isDiscoveryMode) {
+      this.multiplayer.showMultiplayer()
     }
   }
 
@@ -93,8 +112,7 @@ export default class Sequencer {
       await this.showNavigation()
     }
 
-    window.sequencer.active = false
-    this.multiplayer.showMultiplayer()
+    this._onEndingSequence()
   }
 
   async chapterTwoSequence (skipped = false) {
@@ -132,8 +150,7 @@ export default class Sequencer {
       await this.showNavigation()
     }
   
-    window.sequencer.active = false
-    this.multiplayer.showMultiplayer()
+    this._onEndingSequence()
   }
 
   async chapterThreeSequence (skipped = false) {
@@ -172,8 +189,7 @@ export default class Sequencer {
       await this.showNavigation()
     }
 
-    window.sequencer.active = false
-    this.multiplayer.showMultiplayer()
+    this._onEndingSequence()
   }
 
   async chapterFourSequence (skipped = false) {
@@ -215,8 +231,7 @@ export default class Sequencer {
       await this.showNavigation()
     }
 
-    window.sequencer.active = false
-    this.multiplayer.showMultiplayer()
+    this._onEndingSequence()
   }
 
   async epiphanySequence (skipped = false) {
@@ -261,7 +276,11 @@ export default class Sequencer {
     if(window.sequencer.active) return
 
     window.sequencer.active = true
-    this.multiplayer.hideMultiplayer()
+
+    if(window.isDiscoveryMode) {
+      this.multiplayer.hideMultiplayer()
+      this.propertySign.dispose()
+    }
 
     this.stopAllSounds()
 
