@@ -68,8 +68,9 @@ export default class Sequencer {
     window.sequencer.active = false
     this._handleMultiplayerDisplay()
 
-    if(window.currentUniverse != 0)
-      this.propertySign.addPropertySign()
+    // TODO : fix bug surimpression
+    //if(window.currentUniverse != 0)
+    //  this.propertySign.addPropertySign()
   }
 
   _handleMultiplayerDisplay() {
@@ -279,7 +280,9 @@ export default class Sequencer {
 
     if(window.isDiscoveryMode) {
       this.multiplayer.hideMultiplayer()
-      this.propertySign.dispose()
+
+      // TODO: fix bug surimpression
+      //this.propertySign.dispose()
     }
 
     this.stopAllSounds()

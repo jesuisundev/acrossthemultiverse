@@ -25,7 +25,7 @@ export default class PropertySign {
     addPropertySign() {
         this.text.metadata = this._getLocalUniverseMetadata()
         const text = `
-            Universe : #${this.text.universeNumber}
+            Universe : #${window.currentUniverse}
             Owner : ${this.text.owner}
 
             Type : ${this.text.metadata.type}

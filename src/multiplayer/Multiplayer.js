@@ -41,7 +41,8 @@ export default class Multiplayer {
       this.channel.on('onPlayerUpdate', data => this._onPlayerUpdate(data))
       this.channel.on('onPlayerDisconnect', id => this._onPlayerDisconnect(id))
 
-      this.propertySign.addPropertySign()
+      // TODO: fix bug surimpression
+      //this.propertySign.addPropertySign()
     })
   }
 
