@@ -21,7 +21,7 @@ export default class Multiplayer {
   }
 
   async connect () {
-    this.channel = geckos({ url: "http://195.154.113.94", port: 3000 })
+    this.channel = geckos({ url: "https://195-154-113-94.rev.poneytelecom.eu", port: 3000 })
 
     this.channel.onConnect(error => {
       if (error) {
