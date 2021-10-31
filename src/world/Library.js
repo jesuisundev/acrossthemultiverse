@@ -1,9 +1,13 @@
 import * as THREE from 'three'
-import { Howl, Howler } from 'howler'
+import { Howl } from 'howler'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 
 export default class Library {
   constructor () {
+    this.gltfLoader = new GLTFLoader()
+    this.fbxLoader = new FBXLoader()
+
     this.source = {
       textures: {
         starfield: {
@@ -69,6 +73,27 @@ export default class Library {
             { type: 'opacity', src: 'sphere_opacity.jpg' },
             { type: 'roughness', src: 'sphere_roughness.jpg' }
           ]
+        },
+        normandy: {
+          baseUrl: '/textures/spaceship/normandy/',
+          pool: [
+            { type: 'decals', src: 'decals.png' },
+            { type: 'ingame', src: 'ingame.png' },
+            { type: 'ingamei', src: 'ingamei.png' }
+          ]
+        },
+        station: {
+          baseUrl: '/textures/spaceship/station/',
+          pool: [
+            { type: 'ao', src: 'ao.jpg' },
+            { type: 'basecolor', src: 'basecolor.jpg' },
+            { type: 'diffuse', src: 'diffuse.jpg' },
+            { type: 'height', src: 'height.jpg' },
+            { type: 'normal', src: 'normal.jpg' },
+            { type: 'opacity', src: 'opacity.jpg' },
+            { type: 'reflection', src: 'reflection.jpg' },
+            { type: 'specular', src: 'specular.jpg' }
+          ]
         }
       },
       audio: {
@@ -88,6 +113,18 @@ export default class Library {
         baseUrl: '/models/player',
         pool: [
           { title: 'sphere', src: 'sphere.glb' }
+        ]
+      },
+      normandy: {
+        baseUrl: '/models/spaceship/normandy',
+        pool: [
+          { title: 'normandy', src: 'normandy.fbx' }
+        ]
+      },
+      station: {
+        baseUrl: '/models/spaceship/station',
+        pool: [
+          { title: 'station', src: 'station.glb' }
         ]
       }
     }
@@ -118,14 +155,38 @@ export default class Library {
         normal: [],
         opacity: [],
         roughness: []
+      },
+      normandy: {
+        decals: [],
+        ingame: [],
+        ingamei: []
+      },
+      station: {
+        ao: [],
+        basecolor: [],
+        diffuse: [],
+        glossiness: [],
+        height: [],
+        ior: [],
+        normal: [],
+        opacity: [],
+        reflection: [],
+        specular: []
       }
     }
 
     this.audio = {}
 
     this.player = {}
+
+    this.normandy = {}
+
+    this.station = {}
   }
 
+  /**
+   * Loads all needed ressource for launching the game
+   */
   preload () {
     // textures
     // this will be re-used all over the universes
@@ -151,8 +212,7 @@ export default class Library {
 
     // load player model
     // TODO: we should maybe add it to the scene hidden to avoid blocking the loop at first render
-    const loader = new GLTFLoader()
-    loader.load(
+    this.gltfLoader.load(
       `${this.source.player.baseUrl}/${this.source.player.pool[0].src}`,
       gltf => {
         this.player.model = gltf.scene
@@ -170,6 +230,64 @@ export default class Library {
           }
         })
         this.player.model.scale.set(500, 500, 500)
+      }
+    )
+  }
+
+  /**
+   * Loads all ressource that the game will need only later
+   */
+  postload () {
+    // load normandy spaceship model
+    this.fbxLoader.load(
+      `${this.source.normandy.baseUrl}/${this.source.normandy.pool[0].src}`,
+      fbx => {
+        this.normandy.model = fbx
+        this.normandy.model.traverse((child) => {
+          if (child.isMesh) {
+            child.material.blending = THREE.NormalBlending
+            child.material.transparent = true
+            child.material.opacity = 0
+
+            if(child.name === 'Root_Leve1') {
+              child.material.map = this.textures.normandy.ingame[0]
+            }
+
+            if(child.name === 'Root_Leve2') {
+              child.material.map = this.textures.normandy.decals[0]
+            }
+          }
+        })
+        this.normandy.model.scale.set(30, 30, 30)
+      }
+    )
+
+    // load station model
+    this.gltfLoader.load(
+      `${this.source.station.baseUrl}/${this.source.station.pool[0].src}`,
+      gltf => {
+        this.station.model = gltf.scene
+        this.station.model.traverse((child) => {
+          if (child.isMesh) {
+            child.material = new THREE.MeshPhongMaterial({
+              map: this.textures.station.basecolor[0],
+              aoMap: this.textures.station.ao[0],
+              specularMap: this.textures.station.specular[0],
+              normalMap: this.textures.station.normal[0],
+              alphaMap: this.textures.station.opacity[0],
+              bumpMap: this.textures.station.height[0],
+              displacementMap: this.textures.station.diffuse[0],
+              emissiveMap: this.textures.station.reflection[0],
+              transparent: true,
+              opacity: 0,
+              vertexColors: false,
+              color: 0x3b3b3b,
+              emissiveIntensity: 1,
+              shininess: 30
+            })
+          }
+        })
+        this.station.model.scale.set(10, 10, 10)
       }
     )
   }
