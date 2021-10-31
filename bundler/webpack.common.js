@@ -2,6 +2,7 @@ const path = require('path')
 const copyWebpackPlugin = require('copy-webpack-plugin')
 const htmlWebpackPlugin = require('html-webpack-plugin')
 const miniCSSExtractPlugin = require('mini-css-extract-plugin')
+const webpackObfuscator = require('webpack-obfuscator')
 
 module.exports = {
   entry: path.resolve(__dirname, '../src/main.js'),
@@ -20,7 +21,10 @@ module.exports = {
       template: path.resolve(__dirname, '../src/index.html'),
       minify: true
     }),
-    new miniCSSExtractPlugin()
+    new miniCSSExtractPlugin(),
+    new webpackObfuscator ({
+      rotateStringArray: true
+    }, [])
   ],
   module: {
     rules: [{
