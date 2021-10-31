@@ -3,6 +3,7 @@ import Nebula from './nebula/Nebula'
 import Galaxy from './galaxy/Galaxy'
 import Giant from './giant/Giant'
 import Singularity from './singularity/Singularity'
+import Spaceship from './spaceship/Spaceship'
 
 export default class MultiverseFactory {
     constructor(scene, library, parameters) {
@@ -27,6 +28,9 @@ export default class MultiverseFactory {
 
             case "singularity":
                 return new Singularity(this.scene, this.library, this.parameters)
+            
+            case "spaceship":
+                return new Spaceship(this.scene, this.library, this.parameters)
           }
     }
 }

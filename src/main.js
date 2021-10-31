@@ -21,6 +21,9 @@ helper.setDefaultGlobal()
 const scene = new THREE.Scene()
 scene.fog = new THREE.Fog(parameters.global.background[window.currentUniverse], parameters.global.camera.near, parameters.global.camera.far)
 
+const ambientLight = new THREE.AmbientLight("#FFFFFF", 1)
+scene.add(ambientLight)
+
 let resizedRenderResolution = helper.getResizedRenderResolution()
 const renderWidth = resizedRenderResolution.renderWidth
 const renderHeight = resizedRenderResolution.renderHeight
@@ -170,6 +173,7 @@ function animate () {
       document.getElementById('loading').remove()
       document.getElementById('launch').className = 'fadeIn'
       document.getElementById('launchUltra').className = 'fadeIn'
+      library.postload()
   }
 
   await helper.showElementById("title")
@@ -204,6 +208,14 @@ function updateAnimatedObjects (elapsedTime) {
       if (camera.position.distanceTo(meshToUpdate.position) < 8000 && !window.sequencer.active) {
         sequencer.wormholeSequence()
       }
+    }
+  }
+
+  if (Object.keys(window.spaceshipToUpdate).length) {
+    for (const spaceshipToUpdate of Object.values(window.spaceshipToUpdate)) {
+      spaceshipToUpdate.rotateX(0.0005)
+      spaceshipToUpdate.rotateZ(0.0005)
+      spaceshipToUpdate.translateZ(0.005)
     }
   }
 }

@@ -15,6 +15,7 @@ export default class Player {
   }
 
   async getNewPlayerModel() {
+    // TODO: delete uselss sphere and material
     const playerModelGeometry = new THREE.SphereGeometry(500, 500, 500)
     const playerModelMaterial = new THREE.MeshBasicMaterial({color: 0x7777ff, wireframe: false})
     const playerModelMesh = this.library.player.model.clone()

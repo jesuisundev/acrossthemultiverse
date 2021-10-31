@@ -75,6 +75,12 @@ export default class Workers {
       subtype: 'Blackhole',
       source: new Worker(new URL('./singularity/BlackHoleSingularityWorker.js', import.meta.url))
     }
+
+    this.spaceshipNormandyWorker = {
+      type: 'Spaceship',
+      subtype: 'Normandy',
+      source: new Worker(new URL('./spaceship/SpaceshipWorker.js', import.meta.url))
+    }
   }
 
   _setWorkersListener () {
@@ -137,10 +143,20 @@ export default class Workers {
       'singularity',
       'blackhole'
     )
+
+    this.spaceshipNormandyWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
+      messageEvent.data,
+      'spaceship',
+      'normandy'
+    )
   }
 
   _setWorkersDistribution () {
     this.workersDistribution[0] = [
+      {
+        chances: 100,
+        worker: this.spaceshipNormandyWorker
+      },
       {
         chances: 29,
         worker: this.openStarfieldWorker
