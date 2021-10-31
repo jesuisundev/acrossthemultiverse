@@ -12,6 +12,8 @@ export default class Spaceship {
   }
 
   generate (spaceshipAttributes, position, subtype = null) {
+    this.subtype = subtype
+
     const currentCoordinateVector = this._getCoordinateVectorByPosition(position)
 
     const brightStarsGeometry = this._getRandomStarsGeometry(spaceshipAttributes.brightStarsRandomAttributes)
@@ -53,11 +55,9 @@ export default class Spaceship {
     thirdPassStars.rotateX(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
     thirdPassStars.rotateZ(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
 
-    const spaceship = this._getSpaceship(subtype)
+    const spaceship = this._getSpaceship()
 
     if(spaceship) {
-      spaceship.children[0].material.opacity = 0
-      spaceship.children[1].material.opacity = 0
       spaceship.position.set(
         currentCoordinateVector.x > 0 ? currentCoordinateVector.x - this.parameters.grid.clusterSize / 3 : currentCoordinateVector.x + this.parameters.grid.clusterSize / 3,
         currentCoordinateVector.y,
@@ -67,8 +67,6 @@ export default class Spaceship {
       spaceship.rotateZ(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
       window.spaceshipToUpdate[spaceship.uuid] = spaceship
     }
-    console.log(spaceship)
-    
 
     const randomSpaceship = {
       bright: {
@@ -119,7 +117,8 @@ export default class Spaceship {
     this.spaceship.secondPass.material.dispose()
     this.spaceship.thirdPass.material.dispose()
 
-    delete window.spaceshipToUpdate[this.spaceship.spaceship.mesh.uuid]
+    if(window.spaceshipToUpdate[this.spaceship.uuid])
+      delete window.spaceshipToUpdate[this.spaceship.uuid]
 
     this.scene.remove(
       this.spaceship.bright.points,
@@ -142,8 +141,7 @@ export default class Spaceship {
       this.spaceship.bright.points,
       this.spaceship.firstPass.points,
       this.spaceship.secondPass.points,
-      this.spaceship.thirdPass.points,
-      this.spaceship.spaceship.mesh
+      this.spaceship.thirdPass.points
     )
 
     gsap.timeline()
@@ -151,8 +149,15 @@ export default class Spaceship {
       .to(this.spaceship.firstPass.points.material, { duration: 3, opacity: 1 }, 0)
       .to(this.spaceship.secondPass.points.material, { duration: 3, opacity: 1 }, 0)
       .to(this.spaceship.thirdPass.points.material, { duration: 3, opacity: 1 }, 0)
-      .to(this.spaceship.spaceship.mesh.children[0].material, { duration: 3, opacity: 1 }, 0)
-      .to(this.spaceship.spaceship.mesh.children[1].material, { duration: 3, opacity: 1 }, 0)
+    
+    switch (this.subtype) {
+      case 'normandy':
+        this._showNormandy()
+        break
+      case 'station':
+        this._showStation()
+        break
+    }
   }
 
   _getCoordinateVectorByPosition (position) {
@@ -239,13 +244,57 @@ export default class Spaceship {
     return material
   }
 
-  _getSpaceship(subtype) {
-    switch (subtype) {
+  _getSpaceship() {
+    switch (this.subtype) {
       case 'normandy':
-        return this.library.normandy.model ? this.library.normandy.model.clone() : null
+        if(!this.library.normandy.model)
+          return null
+
+        return this._getFormatedNormandy()
+      case 'station':
+        if(!this.library.station.model)
+          return null
+
+        return this._getFormatedStation()
       default:
         console.error('Cannot find spaceship subtype')
         return null
     }
+  }
+
+  _getFormatedNormandy() {
+    const normandy = this.library.normandy.model.clone()
+  
+    normandy.children[0].material.opacity = 0
+    normandy.children[1].material.opacity = 0
+
+    return normandy
+  }
+
+  _getFormatedStation() {
+    const station = this.library.station.model.clone()
+
+    station.children[0].material.opacity = 0
+
+    return station
+  }
+
+  _showNormandy() {
+    if(!this.spaceship.spaceship.mesh)
+      return
+
+    this.scene.add(this.spaceship.spaceship.mesh)
+    gsap.timeline()
+      .to(this.spaceship.spaceship.mesh.children[0].material, { duration: 3, opacity: 1 }, 0)
+      .to(this.spaceship.spaceship.mesh.children[1].material, { duration: 3, opacity: 1 }, 0)
+  }
+
+  _showStation() {
+    if(!this.spaceship.spaceship.mesh)
+      return
+
+    this.scene.add(this.spaceship.spaceship.mesh)
+    gsap.timeline()
+      .to(this.spaceship.spaceship.mesh.children[0].material, { duration: 3, opacity: 1 }, 0)
   }
 }

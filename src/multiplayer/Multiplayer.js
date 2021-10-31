@@ -8,8 +8,8 @@ export default class Multiplayer {
     this.library = library
 
     this.server = {
-      //url: "https://195-154-113-94.rev.poneytelecom.eu",
-      url: "http://192.168.2.138",
+      url: "https://195-154-113-94.rev.poneytelecom.eu",
+      //url: "http://192.168.2.138",
       port: 3000
     }
 

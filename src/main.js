@@ -22,7 +22,9 @@ const scene = new THREE.Scene()
 scene.fog = new THREE.Fog(parameters.global.background[window.currentUniverse], parameters.global.camera.near, parameters.global.camera.far)
 
 const ambientLight = new THREE.AmbientLight("#FFFFFF", 1)
-scene.add(ambientLight)
+const directionalLight = new THREE.DirectionalLight("#FFFFFF", 1)
+directionalLight.position.set(0, 400, 0)
+scene.add(ambientLight, directionalLight)
 
 let resizedRenderResolution = helper.getResizedRenderResolution()
 const renderWidth = resizedRenderResolution.renderWidth

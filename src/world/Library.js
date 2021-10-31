@@ -81,6 +81,19 @@ export default class Library {
             { type: 'ingame', src: 'ingame.png' },
             { type: 'ingamei', src: 'ingamei.png' }
           ]
+        },
+        station: {
+          baseUrl: '/textures/spaceship/station/',
+          pool: [
+            { type: 'ao', src: 'ao.jpg' },
+            { type: 'basecolor', src: 'basecolor.jpg' },
+            { type: 'diffuse', src: 'diffuse.jpg' },
+            { type: 'height', src: 'height.jpg' },
+            { type: 'normal', src: 'normal.jpg' },
+            { type: 'opacity', src: 'opacity.jpg' },
+            { type: 'reflection', src: 'reflection.jpg' },
+            { type: 'specular', src: 'specular.jpg' }
+          ]
         }
       },
       audio: {
@@ -106,6 +119,12 @@ export default class Library {
         baseUrl: '/models/spaceship/normandy',
         pool: [
           { title: 'normandy', src: 'normandy.fbx' }
+        ]
+      },
+      station: {
+        baseUrl: '/models/spaceship/station',
+        pool: [
+          { title: 'station', src: 'station.glb' }
         ]
       }
     }
@@ -141,6 +160,18 @@ export default class Library {
         decals: [],
         ingame: [],
         ingamei: []
+      },
+      station: {
+        ao: [],
+        basecolor: [],
+        diffuse: [],
+        glossiness: [],
+        height: [],
+        ior: [],
+        normal: [],
+        opacity: [],
+        reflection: [],
+        specular: []
       }
     }
 
@@ -149,6 +180,8 @@ export default class Library {
     this.player = {}
 
     this.normandy = {}
+
+    this.station = {}
   }
 
   /**
@@ -226,6 +259,35 @@ export default class Library {
           }
         })
         this.normandy.model.scale.set(30, 30, 30)
+      }
+    )
+
+    // load station model
+    this.gltfLoader.load(
+      `${this.source.station.baseUrl}/${this.source.station.pool[0].src}`,
+      gltf => {
+        this.station.model = gltf.scene
+        this.station.model.traverse((child) => {
+          if (child.isMesh) {
+            child.material = new THREE.MeshPhongMaterial({
+              map: this.textures.station.basecolor[0],
+              aoMap: this.textures.station.ao[0],
+              specularMap: this.textures.station.specular[0],
+              normalMap: this.textures.station.normal[0],
+              alphaMap: this.textures.station.opacity[0],
+              bumpMap: this.textures.station.height[0],
+              displacementMap: this.textures.station.diffuse[0],
+              emissiveMap: this.textures.station.reflection[0],
+              transparent: true,
+              opacity: 0,
+              vertexColors: false,
+              color: 0x3b3b3b,
+              emissiveIntensity: 1,
+              shininess: 30
+            })
+          }
+        })
+        this.station.model.scale.set(10, 10, 10)
       }
     )
   }

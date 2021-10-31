@@ -81,6 +81,12 @@ export default class Workers {
       subtype: 'Normandy',
       source: new Worker(new URL('./spaceship/SpaceshipWorker.js', import.meta.url))
     }
+
+    this.spaceshipStationWorker = {
+      type: 'Spaceship',
+      subtype: 'Station',
+      source: new Worker(new URL('./spaceship/SpaceshipWorker.js', import.meta.url))
+    }
   }
 
   _setWorkersListener () {
@@ -149,16 +155,18 @@ export default class Workers {
       'spaceship',
       'normandy'
     )
+
+    this.spaceshipStationWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
+      messageEvent.data,
+      'spaceship',
+      'station'
+    )
   }
 
   _setWorkersDistribution () {
     this.workersDistribution[0] = [
       {
-        chances: 100,
-        worker: this.spaceshipNormandyWorker
-      },
-      {
-        chances: 29,
+        chances: 23,
         worker: this.openStarfieldWorker
       },
       {
@@ -194,8 +202,16 @@ export default class Workers {
         worker: this.sunGiantWorker
       },
       {
+        chances: 1.5,
+        worker: this.spaceshipNormandyWorker
+      },
+      {
         chances: 1,
         worker: this.whiteDwarfGiantWorker
+      },
+      {
+        chances: 0.5,
+        worker: this.spaceshipStationWorker
       }
     ]
 
@@ -264,7 +280,7 @@ export default class Workers {
       currentProbability += workerDistributed.chances
 
       if (pourcentage < currentProbability) {
-        if (workerDistributed.worker.subtype === 'Blackhole' && !this.isClusterEligibleForBlackhole(clusterToPopulate))
+        if (!this.isClusterEligibleForSpecialEvent(clusterToPopulate, workerDistributed))
           return this.openStarfieldWorker.source
 
         return workerDistributed.worker.source
@@ -272,7 +288,10 @@ export default class Workers {
     }
   }
 
-  isClusterEligibleForBlackhole(clusterToPopulate) {
+  isClusterEligibleForSpecialEvent(clusterToPopulate, workerDistributed) {
+    if((workerDistributed.worker.subtype != 'Blackhole') && workerDistributed.worker.type != 'Spaceship')
+       return true
+
     const coordinates = clusterToPopulate.split(',')
 
     for(let coordinate of coordinates) {
