@@ -52,6 +52,7 @@ let needRender = false
 let isRenderingClusterInProgress = false
 let isMultiplayerModeEnable = true
 let previousElapsedTime = clock.getElapsedTime()
+let startTime = + new Date()
 
 const library = new Library()
 const grid = new Grid(camera, parameters, scene, library)
@@ -198,7 +199,11 @@ function updateAnimatedObjects (elapsedTime) {
   // update materials (shaders animation)
   if (Object.keys(window.materialsToUpdate).length) {
     for (const materialToUpdate of Object.values(window.materialsToUpdate)) {
-      materialToUpdate.uniforms.uTime.value = elapsedTime
+      if(materialToUpdate.userData.isStar) {
+        materialToUpdate.uniforms.uTime.value = + new Date() - startTime
+      } else {
+        materialToUpdate.uniforms.uTime.value = elapsedTime
+      }
     }
   }
 

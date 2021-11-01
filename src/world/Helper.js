@@ -28,6 +28,7 @@ export default class Helper {
 
   // i'm lazy, we could refactor some code and avoid globals
   setDefaultGlobal () {
+    window.isDebugMode = false
     window.isDiscoveryMode = false
     window.highend = false
     window.currentUniverse = 0

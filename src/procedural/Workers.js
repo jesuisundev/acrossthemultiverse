@@ -70,6 +70,12 @@ export default class Workers {
       source: new Worker(new URL('./giant/WhiteDwarfGiantWorker.js', import.meta.url))
     }
 
+    this.starGiantWorker = {
+      type: 'Giant',
+      subtype: 'Star',
+      source: new Worker(new URL('./giant/StarGiantWorker.js', import.meta.url))
+    }
+
     this.blackholeWorker = {
       type: 'Singularity',
       subtype: 'Blackhole',
@@ -144,6 +150,12 @@ export default class Workers {
       'whitedwarf'
     )
 
+    this.starGiantWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
+      messageEvent.data,
+      'giant',
+      'star'
+    )
+
     this.blackholeWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
       messageEvent.data,
       'singularity',
@@ -166,7 +178,7 @@ export default class Workers {
   _setWorkersDistribution () {
     this.workersDistribution[0] = [
       {
-        chances: 23,
+        chances: 20,
         worker: this.openStarfieldWorker
       },
       {
@@ -192,6 +204,10 @@ export default class Workers {
       {
         chances: 8,
         worker: this.supernovaRemnantsNebulaWorker
+      },
+      {
+        chances: 5,
+        worker: this.starGiantWorker
       },
       {
         chances: 4,
@@ -289,7 +305,7 @@ export default class Workers {
   }
 
   isClusterEligibleForSpecialEvent(clusterToPopulate, workerDistributed) {
-    if((workerDistributed.worker.subtype != 'Blackhole') && workerDistributed.worker.type != 'Spaceship')
+    if((workerDistributed.worker.subtype != 'Blackhole') && workerDistributed.worker.type != 'Spaceship' && workerDistributed.worker.type != 'Giant')
        return true
 
     const coordinates = clusterToPopulate.split(',')
