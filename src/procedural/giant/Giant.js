@@ -77,7 +77,7 @@ export default class Giant {
   _generateStar (giantsAttributes, position) {
     const currentCoordinateVector = this._getCoordinateVectorByPosition(position)
 
-    const giantStarGeometry = new THREE.SphereGeometry(1, 500, 500)
+    const giantStarGeometry = new THREE.SphereGeometry(1, 64, 32)
     const brightStarTexture = null
     const giantStarmaterial = this._getRandomStarShaderMaterial()
     

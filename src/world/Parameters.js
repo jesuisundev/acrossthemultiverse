@@ -498,8 +498,8 @@ export default class Parameters {
           },
           star: {
             scale: {
-              min: 5000,
-              max: 10000
+              min: 500,
+              max: 1000
             },
             uBrightnessAmplifier: {
               min: 0.20,
@@ -525,12 +525,6 @@ export default class Parameters {
                     '#0072ff',
                     '#00c7ff',
                     '#90f6ff',
-                ],
-                [
-                    '#000000', // green
-                    '#47ca00',
-                    '#78ff00',
-                    '#c7ff67',
                 ]
               ]
           }
