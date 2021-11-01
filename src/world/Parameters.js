@@ -495,6 +495,62 @@ export default class Parameters {
               min: 0.01,
               max: 0.02
             }
+          },
+          star: {
+            scale: {
+              min: 5000,
+              max: 10000
+            },
+            uBrightnessAmplifier: {
+              min: 0.20,
+              max: 0.25
+            },
+            uNoiseIntensity: {
+              min: 2.0,
+              max: 6.0
+            },
+            uNoiseSpeed: {
+              min: 0.01,
+              max: 0.02
+            },
+            colors: [
+                [
+                    '#000000', // red
+                    '#ff0000',
+                    '#ffd236',
+                    '#ffe68f',
+                ],
+                [
+                    '#000000', // blue
+                    '#0072ff',
+                    '#00c7ff',
+                    '#90f6ff',
+                ],
+                [
+                    '#000000', // green
+                    '#47ca00',
+                    '#78ff00',
+                    '#c7ff67',
+                ],
+                [
+                    '#ffffff', // white
+                    '#ff0000',
+                    '#000000',
+                    '#000000',
+                ],
+                [
+                    '#e000ff', // pink
+                    '#ffffff',
+                    '#ffffff',
+                    '#ffffff', 
+                ],
+                [
+                    '#ffa400', // orange
+                    '#ffffff',
+                    '#ffffff',
+                    '#ffffff'
+                ]
+              ]
           }
         },
         colors: [

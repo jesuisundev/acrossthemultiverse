@@ -83,8 +83,10 @@ export default class Sequencer {
     if (skipped) {
       this.camera.rotation.z = 0
 
-      this.library.audio['ghosts'].play()
-      this.library.audio['ghosts'].loop(true)
+      if(!window.isDebugMode) {
+        this.library.audio['ghosts'].play()
+        this.library.audio['ghosts'].loop(true)
+      }
 
       this.fadeOutById('#whitewall', 2)
       this.fadeOutById('#blackwall', 2)

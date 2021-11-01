@@ -1,10 +1,12 @@
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 
-import giantSunVertexShader from '../../shaders/giant/sun/vertex.glsl'
-import giantSunFragmentShader from '../../shaders/giant/sun/fragment.glsl'
 import giantWhiteDwarfVertexShader from '../../shaders/giant/whitedwarf/vertex.glsl'
 import giantWhiteDwarfFragmentShader from '../../shaders/giant/whitedwarf/fragment.glsl'
+import giantStarVertexShader from '../../shaders/giant/star/vertex.glsl'
+import giantStarFragmentShader from '../../shaders/giant/star/fragment.glsl'
+import giantSunVertexShader from '../../shaders/giant/sun/vertex.glsl'
+import giantSunFragmentShader from '../../shaders/giant/sun/fragment.glsl'
 
 export default class Giant {
   constructor (scene, library, parameters) {
@@ -17,50 +19,16 @@ export default class Giant {
   }
 
   generate (giantsAttributes, position, subtype = null) {
-    if (subtype === 'whitedwarf') {
-      return this._generateWhiteDwarf(giantsAttributes, position)
+    switch (subtype) {
+      case 'whitedwarf':
+        return this._generateWhiteDwarf(giantsAttributes, position)
+
+      case 'star':
+        return this._generateStar(giantsAttributes, position)
+
+      default:
+        return this._generateSun(giantsAttributes, position)
     }
-
-    const currentCoordinateVector = this._getCoordinateVectorByPosition(position)
-
-    const giantStarGeometry = new THREE.SphereGeometry(1, 64, 32)
-    const brightStarTexture = null
-    const giantStarmaterial = this._getRandomSunShaderMaterial()
-
-    window.materialsToUpdate[giantStarmaterial.uuid] = giantStarmaterial
-    const giantStar = new THREE.Mesh(giantStarGeometry, giantStarmaterial)
-    const giantStarScale = THREE.MathUtils.randInt(
-      this.parameters.matters[window.currentUniverse].giant.shader.sun.scale.min,
-      this.parameters.matters[window.currentUniverse].giant.shader.sun.scale.max
-    )
-    giantStar.scale.set(giantStarScale, giantStarScale, giantStarScale)
-    giantStar.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
-
-    const firstPassStarsGeometry = this._getRandomStarsGeometry(giantsAttributes.firstPassStarsRandomAttributes)
-    const firstPassStarsTexture = this._getRandomStarsTexture()
-    const firstPassStarsmaterial = this._getRandomStarsMaterial(firstPassStarsTexture)
-    const firstPassStars = new THREE.Points(firstPassStarsGeometry, firstPassStarsmaterial)
-
-    firstPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
-    firstPassStarsGeometry.rotateX(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
-    firstPassStarsGeometry.rotateZ(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
-
-    const randomGiant = {
-      giant: {
-        geometry: giantStarGeometry,
-        texture: brightStarTexture,
-        material: giantStarmaterial,
-        mesh: giantStar
-      },
-      firstPass: {
-        geometry: firstPassStarsGeometry,
-        texture: firstPassStarsTexture,
-        material: firstPassStarsmaterial,
-        points: firstPassStars
-      }
-    }
-
-    this.giant = randomGiant
   }
 
   _generateWhiteDwarf (giantsAttributes, position) {
@@ -106,9 +74,97 @@ export default class Giant {
     this.giant = randomGiant
   }
 
+  _generateStar (giantsAttributes, position) {
+    const currentCoordinateVector = this._getCoordinateVectorByPosition(position)
+
+    const giantStarGeometry = new THREE.SphereGeometry(1, 500, 500)
+    const brightStarTexture = null
+    const giantStarmaterial = this._getRandomStarShaderMaterial()
+    
+    giantStarmaterial.userData.isStar = true
+
+    window.materialsToUpdate[giantStarmaterial.uuid] = giantStarmaterial
+    const giantStar = new THREE.Mesh(giantStarGeometry, giantStarmaterial)
+    const giantStarScale = THREE.MathUtils.randInt(
+      this.parameters.matters[window.currentUniverse].giant.shader.star.scale.min,
+      this.parameters.matters[window.currentUniverse].giant.shader.star.scale.max
+    )
+    giantStar.scale.set(giantStarScale, giantStarScale, giantStarScale)
+    giantStar.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
+
+    const firstPassStarsGeometry = this._getRandomStarsGeometry(giantsAttributes.firstPassStarsRandomAttributes)
+    const firstPassStarsTexture = this._getRandomStarsTexture()
+    const firstPassStarsmaterial = this._getRandomStarsMaterial(firstPassStarsTexture)
+    const firstPassStars = new THREE.Points(firstPassStarsGeometry, firstPassStarsmaterial)
+
+    firstPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
+    firstPassStarsGeometry.rotateX(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
+    firstPassStarsGeometry.rotateZ(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
+
+    const randomGiant = {
+      giant: {
+        geometry: giantStarGeometry,
+        texture: brightStarTexture,
+        material: giantStarmaterial,
+        mesh: giantStar
+      },
+      firstPass: {
+        geometry: firstPassStarsGeometry,
+        texture: firstPassStarsTexture,
+        material: firstPassStarsmaterial,
+        points: firstPassStars
+      }
+    }
+
+    this.giant = randomGiant
+  }
+
+  _generateSun (giantsAttributes, position) {
+    const currentCoordinateVector = this._getCoordinateVectorByPosition(position)
+
+    const giantStarGeometry = new THREE.SphereGeometry( 1, 64, 32)
+    const brightStarTexture = null
+    const giantStarmaterial = this._getRandomWhiteDwarfShaderMaterial()
+
+    window.materialsToUpdate[giantStarmaterial.uuid] = giantStarmaterial
+    const giantStar = new THREE.Mesh(giantStarGeometry, giantStarmaterial)
+    const giantStarScale = THREE.MathUtils.randInt(
+      this.parameters.matters[window.currentUniverse].giant.shader.whitedwarf.scale.min,
+      this.parameters.matters[window.currentUniverse].giant.shader.whitedwarf.scale.max
+    )
+    giantStar.scale.set(giantStarScale, giantStarScale, giantStarScale)
+    giantStar.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
+
+    const firstPassStarsGeometry = this._getRandomStarsGeometry(giantsAttributes.firstPassStarsRandomAttributes)
+    const firstPassStarsTexture = this._getRandomStarsTexture()
+    const firstPassStarsmaterial = this._getRandomStarsMaterial(firstPassStarsTexture)
+    const firstPassStars = new THREE.Points(firstPassStarsGeometry, firstPassStarsmaterial)
+
+    firstPassStars.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
+    firstPassStarsGeometry.rotateX(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
+    firstPassStarsGeometry.rotateZ(THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360)))
+
+    const randomGiant = {
+      giant: {
+        geometry: giantStarGeometry,
+        texture: brightStarTexture,
+        material: giantStarmaterial,
+        mesh: giantStar
+      },
+      firstPass: {
+        geometry: firstPassStarsGeometry,
+        texture: firstPassStarsTexture,
+        material: firstPassStarsmaterial,
+        points: firstPassStars
+      }
+    }
+
+    this.giant = randomGiant
+  }
+
   dispose () {
     if (!this.giant) {
-      console.log('Can\'t dispose empty giant')
+      console.log("Can't dispose empty giant")
       return
     }
 
@@ -130,7 +186,7 @@ export default class Giant {
 
   show () {
     if (!this.giant) {
-      console.log('Can\'t show empty giant')
+      console.log("Can't show empty giant")
       return
     }
 
@@ -168,6 +224,35 @@ export default class Giant {
             this.parameters.matters[window.currentUniverse].giant.shader.sun.uNoiseSpeed.max
           )
         },
+        fogColor: { value: this.scene.fog.color },
+        fogNear: { value: this.scene.fog.near },
+        fogFar: { value: this.scene.fog.far }
+      },
+      side: THREE.FrontSide,
+      fog: true
+    })
+  }
+
+  _getRandomStarShaderMaterial () {
+    const colors = this.parameters.matters[window.currentUniverse].giant.shader.star.colors
+    const currentColors = Object.create(colors[THREE.MathUtils.randInt(0, colors.length - 1)])
+
+    return new THREE.ShaderMaterial({
+      precision: 'lowp',
+      vertexShader: giantStarVertexShader,
+      fragmentShader: giantStarFragmentShader,
+      uniforms: {
+        sphere_radius: { value: 1 },
+        sphere_position: { value: new THREE.Vector3(0, 0, 0) },
+        uTime: { value: 0 },
+        time_multiplier: { value: 0.0010 },
+        color_step_1: { value: new THREE.Color(currentColors[0]) },
+        color_step_2: { value: new THREE.Color(currentColors[1]) },
+        color_step_3: { value: new THREE.Color(currentColors[2]) },
+        color_step_4: { value: new THREE.Color(currentColors[3]) },
+        ratio_step_1: { value: 0.2 },
+        ratio_step_2: { value: 0.4 },
+        displacement: { value: 0.0 },
         fogColor: { value: this.scene.fog.color },
         fogNear: { value: this.scene.fog.near },
         fogFar: { value: this.scene.fog.far }
