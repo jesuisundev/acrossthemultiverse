@@ -206,12 +206,12 @@ export default class Workers {
         worker: this.supernovaRemnantsNebulaWorker
       },
       {
-        chances: 5,
-        worker: this.starGiantWorker
-      },
-      {
         chances: 4,
         worker: this.blackholeWorker
+      },
+      {
+        chances: 3,
+        worker: this.starGiantWorker
       },
       {
         chances: 2,

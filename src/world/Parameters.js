@@ -531,24 +531,6 @@ export default class Parameters {
                     '#47ca00',
                     '#78ff00',
                     '#c7ff67',
-                ],
-                [
-                    '#ffffff', // white
-                    '#ff0000',
-                    '#000000',
-                    '#000000',
-                ],
-                [
-                    '#e000ff', // pink
-                    '#ffffff',
-                    '#ffffff',
-                    '#ffffff', 
-                ],
-                [
-                    '#ffa400', // orange
-                    '#ffffff',
-                    '#ffffff',
-                    '#ffffff'
                 ]
               ]
           }
