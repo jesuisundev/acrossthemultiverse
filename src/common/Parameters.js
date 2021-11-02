@@ -683,6 +683,7 @@ export default class Parameters {
     }
   }
 
+  // TODO : should become _setModifierBloomUniverse()
   setMattersChapterTwo() {
     this.matters[1] = JSON.parse(JSON.stringify(this.matters[0]))
 

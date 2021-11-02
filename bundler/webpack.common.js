@@ -21,10 +21,10 @@ module.exports = {
       template: path.resolve(__dirname, '../src/index.html'),
       minify: true
     }),
-    new miniCSSExtractPlugin(),
-    new webpackObfuscator ({
-      rotateStringArray: true
-    }, [])
+    // new miniCSSExtractPlugin(),
+    // new webpackObfuscator ({
+    //   rotateStringArray: true
+    // }, [])
   ],
   module: {
     rules: [{

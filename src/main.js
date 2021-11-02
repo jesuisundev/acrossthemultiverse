@@ -1,14 +1,14 @@
 import './style.css'
 import * as THREE from 'three'
 
-import Grid from './world/Grid'
+import Grid from './common/Grid'
 import Controls from './controls/Controls'
 import TouchControls from './controls/mobile/touch-controls'
-import Library from './world/Library'
-import Parameters from './world/Parameters'
+import Library from './common/Library'
+import Parameters from './common/Parameters'
 import PostProcessor from './postprocessing/PostProcessor'
 import Sequencer from './sequencer/sequencer'
-import Helper from './world/Helper'
+import Helper from './common/Helper'
 import Multiplayer from './multiplayer/Multiplayer'
 import PropertySign from './blockchain/PropertySign'
 
