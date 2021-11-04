@@ -131,8 +131,674 @@ export default class Parameters {
       }
     }
 
-    this.matters = []
+    this.defaultMatters = {
+      starfield: {
+        budget: 300000,
+        vertices: {
+          bright: {
+            min: 0.00001,
+            max: 0.0001
+          },
+          pass: {
+            min: 0.05,
+            max: 0.25
+          },
+          globularPass: {
+            min: 0.1,
+            max: 0.15
+          }
+        },
+        material: {
+          size: {
+            bright: {
+              min: 300,
+              max: 400
+            },
+            pass: {
+              min: 55,
+              max: 65
+            }
+          },
+          opacity: {
+            bright: {
+              min: 1,
+              max: 1
+            },
+            pass: {
+              min: 1,
+              max: 1
+            }
+          }
+        },
+        colors: [
+          '#9bb2ff',
+          '#9eb5ff',
+          '#a3b9ff',
+          '#aabfff',
+          '#b2c5ff',
+          '#bbccff',
+          '#c4d2ff',
+          '#ccd8ff',
+          '#d3ddff',
+          '#dae2ff',
+          '#dfe5ff',
+          '#e4e9ff',
+          '#e9ecff',
+          '#eeefff',
+          '#f3f2ff',
+          '#f8f6ff',
+          '#fef9ff',
+          '#fff9fb',
+          '#fff7f5',
+          '#fff5ef',
+          '#fff3ea',
+          '#fff1e5',
+          '#ffefe0',
+          '#ffeddb',
+          '#ffebd6',
+          '#ffe9d2',
+          '#ffe8ce',
+          '#ffe6ca',
+          '#ffe5c6',
+          '#ffe3c3',
+          '#ffe2bf',
+          '#ffe0bb',
+          '#ffdfb8',
+          '#ffddb4',
+          '#ffdbb0',
+          '#ffdaad',
+          '#ffd8a9',
+          '#ffd6a5',
+          '#ffd5a1',
+          '#ffd29c',
+          '#ffd096',
+          '#ffcc8f',
+          '#ffc885',
+          '#ffc178',
+          '#ffb765',
+          '#ffa94b',
+          '#ff9523',
+          '#ff7b00',
+          '#ff5200'
+        ],
+        globularColors: [
+          '#FF8E05',
+          '#EF93E6',
+          '#FDFFF2',
+          '#D7693D',
+          '#ffc178',
+          '#ffb765',
+          '#ffa94b',
+          '#ff9523',
+          '#ff7b00',
+          '#ff5200',
+          '#9bb2ff',
+          '#9eb5ff',
+          '#a3b9ff',
+          '#aabfff',
+          '#b2c5ff',
+          '#bbccff',
+          '#c4d2ff'
+        ]
+      },
+      spaceship: {
+        budget: 300000,
+        vertices: {
+          bright: {
+            min: 0.00001,
+            max: 0.0001
+          },
+          pass: {
+            min: 0.05,
+            max: 0.25
+          },
+          globularPass: {
+            min: 0.1,
+            max: 0.15
+          }
+        },
+        material: {
+          size: {
+            bright: {
+              min: 300,
+              max: 400
+            },
+            pass: {
+              min: 55,
+              max: 65
+            }
+          },
+          opacity: {
+            bright: {
+              min: 1,
+              max: 1
+            },
+            pass: {
+              min: 1,
+              max: 1
+            }
+          }
+        },
+        colors: [
+          '#9bb2ff',
+          '#9eb5ff',
+          '#a3b9ff',
+          '#aabfff',
+          '#b2c5ff',
+          '#bbccff',
+          '#c4d2ff',
+          '#ccd8ff',
+          '#d3ddff',
+          '#dae2ff',
+          '#dfe5ff',
+          '#e4e9ff',
+          '#e9ecff',
+          '#eeefff',
+          '#f3f2ff',
+          '#f8f6ff',
+          '#fef9ff',
+          '#fff9fb',
+          '#fff7f5',
+          '#fff5ef',
+          '#fff3ea',
+          '#fff1e5',
+          '#ffefe0',
+          '#ffeddb',
+          '#ffebd6',
+          '#ffe9d2',
+          '#ffe8ce',
+          '#ffe6ca',
+          '#ffe5c6',
+          '#ffe3c3',
+          '#ffe2bf',
+          '#ffe0bb',
+          '#ffdfb8',
+          '#ffddb4',
+          '#ffdbb0',
+          '#ffdaad',
+          '#ffd8a9',
+          '#ffd6a5',
+          '#ffd5a1',
+          '#ffd29c',
+          '#ffd096',
+          '#ffcc8f',
+          '#ffc885',
+          '#ffc178',
+          '#ffb765',
+          '#ffa94b',
+          '#ff9523',
+          '#ff7b00',
+          '#ff5200'
+        ],
+        globularColors: [
+          '#FF8E05',
+          '#EF93E6',
+          '#FDFFF2',
+          '#D7693D',
+          '#ffc178',
+          '#ffb765',
+          '#ffa94b',
+          '#ff9523',
+          '#ff7b00',
+          '#ff5200',
+          '#9bb2ff',
+          '#9eb5ff',
+          '#a3b9ff',
+          '#aabfff',
+          '#b2c5ff',
+          '#bbccff',
+          '#c4d2ff'
+        ]
+      },
+      nebula: {
+        budget: 300000,
+        vertices: {
+          bright: {
+            min: 0.00002,
+            max: 0.0002
+          },
+          pass: {
+            min: 0.10,
+            max: 0.20
+          },
+          cloud: {
+            min: 0.10,
+            max: 0.20
+          },
+          emission: {
+            tubularSegments: 100,
+            radius: 10,
+            radiusSegments: 50,
+            closed: true
+          }
+        },
+        material: {
+          size: {
+            cloud: {
+              min: 2000,
+              max: 2000
+            },
+            pass: {
+              min: 50,
+              max: 60
+            },
+            bright: {
+              min: 500,
+              max: 600
+            }
+          },
+          opacity: {
+            cloud: {
+              min: 0.02,
+              max: 0.02
+            },
+            pass: {
+              min: 1,
+              max: 1
+            },
+            bright: {
+              min: 0.1,
+              max: 1
+            }
+          }
+        },
+        colors: {
+          in: ['#0091ff', '#0011ff', '#000222', '#4b0082', '#8a2be2', '#FF5300', '#489BCF', '#AA1428'],
+          out: ['#00FF00', '#0000FF', '#FF0000', '#00FF00', '#DE3FFE', '#1E0500', '#4A61A4', '#000042']
+        },
+        remnantColors: {
+          in: ['#0091ff', '#0011ff', '#000222', '#4b0082', '#8a2be2', '#FF5300', '#489BCF', '#AA1428'],
+          out: ['#00FF00', '#0000FF', '#FF0000', '#00FF00', '#DE3FFE', '#1E0500', '#4A61A4', '#000042']
+        }
+      },
+      giant: {
+        budget: 300000,
+        vertices: {
+          bright: {
+            min: 0.001,
+            max: 0.002
+          },
+          pass: {
+            min: 0.25,
+            max: 0.30
+          }
+        },
+        material: {
+          size: {
+            bright: {
+              min: 600,
+              max: 800
+            },
+            pass: {
+              min: 50,
+              max: 60
+            }
+          },
+          opacity: {
+            bright: {
+              min: 1,
+              max: 1
+            },
+            pass: {
+              min: 1,
+              max: 1
+            }
+          }
+        },
+        shader: {
+          sun: {
+            scale: {
+              min: 5000,
+              max: 15000
+            },
+            uBrightnessAmplifier: {
+              min: 0.20,
+              max: 0.25
+            },
+            uNoiseIntensity: {
+              min: 2.0,
+              max: 8.0
+            },
+            uNoiseSpeed: {
+              min: 0.03,
+              max: 0.08
+            }
+          },
+          whitedwarf: {
+            scale: {
+              min: 1000,
+              max: 1500
+            },
+            uBrightnessAmplifier: {
+              min: 0.20,
+              max: 0.25
+            },
+            uNoiseIntensity: {
+              min: 2.0,
+              max: 6.0
+            },
+            uNoiseSpeed: {
+              min: 0.01,
+              max: 0.02
+            }
+          },
+          star: {
+            scale: {
+              min: 500,
+              max: 1000
+            },
+            uBrightnessAmplifier: {
+              min: 0.20,
+              max: 0.25
+            },
+            uNoiseIntensity: {
+              min: 2.0,
+              max: 6.0
+            },
+            uNoiseSpeed: {
+              min: 0.01,
+              max: 0.02
+            },
+            colors: [
+                [
+                    '#000000', // red
+                    '#ff0000',
+                    '#ffd236',
+                    '#ffe68f',
+                ],
+                [
+                    '#000000', // blue
+                    '#0072ff',
+                    '#00c7ff',
+                    '#90f6ff',
+                ]
+              ]
+          }
+        },
+        colors: [
+          '#9bb2ff',
+          '#9eb5ff',
+          '#a3b9ff',
+          '#aabfff',
+          '#b2c5ff',
+          '#bbccff',
+          '#c4d2ff',
+          '#ccd8ff',
+          '#d3ddff',
+          '#dae2ff',
+          '#dfe5ff',
+          '#e4e9ff',
+          '#e9ecff',
+          '#eeefff',
+          '#f3f2ff',
+          '#f8f6ff',
+          '#fef9ff',
+          '#fff9fb',
+          '#fff7f5',
+          '#fff5ef',
+          '#fff3ea',
+          '#fff1e5',
+          '#ffefe0',
+          '#ffeddb',
+          '#ffebd6',
+          '#ffe9d2',
+          '#ffe8ce',
+          '#ffe6ca',
+          '#ffe5c6',
+          '#ffe3c3',
+          '#ffe2bf',
+          '#ffe0bb',
+          '#ffdfb8',
+          '#ffddb4',
+          '#ffdbb0',
+          '#ffdaad',
+          '#ffd8a9',
+          '#ffd6a5',
+          '#ffd5a1',
+          '#ffd29c',
+          '#ffd096',
+          '#ffcc8f',
+          '#ffc885',
+          '#ffc178',
+          '#ffb765',
+          '#ffa94b',
+          '#ff9523',
+          '#ff7b00',
+          '#ff5200'
+        ]
+      },
+      blackhole: {
+      },
+      galaxy: {
+        budget: 60000,
+        spiral: {
+          randomnessPower: 2.8,
+          randomness: 0.5,
+          spinAmplitude: 0.00008,
+          branchesAmplitude: 2.4,
+          colorInterpolationAmplitude: 0.5,
+          spin: {
+            min: 3,
+            max: 3
+          },
+          branches: {
+            min: 3,
+            max: 7
+          }
+        },
+        irregular: {
+          randomnessPower: 4,
+          randomness: 20,
+          spinAmplitude: 0.8,
+          branchesAmplitude: 2.4,
+          colorInterpolationAmplitude: 0.5,
+          spin: {
+            min: 3,
+            max: 3
+          },
+          branches: {
+            min: 3,
+            max: 7
+          }
+        },
+        vertices: {
+          bright: {
+            min: 0.00001,
+            max: 0.0001
+          },
+          pass: {
+            min: 1,
+            max: 1
+          },
+          cloud: {
+            min: 1,
+            max: 1
+          }
+        },
+        material: {
+          size: {
+            bright: {
+              min: 300,
+              max: 400
+            },
+            pass: {
+              min: 50,
+              max: 150
+            }
+          },
+          opacity: {
+            bright: {
+              min: 1,
+              max: 1
+            },
+            pass: {
+              min: 0.0001,
+              max: 0.0002
+            },
+            sombrero: {
+              min: 0.01,
+              max: 0.01
+            }
+          }
+        },
+        colors: [
+          '#24346c',
+          '#5965a4',
+          '#b09bc7',
+          '#313e58',
+          '#f2f4ff',
+          '#000210'
+        ],
+        galaxyColors: {
+          in: [
+            "#F0491C",
+            '#8ab1cf',
+            '#b09bc7',
+            '#EFCEBD',
+            '#ffdf00'
+          ],
+          out: [
+            '#24346c',
+            '#0A0068',
+            '#000210',
+            '#000941',
+            '#841B1F'
+          ]
+        }
+      }
+    }
 
+    this.universeProperties = {
+      type: {
+        stable : {
+          displayName: 'Stable',
+          probability: 40,
+        },
+        bloom : {
+          displayName: 'Bloom',
+          probability: 25,
+        },
+        filaments : {
+          displayName: 'Filaments',
+          probability: 15,
+        },
+        ethereum : {
+          displayName: 'Ethereum',
+          probability: 10,
+        },
+        gold : {
+          displayName: 'Gold',
+          probability: 5,
+        },
+        amethyst : {
+          displayName: 'Amethyst',
+          probability: 3,
+        },
+        eternal : {
+          displayName: 'Eternal',
+          probability: 2
+        }
+      },
+      age: {
+        newBorn: {
+          displayName: 'New Born | ~1B years',
+          probability: 1,
+        },
+        infant: {
+          displayName: 'Infant | ~10B years',
+          probability: 5,
+        },
+        toddler: {
+          displayName: 'Toddler | ~100B years',
+          probability: 25,
+        },
+        child: {
+          displayName: 'Child | ~1T years',
+          probability: 50,
+        },
+        teenager: {
+          displayName: 'Teenager | ~10T years',
+          probability: 15,
+        },
+        adult: {
+          displayName: 'Adult | ~100T years',
+          probability: 5,
+        },
+        elder: {
+          displayName: 'Elder | ~1E years',
+          probability: 1,
+        }
+      },
+      diversity: {
+        low: {
+          displayName: 'Low',
+          probability: 40,
+        },
+        medium: {
+          displayName: 'Medium',
+          probability: 25,
+        },
+        high: {
+          displayName: 'High',
+          probability: 15,
+        },
+        veryHigh: {
+          displayName: 'Very High',
+          probability: 10,
+        },
+        extreme: {
+          displayName: 'Extreme',
+          probability: 5,
+        },
+        superExtreme: {
+          displayName: 'Super Extreme',
+          probability: 1,
+        }
+      },
+      singularity: {
+        blackHole: {
+          displayName: 'Black Hole',
+          probability: 99
+        },
+        blazar: {
+          displayName: 'Blazar',
+          probability: 1
+        }
+      },
+      dominantRace: {
+        human: {
+          displayName: 'Human',
+          probability: 40,
+        },
+        protean: {
+          displayName: 'Protean',
+          probability: 25,
+        },
+        asari: {
+          displayName: 'Asari',
+          probability: 15,
+        },
+        korath: {
+          displayName: 'Korath',
+          probability: 10,
+        },
+        kroot: {
+          displayName: 'Kroot',
+          probability: 5,
+        },
+        Turians: {
+          displayName: 'Turians',
+          probability: 1,
+        },
+        ape: {
+          displayName: 'Ape',
+          probability: 1,
+        }
+      }
+    }
+
+    // should disappear
+    this.matters = []
     this.setMattersByChapter()
   }
 
@@ -683,7 +1349,7 @@ export default class Parameters {
     }
   }
 
-  // TODO : should become _setModifierBloomUniverse()
+  // TODO : should become _applyModifierByUniverseType(universeType) in universe class
   setMattersChapterTwo() {
     this.matters[1] = JSON.parse(JSON.stringify(this.matters[0]))
 

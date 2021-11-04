@@ -11,10 +11,13 @@ import Sequencer from './sequencer/sequencer'
 import Helper from './common/Helper'
 import Multiplayer from './multiplayer/Multiplayer'
 import PropertySign from './blockchain/PropertySign'
+import Universe from './universe/Universe'
 
 const clock = new THREE.Clock()
 const parameters = new Parameters()
 const helper = new Helper(parameters)
+const urlSearchParams = new URLSearchParams(window.location.search)
+const urlParams = Object.fromEntries(urlSearchParams.entries())
 
 helper.setDefaultGlobal()
 
@@ -127,8 +130,10 @@ function animate () {
     if (window.wormhole.active) {
       updatePositionInWormhole()
     } else {
-      postProcessor.composer.render()
-      multiplayer.update()
+      if(window.currentUniverse) {
+        postProcessor.composer.render()
+        multiplayer.update()
+      }
     }
   }
 
@@ -145,24 +150,26 @@ function animate () {
 
   requestAnimationFrame(animate)
 
-  const currentClusterPosition = grid.getCurrentClusterPosition()
+  if (window.currentUniverse) {
+    const currentClusterPosition = grid.getCurrentClusterPosition()
 
-  if (lastClusterPosition !== currentClusterPosition && !window.sequencer.active) {
-    lastClusterPosition = currentClusterPosition
+    if (lastClusterPosition !== currentClusterPosition && !window.sequencer.active) {
+      lastClusterPosition = currentClusterPosition
 
-    const clustersStatus = grid.getClustersStatus(currentClusterPosition)
+      const clustersStatus = grid.getClustersStatus(currentClusterPosition)
 
-    grid.disposeClusters(clustersStatus.clustersToDispose)
-    grid.buildMatters(clustersStatus.clustersToPopulate)
-  } else if (grid.queueClusters.size && !isRenderingClusterInProgress) {
-    isRenderingClusterInProgress = true
+      grid.disposeClusters(clustersStatus.clustersToDispose)
+      grid.buildMatters(clustersStatus.clustersToPopulate)
+    } else if (grid.queueClusters.size && !isRenderingClusterInProgress) {
+      isRenderingClusterInProgress = true
 
-    const clusterTorender = grid.queueClusters.keys().next().value
+      const clusterTorender = grid.queueClusters.keys().next().value
 
-    setTimeout(() => {
-      grid.renderMatters(clusterTorender, grid.queueClusters.get(clusterTorender))
-      isRenderingClusterInProgress = false
-    }, parameters.global.clusterRenderTimeOut)
+      setTimeout(() => {
+        grid.renderMatters(clusterTorender, grid.queueClusters.get(clusterTorender))
+        isRenderingClusterInProgress = false
+      }, parameters.global.clusterRenderTimeOut)
+    }
   }
 }
 

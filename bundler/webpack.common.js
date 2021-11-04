@@ -21,7 +21,7 @@ module.exports = {
       template: path.resolve(__dirname, '../src/index.html'),
       minify: true
     }),
-    // new miniCSSExtractPlugin(),
+    new miniCSSExtractPlugin(),
     // new webpackObfuscator ({
     //   rotateStringArray: true
     // }, [])
