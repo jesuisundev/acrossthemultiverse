@@ -31,7 +31,6 @@ export default class Helper {
     window.isDebugMode = true
     window.isDiscoveryMode = false
     window.highend = false
-    window.currentUniverse = 0
     window.materialsToUpdate = {}
     window.meshesToUpdate = {}
     window.spaceshipToUpdate = {}

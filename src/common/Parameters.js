@@ -17,13 +17,16 @@ export default class Parameters {
         defaultForward: 0.5
       },
       clusterRenderTimeOut: 50,
-      background: [
-        "#000000",
-        "#000000",
-        "#000000",
-        "#000F34",
-        "#000000"
-      ]
+      background: {
+        stable: "#000000",
+        bloom: "#000000",
+        filaments: "#000000",
+        ethereum: "#000F34",
+        gold: "#FFD700",
+        amethyst: "#9B59B6",
+        eternal: "#000000",
+        epiphany: "#000000"
+      }
     }
 
     this.postprocessing = {
@@ -668,129 +671,231 @@ export default class Parameters {
       }
     }
 
+    this.defaultWorkersDistribution = [
+      {
+        chances: 20,
+        type: 'Starfield',
+        subtype: 'Open',
+      },
+      {
+        chances: 13,
+        type: 'Nebula',
+        subtype: 'Emission'
+      },
+      {
+        chances: 12,
+        type: 'Galaxy',
+        subtype: 'Irregular'
+      },
+      {
+        chances: 11,
+        type: 'Starfield',
+        subtype: 'Globular'
+      },
+      {
+        chances: 10,
+        type: 'Galaxy',
+        subtype: 'Spiral'
+      },
+      {
+        chances: 9,
+        type: 'Galaxy',
+        subtype: 'Sombrero'
+      },
+      {
+        chances: 8,
+        type: 'Nebula',
+        subtype: 'Remnant'
+      },
+      {
+        chances: 4,
+        type: 'Singularity',
+        subtype: 'Blackhole'
+      },
+      {
+        chances: 3,
+        type: 'Giant',
+        subtype: 'Star'
+      },
+      {
+        chances: 2,
+        type: 'Giant',
+        subtype: 'Sun'
+      },
+      {
+        chances: 1.5,
+        type: 'Spaceship',
+        subtype: 'Normandy'
+      },
+      {
+        chances: 1,
+        type: 'Giant',
+        subtype: 'WhiteDwarf'
+      },
+      {
+        chances: 0.5,
+        type: 'Spaceship',
+        subtype: 'Station'
+      }
+    ]
+
     this.universeProperties = {
       type: {
         stable : {
+          id: 'stable',
           displayName: 'Stable',
           probability: 40,
         },
         bloom : {
+          id: 'bloom',
           displayName: 'Bloom',
           probability: 25,
         },
         filaments : {
+          id: 'filaments',
           displayName: 'Filaments',
           probability: 15,
         },
         ethereum : {
+          id: 'ethereum',
           displayName: 'Ethereum',
           probability: 10,
         },
         gold : {
+          id: 'gold',
           displayName: 'Gold',
           probability: 5,
         },
         amethyst : {
+          id: 'amethyst',
           displayName: 'Amethyst',
           probability: 3,
         },
         eternal : {
+          id: 'eternal',
           displayName: 'Eternal',
           probability: 2
+        },
+        epiphany : {
+          id: 'epiphany',
+          displayName: 'Epiphany',
+          probability: 0
         }
       },
       age: {
         newBorn: {
+          id: 'newBorn',
           displayName: 'New Born | ~1B years',
           probability: 1,
         },
         infant: {
+          id: 'infant',
           displayName: 'Infant | ~10B years',
           probability: 5,
         },
         toddler: {
+          id: 'toddler',
           displayName: 'Toddler | ~100B years',
           probability: 25,
         },
         child: {
+          id: 'child',
           displayName: 'Child | ~1T years',
           probability: 50,
         },
         teenager: {
+          id: 'teenager',
           displayName: 'Teenager | ~10T years',
           probability: 15,
         },
         adult: {
+          id: 'adult',
           displayName: 'Adult | ~100T years',
           probability: 5,
         },
         elder: {
+          id: 'elder',
           displayName: 'Elder | ~1E years',
           probability: 1,
         }
       },
       diversity: {
         low: {
+          id: 'low',
           displayName: 'Low',
           probability: 40,
         },
         medium: {
+          id: 'medium',
           displayName: 'Medium',
           probability: 25,
         },
         high: {
+          id: 'high',
           displayName: 'High',
           probability: 15,
         },
         veryHigh: {
+          id: 'veryHigh',
           displayName: 'Very High',
           probability: 10,
         },
         extreme: {
+          id: 'extreme',
           displayName: 'Extreme',
           probability: 5,
         },
         superExtreme: {
+          id: 'superExtreme',
           displayName: 'Super Extreme',
           probability: 1,
         }
       },
       singularity: {
         blackHole: {
+          id: 'blackHole',
           displayName: 'Black Hole',
           probability: 99
         },
         blazar: {
+          id: 'blazar',
           displayName: 'Blazar',
           probability: 1
         }
       },
       dominantRace: {
         human: {
+          id: 'human',
           displayName: 'Human',
           probability: 40,
         },
         protean: {
+          id: 'protean',
           displayName: 'Protean',
           probability: 25,
         },
         asari: {
+          id: 'asari',
           displayName: 'Asari',
           probability: 15,
         },
         korath: {
+          id: 'korath',
           displayName: 'Korath',
           probability: 10,
         },
         kroot: {
+          id: 'kroot',
           displayName: 'Kroot',
           probability: 5,
         },
         Turians: {
+          id: 'Turians',
           displayName: 'Turians',
           probability: 1,
         },
         ape: {
+          id: 'ape',
           displayName: 'Ape',
           probability: 1,
         }

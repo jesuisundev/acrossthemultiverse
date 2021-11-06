@@ -15,14 +15,18 @@ import Universe from './universe/Universe'
 
 const clock = new THREE.Clock()
 const parameters = new Parameters()
-const helper = new Helper(parameters)
+
+// initiate universe generation while loading
 const urlSearchParams = new URLSearchParams(window.location.search)
 const urlParams = Object.fromEntries(urlSearchParams.entries())
+window.currentUniverse = new Universe(parameters, urlParams.universe)
+window.currentUniverse.generate()
 
+const helper = new Helper(parameters)
 helper.setDefaultGlobal()
 
 const scene = new THREE.Scene()
-scene.fog = new THREE.Fog(parameters.global.background[window.currentUniverse], parameters.global.camera.near, parameters.global.camera.far)
+scene.fog = new THREE.Fog("#000000", parameters.global.camera.near, parameters.global.camera.far)
 
 const ambientLight = new THREE.AmbientLight("#FFFFFF", 1)
 const directionalLight = new THREE.DirectionalLight("#FFFFFF", 1)
@@ -130,7 +134,7 @@ function animate () {
     if (window.wormhole.active) {
       updatePositionInWormhole()
     } else {
-      if(window.currentUniverse) {
+      if(window.currentUniverse.isReady) {
         postProcessor.composer.render()
         multiplayer.update()
       }
@@ -150,7 +154,7 @@ function animate () {
 
   requestAnimationFrame(animate)
 
-  if (window.currentUniverse) {
+  if (window.currentUniverse.isReady) {
     const currentClusterPosition = grid.getCurrentClusterPosition()
 
     if (lastClusterPosition !== currentClusterPosition && !window.sequencer.active) {
