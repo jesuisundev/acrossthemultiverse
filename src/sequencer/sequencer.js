@@ -488,6 +488,27 @@ export default class Sequencer {
 
   resetScene () {
     this.grid.disposeClusters(Array.from(this.grid.activeClusters.keys()))
+
+    this.deepResetScene(this.scene)
+  }
+
+  deepResetScene(obj){
+    while(obj.children.length > 0){ 
+      this.deepResetScene(obj.children[0])
+      obj.remove(obj.children[0]);
+    }
+
+    if(obj.geometry) obj.geometry.dispose()
+  
+    if(obj.material){ 
+      Object.keys(obj.material).forEach(prop => {
+        if(!obj.material[prop])
+          return         
+        if(obj.material[prop] !== null && typeof obj.material[prop].dispose === 'function')                                  
+          obj.material[prop].dispose()                                                        
+      })
+      obj.material.dispose()
+    }
   }
 
   resetPlayer() {
