@@ -99,14 +99,13 @@ export default class Grid {
 
   populateNewUniverse () {
     const clusterStatus = this.getClustersStatus('0,0,0')
-
+    this.workers = new Workers(this)
     this.buildMatters(clusterStatus.clustersToPopulate)
   }
 
   buildMatters (clustersToPopulate) {
     for (const clusterToPopulate of clustersToPopulate) {
       let randomDistributedWorker = this.workers.getWorkerDistributed(clusterToPopulate)
-  
       if (!randomDistributedWorker) {
         // TODO - why the fuck this happen, fix it
         randomDistributedWorker = this.workers.openStarfieldWorker.source

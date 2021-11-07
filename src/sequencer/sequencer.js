@@ -3,6 +3,7 @@ import { gsap } from 'gsap'
 
 import Wormhole from './wormhole/Wormhole'
 import Epiphany from './epiphany/Epiphany'
+import Universe from '../universe/Universe'
 
 export default class Sequencer {
   constructor (scene, library, parameters, grid, camera, postProcessor, multiplayer, propertySign) {
@@ -32,7 +33,21 @@ export default class Sequencer {
   }
 
   async _launchMetaverseNextSequence() {
-    await this.chapterOneSequence(true)
+    this.onEnteringUniverse()
+
+    this.camera.rotation.z = 0
+    
+    if(!window.isDebugMode) {
+      // TODO MUSIC BY UNIVERSE
+      this.library.audio['ghosts'].play()
+      this.library.audio['ghosts'].loop(true)
+    }
+
+    this.fadeOutById('#whitewall', 2)
+    this.fadeOutById('#blackwall', 2)
+    await this.showNavigation()
+
+    this._onEndingSequence()
   }
 
   async _launchStoryNextSequence(skipped) {
@@ -282,20 +297,22 @@ export default class Sequencer {
   async wormholeSequence () {
     if(window.sequencer.active) return
 
-    window.sequencer.active = true
-
     if(window.isMetaverse) {
-      this.multiplayer.hideMultiplayer()
-
-      // TODO: fix bug surimpression
-      //this.propertySign.dispose()
+      await this._metaverseWormholeSequence()
+    } else {
+      await this._storyWormholeSequence()
     }
+  }
+
+  async _storyWormholeSequence () {
+    window.sequencer.active = true
 
     this.stopAllSounds()
 
     this.fadeOutById('#credits', 0.1)
-    await this.fadeInById('#blackwall', 0.2)
     this.hideNavigation()
+
+    await this.fadeInById('#blackwall', 0.2)
 
     this.resetScene()
     this.resetPlayer()
@@ -322,10 +339,58 @@ export default class Sequencer {
     this.wormhole.dispose()
     window.wormhole.CameraPositionIndex = 0
 
-    // TODO: HANDLE METAVERSE CHANGE
     window.storyCurrentUniverse++
     await this.asyncWaitFor(1000)
 
+    window.sequencer.active = false
+    await this.launchNextSequence()
+  }
+
+  async _metaverseWormholeSequence () {
+    window.sequencer.active = true
+
+    this.stopAllSounds()
+    this.multiplayer.hideMultiplayer()
+
+    // TODO: fix bug surimpression
+    //this.propertySign.dispose()
+
+    this.fadeOutById('#credits', 0.1)
+    this.hideNavigation()
+    await this.fadeInById('#blackwall', 0.2)
+
+    this.resetScene()
+    this.resetPlayer()
+
+    this.scene.background = "#000000"
+    this.camera.near = 0.01
+    this.camera.updateProjectionMatrix()
+
+    this.wormhole.generate()
+    this.wormhole.active()
+
+    this.startSoundByTitle('wormhole')
+    this.fadeOutById('#blackwall', 0.5)
+
+    window.currentUniverse = new Universe(this.parameters, 4)
+
+    const generateCurrentUniverse = window.currentUniverse.generate()
+    const wormholeAnimate = this.wormhole.animate()
+
+    // parallel awaits
+    await generateCurrentUniverse
+    await wormholeAnimate
+    await this.fadeInById('#whitewall', 1)
+
+    this.changeUniverse()
+
+    this.camera.near = 100
+    this.camera.updateProjectionMatrix()
+
+    this.wormhole.dispose()
+    window.wormhole.CameraPositionIndex = 0
+
+    await this.asyncWaitFor(1000)
     window.sequencer.active = false
 
     await this.launchNextSequence()
@@ -411,11 +476,7 @@ export default class Sequencer {
   }
 
   resetScene () {
-    const arrayActiveClusters = Array.from(this.grid.activeClusters.keys())
-
-    this.grid.disposeClusters(arrayActiveClusters)
-
-    this.camera.position.set(0, 0, 0)
+    this.grid.disposeClusters(Array.from(this.grid.activeClusters.keys()))
   }
 
   resetPlayer() {

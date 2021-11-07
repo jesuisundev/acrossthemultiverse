@@ -47,6 +47,36 @@ export default class Universe {
         // TODO : should not be a switch but an async call to a db/cache
         // horrific harcoded values for now
         switch (this.universeNumber) {
+            case 2:
+                this.universeModifiers = {
+                    type: this.parameters.universeProperties.type.bloom,
+                    age: this.parameters.universeProperties.age.child,
+                    diversity: this.parameters.universeProperties.diversity.superExtreme,
+                    singularity: this.parameters.universeProperties.singularity.blackHole,
+                    dominantRace: this.parameters.universeProperties.dominantRace.human
+                }
+                break
+
+            case 3:
+                this.universeModifiers = {
+                    type: this.parameters.universeProperties.type.filaments,
+                    age: this.parameters.universeProperties.age.child,
+                    diversity: this.parameters.universeProperties.diversity.superExtreme,
+                    singularity: this.parameters.universeProperties.singularity.blackHole,
+                    dominantRace: this.parameters.universeProperties.dominantRace.human
+                }
+                break
+            
+            case 4:
+                this.universeModifiers = {
+                    type: this.parameters.universeProperties.type.ethereum,
+                    age: this.parameters.universeProperties.age.child,
+                    diversity: this.parameters.universeProperties.diversity.superExtreme,
+                    singularity: this.parameters.universeProperties.singularity.blackHole,
+                    dominantRace: this.parameters.universeProperties.dominantRace.human
+                }
+                break
+
             default:
                 return
         }
