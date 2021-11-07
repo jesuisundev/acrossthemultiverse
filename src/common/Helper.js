@@ -28,10 +28,11 @@ export default class Helper {
 
   // i'm lazy, we could refactor some code and avoid globals
   setDefaultGlobal () {
-    window.isDebugMode = true
-    window.storyCurrentUniverse = 0
+    window.isDebugMode = false
+    window.isFirstUniverse = true
     window.isMetaverse = false
     window.highend = false
+    window.storyCurrentUniverse = 0
     window.materialsToUpdate = {}
     window.meshesToUpdate = {}
     window.spaceshipToUpdate = {}

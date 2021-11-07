@@ -38,13 +38,13 @@ export default class Sequencer {
     this.camera.rotation.z = 0
     
     if(!window.isDebugMode) {
-      // TODO MUSIC BY UNIVERSE
-      this.library.audio['ghosts'].play()
-      this.library.audio['ghosts'].loop(true)
+      const songName = window.isFirstUniverse ? 'ghosts' : this._getRandomSongName()
+      this.library.audio[songName].play()
+      this.library.audio[songName].loop(true)
     }
 
-    this.fadeOutById('#whitewall', 2)
-    this.fadeOutById('#blackwall', 2)
+    this.fadeOutById('#whitewall', 1)
+    this.fadeOutById('#blackwall', 1)
     await this.showNavigation()
 
     this._onEndingSequence()
@@ -297,6 +297,8 @@ export default class Sequencer {
   async wormholeSequence () {
     if(window.sequencer.active) return
 
+    window.isFirstUniverse = false
+
     if(window.isMetaverse) {
       await this._metaverseWormholeSequence()
     } else {
@@ -329,7 +331,15 @@ export default class Sequencer {
     this.startSoundByTitle('wormhole')
     this.fadeOutById('#blackwall', 0.5)
 
-    await this.wormhole.animate()
+    window.storyCurrentUniverse++
+
+    window.currentUniverse = new Universe(this.parameters, window.storyCurrentUniverse + 1)
+    const generateCurrentUniverse = window.currentUniverse.generate()
+    const wormholeAnimate = this.wormhole.animate()
+
+    // parallel awaits
+    await generateCurrentUniverse
+    await wormholeAnimate
 
     await this.fadeInById('#whitewall', 1)
 
@@ -339,8 +349,7 @@ export default class Sequencer {
     this.wormhole.dispose()
     window.wormhole.CameraPositionIndex = 0
 
-    window.storyCurrentUniverse++
-    await this.asyncWaitFor(1000)
+    await this.asyncWaitFor(500)
 
     window.sequencer.active = false
     await this.launchNextSequence()
@@ -372,9 +381,9 @@ export default class Sequencer {
     this.startSoundByTitle('wormhole')
     this.fadeOutById('#blackwall', 0.5)
 
-    window.currentUniverse = new Universe(this.parameters, 4)
+    window.currentUniverse = new Universe(this.parameters)
 
-    const generateCurrentUniverse = window.currentUniverse.generate()
+    const generateCurrentUniverse = window.currentUniverse.generateRandom()
     const wormholeAnimate = this.wormhole.animate()
 
     // parallel awaits
@@ -390,7 +399,7 @@ export default class Sequencer {
     this.wormhole.dispose()
     window.wormhole.CameraPositionIndex = 0
 
-    await this.asyncWaitFor(1000)
+    await this.asyncWaitFor(500)
     window.sequencer.active = false
 
     await this.launchNextSequence()
@@ -403,7 +412,9 @@ export default class Sequencer {
     this.stopAllSounds()
     this.library.audio['borealis'].play()
     this.library.audio['borealis'].on('end', () => {
-      window.currentUniverse = 0
+      window.storyCurrentUniverse = 0
+      window.currentUniverse = new Universe(this.parameters, window.storyCurrentUniverse)
+      window.currentUniverse.generate()
       this.changeUniverse()
       window.sequencer.active = false
       this.launchNextSequence()
@@ -497,6 +508,10 @@ export default class Sequencer {
 
   onEnteringUniverse() {
     this.camera.rotation.set(0,0,0)
+    if(!window.isFirstUniverse) {
+      window.controls.velocity.z = -20000
+      gsap.timeline().to(window.controls.velocity, { duration: 4, z: -200 }, 0)
+    }
   }
 
   async showNavigation() {
@@ -519,5 +534,16 @@ export default class Sequencer {
       document.querySelector('#nav').style.zIndex = 7
       document.querySelector('#nav').style.opacity = 0
     }
+  }
+
+  _getRandomSongName() {
+    const songNames = [
+      'ghosts',
+      'discovery',
+      'celestial',
+      'omega'
+    ]
+
+    return songNames[THREE.Math.randInt(0, songNames.length - 1)]
   }
 }

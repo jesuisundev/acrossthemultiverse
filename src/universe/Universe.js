@@ -1,4 +1,4 @@
-
+import * as THREE from 'three'
 
 export default class Universe {
     constructor (parameters, universeNumber) {
@@ -21,6 +21,10 @@ export default class Universe {
     }
 
     async generateRandom() {
+        await this._setRandomUniverseModifiers()
+        await this._applyUniverseModifiersToMatters()
+
+        this.isReady = true
     }
 
     _getSanitizedUniverseNumber(universeNumber) {
@@ -82,6 +86,19 @@ export default class Universe {
         }
     }
 
+    async _setRandomUniverseModifiers() {
+        const arrayType = Object.keys(this.parameters.universeProperties.type)
+        const randomType = this.parameters.universeProperties.type[arrayType[THREE.MathUtils.randInt(0, arrayType.length - 1)]]
+
+        this.universeModifiers = {
+            type: randomType,
+            age: this.parameters.universeProperties.age.child,
+            diversity: this.parameters.universeProperties.diversity.superExtreme,
+            singularity: this.parameters.universeProperties.singularity.blackHole,
+            dominantRace: this.parameters.universeProperties.dominantRace.human
+        }
+    }
+
     async _applyUniverseModifiersToMatters() {
         await this._applyTypeUniverseModifier()
         await this._applyAgeUniverseModifier()
@@ -94,6 +111,10 @@ export default class Universe {
 
     async _applyTypeUniverseModifier() {
         switch (this.universeModifiers.type.id) {
+            case 'stable':
+                this._applyStableTypeUniverseModifier()
+                break;
+
             case 'bloom':
                 this._applyBloomTypeUniverseModifier()
                 break;
@@ -111,13 +132,21 @@ export default class Universe {
                 break;
         
             default:
+                console.log('Universe type TODO', this.universeModifiers.type.id)
                 break;
         }
+    }
+
+    async _applyStableTypeUniverseModifier() {
+        // matters modifiers
+        this.matters.global.bloomIntensity = 2
+        this.matters.global.clearColor = '#000000'
     }
 
     async _applyBloomTypeUniverseModifier() {
         // matters modifiers
         this.matters.global.bloomIntensity = 4
+        this.matters.global.clearColor = '#000000'
         this.matters.starfield.vertices.bright = { min: 0.001, max: 0.01 }
         this.matters.starfield.material.size.pass = { min: 70, max: 80 }
 
@@ -193,6 +222,7 @@ export default class Universe {
     async _applyFilamentsTypeUniverseModifier() {
         // matters modifiers
         this.matters.global.bloomIntensity = 4
+        this.matters.global.clearColor = '#000000'
         this.matters.galaxy.budget = 100000
         this.matters.galaxy.spiral.randomnessPower = 0.0002
         this.matters.galaxy.spiral.branchesAmplitude = 0.00008
@@ -216,6 +246,7 @@ export default class Universe {
 
     async _applyEthereumTypeUniverseModifier() {
         // matters modifiers
+        this.matters.global.bloomIntensity = 2
         this.matters.global.clearColor = '#000F34'
         this.matters.starfield.colors = this.matters.nebula.colors.in
         this.matters.starfield.globularColors = this.matters.nebula.colors.out
@@ -237,6 +268,10 @@ export default class Universe {
     }
 
     async _applyEpiphanyTypeUniverseModifier() {
+        // matters modifiers
+        this.matters.global.bloomIntensity = 2
+        this.matters.global.clearColor = '#000000'
+
         // workers modifiers
         this.workersDistribution = [
             {
@@ -248,23 +283,22 @@ export default class Universe {
     }
 
     // Age modifiers
-
     async _applyAgeUniverseModifier() {
-        // TODO
+        // TODO : budget stars
     }
 
     // Diversity modifiers
-
     async _applyDiversityUniverseModifier() {
+        // TODO : Color diversity
     }
 
     // Singularity modifiers
-
     async _applySinguralityUniverseModifier() {
+        // TODO : color blackholes
     }
 
     // Dominant race modifiers
-
     async _applyDominantRaceUniverseModifier() {
+        // TODO : add new spaceships
     }
 }

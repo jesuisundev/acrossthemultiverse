@@ -66,7 +66,8 @@ self.onmessage = messageEvent => {
 function _getGalaxyAttributesInRandomPosition (max, clusterSize, parameters, chosenColors, enforcedBranches, currentUniverse) {
   const positions = []
   const colors = []
-  const radius = currentUniverse === 2 ? clusterSize * 4 : clusterSize / 1.8
+
+  const radius = currentUniverse.universeModifiers.type.id === 'filaments' ? clusterSize * 5 : clusterSize / 1.8
   const branches = enforcedBranches || THREE.MathUtils.randInt(parameters.spiral.branches.min, parameters.spiral.branches.max)
   const spin = THREE.MathUtils.randInt(parameters.spiral.spin.min, parameters.spiral.spin.max)
   const mixedColor = chosenColors.colorIn.clone()
