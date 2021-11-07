@@ -179,53 +179,53 @@ export default class Workers {
     switch (type) {
       case "Starfield":
         if(subtype === "Globular") {
-          return this.globularStarfieldWorker
+          return this.globularStarfieldWorker.source
         }
 
-        return this.openStarfieldWorker
+        return this.openStarfieldWorker.source
 
       case "Nebula":
         if(subtype === "Emission") {
-          return this.emissionNebulaWorker
+          return this.emissionNebulaWorker.source
         }
 
-        return this.supernovaRemnantsNebulaWorker
+        return this.supernovaRemnantsNebulaWorker.source
 
       case "Galaxy":
         if(subtype === "Spiral") {
-          return this.spiralGalaxyWorker
+          return this.spiralGalaxyWorker.source
         }
 
         if(subtype === "Sombrero") {
-          return this.sombreroGalaxyWorker
+          return this.sombreroGalaxyWorker.source
         }
 
-        return this.irregularGalaxyWorker
+        return this.irregularGalaxyWorker.source
 
       case "Giant":
         if(subtype === "Sun") {
-          return this.sunGiantWorker
+          return this.sunGiantWorker.source
         }
 
         if(subtype === "WhiteDwarf") {
-          return this.whiteDwarfGiantWorker
+          return this.whiteDwarfGiantWorker.source
         }
 
-        return this.starGiantWorker
+        return this.starGiantWorker.source
 
       case "Singularity":
-        return this.blackholeWorker
+        return this.blackholeWorker.source
 
       case "Spaceship":
         if(subtype === "Normandy") {
-          return this.spaceshipNormandyWorker
+          return this.spaceshipNormandyWorker.source
         }
 
-        return this.spaceshipStationWorker
+        return this.spaceshipStationWorker.source
 
       default:
         console.error('Getting worker type with unandled type.')
-        return this.openStarfieldWorker
+        return this.openStarfieldWorker.source
     }
   }
 

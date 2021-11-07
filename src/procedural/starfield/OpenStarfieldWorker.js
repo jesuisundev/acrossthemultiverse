@@ -3,7 +3,7 @@ import * as THREE from 'three'
 self.onmessage = messageEvent => {
   const clustersToPopulate = messageEvent.data.clustersToPopulate
   const currentUniverse = messageEvent.data.currentUniverse
-  const starfieldParameters = messageEvent.data.parameters.matters[currentUniverse].starfield
+  const starfieldParameters = messageEvent.data.currentUniverse.matters.starfield
   const clusterSize = messageEvent.data.parameters.grid.clusterSize
   const starfieldsAttributes = {}
 
@@ -71,13 +71,13 @@ self.onmessage = messageEvent => {
   self.postMessage(starfieldsAttributes)
 }
 
-function _getAttributesInRandomPosition (max, clusterSize, parameters, currentUniverse = 0) {
+function _getAttributesInRandomPosition (max, clusterSize, parameters, currentUniverse) {
   const positions = []
   const colors = []
   let x, y, z, alpha, theta
 
   for (let i = 0; i < max; i++) {
-    if(currentUniverse === 3) {
+    if(currentUniverse.universeModifiers.type.id === 'ethereum') {
       if(Math.random() > 0.5) {
         // spheric cluster
         alpha = Math.random()*(Math.PI)

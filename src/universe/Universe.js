@@ -6,6 +6,7 @@ export default class Universe {
 
         this.isReady = false
         this.universeNumber = this._getSanitizedUniverseNumber(universeNumber)
+        this.owner = 'vooodoo.eth'
         this.matters = this.parameters.defaultMatters
         this.workersDistribution = this.parameters.defaultWorkersDistribution
 
@@ -86,6 +87,7 @@ export default class Universe {
 
     async _applyBloomTypeUniverseModifier() {
         // matters modifiers
+        this.matters.global.bloomIntensity = 4
         this.matters.starfield.vertices.bright = { min: 0.001, max: 0.01 }
         this.matters.starfield.material.size.pass = { min: 70, max: 80 }
 
@@ -160,6 +162,7 @@ export default class Universe {
 
     async _applyFilamentsTypeUniverseModifier() {
         // matters modifiers
+        this.matters.global.bloomIntensity = 4
         this.matters.galaxy.budget = 100000
         this.matters.galaxy.spiral.randomnessPower = 0.0002
         this.matters.galaxy.spiral.branchesAmplitude = 0.00008
@@ -183,6 +186,7 @@ export default class Universe {
 
     async _applyEthereumTypeUniverseModifier() {
         // matters modifiers
+        this.matters.global.clearColor = '#000F34'
         this.matters.starfield.colors = this.matters.nebula.colors.in
         this.matters.starfield.globularColors = this.matters.nebula.colors.out
         this.matters.starfield.material.size.pass = { min: 130, max: 130 }

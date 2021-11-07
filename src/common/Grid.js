@@ -111,7 +111,7 @@ export default class Grid {
         // TODO - why the fuck this happen, fix it
         randomDistributedWorker = this.workers.openStarfieldWorker.source
       }
-  
+
       randomDistributedWorker.postMessage({
         clustersToPopulate: [clusterToPopulate],
         parameters: this.parameters,

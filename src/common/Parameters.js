@@ -135,6 +135,10 @@ export default class Parameters {
     }
 
     this.defaultMatters = {
+      global: {
+        clearColor: '#000000',
+        bloomIntensity: 2
+      },
       starfield: {
         budget: 300000,
         vertices: {

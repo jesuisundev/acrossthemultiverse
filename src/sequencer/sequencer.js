@@ -24,33 +24,37 @@ export default class Sequencer {
 
     this._onLaunchNextSequence()
 
-    switch (window.currentUniverse) {
+    if(window.isMetaverse) {
+      await this._launchMetaverseNextSequence()
+    } else {
+      await this._launchStoryNextSequence(skipped)
+    }
+  }
+
+  async _launchMetaverseNextSequence() {
+    await this.chapterOneSequence(true)
+  }
+
+  async _launchStoryNextSequence(skipped) {
+    switch (window.storyCurrentUniverse) {
       case 0:
-        await this.chapterOneSequence(window.isDiscoveryMode)
+        await this.chapterOneSequence(skipped)
         break
 
       case 1:
-        await this.chapterTwoSequence(window.isDiscoveryMode)
+        await this.chapterTwoSequence(skipped)
         break
 
       case 2:
-        await this.chapterThreeSequence(window.isDiscoveryMode)
+        await this.chapterThreeSequence(skipped)
         break
       
       case 3:
-        await this.chapterFourSequence(window.isDiscoveryMode)
+        await this.chapterFourSequence(skipped)
         break
 
       case 4:
-        if(window.isDiscoveryMode) {
-          window.currentUniverse = 0
-          window.sequencer.active = false
-          this.changeUniverse()
-          this.onEnteringUniverse()
-          this.launchNextSequence()
-        } else {
-          await this.epiphanySequence(skipped)
-        }
+        await this.epiphanySequence(skipped)
         break
 
       default:
@@ -74,7 +78,7 @@ export default class Sequencer {
   }
 
   _handleMultiplayerDisplay() {
-    if(window.isDiscoveryMode) {
+    if(window.isMetaverse) {
       this.multiplayer.showMultiplayer()
     }
   }
@@ -280,7 +284,7 @@ export default class Sequencer {
 
     window.sequencer.active = true
 
-    if(window.isDiscoveryMode) {
+    if(window.isMetaverse) {
       this.multiplayer.hideMultiplayer()
 
       // TODO: fix bug surimpression
@@ -318,7 +322,8 @@ export default class Sequencer {
     this.wormhole.dispose()
     window.wormhole.CameraPositionIndex = 0
 
-    window.currentUniverse++
+    // TODO: HANDLE METAVERSE CHANGE
+    window.storyCurrentUniverse++
     await this.asyncWaitFor(1000)
 
     window.sequencer.active = false

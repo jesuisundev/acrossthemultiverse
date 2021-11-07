@@ -81,7 +81,7 @@ export default class Multiplayer {
       yRotation: this.camera.rotation.y,
       zRotation: this.camera.rotation.z,
       showPlayer: this.showPlayer,
-      universePlayer: window.currentUniverse
+      universePlayer: window.currentUniverse.universeNumber
     }
   }
 
@@ -115,7 +115,7 @@ export default class Multiplayer {
       return
     }
 
-    if(!data.showPlayer || window.currentUniverse ==! data.universePlayer) {
+    if(!data.showPlayer || window.currentUniverse.universeNumber ==! data.universePlayer) {
       playerToUpdate.playerModel.playerModelMesh.visible = false
       playerToUpdate.playerName.playerNameMesh.visible = false
       return

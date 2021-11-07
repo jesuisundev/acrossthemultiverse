@@ -37,7 +37,7 @@ let resizedRenderResolution = helper.getResizedRenderResolution()
 const renderWidth = resizedRenderResolution.renderWidth
 const renderHeight = resizedRenderResolution.renderHeight
 const renderer = new THREE.WebGLRenderer(parameters.global.webGlRenderer)
-renderer.setClearColor(new THREE.Color(parameters.global.background[window.currentUniverse]))
+renderer.setClearColor(new THREE.Color(window.currentUniverse.matters.global.clearColor))
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 renderer.setSize(renderWidth, renderHeight)
 renderer.shadowMap.autoUpdate = false
@@ -98,7 +98,7 @@ function onLaunch(event, isHighEnd = false) {
     onResize()
   }
 
-  if(window.isDiscoveryMode) {
+  if(window.isMetaverse) {
     setupMultiplayer()
   }
 

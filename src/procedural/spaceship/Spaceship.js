@@ -19,8 +19,8 @@ export default class Spaceship {
     const brightStarsGeometry = this._getRandomStarsGeometry(spaceshipAttributes.brightStarsRandomAttributes)
     const brightStarTexture = this._getRandomStarsTexture('bright')
     const brightStarsmaterial = this._getRandomStarsMaterial(brightStarTexture, THREE.MathUtils.randInt(
-      this.parameters.matters[window.currentUniverse].spaceship.material.size.bright.min,
-      this.parameters.matters[window.currentUniverse].spaceship.material.size.bright.max
+      window.currentUniverse.matters.spaceship.material.size.bright.min,
+      window.currentUniverse.matters.spaceship.material.size.bright.max
     ))
     const brightStars = new THREE.Points(brightStarsGeometry, brightStarsmaterial)
 
@@ -224,8 +224,8 @@ export default class Spaceship {
      * @returns
      */
   _getRandomStarsMaterial (randomMaterialTexture, enforcedSize, enforcedOpacity) {
-    const randomMaterialSize = enforcedSize || enforcedSize === 0 ? enforcedSize : THREE.MathUtils.randInt(this.parameters.matters[window.currentUniverse].spaceship.material.size.pass.min, this.parameters.matters[window.currentUniverse].spaceship.material.size.pass.max)
-    const randomMaterialOpacity = enforcedOpacity || enforcedOpacity === 0 ? enforcedOpacity : THREE.MathUtils.randInt(this.parameters.matters[window.currentUniverse].spaceship.material.opacity.pass.min, this.parameters.matters[window.currentUniverse].spaceship.material.opacity.pass.max)
+    const randomMaterialSize = enforcedSize || enforcedSize === 0 ? enforcedSize : THREE.MathUtils.randInt(window.currentUniverse.matters.spaceship.material.size.pass.min, window.currentUniverse.matters.spaceship.material.size.pass.max)
+    const randomMaterialOpacity = enforcedOpacity || enforcedOpacity === 0 ? enforcedOpacity : THREE.MathUtils.randInt(window.currentUniverse.matters.spaceship.material.opacity.pass.min, window.currentUniverse.matters.spaceship.material.opacity.pass.max)
 
     randomMaterialTexture.magFilter = THREE.NearestFilter
 
