@@ -25,7 +25,7 @@ export default class PropertySign {
     addPropertySign() {
         this.text.metadata = this._getLocalUniverseMetadata()
         const text = `
-            Universe : #${window.currentUniverse}
+            Universe : #${window.currentUniverse.universeNumber}
             Owner : ${this.text.owner}
 
             Type : ${this.text.metadata.type}
@@ -54,36 +54,16 @@ export default class PropertySign {
     }
 
     _getLocalUniverseMetadata() {
-        const metadata = {
-            type: 'Unknow',
-            astralDiversity: 'Unknow',
-            astralSingularity: 'Unknow'
-        }
+        if(!window.currentUniverse.isReady)
+            return {}
 
-        switch(window.currentUniverse) {
-            case 0:
-                metadata.type = 'Borealis (60%)'
-                metadata.astralDiversity = 'High (10%)'
-                metadata.astralSingularity = 'Magnetar (5%)'
-                break
-            case 1:
-                metadata.type = 'Bloom (20%)'
-                metadata.astralDiversity = 'Very High (2%)'
-                metadata.astralSingularity = 'Black Hole (80%)'
-                break
-            case 2:
-                metadata.type = 'Filament (18%)'
-                metadata.astralDiversity = 'Normal (70%)'
-                metadata.astralSingularity = 'Blazar (25%)'
-                break
-            case 3:
-                metadata.type = 'Ethereum (2%)'
-                metadata.astralDiversity = 'Very High (2%)'
-                metadata.astralSingularity = 'Pulsar (2%)'
-                break
+        return {
+            type: window.currentUniverse.universeModifiers.type,
+            age: window.currentUniverse.universeModifiers.age,
+            diversity: window.currentUniverse.universeModifiers.diversity,
+            singularity: window.currentUniverse.universeModifiers.singularity,
+            dominantRace: window.currentUniverse.universeModifiers.dominantRace
         }
-
-        return metadata
     }
 
     _getOwner() {

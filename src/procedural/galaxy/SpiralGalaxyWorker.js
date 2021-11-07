@@ -3,7 +3,7 @@ import * as THREE from 'three'
 self.onmessage = messageEvent => {
   const clustersToPopulate = messageEvent.data.clustersToPopulate
   const currentUniverse = messageEvent.data.currentUniverse
-  const galaxyParameters = messageEvent.data.parameters.matters[currentUniverse].galaxy
+  const galaxyParameters = messageEvent.data.currentUniverse.matters.galaxy
   const clusterSize = messageEvent.data.parameters.grid.clusterSize
   const galaxyAttributes = {}
   const defaultBranchesNumber = THREE.MathUtils.randInt(galaxyParameters.spiral.branches.min, galaxyParameters.spiral.branches.max)
@@ -66,7 +66,8 @@ self.onmessage = messageEvent => {
 function _getGalaxyAttributesInRandomPosition (max, clusterSize, parameters, chosenColors, enforcedBranches, currentUniverse) {
   const positions = []
   const colors = []
-  const radius = currentUniverse === 2 ? clusterSize * 4 : clusterSize / 1.8
+
+  const radius = currentUniverse.universeModifiers.type.id === 'filaments' ? clusterSize * 5 : clusterSize / 1.8
   const branches = enforcedBranches || THREE.MathUtils.randInt(parameters.spiral.branches.min, parameters.spiral.branches.max)
   const spin = THREE.MathUtils.randInt(parameters.spiral.spin.min, parameters.spiral.spin.max)
   const mixedColor = chosenColors.colorIn.clone()

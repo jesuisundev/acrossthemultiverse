@@ -20,7 +20,7 @@ export default class Galaxy {
 
     const firstPassStarsGeometry = this._getRandomStarsGeometry(galaxiesAttributes.firstPassStarsRandomAttributes)
     const firstPassStarsTexture = this._getRandomStarsTexture()
-    const firstPassStarsmaterial = this._getRandomStarsMaterial(firstPassStarsTexture, currentUniverse === 2 ? 300 : false)
+    const firstPassStarsmaterial = this._getRandomStarsMaterial(firstPassStarsTexture, currentUniverse.universeModifiers.type.id === 'filaments' ? 300 : false)
     const firstPassStars = new THREE.Points(firstPassStarsGeometry, firstPassStarsmaterial)
 
     firstPassStars.position.set(this.currentCoordinateVector.x, this.currentCoordinateVector.y, this.currentCoordinateVector.z)
@@ -106,12 +106,12 @@ export default class Galaxy {
       this.galaxy.thirdPass.points
     )
 
-    let minCloudOpacity = this.parameters.matters[window.currentUniverse].galaxy.material.opacity.pass.min
-    let maxCloudOpacity = this.parameters.matters[window.currentUniverse].galaxy.material.opacity.pass.max
+    let minCloudOpacity = window.currentUniverse.matters.galaxy.material.opacity.pass.min
+    let maxCloudOpacity = window.currentUniverse.matters.galaxy.material.opacity.pass.max
 
     if(this.subtype === 'sombrero') {
-      minCloudOpacity = this.parameters.matters[window.currentUniverse].galaxy.material.opacity.sombrero.min
-      maxCloudOpacity = this.parameters.matters[window.currentUniverse].galaxy.material.opacity.sombrero.max
+      minCloudOpacity = window.currentUniverse.matters.galaxy.material.opacity.sombrero.min
+      maxCloudOpacity = window.currentUniverse.matters.galaxy.material.opacity.sombrero.max
     }
 
     gsap.timeline()
@@ -197,8 +197,8 @@ export default class Galaxy {
      * @returns
      */
   _getRandomStarsMaterial (randomMaterialTexture, enforcedSize, enforcedOpacity) {
-    const randomMaterialSize = enforcedSize || enforcedSize === 0 ? enforcedSize : THREE.MathUtils.randInt(this.parameters.matters[window.currentUniverse].galaxy.material.size.pass.min, this.parameters.matters[window.currentUniverse].galaxy.material.size.pass.max)
-    const randomMaterialOpacity = enforcedOpacity || enforcedOpacity === 0 ? enforcedOpacity : THREE.MathUtils.randInt(this.parameters.matters[window.currentUniverse].galaxy.material.opacity.pass.min, this.parameters.matters[window.currentUniverse].galaxy.material.opacity.pass.max)
+    const randomMaterialSize = enforcedSize || enforcedSize === 0 ? enforcedSize : THREE.MathUtils.randInt(window.currentUniverse.matters.galaxy.material.size.pass.min, window.currentUniverse.matters.galaxy.material.size.pass.max)
+    const randomMaterialOpacity = enforcedOpacity || enforcedOpacity === 0 ? enforcedOpacity : THREE.MathUtils.randInt(window.currentUniverse.matters.galaxy.material.opacity.pass.min, window.currentUniverse.matters.galaxy.material.opacity.pass.max)
 
     randomMaterialTexture.magFilter = THREE.NearestFilter
 

@@ -3,7 +3,7 @@ import { Curves } from 'three/examples/jsm/curves/CurveExtras'
 
 self.onmessage = messageEvent => {
   const clustersToPopulate = messageEvent.data.clustersToPopulate
-  const nebulaParameters = messageEvent.data.parameters.matters[messageEvent.data.currentUniverse].nebula
+  const nebulaParameters = messageEvent.data.currentUniverse.matters.nebula
   const clusterSize = messageEvent.data.parameters.grid.clusterSize
   const nebulasAttributes = {}
 

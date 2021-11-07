@@ -41,8 +41,8 @@ export default class Giant {
     window.materialsToUpdate[giantStarmaterial.uuid] = giantStarmaterial
     const giantStar = new THREE.Mesh(giantStarGeometry, giantStarmaterial)
     const giantStarScale = THREE.MathUtils.randInt(
-      this.parameters.matters[window.currentUniverse].giant.shader.whitedwarf.scale.min,
-      this.parameters.matters[window.currentUniverse].giant.shader.whitedwarf.scale.max
+      window.currentUniverse.matters.giant.shader.whitedwarf.scale.min,
+      window.currentUniverse.matters.giant.shader.whitedwarf.scale.max
     )
     giantStar.scale.set(giantStarScale, giantStarScale, giantStarScale)
     giantStar.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
@@ -86,8 +86,8 @@ export default class Giant {
     window.materialsToUpdate[giantStarmaterial.uuid] = giantStarmaterial
     const giantStar = new THREE.Mesh(giantStarGeometry, giantStarmaterial)
     const giantStarScale = THREE.MathUtils.randInt(
-      this.parameters.matters[window.currentUniverse].giant.shader.star.scale.min,
-      this.parameters.matters[window.currentUniverse].giant.shader.star.scale.max
+      window.currentUniverse.matters.giant.shader.star.scale.min,
+      window.currentUniverse.matters.giant.shader.star.scale.max
     )
     giantStar.scale.set(giantStarScale, giantStarScale, giantStarScale)
     giantStar.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
@@ -129,8 +129,8 @@ export default class Giant {
     window.materialsToUpdate[giantStarmaterial.uuid] = giantStarmaterial
     const giantStar = new THREE.Mesh(giantStarGeometry, giantStarmaterial)
     const giantStarScale = THREE.MathUtils.randInt(
-      this.parameters.matters[window.currentUniverse].giant.shader.whitedwarf.scale.min,
-      this.parameters.matters[window.currentUniverse].giant.shader.whitedwarf.scale.max
+      window.currentUniverse.matters.giant.shader.whitedwarf.scale.min,
+      window.currentUniverse.matters.giant.shader.whitedwarf.scale.max
     )
     giantStar.scale.set(giantStarScale, giantStarScale, giantStarScale)
     giantStar.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
@@ -208,20 +208,20 @@ export default class Giant {
         uTime: { value: 0 },
         uBrightnessAmplifier: {
           value: THREE.MathUtils.randFloat(
-            this.parameters.matters[window.currentUniverse].giant.shader.sun.uBrightnessAmplifier.min,
-            this.parameters.matters[window.currentUniverse].giant.shader.sun.uBrightnessAmplifier.max
+            window.currentUniverse.matters.giant.shader.sun.uBrightnessAmplifier.min,
+            window.currentUniverse.matters.giant.shader.sun.uBrightnessAmplifier.max
           )
         },
         uNoiseIntensity: {
           value: THREE.MathUtils.randFloat(
-            this.parameters.matters[window.currentUniverse].giant.shader.sun.uNoiseIntensity.min,
-            this.parameters.matters[window.currentUniverse].giant.shader.sun.uNoiseIntensity.max
+            window.currentUniverse.matters.giant.shader.sun.uNoiseIntensity.min,
+            window.currentUniverse.matters.giant.shader.sun.uNoiseIntensity.max
           )
         },
         uNoiseSpeed: {
           value: THREE.MathUtils.randFloat(
-            this.parameters.matters[window.currentUniverse].giant.shader.sun.uNoiseSpeed.min,
-            this.parameters.matters[window.currentUniverse].giant.shader.sun.uNoiseSpeed.max
+            window.currentUniverse.matters.giant.shader.sun.uNoiseSpeed.min,
+            window.currentUniverse.matters.giant.shader.sun.uNoiseSpeed.max
           )
         },
         fogColor: { value: this.scene.fog.color },
@@ -234,7 +234,7 @@ export default class Giant {
   }
 
   _getRandomStarShaderMaterial () {
-    const colors = this.parameters.matters[window.currentUniverse].giant.shader.star.colors
+    const colors = window.currentUniverse.matters.giant.shader.star.colors
     const currentColors = Object.create(colors[THREE.MathUtils.randInt(0, colors.length - 1)])
 
     return new THREE.ShaderMaterial({
@@ -271,20 +271,20 @@ export default class Giant {
         uTime: { value: 0 },
         uBrightnessAmplifier: {
           value: THREE.MathUtils.randFloat(
-            this.parameters.matters[window.currentUniverse].giant.shader.whitedwarf.uBrightnessAmplifier.min,
-            this.parameters.matters[window.currentUniverse].giant.shader.whitedwarf.uBrightnessAmplifier.max
+            window.currentUniverse.matters.giant.shader.whitedwarf.uBrightnessAmplifier.min,
+            window.currentUniverse.matters.giant.shader.whitedwarf.uBrightnessAmplifier.max
           )
         },
         uNoiseIntensity: {
           value: THREE.MathUtils.randFloat(
-            this.parameters.matters[window.currentUniverse].giant.shader.whitedwarf.uNoiseIntensity.min,
-            this.parameters.matters[window.currentUniverse].giant.shader.whitedwarf.uNoiseIntensity.max
+            window.currentUniverse.matters.giant.shader.whitedwarf.uNoiseIntensity.min,
+            window.currentUniverse.matters.giant.shader.whitedwarf.uNoiseIntensity.max
           )
         },
         uNoiseSpeed: {
           value: THREE.MathUtils.randFloat(
-            this.parameters.matters[window.currentUniverse].giant.shader.whitedwarf.uNoiseSpeed.min,
-            this.parameters.matters[window.currentUniverse].giant.shader.whitedwarf.uNoiseSpeed.max
+            window.currentUniverse.matters.giant.shader.whitedwarf.uNoiseSpeed.min,
+            window.currentUniverse.matters.giant.shader.whitedwarf.uNoiseSpeed.max
           )
         },
         fogColor: { value: this.scene.fog.color },
@@ -360,8 +360,8 @@ export default class Giant {
      * @returns
      */
   _getRandomStarsMaterial (randomMaterialTexture, enforcedSize, enforcedOpacity) {
-    const randomMaterialSize = enforcedSize || enforcedSize === 0 ? enforcedSize : THREE.MathUtils.randInt(this.parameters.matters[window.currentUniverse].giant.material.size.pass.min, this.parameters.matters[window.currentUniverse].giant.material.size.pass.max)
-    const randomMaterialOpacity = enforcedOpacity || enforcedOpacity === 0 ? enforcedOpacity : THREE.MathUtils.randInt(this.parameters.matters[window.currentUniverse].giant.material.opacity.pass.min, this.parameters.matters[window.currentUniverse].giant.material.opacity.pass.max)
+    const randomMaterialSize = enforcedSize || enforcedSize === 0 ? enforcedSize : THREE.MathUtils.randInt(window.currentUniverse.matters.giant.material.size.pass.min, window.currentUniverse.matters.giant.material.size.pass.max)
+    const randomMaterialOpacity = enforcedOpacity || enforcedOpacity === 0 ? enforcedOpacity : THREE.MathUtils.randInt(window.currentUniverse.matters.giant.material.opacity.pass.min, window.currentUniverse.matters.giant.material.opacity.pass.max)
 
     randomMaterialTexture.magFilter = THREE.NearestFilter
 

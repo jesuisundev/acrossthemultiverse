@@ -12,7 +12,7 @@ export default class PostProcessor {
 
     this.composer = new POSTPROCESSING.EffectComposer(this.renderer)
     this.composer.addPass(new POSTPROCESSING.RenderPass(this.scene, this.camera))
-    this.composer.addPass(this.getEffectPass(window.currentUniverse))
+    this.composer.addPass(this.getEffectPass())
 
     if (this.isDebug) {
       this.gui = new dat.GUI()
@@ -21,18 +21,14 @@ export default class PostProcessor {
 
   updateProcessingRenderer() {
     this.composer.reset()
-    this.renderer.setClearColor(new THREE.Color(this.parameters.global.background[window.currentUniverse]))
+    this.renderer.setClearColor(new THREE.Color(window.currentUniverse.matters.global.clearColor))
     this.composer = new POSTPROCESSING.EffectComposer(this.renderer)
     this.composer.addPass(new POSTPROCESSING.RenderPass(this.scene, this.camera))
-    this.composer.addPass(this.getEffectPass(window.currentUniverse))
+    this.composer.addPass(this.getEffectPass())
   }
 
-  getEffectPass (currentUniverse) {
-    if (currentUniverse === 1 || currentUniverse === 2) {
-      this.parameters.postprocessing.bloomEffect.intensity = 4
-    } else {
-      this.parameters.postprocessing.bloomEffect.intensity = 2
-    }
+  getEffectPass () {
+    this.parameters.postprocessing.bloomEffect.intensity = window.currentUniverse.matters.global.bloomIntensity
     const bloomEffect = new POSTPROCESSING.BloomEffect(this.parameters.postprocessing.bloomEffect)
     bloomEffect.blendMode.opacity.value = this.parameters.postprocessing.bloomEffect.opacity
 

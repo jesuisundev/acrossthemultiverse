@@ -2,7 +2,7 @@ import * as THREE from 'three'
 
 self.onmessage = messageEvent => {
   const clustersToPopulate = messageEvent.data.clustersToPopulate
-  const nebulaParameters = messageEvent.data.parameters.matters[messageEvent.data.currentUniverse].nebula
+  const nebulaParameters = messageEvent.data.currentUniverse.matters.nebula
   const clusterSize = messageEvent.data.parameters.grid.clusterSize
   const nebulasAttributes = {}
 

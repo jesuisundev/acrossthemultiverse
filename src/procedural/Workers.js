@@ -175,113 +175,62 @@ export default class Workers {
     )
   }
 
+  _getWorkerByTypeAndSubtype(type, subtype) {
+    switch (type) {
+      case "Starfield":
+        if(subtype === "Globular") {
+          return this.globularStarfieldWorker.source
+        }
+
+        return this.openStarfieldWorker.source
+
+      case "Nebula":
+        if(subtype === "Emission") {
+          return this.emissionNebulaWorker.source
+        }
+
+        return this.supernovaRemnantsNebulaWorker.source
+
+      case "Galaxy":
+        if(subtype === "Spiral") {
+          return this.spiralGalaxyWorker.source
+        }
+
+        if(subtype === "Sombrero") {
+          return this.sombreroGalaxyWorker.source
+        }
+
+        return this.irregularGalaxyWorker.source
+
+      case "Giant":
+        if(subtype === "Sun") {
+          return this.sunGiantWorker.source
+        }
+
+        if(subtype === "WhiteDwarf") {
+          return this.whiteDwarfGiantWorker.source
+        }
+
+        return this.starGiantWorker.source
+
+      case "Singularity":
+        return this.blackholeWorker.source
+
+      case "Spaceship":
+        if(subtype === "Normandy") {
+          return this.spaceshipNormandyWorker.source
+        }
+
+        return this.spaceshipStationWorker.source
+
+      default:
+        console.error('Getting worker type with unandled type.')
+        return this.openStarfieldWorker.source
+    }
+  }
+
   _setWorkersDistribution () {
-    this.workersDistribution[0] = [
-      {
-        chances: 20,
-        worker: this.openStarfieldWorker
-      },
-      {
-        chances: 13,
-        worker: this.emissionNebulaWorker
-      },
-      {
-        chances: 12,
-        worker: this.irregularGalaxyWorker
-      },
-      {
-        chances: 11,
-        worker: this.globularStarfieldWorker
-      },
-      {
-        chances: 10,
-        worker: this.spiralGalaxyWorker
-      },
-      {
-        chances: 9,
-        worker: this.sombreroGalaxyWorker
-      },
-      {
-        chances: 8,
-        worker: this.supernovaRemnantsNebulaWorker
-      },
-      {
-        chances: 4,
-        worker: this.blackholeWorker
-      },
-      {
-        chances: 3,
-        worker: this.starGiantWorker
-      },
-      {
-        chances: 2,
-        worker: this.sunGiantWorker
-      },
-      {
-        chances: 1.5,
-        worker: this.spaceshipNormandyWorker
-      },
-      {
-        chances: 1,
-        worker: this.whiteDwarfGiantWorker
-      },
-      {
-        chances: 0.5,
-        worker: this.spaceshipStationWorker
-      }
-    ]
-
-    this.workersDistribution[1] = [
-      {
-        chances: 38,
-        worker: this.globularStarfieldWorker
-      },
-      {
-        chances: 38,
-        worker: this.emissionNebulaWorker
-      },
-      {
-        chances: 10,
-        worker: this.openStarfieldWorker
-      },
-      {
-        chances: 8,
-        worker: this.supernovaRemnantsNebulaWorker
-      },
-      {
-        chances: 5,
-        worker: this.blackholeWorker
-      }
-    ]
-
-    this.workersDistribution[2] = [
-      {
-        chances: 90,
-        worker: this.spiralGalaxyWorker
-      },
-      {
-        chances: 10,
-        worker: this.blackholeWorker
-      }
-    ]
-
-    this.workersDistribution[3] = [
-      {
-        chances: 90,
-        worker: this.openStarfieldWorker
-      },
-      {
-        chances: 10,
-        worker: this.blackholeWorker
-      }
-    ]
-
-    this.workersDistribution[4] = [
-      {
-        chances: 100,
-        worker: this.openStarfieldWorker
-      }
-    ]
+    this.workersDistribution = window.currentUniverse.workersDistribution
   }
 
   getWorkerDistributed (clusterToPopulate) {
@@ -292,20 +241,20 @@ export default class Workers {
     let currentProbability = 0
     const pourcentage = Math.random() * 100
 
-    for (const workerDistributed of this.workersDistribution[window.currentUniverse]) {
+    for (const workerDistributed of this.workersDistribution) {
       currentProbability += workerDistributed.chances
 
       if (pourcentage < currentProbability) {
         if (!this.isClusterEligibleForSpecialEvent(clusterToPopulate, workerDistributed))
           return this.openStarfieldWorker.source
 
-        return workerDistributed.worker.source
+        return this._getWorkerByTypeAndSubtype(workerDistributed.type, workerDistributed.subtype)
       }
     }
   }
 
   isClusterEligibleForSpecialEvent(clusterToPopulate, workerDistributed) {
-    if((workerDistributed.worker.subtype != 'Blackhole') && workerDistributed.worker.type != 'Spaceship' && workerDistributed.worker.type != 'Giant')
+    if((workerDistributed.subtype != 'Blackhole') && workerDistributed.type != 'Spaceship' && workerDistributed.type != 'Giant')
        return true
 
     const coordinates = clusterToPopulate.split(',')

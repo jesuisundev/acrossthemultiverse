@@ -3,6 +3,7 @@ import { gsap } from 'gsap'
 
 import Wormhole from './wormhole/Wormhole'
 import Epiphany from './epiphany/Epiphany'
+import Universe from '../universe/Universe'
 
 export default class Sequencer {
   constructor (scene, library, parameters, grid, camera, postProcessor, multiplayer, propertySign) {
@@ -24,33 +25,51 @@ export default class Sequencer {
 
     this._onLaunchNextSequence()
 
-    switch (window.currentUniverse) {
+    if(window.isMetaverse) {
+      await this._launchMetaverseNextSequence()
+    } else {
+      await this._launchStoryNextSequence(skipped)
+    }
+  }
+
+  async _launchMetaverseNextSequence() {
+    this.onEnteringUniverse()
+
+    this.camera.rotation.z = 0
+    
+    if(!window.isDebugMode) {
+      const songName = window.isFirstUniverse ? 'ghosts' : this._getRandomSongName()
+      this.library.audio[songName].play()
+      this.library.audio[songName].loop(true)
+    }
+
+    this.fadeOutById('#whitewall', 1)
+    this.fadeOutById('#blackwall', 1)
+    await this.showNavigation()
+
+    this._onEndingSequence()
+  }
+
+  async _launchStoryNextSequence(skipped) {
+    switch (window.storyCurrentUniverse) {
       case 0:
-        await this.chapterOneSequence(window.isDiscoveryMode)
+        await this.chapterOneSequence(skipped)
         break
 
       case 1:
-        await this.chapterTwoSequence(window.isDiscoveryMode)
+        await this.chapterTwoSequence(skipped)
         break
 
       case 2:
-        await this.chapterThreeSequence(window.isDiscoveryMode)
+        await this.chapterThreeSequence(skipped)
         break
       
       case 3:
-        await this.chapterFourSequence(window.isDiscoveryMode)
+        await this.chapterFourSequence(skipped)
         break
 
       case 4:
-        if(window.isDiscoveryMode) {
-          window.currentUniverse = 0
-          window.sequencer.active = false
-          this.changeUniverse()
-          this.onEnteringUniverse()
-          this.launchNextSequence()
-        } else {
-          await this.epiphanySequence(skipped)
-        }
+        await this.epiphanySequence(skipped)
         break
 
       default:
@@ -74,7 +93,7 @@ export default class Sequencer {
   }
 
   _handleMultiplayerDisplay() {
-    if(window.isDiscoveryMode) {
+    if(window.isMetaverse) {
       this.multiplayer.showMultiplayer()
     }
   }
@@ -278,20 +297,24 @@ export default class Sequencer {
   async wormholeSequence () {
     if(window.sequencer.active) return
 
-    window.sequencer.active = true
+    window.isFirstUniverse = false
 
-    if(window.isDiscoveryMode) {
-      this.multiplayer.hideMultiplayer()
-
-      // TODO: fix bug surimpression
-      //this.propertySign.dispose()
+    if(window.isMetaverse) {
+      await this._metaverseWormholeSequence()
+    } else {
+      await this._storyWormholeSequence()
     }
+  }
+
+  async _storyWormholeSequence () {
+    window.sequencer.active = true
 
     this.stopAllSounds()
 
     this.fadeOutById('#credits', 0.1)
-    await this.fadeInById('#blackwall', 0.2)
     this.hideNavigation()
+
+    await this.fadeInById('#blackwall', 0.2)
 
     this.resetScene()
     this.resetPlayer()
@@ -308,7 +331,15 @@ export default class Sequencer {
     this.startSoundByTitle('wormhole')
     this.fadeOutById('#blackwall', 0.5)
 
-    await this.wormhole.animate()
+    window.storyCurrentUniverse++
+
+    window.currentUniverse = new Universe(this.parameters, window.storyCurrentUniverse + 1)
+    const generateCurrentUniverse = window.currentUniverse.generate()
+    const wormholeAnimate = this.wormhole.animate()
+
+    // parallel awaits
+    await generateCurrentUniverse
+    await wormholeAnimate
 
     await this.fadeInById('#whitewall', 1)
 
@@ -318,9 +349,57 @@ export default class Sequencer {
     this.wormhole.dispose()
     window.wormhole.CameraPositionIndex = 0
 
-    window.currentUniverse++
-    await this.asyncWaitFor(1000)
+    await this.asyncWaitFor(500)
 
+    window.sequencer.active = false
+    await this.launchNextSequence()
+  }
+
+  async _metaverseWormholeSequence () {
+    window.sequencer.active = true
+
+    this.stopAllSounds()
+    this.multiplayer.hideMultiplayer()
+
+    // TODO: fix bug surimpression
+    //this.propertySign.dispose()
+
+    this.fadeOutById('#credits', 0.1)
+    this.hideNavigation()
+    await this.fadeInById('#blackwall', 0.2)
+
+    this.resetScene()
+    this.resetPlayer()
+
+    this.scene.background = "#000000"
+    this.camera.near = 0.01
+    this.camera.updateProjectionMatrix()
+
+    this.wormhole.generate()
+    this.wormhole.active()
+
+    this.startSoundByTitle('wormhole')
+    this.fadeOutById('#blackwall', 0.5)
+
+    window.currentUniverse = new Universe(this.parameters)
+
+    const generateCurrentUniverse = window.currentUniverse.generateRandom()
+    const wormholeAnimate = this.wormhole.animate()
+
+    // parallel awaits
+    await generateCurrentUniverse
+    await wormholeAnimate
+    await this.fadeInById('#whitewall', 1)
+
+    this.changeUniverse()
+
+    this.camera.near = 100
+    this.camera.updateProjectionMatrix()
+
+    this.wormhole.dispose()
+    window.wormhole.CameraPositionIndex = 0
+
+    await this.asyncWaitFor(500)
     window.sequencer.active = false
 
     await this.launchNextSequence()
@@ -333,7 +412,9 @@ export default class Sequencer {
     this.stopAllSounds()
     this.library.audio['borealis'].play()
     this.library.audio['borealis'].on('end', () => {
-      window.currentUniverse = 0
+      window.storyCurrentUniverse = 0
+      window.currentUniverse = new Universe(this.parameters, window.storyCurrentUniverse)
+      window.currentUniverse.generate()
       this.changeUniverse()
       window.sequencer.active = false
       this.launchNextSequence()
@@ -406,11 +487,7 @@ export default class Sequencer {
   }
 
   resetScene () {
-    const arrayActiveClusters = Array.from(this.grid.activeClusters.keys())
-
-    this.grid.disposeClusters(arrayActiveClusters)
-
-    this.camera.position.set(0, 0, 0)
+    this.grid.disposeClusters(Array.from(this.grid.activeClusters.keys()))
   }
 
   resetPlayer() {
@@ -431,6 +508,10 @@ export default class Sequencer {
 
   onEnteringUniverse() {
     this.camera.rotation.set(0,0,0)
+    if(!window.isFirstUniverse) {
+      window.controls.velocity.z = -20000
+      gsap.timeline().to(window.controls.velocity, { duration: 4, z: -200 }, 0)
+    }
   }
 
   async showNavigation() {
@@ -453,5 +534,16 @@ export default class Sequencer {
       document.querySelector('#nav').style.zIndex = 7
       document.querySelector('#nav').style.opacity = 0
     }
+  }
+
+  _getRandomSongName() {
+    const songNames = [
+      'ghosts',
+      'discovery',
+      'celestial',
+      'omega'
+    ]
+
+    return songNames[THREE.Math.randInt(0, songNames.length - 1)]
   }
 }

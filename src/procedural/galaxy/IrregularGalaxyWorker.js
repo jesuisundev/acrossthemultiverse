@@ -2,7 +2,7 @@ import * as THREE from 'three'
 
 self.onmessage = messageEvent => {
   const clustersToPopulate = messageEvent.data.clustersToPopulate
-  const galaxyParameters = messageEvent.data.parameters.matters[messageEvent.data.currentUniverse].galaxy
+  const galaxyParameters = messageEvent.data.currentUniverse.matters.galaxy
   const clusterSize = messageEvent.data.parameters.grid.clusterSize
   const galaxyAttributes = {}
   const defaultBranchesNumber = THREE.MathUtils.randInt(galaxyParameters.irregular.branches.min, galaxyParameters.irregular.branches.max)

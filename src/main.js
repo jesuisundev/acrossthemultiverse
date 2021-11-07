@@ -1,25 +1,32 @@
 import './style.css'
 import * as THREE from 'three'
 
-import Grid from './world/Grid'
+import Grid from './common/Grid'
 import Controls from './controls/Controls'
 import TouchControls from './controls/mobile/touch-controls'
-import Library from './world/Library'
-import Parameters from './world/Parameters'
+import Library from './common/Library'
+import Parameters from './common/Parameters'
 import PostProcessor from './postprocessing/PostProcessor'
 import Sequencer from './sequencer/sequencer'
-import Helper from './world/Helper'
+import Helper from './common/Helper'
 import Multiplayer from './multiplayer/Multiplayer'
 import PropertySign from './blockchain/PropertySign'
+import Universe from './universe/Universe'
 
 const clock = new THREE.Clock()
 const parameters = new Parameters()
-const helper = new Helper(parameters)
 
+// initiate universe generation while loading
+const urlSearchParams = new URLSearchParams(window.location.search)
+const urlParams = Object.fromEntries(urlSearchParams.entries())
+window.currentUniverse = new Universe(parameters, urlParams.universe)
+window.currentUniverse.generate()
+
+const helper = new Helper(parameters)
 helper.setDefaultGlobal()
 
 const scene = new THREE.Scene()
-scene.fog = new THREE.Fog(parameters.global.background[window.currentUniverse], parameters.global.camera.near, parameters.global.camera.far)
+scene.fog = new THREE.Fog("#000000", parameters.global.camera.near, parameters.global.camera.far)
 
 const ambientLight = new THREE.AmbientLight("#FFFFFF", 1)
 const directionalLight = new THREE.DirectionalLight("#FFFFFF", 1)
@@ -30,7 +37,7 @@ let resizedRenderResolution = helper.getResizedRenderResolution()
 const renderWidth = resizedRenderResolution.renderWidth
 const renderHeight = resizedRenderResolution.renderHeight
 const renderer = new THREE.WebGLRenderer(parameters.global.webGlRenderer)
-renderer.setClearColor(new THREE.Color(parameters.global.background[window.currentUniverse]))
+renderer.setClearColor(new THREE.Color(window.currentUniverse.matters.global.clearColor))
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 renderer.setSize(renderWidth, renderHeight)
 renderer.shadowMap.autoUpdate = false
@@ -91,7 +98,7 @@ function onLaunch(event, isHighEnd = false) {
     onResize()
   }
 
-  if(window.isDiscoveryMode) {
+  if(window.isMetaverse) {
     setupMultiplayer()
   }
 
@@ -127,8 +134,10 @@ function animate () {
     if (window.wormhole.active) {
       updatePositionInWormhole()
     } else {
-      postProcessor.composer.render()
-      multiplayer.update()
+      if(window.currentUniverse.isReady) {
+        postProcessor.composer.render()
+        multiplayer.update()
+      }
     }
   }
 
@@ -145,24 +154,26 @@ function animate () {
 
   requestAnimationFrame(animate)
 
-  const currentClusterPosition = grid.getCurrentClusterPosition()
+  if (window.currentUniverse.isReady) {
+    const currentClusterPosition = grid.getCurrentClusterPosition()
 
-  if (lastClusterPosition !== currentClusterPosition && !window.sequencer.active) {
-    lastClusterPosition = currentClusterPosition
+    if (lastClusterPosition !== currentClusterPosition && !window.sequencer.active) {
+      lastClusterPosition = currentClusterPosition
 
-    const clustersStatus = grid.getClustersStatus(currentClusterPosition)
+      const clustersStatus = grid.getClustersStatus(currentClusterPosition)
 
-    grid.disposeClusters(clustersStatus.clustersToDispose)
-    grid.buildMatters(clustersStatus.clustersToPopulate)
-  } else if (grid.queueClusters.size && !isRenderingClusterInProgress) {
-    isRenderingClusterInProgress = true
+      grid.disposeClusters(clustersStatus.clustersToDispose)
+      grid.buildMatters(clustersStatus.clustersToPopulate)
+    } else if (grid.queueClusters.size && !isRenderingClusterInProgress) {
+      isRenderingClusterInProgress = true
 
-    const clusterTorender = grid.queueClusters.keys().next().value
+      const clusterTorender = grid.queueClusters.keys().next().value
 
-    setTimeout(() => {
-      grid.renderMatters(clusterTorender, grid.queueClusters.get(clusterTorender))
-      isRenderingClusterInProgress = false
-    }, parameters.global.clusterRenderTimeOut)
+      setTimeout(() => {
+        grid.renderMatters(clusterTorender, grid.queueClusters.get(clusterTorender))
+        isRenderingClusterInProgress = false
+      }, parameters.global.clusterRenderTimeOut)
+    }
   }
 }
 
