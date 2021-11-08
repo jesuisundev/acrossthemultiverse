@@ -103,6 +103,7 @@ function onLaunch(event, isHighEnd = false) {
   }
 
   document.getElementById('intro').className = 'fadeOut'
+  setTimeout(() => document.getElementById('intro').remove(), 3000)
 
   needRender = true
   sequencer.launchNextSequence()
@@ -187,6 +188,8 @@ function animate () {
       document.getElementById('loading').remove()
       document.getElementById('launch').className = 'fadeIn'
       document.getElementById('launchUltra').className = 'fadeIn'
+      // this is useless since it's loading from webpack static
+      // todo fix this
       library.postload()
   }
 

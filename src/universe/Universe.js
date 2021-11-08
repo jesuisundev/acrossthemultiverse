@@ -87,7 +87,7 @@ export default class Universe {
     }
 
     async _setRandomUniverseModifiers() {
-        const arrayType = Object.keys(this.parameters.universeProperties.type)
+        const arrayType = Object.keys(this.parameters.universeProperties.type).filter(type => type !== 'epiphany')
         const randomType = this.parameters.universeProperties.type[arrayType[THREE.MathUtils.randInt(0, arrayType.length - 1)]]
 
         this.universeModifiers = {
@@ -132,6 +132,9 @@ export default class Universe {
                 break;
         
             default:
+                // TODO : DELETE THIS should be in every cases
+                this.matters.global.bloomIntensity = 2
+                this.matters.global.clearColor = '#000000'
                 console.log('Universe type TODO', this.universeModifiers.type.id)
                 break;
         }

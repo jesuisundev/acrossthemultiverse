@@ -28,7 +28,8 @@ export default class Helper {
 
   // i'm lazy, we could refactor some code and avoid globals
   setDefaultGlobal () {
-    window.isDebugMode = false
+    // tochange
+    window.isDebugMode = true
     window.isFirstUniverse = true
     window.isMetaverse = false
     window.highend = false
