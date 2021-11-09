@@ -378,7 +378,8 @@ export default class Sequencer {
     this.wormhole.generate()
     this.wormhole.active()
 
-    this.startSoundByTitle('wormhole')
+    // tochange back
+    //this.startSoundByTitle('wormhole')
     this.fadeOutById('#blackwall', 0.5)
 
     window.currentUniverse = new Universe(this.parameters)
@@ -388,7 +389,8 @@ export default class Sequencer {
 
     // parallel awaits
     await generateCurrentUniverse
-    await wormholeAnimate
+    // tochange back
+    //await wormholeAnimate
     await this.fadeInById('#whitewall', 1)
 
     this.changeUniverse()

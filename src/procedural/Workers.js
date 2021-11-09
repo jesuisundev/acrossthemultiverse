@@ -40,6 +40,12 @@ export default class Workers {
       source: new Worker(new URL('./nebula/SupernovaRemnantsNebulaWorker.js', import.meta.url))
     }
 
+    this.gargantuaNebulaWorker = {
+      type: 'Nebula',
+      subtype: 'Gargantua',
+      source: new Worker(new URL('./nebula/GargantuaNebulaWorker.js', import.meta.url))
+    }
+
     this.spiralGalaxyWorker = {
       type: 'Galaxy',
       subtype: 'Spiral',
@@ -120,6 +126,12 @@ export default class Workers {
       'remnant'
     )
 
+    this.gargantuaNebulaWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
+      messageEvent.data,
+      'nebula',
+      'gargantua'
+    )
+
     this.spiralGalaxyWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
       messageEvent.data,
       'galaxy',
@@ -187,6 +199,10 @@ export default class Workers {
       case "Nebula":
         if(subtype === "Emission") {
           return this.emissionNebulaWorker.source
+        }
+
+        if(subtype === "Gargantua") {
+          return this.gargantuaNebulaWorker.source
         }
 
         return this.supernovaRemnantsNebulaWorker.source

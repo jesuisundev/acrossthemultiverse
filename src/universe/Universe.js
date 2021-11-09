@@ -88,8 +88,9 @@ export default class Universe {
 
     async _setRandomUniverseModifiers() {
         const arrayType = Object.keys(this.parameters.universeProperties.type).filter(type => type !== 'epiphany')
-        const randomType = this.parameters.universeProperties.type[arrayType[THREE.MathUtils.randInt(0, arrayType.length - 1)]]
-
+        //const randomType = this.parameters.universeProperties.type[arrayType[THREE.MathUtils.randInt(0, arrayType.length - 1)]]
+        // tochange
+        const randomType = {id: 'turbid'}
         this.universeModifiers = {
             type: randomType,
             age: this.parameters.universeProperties.age.child,
@@ -127,11 +128,17 @@ export default class Universe {
                 this._applyEthereumTypeUniverseModifier()
                 break;
 
+            case 'turbid':
+                this._applyTurbidTypeUniverseModifier()
+                break;
+
             case 'epiphany':
                 this._applyEpiphanyTypeUniverseModifier()
                 break;
-        
+            
+                //eternal b4b4b4
             default:
+                // tochange
                 // TODO : DELETE THIS should be in every cases
                 this.matters.global.bloomIntensity = 2
                 this.matters.global.clearColor = '#000000'
@@ -264,6 +271,87 @@ export default class Universe {
             },
             {
                 chances: 10,
+                type: 'Singularity',
+                subtype: 'Blackhole'
+            }
+        ]
+    }
+
+    async _applyTurbidTypeUniverseModifier() {
+        // matters modifiers
+        this.matters.global.bloomIntensity = 4
+        this.matters.nebula.material.size.pass = { min: 130, max: 130 }
+        this.matters.nebula.colors.in = [
+            '#9bb2ff',
+            '#9eb5ff',
+            '#a3b9ff',
+            '#aabfff',
+            '#b2c5ff',
+            '#bbccff',
+            '#c4d2ff',
+            '#ccd8ff',
+            '#d3ddff',
+            '#dae2ff',
+            '#dfe5ff',
+            '#e4e9ff',
+            '#e9ecff',
+            '#eeefff',
+            '#f3f2ff',
+            '#f8f6ff',
+            '#fef9ff',
+            '#fff9fb',
+            '#fff7f5',
+            '#fff5ef',
+            '#fff3ea',
+            '#fff1e5',
+            '#ffefe0',
+            '#ffeddb',
+            '#ffebd6',
+            '#ffe9d2',
+            '#ffe8ce',
+            '#ffe6ca',
+            '#ffe5c6',
+            '#ffe3c3',
+            '#ffe2bf',
+            '#ffe0bb',
+            '#ffdfb8',
+            '#ffddb4',
+            '#ffdbb0',
+            '#ffdaad',
+            '#ffd8a9',
+            '#ffd6a5',
+            '#ffd5a1',
+            '#ffd29c',
+            '#ffd096',
+            '#ffcc8f',
+            '#ffc885',
+            '#ffc178',
+            '#ffb765',
+            '#ffa94b',
+            '#ff9523',
+            '#ff7b00',
+            '#ff5200'
+        ]
+
+        // workers modifiers
+        this.workersDistribution = [
+            {
+                chances: 70,
+                type: 'Nebula',
+                subtype: 'Gargantua'
+            },
+            {
+                chances: 15,
+                type: 'Nebula',
+                subtype: 'Emission'
+            },
+            {
+                chances: 13,
+                type: 'Nebula',
+                subtype: 'Remnant'
+            },
+            {
+                chances: 2,
                 type: 'Singularity',
                 subtype: 'Blackhole'
             }

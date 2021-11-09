@@ -192,11 +192,12 @@ function animate () {
       // todo fix this
       library.postload()
   }
-
-  await helper.showElementById("title")
-  await helper.showElementById("description")
-  await helper.showElementById("notice")
-  await helper.showElementById("entrypoint")
+  
+  // tochange - readd await
+  helper.showElementById("title")
+  helper.showElementById("description")
+  helper.showElementById("notice")
+  helper.showElementById("entrypoint")
 }
 
  async function setupMultiplayer() {
