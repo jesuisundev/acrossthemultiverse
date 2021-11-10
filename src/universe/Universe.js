@@ -90,7 +90,7 @@ export default class Universe {
         const arrayType = Object.keys(this.parameters.universeProperties.type).filter(type => type !== 'epiphany')
         //const randomType = this.parameters.universeProperties.type[arrayType[THREE.MathUtils.randInt(0, arrayType.length - 1)]]
         // tochange
-        const randomType = {id: 'turbid'}
+        const randomType = {id: 'whirlpool'}
         this.universeModifiers = {
             type: randomType,
             age: this.parameters.universeProperties.age.child,
@@ -128,8 +128,8 @@ export default class Universe {
                 this._applyEthereumTypeUniverseModifier()
                 break;
 
-            case 'turbid':
-                this._applyTurbidTypeUniverseModifier()
+            case 'whirlpool':
+                this._applyWhirlpoolTypeUniverseModifier()
                 break;
 
             case 'epiphany':
@@ -277,9 +277,9 @@ export default class Universe {
         ]
     }
 
-    async _applyTurbidTypeUniverseModifier() {
+    async _applyWhirlpoolTypeUniverseModifier() {
         // matters modifiers
-        this.matters.global.bloomIntensity = 4
+        this.matters.global.bloomIntensity = 3
         this.matters.nebula.material.size.pass = { min: 130, max: 130 }
         this.matters.nebula.colors.in = [
             '#9bb2ff',
@@ -332,6 +332,9 @@ export default class Universe {
             '#ff7b00',
             '#ff5200'
         ]
+        this.matters.giant.shader.sun.scale = { min: 15000, max: 15000 }
+        this.matters.giant.shader.sun.uColorAmplifier.primary = 3.0
+        this.matters.giant.shader.sun.uColorAmplifier.tertiary = 1.0
 
         // workers modifiers
         this.workersDistribution = [
@@ -341,19 +344,29 @@ export default class Universe {
                 subtype: 'Gargantua'
             },
             {
-                chances: 15,
+                chances: 10,
+                type: 'Nebula',
+                subtype: 'Remnant'
+            },
+            {
+                chances: 9,
                 type: 'Nebula',
                 subtype: 'Emission'
             },
             {
-                chances: 13,
-                type: 'Nebula',
-                subtype: 'Remnant'
+                chances: 3,
+                type: 'Giant',
+                subtype: 'Sun'
             },
             {
                 chances: 2,
                 type: 'Singularity',
                 subtype: 'Blackhole'
+            },
+            {
+                chances: 0.01,
+                type: 'Spaceship',
+                subtype: 'Station'
             }
         ]
     }

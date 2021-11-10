@@ -8,6 +8,9 @@ uniform float uNoiseSpeed;
 uniform vec3 fogColor;
 uniform float fogNear;
 uniform float fogFar;
+uniform float uColorAmplifierPrimary;
+uniform float uColorAmplifierSecondary;
+uniform float uColorAmplifierTertiary;
 
 varying vec2 vUv;
 varying vec3 vPosition;
@@ -185,7 +188,7 @@ vec3 convertBrightToColor(float brightness)
     brightness *= brightnessAmplifier;
 
     // add uniform for color pow here to change color on diff universes
-    return vec3(brightness, brightness*brightness, brightness*brightness*brightness*brightness) * 0.6;
+    return vec3(pow(brightness, uColorAmplifierPrimary), pow(brightness, uColorAmplifierSecondary), pow(brightness, uColorAmplifierTertiary)) * 0.6;
 }
 
 // calucate the fresnel of the object

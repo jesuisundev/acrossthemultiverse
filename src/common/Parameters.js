@@ -465,6 +465,11 @@ export default class Parameters {
             uNoiseSpeed: {
               min: 0.03,
               max: 0.08
+            },
+            uColorAmplifier: {
+              primary: 1.0,
+              secondary: 2.0,
+              tertiary: 3.0
             }
           },
           whitedwarf: {
@@ -761,9 +766,9 @@ export default class Parameters {
           displayName: 'Ethereum',
           probability: 10,
         },
-        turbid : {
-          id: 'turbid',
-          displayName: 'turbid',
+        whirlpool : {
+          id: 'whirlpool',
+          displayName: 'whirlpool',
           probability: 5,
         },
         amethyst : {

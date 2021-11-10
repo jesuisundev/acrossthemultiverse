@@ -490,12 +490,12 @@ export default class Sequencer {
 
   resetScene () {
     this.grid.disposeClusters(Array.from(this.grid.activeClusters.keys()))
-
     this.deepResetScene(this.scene)
+    this.setLight()
   }
 
   deepResetScene(obj){
-    while(obj.children.length > 0){ 
+    while(obj.children.length > 0) {
       this.deepResetScene(obj.children[0])
       obj.remove(obj.children[0]);
     }
@@ -505,12 +505,20 @@ export default class Sequencer {
     if(obj.material){ 
       Object.keys(obj.material).forEach(prop => {
         if(!obj.material[prop])
-          return         
-        if(obj.material[prop] !== null && typeof obj.material[prop].dispose === 'function')                                  
-          obj.material[prop].dispose()                                                        
+          return
+
+        if(obj.material[prop] !== null && typeof obj.material[prop].dispose === 'function')
+          obj.material[prop].dispose()
       })
       obj.material.dispose()
     }
+  }
+
+  setLight () {
+    const ambientLight = new THREE.AmbientLight("#FFFFFF", 1)
+    const directionalLight = new THREE.DirectionalLight("#FFFFFF", 1)
+    directionalLight.position.set(0, 400, 0)
+    this.scene.add(ambientLight, directionalLight)
   }
 
   resetPlayer() {

@@ -240,6 +240,13 @@ function updateAnimatedObjects (elapsedTime) {
       spaceshipToUpdate.translateZ(0.005)
     }
   }
+
+  if(Object.keys(window.nebulaToUpdate).length) {
+    for (const nebulaToUpdate of Object.values(window.nebulaToUpdate)) {
+      nebulaToUpdate.rotateX(0.0009)
+      nebulaToUpdate.rotateZ(0.0009)
+    }
+  }
 }
 
 function updatePositionInWormhole () {
