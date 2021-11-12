@@ -90,7 +90,7 @@ export default class Universe {
         const arrayType = Object.keys(this.parameters.universeProperties.type).filter(type => type !== 'epiphany')
         //const randomType = this.parameters.universeProperties.type[arrayType[THREE.MathUtils.randInt(0, arrayType.length - 1)]]
         // tochange
-        const randomType = {id: 'whirlpool'}
+        const randomType = {id: 'eternal'}
         this.universeModifiers = {
             type: randomType,
             age: this.parameters.universeProperties.age.child,
@@ -132,11 +132,14 @@ export default class Universe {
                 this._applyWhirlpoolTypeUniverseModifier()
                 break;
 
+            case 'eternal':
+                this._applyEternalTypeUniverseModifier()
+                break;
+
             case 'epiphany':
                 this._applyEpiphanyTypeUniverseModifier()
                 break;
-            
-                //eternal b4b4b4
+
             default:
                 // tochange
                 // TODO : DELETE THIS should be in every cases
@@ -367,6 +370,71 @@ export default class Universe {
                 chances: 0.01,
                 type: 'Spaceship',
                 subtype: 'Station'
+            }
+        ]
+    }
+
+    async _applyEternalTypeUniverseModifier() {
+        // matters modifiers
+        this.matters.global.bloomIntensity = 0.8
+        this.matters.global.clearColor = '#b4b4b4'
+
+        this.matters.starfield.material.transparent = false
+        this.matters.starfield.material.blending = THREE.SubtractiveBlending
+        this.matters.starfield.material.size.bright = { min: 1000, max: 1000}
+        this.matters.starfield.colors = ['#000000']
+
+        this.matters.nebula.material.transparent = false
+        this.matters.nebula.material.blending = THREE.CustomBlending
+        this.matters.nebula.material.opacity.cloud = { min: 0.03, max: 0.03 }
+        this.matters.nebula.colors.in = ['#000000']
+        this.matters.nebula.colors.out = ['#000000']
+        this.matters.nebula.geometry.emission.randomness = 0.001
+        this.matters.nebula.geometry.emission.radius = 20
+
+        this.matters.galaxy.material.transparent = false
+        this.matters.galaxy.material.blending = THREE.SubtractiveBlending
+        this.matters.galaxy.material.size.pass = { min: 300, max: 300}
+        this.matters.galaxy.colors = ['#000000']
+        this.matters.galaxy.galaxyColors.in = ['#000000']
+        this.matters.galaxy.galaxyColors.out = ['#000000']
+
+        this.matters.giant.shader.sun.scale = { min: 5000, max: 5000 }
+        this.matters.giant.shader.sun.uColorAmplifier.primary = 10.0
+        this.matters.giant.shader.sun.uColorAmplifier.secondary = 10.0
+        this.matters.giant.shader.sun.uColorAmplifier.tertiary = 10.0
+
+        // workers modifiers
+        this.workersDistribution = [
+            {
+                chances: 25,
+                type: 'Galaxy',
+                subtype: 'Irregular'
+            },
+            {
+                chances: 20,
+                type: 'Starfield',
+                subtype: 'Open'
+            },
+            {
+                chances: 19,
+                type: 'Starfield',
+                subtype: 'Globular'
+            },
+            {
+                chances: 18,
+                type: 'Nebula',
+                subtype: 'Emission'
+            },
+            {
+                chances: 3,
+                type: 'Giant',
+                subtype: 'Sun'
+            },
+            {
+                chances: 1,
+                type: 'Singularity',
+                subtype: 'Blackhole'
             }
         ]
     }

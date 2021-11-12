@@ -1,3 +1,4 @@
+import * as THREE from 'three'
 import * as POSTPROCESSING from 'postprocessing'
 
 export default class Parameters {
@@ -127,6 +128,7 @@ export default class Parameters {
     this.defaultMatters = {
       global: {
         clearColor: '#000000',
+        fogColor: '#000000',
         bloomIntensity: 2
       },
       starfield: {
@@ -165,7 +167,10 @@ export default class Parameters {
               min: 1,
               max: 1
             }
-          }
+          },
+          transparent: false,
+          blending: THREE.AdditiveBlending,
+          defaultType: 'pass'
         },
         colors: [
           '#9bb2ff',
@@ -403,7 +408,9 @@ export default class Parameters {
               min: 0.1,
               max: 1
             }
-          }
+          },
+          transparent: true,
+          blending: THREE.AdditiveBlending,
         },
         colors: {
           in: ['#0091ff', '#0011ff', '#000222', '#4b0082', '#8a2be2', '#FF5300', '#489BCF', '#AA1428'],
@@ -412,6 +419,12 @@ export default class Parameters {
         remnantColors: {
           in: ['#0091ff', '#0011ff', '#000222', '#4b0082', '#8a2be2', '#FF5300', '#489BCF', '#AA1428'],
           out: ['#00FF00', '#0000FF', '#FF0000', '#00FF00', '#DE3FFE', '#1E0500', '#4A61A4', '#000042']
+        },
+        geometry: {
+          emission: {
+            randomness: 4,
+            radius: 5
+          }
         }
       },
       giant: {
@@ -647,7 +660,9 @@ export default class Parameters {
               min: 0.01,
               max: 0.01
             }
-          }
+          },
+          transparent: false,
+          blending: THREE.AdditiveBlending,
         },
         colors: [
           '#24346c',

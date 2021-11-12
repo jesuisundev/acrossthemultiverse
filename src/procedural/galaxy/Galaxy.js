@@ -208,8 +208,8 @@ export default class Galaxy {
       map: randomMaterialTexture,
       sizeAttenuation: true,
       depthWrite: false,
-      transparent: false,
-      blending: THREE.AdditiveBlending,
+      transparent: window.currentUniverse.matters.galaxy.material.transparent,
+      blending: window.currentUniverse.matters.galaxy.material.blending,
       vertexColors: true,
       opacity: 0
     })

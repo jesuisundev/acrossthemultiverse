@@ -54,8 +54,8 @@ self.onmessage = messageEvent => {
 function _getShapeAttributesInRandomPosition (parameters, enforcedPositions, enforcedColors) {
   const positions = enforcedPositions || []
   const colors = enforcedColors || []
-  const randomNess = 4
-  const radius = 5
+  const randomNess = parameters.geometry.emission.randomness
+  const radius = parameters.geometry.emission.radius
 
   const geometry = new THREE.TubeGeometry(
     new Curves.CinquefoilKnot(),

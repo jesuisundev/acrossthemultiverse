@@ -26,7 +26,7 @@ const helper = new Helper(parameters)
 helper.setDefaultGlobal()
 
 const scene = new THREE.Scene()
-scene.fog = new THREE.Fog("#000000", parameters.global.camera.near, parameters.global.camera.far)
+scene.fog = new THREE.Fog(window.currentUniverse.matters.global.fogColor, parameters.global.camera.near, parameters.global.camera.far)
 
 const ambientLight = new THREE.AmbientLight("#FFFFFF", 1)
 const directionalLight = new THREE.DirectionalLight("#FFFFFF", 1)
