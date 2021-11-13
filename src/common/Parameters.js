@@ -688,6 +688,160 @@ export default class Parameters {
             '#841B1F'
           ]
         }
+      },
+      strangerthings: {
+        cyclic: {
+          budget: 100000,
+          spiral: {
+            randomnessPower: 2.8,
+            randomness: 0.5,
+            spinAmplitude: 0.00008,
+            branchesAmplitude: 2.4,
+            colorInterpolationAmplitude: 0.5
+          },
+          vertices: {
+            bright: {
+              min: 0.00001,
+              max: 0.0001
+            },
+            pass: {
+              min: 1,
+              max: 1
+            },
+            cloud: {
+              min: 1,
+              max: 1
+            }
+          },
+          material: {
+            size: {
+              bright: {
+                min: 300,
+                max: 400
+              },
+              pass: {
+                min: 200,
+                max: 200
+              }
+            },
+            opacity: {
+              bright: {
+                min: 1,
+                max: 1
+              },
+              pass: {
+                min: 1,
+                max: 2
+              }
+            },
+            transparent: false,
+            blending: THREE.AdditiveBlending,
+          },
+          colors: {
+            in: [
+              '#9bb2ff',
+              '#9eb5ff',
+              '#a3b9ff',
+              '#aabfff',
+              '#b2c5ff',
+              '#bbccff',
+              '#c4d2ff',
+              '#ccd8ff',
+              '#d3ddff',
+              '#dae2ff',
+              '#dfe5ff',
+              '#e4e9ff',
+              '#e9ecff',
+              '#eeefff',
+              '#f3f2ff',
+              '#f8f6ff',
+              '#fef9ff',
+              '#fff9fb',
+              '#fff7f5',
+              '#fff5ef',
+              '#fff3ea',
+              '#fff1e5',
+              '#ffefe0',
+              '#ffeddb',
+              '#ffebd6',
+              '#ffe9d2',
+              '#ffe8ce',
+              '#ffe6ca',
+              '#ffe5c6',
+              '#ffe3c3',
+              '#ffe2bf',
+              '#ffe0bb',
+              '#ffdfb8',
+              '#ffddb4',
+              '#ffdbb0',
+              '#ffdaad',
+              '#ffd8a9',
+              '#ffd6a5',
+              '#ffd5a1',
+              '#ffd29c',
+              '#ffd096',
+              '#ffcc8f',
+              '#ffc885',
+              '#ffc178',
+              '#ffb765',
+              '#ffa94b',
+              '#ff9523',
+              '#ff7b00',
+              '#ff5200'
+            ],
+            out: [
+              '#9bb2ff',
+              '#9eb5ff',
+              '#a3b9ff',
+              '#aabfff',
+              '#b2c5ff',
+              '#bbccff',
+              '#c4d2ff',
+              '#ccd8ff',
+              '#d3ddff',
+              '#dae2ff',
+              '#dfe5ff',
+              '#e4e9ff',
+              '#e9ecff',
+              '#eeefff',
+              '#f3f2ff',
+              '#f8f6ff',
+              '#fef9ff',
+              '#fff9fb',
+              '#fff7f5',
+              '#fff5ef',
+              '#fff3ea',
+              '#fff1e5',
+              '#ffefe0',
+              '#ffeddb',
+              '#ffebd6',
+              '#ffe9d2',
+              '#ffe8ce',
+              '#ffe6ca',
+              '#ffe5c6',
+              '#ffe3c3',
+              '#ffe2bf',
+              '#ffe0bb',
+              '#ffdfb8',
+              '#ffddb4',
+              '#ffdbb0',
+              '#ffdaad',
+              '#ffd8a9',
+              '#ffd6a5',
+              '#ffd5a1',
+              '#ffd29c',
+              '#ffd096',
+              '#ffcc8f',
+              '#ffc885',
+              '#ffc178',
+              '#ffb765',
+              '#ffa94b',
+              '#ff9523',
+              '#ff7b00',
+              '#ff5200'
+            ]
+          }
+        }
       }
     }
 

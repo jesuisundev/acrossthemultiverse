@@ -247,6 +247,13 @@ function updateAnimatedObjects (elapsedTime) {
       nebulaToUpdate.rotateZ(0.0009)
     }
   }
+
+  if (window.cyclicStrangerThingsToUpdate && Object.keys(window.cyclicStrangerThingsToUpdate).length) {
+    for (const cyclicStrangerThingsToUpdate of Object.values(window.cyclicStrangerThingsToUpdate)) {
+      cyclicStrangerThingsToUpdate.rotateX(0.001)
+      cyclicStrangerThingsToUpdate.rotateZ(0.0005)
+    }
+  }
 }
 
 function updatePositionInWormhole () {

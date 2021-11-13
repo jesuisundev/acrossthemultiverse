@@ -99,6 +99,12 @@ export default class Workers {
       subtype: 'Station',
       source: new Worker(new URL('./spaceship/SpaceshipWorker.js', import.meta.url))
     }
+
+    this.cyclicSrangerThingsWorker = {
+      type: 'StrangerThings',
+      subtype: 'Cyclic',
+      source: new Worker(new URL('./strangerthings/CyclicWorker.js', import.meta.url))
+    }
   }
 
   _setWorkersListener () {
@@ -185,6 +191,12 @@ export default class Workers {
       'spaceship',
       'station'
     )
+
+    this.cyclicSrangerThingsWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
+      messageEvent.data,
+      'strangerthings',
+      'cyclic'
+    )
   }
 
   _getWorkerByTypeAndSubtype(type, subtype) {
@@ -238,6 +250,11 @@ export default class Workers {
         }
 
         return this.spaceshipStationWorker.source
+
+      case "StrangerThings":
+        if(subtype === "Cyclic") {
+          return this.cyclicSrangerThingsWorker.source
+        }
 
       default:
         console.error('Getting worker type with unandled type.')

@@ -462,6 +462,15 @@ export default class Universe {
         // matters modifiers
         this.matters.global.bloomIntensity = 0.8
         this.matters.global.clearColor = '#011120'
+
+        // workers modifiers
+        this.workersDistribution = [
+            {
+                chances: 100,
+                type: 'StrangerThings',
+                subtype: 'Cyclic'
+            }
+        ]
     }
 
     // Age modifiers

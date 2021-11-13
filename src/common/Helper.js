@@ -38,6 +38,7 @@ export default class Helper {
     window.meshesToUpdate = {}
     window.spaceshipToUpdate = {}
     window.nebulaToUpdate = {}
+    window.cyclicStrangerThingsToUpdate = {}
     window.wormhole = { shape: null, CameraPositionIndex: 0, speed: this.parameters.wormhole.speed, active: false }
     window.sequencer = { active: false }
     window.isMobileOrTabletFlag = this.isMobileOrTablet()
