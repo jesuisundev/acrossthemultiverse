@@ -90,7 +90,7 @@ export default class Universe {
         const arrayType = Object.keys(this.parameters.universeProperties.type).filter(type => type !== 'epiphany')
         //const randomType = this.parameters.universeProperties.type[arrayType[THREE.MathUtils.randInt(0, arrayType.length - 1)]]
         // tochange
-        const randomType = {id: 'eternal'}
+        const randomType = {id: 'quantum'}
         this.universeModifiers = {
             type: randomType,
             age: this.parameters.universeProperties.age.child,
@@ -134,6 +134,10 @@ export default class Universe {
 
             case 'eternal':
                 this._applyEternalTypeUniverseModifier()
+                break;
+
+            case 'quantum':
+                this._applyQuantumTypeUniverseModifier()
                 break;
 
             case 'epiphany':
@@ -452,6 +456,12 @@ export default class Universe {
                 subtype: 'Open'
             }
         ]
+    }
+
+    async _applyQuantumTypeUniverseModifier() {
+        // matters modifiers
+        this.matters.global.bloomIntensity = 0.8
+        this.matters.global.clearColor = '#011120'
     }
 
     // Age modifiers

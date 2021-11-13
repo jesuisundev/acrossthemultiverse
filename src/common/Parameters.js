@@ -786,6 +786,11 @@ export default class Parameters {
           displayName: 'whirlpool',
           probability: 5,
         },
+        quantum : {
+          id: 'quantum',
+          displayName: 'Quantum',
+          probability: 4
+        },
         amethyst : {
           id: 'amethyst',
           displayName: 'Amethyst',
