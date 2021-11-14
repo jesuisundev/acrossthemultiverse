@@ -466,7 +466,12 @@ export default class Universe {
         // workers modifiers
         this.workersDistribution = [
             {
-                chances: 100,
+                chances: 50,
+                type: 'StrangerThings',
+                subtype: 'Spear'
+            },
+            {
+                chances: 50,
                 type: 'StrangerThings',
                 subtype: 'Cyclic'
             }

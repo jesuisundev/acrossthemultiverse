@@ -174,8 +174,7 @@ export default class StrangerThings {
   }
 
   _getRandomStarsTexture () {
-    const starsChoosenIndexes = [0, 1, 3, 4]
-    const currentTexturesPool = this.library.textures.starfield["pass"].filter((texture, index) => starsChoosenIndexes.includes(index))
+    const currentTexturesPool = this.library.textures.starfield["pass"]
     const randomTexture = currentTexturesPool[THREE.MathUtils.randInt(0, currentTexturesPool.length - 1)]
 
     this.textureSeen.push(randomTexture)

@@ -753,6 +753,70 @@ export default class Parameters {
               '#ff5200'
             ]
           }
+        },
+        spear: {
+          budget: 500000,
+          spiral: {
+            randomnessPower: 2.8,
+            randomness: 0.5,
+            spinAmplitude: 0.00008,
+            branchesAmplitude: 2.4,
+            colorInterpolationAmplitude: 0.5
+          },
+          vertices: {
+            bright: {
+              min: 0.00001,
+              max: 0.0001
+            },
+            pass: {
+              min: 1,
+              max: 1
+            },
+            cloud: {
+              min: 1,
+              max: 1
+            }
+          },
+          material: {
+            size: {
+              bright: {
+                min: 300,
+                max: 400
+              },
+              pass: {
+                min: 300,
+                max: 300
+              }
+            },
+            opacity: {
+              bright: {
+                min: 1,
+                max: 1
+              },
+              pass: {
+                min: 1,
+                max: 2
+              }
+            },
+            transparent: false,
+            blending: THREE.AdditiveBlending,
+          },
+          colors: {
+            in: [
+              '#ffb765',
+              '#ffa94b',
+              '#ff9523',
+              '#ff7b00',
+              '#ff5200'
+            ],
+            out: [
+              '#ffb765',
+              '#ffa94b',
+              '#ff9523',
+              '#ff7b00',
+              '#ff5200'
+            ]
+          }
         }
       }
     }
