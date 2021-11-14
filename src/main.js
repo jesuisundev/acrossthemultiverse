@@ -250,8 +250,9 @@ function updateAnimatedObjects (elapsedTime) {
 
   if (window.cyclicStrangerThingsToUpdate && Object.keys(window.cyclicStrangerThingsToUpdate).length) {
     for (const cyclicStrangerThingsToUpdate of Object.values(window.cyclicStrangerThingsToUpdate)) {
-      cyclicStrangerThingsToUpdate.rotateX(0.001)
+      cyclicStrangerThingsToUpdate.rotateX(0.00005)
       cyclicStrangerThingsToUpdate.rotateZ(0.0005)
+      cyclicStrangerThingsToUpdate.translateY(1)
     }
   }
 }

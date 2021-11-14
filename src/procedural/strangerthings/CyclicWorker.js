@@ -35,8 +35,8 @@ self.onmessage = messageEvent => {
     const thirdPassStarsRandomAttributes = _getAttributesInRandomPosition(
       Math.floor(
         strangerThingsParameters.budget * THREE.MathUtils.randFloat(
-            strangerThingsParameters.vertices.pass.min,
-            strangerThingsParameters.vertices.pass.max
+            strangerThingsParameters.vertices.pass.min * 0.6,
+            strangerThingsParameters.vertices.pass.max * 0.6
         )
       ),
       clusterSize,
@@ -101,7 +101,6 @@ function _getCyclicAttributesInRandomPosition (max, clusterSize, parameters) {
 }
 
 function _getAttributesInRandomPosition (max, clusterSize, parameters) {
-  const chosenColors = _getTwoDifferentColors(parameters.colors)
   const positions = []
   const colors = []
 
@@ -113,9 +112,7 @@ function _getAttributesInRandomPosition (max, clusterSize, parameters) {
 
     positions.push(x, y, z)
 
-    const color = chosenColors.colorOut
-
-    colors.push(color.r, color.g, color.b)
+    colors.push(0, 0, 0.545)
   }
 
   return {
