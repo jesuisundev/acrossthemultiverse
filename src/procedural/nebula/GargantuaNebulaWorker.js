@@ -54,19 +54,19 @@ self.onmessage = messageEvent => {
 function _getShapeAttributesInRandomPosition (parameters, enforcedPositions, enforcedColors) {
   const positions = enforcedPositions || []
   const colors = enforcedColors || []
-  const randomNess = parameters.geometry.emission.randomness
-  const radius = parameters.geometry.emission.radius
+  const randomNess = 2
+  const radius = 30
 
   const geometry = new THREE.TubeGeometry(
     new Curves.CinquefoilKnot(),
-    parameters.vertices.emission.tubularSegments,
-    parameters.vertices.emission.radius,
-    parameters.vertices.emission.radiusSegments,
-    parameters.vertices.emission.closed
+    parameters.vertices.gargantua.tubularSegments,
+    parameters.vertices.gargantua.radius,
+    parameters.vertices.gargantua.radiusSegments,
+    parameters.vertices.gargantua.closed
   )
 
-  geometry.scale(80, 80, 80)
-
+  geometry.scale(50, 50, 50)
+    
   if (!positions.length || !colors.length) {
     const chosenColors = _getTwoDifferentColors(parameters.colors)
     const mixedColor = chosenColors.colorIn.clone()

@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 
-export default class Galaxy {
+export default class StrangerThings {
   constructor (scene, library, parameters) {
     this.scene = scene
     this.library = library
@@ -12,13 +12,13 @@ export default class Galaxy {
     this.subtype = null
   }
 
-  generate (galaxiesAttributes, position, subtype = null) {
+  generate (strangerThingsAttributes, position, subtype = null) {
     this.currentCoordinateVector = this._getCoordinateVectorByPosition(position)
     this.subtype = subtype
 
     const rotation = THREE.Math.degToRad(THREE.MathUtils.randInt(0, 360))
 
-    const firstPassStarsGeometry = this._getRandomStarsGeometry(galaxiesAttributes.firstPassStarsRandomAttributes)
+    const firstPassStarsGeometry = this._getRandomStarsGeometry(strangerThingsAttributes.firstPassStarsRandomAttributes)
     const firstPassStarsTexture = this._getRandomStarsTexture()
     const firstPassStarsmaterial = this._getRandomStarsMaterial(firstPassStarsTexture, currentUniverse.universeModifiers.type.id === 'filaments' ? 300 : false)
     const firstPassStars = new THREE.Points(firstPassStarsGeometry, firstPassStarsmaterial)
@@ -26,26 +26,27 @@ export default class Galaxy {
     firstPassStars.position.set(this.currentCoordinateVector.x, this.currentCoordinateVector.y, this.currentCoordinateVector.z)
     firstPassStarsGeometry.rotateX(rotation)
 
-    const secondPassStarsGeometry = this._getRandomStarsGeometry(galaxiesAttributes.secondPassStarsRandomAttributes)
+    const secondPassStarsGeometry = this._getRandomStarsGeometry(strangerThingsAttributes.secondPassStarsRandomAttributes)
     const secondPassStarsTexture = this._getRandomStarsTextureByType('cloud')
-    const secondPassStarsmaterial = this._getRandomStarsMaterial(secondPassStarsTexture, 800, 0.04)
+    const secondPassStarsmaterial = this._getRandomStarsMaterial(secondPassStarsTexture, 800, 100)
     const secondPassStars = new THREE.Points(secondPassStarsGeometry, secondPassStarsmaterial)
 
     secondPassStars.position.set(this.currentCoordinateVector.x, this.currentCoordinateVector.y, this.currentCoordinateVector.z)
     secondPassStars.rotateX(rotation)
 
-    const thirdPassStarsGeometry = this._getRandomStarsGeometry(galaxiesAttributes.thirdPassStarsRandomAttributes)
+    const thirdPassStarsGeometry = this._getRandomStarsGeometry(strangerThingsAttributes.thirdPassStarsRandomAttributes)
     const thirdPassStarsTexture = this._getRandomStarsTexture()
     const thirdPassStarsmaterial = this._getRandomStarsMaterial(thirdPassStarsTexture)
     const thirdPassStars = new THREE.Points(thirdPassStarsGeometry, thirdPassStarsmaterial)
-
-    if (this.subtype === "sombrero") {
-      thirdPassStars.rotateX(rotation - 80)
-    } else {
-      thirdPassStars.rotateX(rotation)
-    }
+    thirdPassStars.rotateX(rotation)
 
     thirdPassStars.position.set(this.currentCoordinateVector.x, this.currentCoordinateVector.y, this.currentCoordinateVector.z)
+
+    if(this.subtype === 'cyclic'){
+      window.cyclicStrangerThingsToUpdate[firstPassStars.uuid] = firstPassStars
+      window.cyclicStrangerThingsToUpdate[secondPassStars.uuid] = secondPassStars
+      window.cyclicStrangerThingsToUpdate[thirdPassStars.uuid] = thirdPassStars
+    }
 
     const randomGalaxy = {
       firstPass: {
@@ -85,6 +86,12 @@ export default class Galaxy {
     this.galaxy.secondPass.material.dispose()
     this.galaxy.thirdPass.material.dispose()
 
+    if(window.cyclicStrangerThingsToUpdate[this.galaxy.firstPass.uuid]) {
+      delete window.cyclicStrangerThingsToUpdate[this.galaxy.firstPass.uuid]
+      delete window.cyclicStrangerThingsToUpdate[this.galaxy.secondPass.uuid]
+      delete window.cyclicStrangerThingsToUpdate[this.galaxy.thirdPass.uuid]
+    } 
+
     this.scene.remove(
       this.galaxy.firstPass.points,
       this.galaxy.secondPass.points,
@@ -108,11 +115,6 @@ export default class Galaxy {
 
     let minCloudOpacity = window.currentUniverse.matters.galaxy.material.opacity.pass.min
     let maxCloudOpacity = window.currentUniverse.matters.galaxy.material.opacity.pass.max
-
-    if(this.subtype === 'sombrero') {
-      minCloudOpacity = window.currentUniverse.matters.galaxy.material.opacity.sombrero.min
-      maxCloudOpacity = window.currentUniverse.matters.galaxy.material.opacity.sombrero.max
-    }
 
     gsap.timeline()
       .to(this.galaxy.firstPass.points.material, { duration: 3, opacity: 1 }, 0)
@@ -172,8 +174,7 @@ export default class Galaxy {
   }
 
   _getRandomStarsTexture () {
-    const starsChoosenIndexes = [0, 1, 3, 4]
-    const currentTexturesPool = this.library.textures.starfield["pass"].filter((texture, index) => starsChoosenIndexes.includes(index))
+    const currentTexturesPool = this.library.textures.starfield["pass"]
     const randomTexture = currentTexturesPool[THREE.MathUtils.randInt(0, currentTexturesPool.length - 1)]
 
     this.textureSeen.push(randomTexture)
@@ -197,8 +198,8 @@ export default class Galaxy {
      * @returns
      */
   _getRandomStarsMaterial (randomMaterialTexture, enforcedSize, enforcedOpacity) {
-    const randomMaterialSize = enforcedSize || enforcedSize === 0 ? enforcedSize : THREE.MathUtils.randInt(window.currentUniverse.matters.galaxy.material.size.pass.min, window.currentUniverse.matters.galaxy.material.size.pass.max)
-    const randomMaterialOpacity = enforcedOpacity || enforcedOpacity === 0 ? enforcedOpacity : THREE.MathUtils.randInt(window.currentUniverse.matters.galaxy.material.opacity.pass.min, window.currentUniverse.matters.galaxy.material.opacity.pass.max)
+    const randomMaterialSize = enforcedSize || enforcedSize === 0 ? enforcedSize : THREE.MathUtils.randInt(window.currentUniverse.matters.strangerthings[this.subtype].material.size.pass.min, window.currentUniverse.matters.strangerthings[this.subtype].material.size.pass.max)
+    const randomMaterialOpacity = enforcedOpacity || enforcedOpacity === 0 ? enforcedOpacity : THREE.MathUtils.randInt(window.currentUniverse.matters.strangerthings[this.subtype].material.opacity.pass.min, window.currentUniverse.matters.strangerthings[this.subtype].material.opacity.pass.max)
 
     randomMaterialTexture.magFilter = THREE.NearestFilter
 

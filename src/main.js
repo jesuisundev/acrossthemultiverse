@@ -26,7 +26,7 @@ const helper = new Helper(parameters)
 helper.setDefaultGlobal()
 
 const scene = new THREE.Scene()
-scene.fog = new THREE.Fog("#000000", parameters.global.camera.near, parameters.global.camera.far)
+scene.fog = new THREE.Fog(window.currentUniverse.matters.global.fogColor, parameters.global.camera.near, parameters.global.camera.far)
 
 const ambientLight = new THREE.AmbientLight("#FFFFFF", 1)
 const directionalLight = new THREE.DirectionalLight("#FFFFFF", 1)
@@ -103,6 +103,7 @@ function onLaunch(event, isHighEnd = false) {
   }
 
   document.getElementById('intro').className = 'fadeOut'
+  setTimeout(() => document.getElementById('intro').remove(), 3000)
 
   needRender = true
   sequencer.launchNextSequence()
@@ -187,9 +188,12 @@ function animate () {
       document.getElementById('loading').remove()
       document.getElementById('launch').className = 'fadeIn'
       document.getElementById('launchUltra').className = 'fadeIn'
+      // this is useless since it's loading from webpack static
+      // todo fix this
       library.postload()
   }
-
+  
+  // tochange - readd await
   await helper.showElementById("title")
   await helper.showElementById("description")
   await helper.showElementById("notice")
@@ -234,6 +238,21 @@ function updateAnimatedObjects (elapsedTime) {
       spaceshipToUpdate.rotateX(0.0005)
       spaceshipToUpdate.rotateZ(0.0005)
       spaceshipToUpdate.translateZ(0.005)
+    }
+  }
+
+  if(Object.keys(window.nebulaToUpdate).length) {
+    for (const nebulaToUpdate of Object.values(window.nebulaToUpdate)) {
+      nebulaToUpdate.rotateX(0.0009)
+      nebulaToUpdate.rotateZ(0.0009)
+    }
+  }
+
+  if (window.cyclicStrangerThingsToUpdate && Object.keys(window.cyclicStrangerThingsToUpdate).length) {
+    for (const cyclicStrangerThingsToUpdate of Object.values(window.cyclicStrangerThingsToUpdate)) {
+      cyclicStrangerThingsToUpdate.rotateX(0.00005)
+      cyclicStrangerThingsToUpdate.rotateZ(0.0005)
+      cyclicStrangerThingsToUpdate.translateY(1)
     }
   }
 }

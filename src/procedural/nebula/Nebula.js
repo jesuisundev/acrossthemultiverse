@@ -9,10 +9,13 @@ export default class Nebula {
 
     this.textureSeen = []
     this.nebula = null
+    this.subtype = null
   }
 
   generate (nebulasAttributes, position, subtype = null) {
-    if (subtype === 'remnant') {
+    this.subtype = subtype
+
+    if (this.subtype === 'remnant') {
       return this._generateRemnant(nebulasAttributes, position)
     }
 
@@ -207,6 +210,12 @@ export default class Nebula {
     this.nebula.secondPass.material.dispose()
     this.nebula.thirdPass.material.dispose()
 
+    if(window.nebulaToUpdate[this.nebula.cloud.points.uuid]) {
+      delete window.nebulaToUpdate[this.nebula.firstPass.points.uuid]
+      delete window.nebulaToUpdate[this.nebula.secondPass.points.uuid]
+      delete window.nebulaToUpdate[this.nebula.thirdPass.points.uuid]
+    }
+
     this.scene.remove(
       this.nebula.cloud.points,
       this.nebula.firstPass.points,
@@ -229,6 +238,13 @@ export default class Nebula {
       this.nebula.secondPass.points,
       this.nebula.thirdPass.points
     )
+
+    if(this.subtype === 'gargantua') {
+      window.nebulaToUpdate[this.nebula.cloud.points.uuid] = this.nebula.cloud.points
+      window.nebulaToUpdate[this.nebula.firstPass.points.uuid] = this.nebula.firstPass.points
+      window.nebulaToUpdate[this.nebula.secondPass.points.uuid] = this.nebula.secondPass.points
+      window.nebulaToUpdate[this.nebula.thirdPass.points.uuid] = this.nebula.thirdPass.points
+    }
 
     gsap.timeline()
       .to(this.nebula.cloud.points.material, { duration: 4, opacity: window.currentUniverse.matters.nebula.material.opacity.cloud.min }, 0)
@@ -319,8 +335,8 @@ export default class Nebula {
       map: randomMaterialTexture,
       sizeAttenuation: true,
       depthWrite: false,
-      transparent: false,
-      blending: THREE.AdditiveBlending,
+      transparent: window.currentUniverse.matters.nebula.material.transparent,
+      blending: window.currentUniverse.matters.nebula.material.blending,
       vertexColors: true,
       opacity: 0
     })

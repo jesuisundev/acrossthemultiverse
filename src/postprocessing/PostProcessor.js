@@ -22,6 +22,11 @@ export default class PostProcessor {
   updateProcessingRenderer() {
     this.composer.reset()
     this.renderer.setClearColor(new THREE.Color(window.currentUniverse.matters.global.clearColor))
+    this.scene.fog = new THREE.Fog(
+      window.currentUniverse.matters.global.fogColor,
+      this.parameters.global.camera.near,
+      this.parameters.global.camera.far
+    )
     this.composer = new POSTPROCESSING.EffectComposer(this.renderer)
     this.composer.addPass(new POSTPROCESSING.RenderPass(this.scene, this.camera))
     this.composer.addPass(this.getEffectPass())

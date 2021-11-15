@@ -378,16 +378,19 @@ export default class Sequencer {
     this.wormhole.generate()
     this.wormhole.active()
 
+    // tochange back
     this.startSoundByTitle('wormhole')
     this.fadeOutById('#blackwall', 0.5)
 
+    const oldUniverseId = window.currentUniverse.universeModifiers.type.id
     window.currentUniverse = new Universe(this.parameters)
 
-    const generateCurrentUniverse = window.currentUniverse.generateRandom()
+    const generateCurrentUniverse = window.currentUniverse.generateRandom(oldUniverseId)
     const wormholeAnimate = this.wormhole.animate()
 
     // parallel awaits
     await generateCurrentUniverse
+    // tochange back
     await wormholeAnimate
     await this.fadeInById('#whitewall', 1)
 
@@ -488,12 +491,12 @@ export default class Sequencer {
 
   resetScene () {
     this.grid.disposeClusters(Array.from(this.grid.activeClusters.keys()))
-
     this.deepResetScene(this.scene)
+    this.setLight()
   }
 
   deepResetScene(obj){
-    while(obj.children.length > 0){ 
+    while(obj.children.length > 0) {
       this.deepResetScene(obj.children[0])
       obj.remove(obj.children[0]);
     }
@@ -503,12 +506,20 @@ export default class Sequencer {
     if(obj.material){ 
       Object.keys(obj.material).forEach(prop => {
         if(!obj.material[prop])
-          return         
-        if(obj.material[prop] !== null && typeof obj.material[prop].dispose === 'function')                                  
-          obj.material[prop].dispose()                                                        
+          return
+
+        if(obj.material[prop] !== null && typeof obj.material[prop].dispose === 'function')
+          obj.material[prop].dispose()
       })
       obj.material.dispose()
     }
+  }
+
+  setLight () {
+    const ambientLight = new THREE.AmbientLight("#FFFFFF", 1)
+    const directionalLight = new THREE.DirectionalLight("#FFFFFF", 1)
+    directionalLight.position.set(0, 400, 0)
+    this.scene.add(ambientLight, directionalLight)
   }
 
   resetPlayer() {

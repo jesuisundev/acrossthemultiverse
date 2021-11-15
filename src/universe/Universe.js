@@ -2,12 +2,14 @@ import * as THREE from 'three'
 
 export default class Universe {
     constructor (parameters, universeNumber) {
+        window.currentUniverse = null
+
         this.parameters = parameters
 
         this.isReady = false
         this.universeNumber = this._getSanitizedUniverseNumber(universeNumber)
         this.owner = 'vooodoo.eth'
-        this.matters = this.parameters.defaultMatters
+        this.matters = JSON.parse(JSON.stringify(this.parameters.defaultMatters))
         this.workersDistribution = this.parameters.defaultWorkersDistribution
 
         this.universeModifiers = {}
@@ -20,8 +22,8 @@ export default class Universe {
         this.isReady = true
     }
 
-    async generateRandom() {
-        await this._setRandomUniverseModifiers()
+    async generateRandom(oldUniverseId) {
+        await this._setRandomUniverseModifiers(oldUniverseId)
         await this._applyUniverseModifiersToMatters()
 
         this.isReady = true
@@ -86,10 +88,14 @@ export default class Universe {
         }
     }
 
-    async _setRandomUniverseModifiers() {
-        const arrayType = Object.keys(this.parameters.universeProperties.type)
+    async _setRandomUniverseModifiers(oldUniverseId) {
+        let arrayType = Object.keys(this.parameters.universeProperties.type).filter(type => type !== 'epiphany')
+        if(oldUniverseId)
+            arrayType = arrayType.filter(type => type !== oldUniverseId)
+        
         const randomType = this.parameters.universeProperties.type[arrayType[THREE.MathUtils.randInt(0, arrayType.length - 1)]]
-
+        // tochange
+        //const randomType = {id: 'abaddon'}
         this.universeModifiers = {
             type: randomType,
             age: this.parameters.universeProperties.age.child,
@@ -113,27 +119,44 @@ export default class Universe {
         switch (this.universeModifiers.type.id) {
             case 'stable':
                 this._applyStableTypeUniverseModifier()
-                break;
+                break
 
             case 'bloom':
                 this._applyBloomTypeUniverseModifier()
-                break;
+                break
             
             case 'filaments':
                 this._applyFilamentsTypeUniverseModifier()
-                break;
+                break
 
             case 'ethereum':
                 this._applyEthereumTypeUniverseModifier()
-                break;
+                break
+
+            case 'whirlpool':
+                this._applyWhirlpoolTypeUniverseModifier()
+                break
+
+            case 'eternal':
+                this._applyEternalTypeUniverseModifier()
+                break
+
+            case 'quantum':
+                this._applyQuantumTypeUniverseModifier()
+                break
+
+            case 'abaddon':
+                this._applyAbaddonTypeUniverseModifier()
+                break
 
             case 'epiphany':
                 this._applyEpiphanyTypeUniverseModifier()
-                break;
-        
+                break
+
             default:
-                console.log('Universe type TODO', this.universeModifiers.type.id)
-                break;
+                this.matters.global.bloomIntensity = 2
+                this.matters.global.clearColor = '#000000'
+                break
         }
     }
 
@@ -267,6 +290,165 @@ export default class Universe {
         ]
     }
 
+    async _applyWhirlpoolTypeUniverseModifier() {
+        // matters modifiers
+        this.matters.global.bloomIntensity = 3
+        this.matters.nebula.material.size.pass = { min: 130, max: 130 }
+        this.matters.nebula.colors.in = [
+            '#9bb2ff',
+            '#9eb5ff',
+            '#a3b9ff',
+            '#aabfff',
+            '#b2c5ff',
+            '#bbccff',
+            '#c4d2ff',
+            '#ccd8ff',
+            '#d3ddff',
+            '#dae2ff',
+            '#dfe5ff',
+            '#e4e9ff',
+            '#e9ecff',
+            '#eeefff',
+            '#f3f2ff',
+            '#f8f6ff',
+            '#fef9ff',
+            '#fff9fb',
+            '#fff7f5',
+            '#fff5ef',
+            '#fff3ea',
+            '#fff1e5',
+            '#ffefe0',
+            '#ffeddb',
+            '#ffebd6',
+            '#ffe9d2',
+            '#ffe8ce',
+            '#ffe6ca',
+            '#ffe5c6',
+            '#ffe3c3',
+            '#ffe2bf',
+            '#ffe0bb',
+            '#ffdfb8',
+            '#ffddb4',
+            '#ffdbb0',
+            '#ffdaad',
+            '#ffd8a9',
+            '#ffd6a5',
+            '#ffd5a1',
+            '#ffd29c',
+            '#ffd096',
+            '#ffcc8f',
+            '#ffc885',
+            '#ffc178',
+            '#ffb765',
+            '#ffa94b',
+            '#ff9523',
+            '#ff7b00',
+            '#ff5200'
+        ]
+        this.matters.giant.shader.sun.scale = { min: 15000, max: 15000 }
+        this.matters.giant.shader.sun.uColorAmplifier.primary = 3.0
+        this.matters.giant.shader.sun.uColorAmplifier.tertiary = 1.0
+
+        // workers modifiers
+        this.workersDistribution = [
+            {
+                chances: 70,
+                type: 'Nebula',
+                subtype: 'Gargantua'
+            },
+            {
+                chances: 10,
+                type: 'Nebula',
+                subtype: 'Remnant'
+            },
+            {
+                chances: 9,
+                type: 'Nebula',
+                subtype: 'Emission'
+            },
+            {
+                chances: 3,
+                type: 'Giant',
+                subtype: 'Sun'
+            },
+            {
+                chances: 2,
+                type: 'Singularity',
+                subtype: 'Blackhole'
+            },
+            {
+                chances: 0.01,
+                type: 'Spaceship',
+                subtype: 'Station'
+            }
+        ]
+    }
+
+    async _applyEternalTypeUniverseModifier() {
+        // matters modifiers
+        this.matters.global.bloomIntensity = 0.8
+        this.matters.global.clearColor = '#b4b4b4'
+
+        this.matters.starfield.material.transparent = false
+        this.matters.starfield.material.blending = THREE.SubtractiveBlending
+        this.matters.starfield.material.size.bright = { min: 1000, max: 1000}
+        this.matters.starfield.colors = ['#000000']
+
+        this.matters.nebula.material.transparent = false
+        this.matters.nebula.material.blending = THREE.CustomBlending
+        this.matters.nebula.material.opacity.cloud = { min: 0.03, max: 0.03 }
+        this.matters.nebula.colors.in = ['#000000']
+        this.matters.nebula.colors.out = ['#000000']
+        this.matters.nebula.geometry.emission.randomness = 0.001
+        this.matters.nebula.geometry.emission.radius = 20
+
+        this.matters.galaxy.material.transparent = false
+        this.matters.galaxy.material.blending = THREE.SubtractiveBlending
+        this.matters.galaxy.material.size.pass = { min: 300, max: 300}
+        this.matters.galaxy.colors = ['#000000']
+        this.matters.galaxy.galaxyColors.in = ['#000000']
+        this.matters.galaxy.galaxyColors.out = ['#000000']
+
+        this.matters.giant.shader.sun.scale = { min: 5000, max: 5000 }
+        this.matters.giant.shader.sun.uColorAmplifier.primary = 10.0
+        this.matters.giant.shader.sun.uColorAmplifier.secondary = 10.0
+        this.matters.giant.shader.sun.uColorAmplifier.tertiary = 10.0
+
+        // workers modifiers
+        this.workersDistribution = [
+            {
+                chances: 25,
+                type: 'Galaxy',
+                subtype: 'Irregular'
+            },
+            {
+                chances: 20,
+                type: 'Starfield',
+                subtype: 'Open'
+            },
+            {
+                chances: 19,
+                type: 'Starfield',
+                subtype: 'Globular'
+            },
+            {
+                chances: 18,
+                type: 'Nebula',
+                subtype: 'Emission'
+            },
+            {
+                chances: 3,
+                type: 'Giant',
+                subtype: 'Sun'
+            },
+            {
+                chances: 1,
+                type: 'Singularity',
+                subtype: 'Blackhole'
+            }
+        ]
+    }
+
     async _applyEpiphanyTypeUniverseModifier() {
         // matters modifiers
         this.matters.global.bloomIntensity = 2
@@ -278,6 +460,96 @@ export default class Universe {
                 chances: 100,
                 type: 'Starfield',
                 subtype: 'Open'
+            }
+        ]
+    }
+
+    async _applyQuantumTypeUniverseModifier() {
+        // matters modifiers
+        this.matters.global.bloomIntensity = 0.8
+        this.matters.global.clearColor = '#011120'
+
+        // workers modifiers
+        this.workersDistribution = [
+            {
+                chances: 30,
+                type: 'StrangerThings',
+                subtype: 'Spear'
+            },
+            {
+                chances: 30,
+                type: 'StrangerThings',
+                subtype: 'Cyclic'
+            },
+            {
+                chances: 20,
+                type: 'Galaxy',
+                subtype: 'Sombrero'
+            },
+            {
+                chances: 9,
+                type: 'Starfield',
+                subtype: 'Open'
+            },
+            {
+                chances: 1,
+                type: 'Singularity',
+                subtype: 'Blackhole'
+            }
+        ]
+    }
+
+    async _applyAbaddonTypeUniverseModifier() {
+        // matters modifiers
+        this.matters.global.bloomIntensity = 0
+        this.matters.global.clearColor = '#000000'
+
+        //this.matters.starfield.material.transparent = false
+        //this.matters.starfield.material.blending = THREE.SubtractiveBlending
+        this.matters.starfield.material.size.bright = { min: 1000, max: 1000}
+        this.matters.starfield.colors = ['#ff0000', '#ff5a00']
+
+        //this.matters.nebula.material.transparent = false
+        //this.matters.nebula.material.blending = THREE.CustomBlending
+        this.matters.nebula.material.opacity.cloud = { min: 0.03, max: 0.03 }
+        this.matters.nebula.colors.in = ['#ff0000', '#ff5a00']
+        this.matters.nebula.colors.out = ['#ff0000', '#ff5a00']
+        this.matters.nebula.geometry.emission.randomness = 0.001
+        this.matters.nebula.geometry.emission.radius = 20
+
+        //this.matters.galaxy.material.transparent = false
+        //this.matters.galaxy.material.blending = THREE.SubtractiveBlending
+        this.matters.galaxy.material.size.pass = { min: 300, max: 300}
+        this.matters.galaxy.colors = ['#ff0000', '#ff5a00']
+        this.matters.galaxy.galaxyColors.in = ['#ff0000', '#ff5a00']
+        this.matters.galaxy.galaxyColors.out = ['#ff0000', '#ff5a00']
+
+        // workers modifiers
+        this.workersDistribution = [
+            {
+                chances: 30,
+                type: 'Starfield',
+                subtype: 'Open'
+            },
+            {
+                chances: 30,
+                type: 'StrangerThings',
+                subtype: 'Cyclic'
+            },
+            {
+                chances: 20,
+                type: 'Galaxy',
+                subtype: 'Sombrero'
+            },
+            {
+                chances: 9,
+                type: 'Starfield',
+                subtype: 'Open'
+            },
+            {
+                chances: 1,
+                type: 'Singularity',
+                subtype: 'Blackhole'
             }
         ]
     }

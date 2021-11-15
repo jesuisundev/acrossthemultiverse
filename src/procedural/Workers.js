@@ -40,6 +40,12 @@ export default class Workers {
       source: new Worker(new URL('./nebula/SupernovaRemnantsNebulaWorker.js', import.meta.url))
     }
 
+    this.gargantuaNebulaWorker = {
+      type: 'Nebula',
+      subtype: 'Gargantua',
+      source: new Worker(new URL('./nebula/GargantuaNebulaWorker.js', import.meta.url))
+    }
+
     this.spiralGalaxyWorker = {
       type: 'Galaxy',
       subtype: 'Spiral',
@@ -93,6 +99,18 @@ export default class Workers {
       subtype: 'Station',
       source: new Worker(new URL('./spaceship/SpaceshipWorker.js', import.meta.url))
     }
+
+    this.cyclicStrangerThingsWorker = {
+      type: 'StrangerThings',
+      subtype: 'Cyclic',
+      source: new Worker(new URL('./strangerthings/CyclicWorker.js', import.meta.url))
+    }
+
+    this.spearStrangerThingsWorker = {
+      type: 'StrangerThings',
+      subtype: 'Spear',
+      source: new Worker(new URL('./strangerthings/SpearWorker.js', import.meta.url))
+    }
   }
 
   _setWorkersListener () {
@@ -118,6 +136,12 @@ export default class Workers {
       messageEvent.data,
       'nebula',
       'remnant'
+    )
+
+    this.gargantuaNebulaWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
+      messageEvent.data,
+      'nebula',
+      'gargantua'
     )
 
     this.spiralGalaxyWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
@@ -173,6 +197,18 @@ export default class Workers {
       'spaceship',
       'station'
     )
+
+    this.cyclicStrangerThingsWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
+      messageEvent.data,
+      'strangerthings',
+      'cyclic'
+    )
+
+    this.spearStrangerThingsWorker.source.onmessage = messageEvent => this.grid.addMattersToClustersQueue(
+      messageEvent.data,
+      'strangerthings',
+      'spear'
+    )
   }
 
   _getWorkerByTypeAndSubtype(type, subtype) {
@@ -187,6 +223,10 @@ export default class Workers {
       case "Nebula":
         if(subtype === "Emission") {
           return this.emissionNebulaWorker.source
+        }
+
+        if(subtype === "Gargantua") {
+          return this.gargantuaNebulaWorker.source
         }
 
         return this.supernovaRemnantsNebulaWorker.source
@@ -222,6 +262,13 @@ export default class Workers {
         }
 
         return this.spaceshipStationWorker.source
+
+      case "StrangerThings":
+        if(subtype === "Cyclic") {
+          return this.cyclicStrangerThingsWorker.source
+        }
+
+        return this.spearStrangerThingsWorker.source
 
       default:
         console.error('Getting worker type with unandled type.')

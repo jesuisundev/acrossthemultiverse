@@ -20,10 +20,10 @@ export default class Giant {
 
   generate (giantsAttributes, position, subtype = null) {
     switch (subtype) {
-      case 'whitedwarf':
+      case 'WhiteDwarf':
         return this._generateWhiteDwarf(giantsAttributes, position)
 
-      case 'star':
+      case 'Star':
         return this._generateStar(giantsAttributes, position)
 
       default:
@@ -122,15 +122,15 @@ export default class Giant {
   _generateSun (giantsAttributes, position) {
     const currentCoordinateVector = this._getCoordinateVectorByPosition(position)
 
-    const giantStarGeometry = new THREE.SphereGeometry( 1, 64, 32)
+    const giantStarGeometry = new THREE.SphereGeometry(1, 64, 32)
     const brightStarTexture = null
-    const giantStarmaterial = this._getRandomWhiteDwarfShaderMaterial()
+    const giantStarmaterial = this._getRandomSunShaderMaterial()
 
     window.materialsToUpdate[giantStarmaterial.uuid] = giantStarmaterial
     const giantStar = new THREE.Mesh(giantStarGeometry, giantStarmaterial)
     const giantStarScale = THREE.MathUtils.randInt(
-      window.currentUniverse.matters.giant.shader.whitedwarf.scale.min,
-      window.currentUniverse.matters.giant.shader.whitedwarf.scale.max
+      window.currentUniverse.matters.giant.shader.sun.scale.min,
+      window.currentUniverse.matters.giant.shader.sun.scale.max
     )
     giantStar.scale.set(giantStarScale, giantStarScale, giantStarScale)
     giantStar.position.set(currentCoordinateVector.x, currentCoordinateVector.y, currentCoordinateVector.z)
@@ -223,6 +223,15 @@ export default class Giant {
             window.currentUniverse.matters.giant.shader.sun.uNoiseSpeed.min,
             window.currentUniverse.matters.giant.shader.sun.uNoiseSpeed.max
           )
+        },
+        uColorAmplifierPrimary: { 
+          value: window.currentUniverse.matters.giant.shader.sun.uColorAmplifier.primary
+        },
+        uColorAmplifierSecondary: { 
+          value: window.currentUniverse.matters.giant.shader.sun.uColorAmplifier.secondary
+        },
+        uColorAmplifierTertiary: { 
+          value: window.currentUniverse.matters.giant.shader.sun.uColorAmplifier.tertiary
         },
         fogColor: { value: this.scene.fog.color },
         fogNear: { value: this.scene.fog.near },

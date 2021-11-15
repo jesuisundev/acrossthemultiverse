@@ -177,10 +177,9 @@ export default class StarField {
     return geometry
   }
 
-  _getRandomStarsTexture (type = 'pass') {
+  _getRandomStarsTexture (type = window.currentUniverse.matters.starfield.material.defaultType) {
     const currentTexturesPool = this.library.textures.starfield[type].filter(texture => !this.textureSeen.includes(texture))
     const randomTexture = currentTexturesPool[THREE.MathUtils.randInt(0, currentTexturesPool.length - 1)]
-
     this.textureSeen.push(randomTexture)
 
     return randomTexture
@@ -204,8 +203,8 @@ export default class StarField {
       map: randomMaterialTexture,
       sizeAttenuation: true,
       depthWrite: false,
-      transparent: false,
-      blending: THREE.AdditiveBlending,
+      transparent: window.currentUniverse.matters.starfield.material.transparent,
+      blending: window.currentUniverse.matters.starfield.material.blending,
       vertexColors: true,
       opacity: 0
     })

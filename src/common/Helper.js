@@ -28,6 +28,7 @@ export default class Helper {
 
   // i'm lazy, we could refactor some code and avoid globals
   setDefaultGlobal () {
+    // tochange
     window.isDebugMode = false
     window.isFirstUniverse = true
     window.isMetaverse = false
@@ -36,6 +37,8 @@ export default class Helper {
     window.materialsToUpdate = {}
     window.meshesToUpdate = {}
     window.spaceshipToUpdate = {}
+    window.nebulaToUpdate = {}
+    window.cyclicStrangerThingsToUpdate = {}
     window.wormhole = { shape: null, CameraPositionIndex: 0, speed: this.parameters.wormhole.speed, active: false }
     window.sequencer = { active: false }
     window.isMobileOrTabletFlag = this.isMobileOrTablet()

@@ -4,6 +4,7 @@ import Galaxy from './galaxy/Galaxy'
 import Giant from './giant/Giant'
 import Singularity from './singularity/Singularity'
 import Spaceship from './spaceship/Spaceship'
+import StrangerThings from './strangerthings/StrangerThings'
 
 export default class MultiverseFactory {
     constructor(scene, library, parameters) {
@@ -31,6 +32,9 @@ export default class MultiverseFactory {
             
             case "spaceship":
                 return new Spaceship(this.scene, this.library, this.parameters)
+
+            case "strangerthings":
+                return new StrangerThings(this.scene, this.library, this.parameters)
           }
     }
 }
