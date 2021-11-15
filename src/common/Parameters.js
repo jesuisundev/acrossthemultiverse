@@ -863,11 +863,6 @@ export default class Parameters {
         subtype: 'Blackhole'
       },
       {
-        chances: 3,
-        type: 'Giant',
-        subtype: 'Star'
-      },
-      {
         chances: 2,
         type: 'Giant',
         subtype: 'Sun'
@@ -921,9 +916,9 @@ export default class Parameters {
           displayName: 'Quantum',
           probability: 4
         },
-        amethyst : {
-          id: 'amethyst',
-          displayName: 'Amethyst',
+        abaddon : {
+          id: 'abaddon',
+          displayName: 'Abaddon',
           probability: 3,
         },
         eternal : {

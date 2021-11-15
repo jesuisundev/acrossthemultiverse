@@ -22,10 +22,9 @@ module.exports = {
       minify: true
     }),
     new miniCSSExtractPlugin(),
-    // new webpackObfuscator ({
-    //   rotateStringArray: true
-    // }, [])
-    // tochange
+    new webpackObfuscator ({
+      rotateStringArray: true
+    }, [])
   ],
   module: {
     rules: [{

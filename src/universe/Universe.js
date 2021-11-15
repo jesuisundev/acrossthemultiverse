@@ -2,12 +2,14 @@ import * as THREE from 'three'
 
 export default class Universe {
     constructor (parameters, universeNumber) {
+        window.currentUniverse = null
+
         this.parameters = parameters
 
         this.isReady = false
         this.universeNumber = this._getSanitizedUniverseNumber(universeNumber)
         this.owner = 'vooodoo.eth'
-        this.matters = this.parameters.defaultMatters
+        this.matters = JSON.parse(JSON.stringify(this.parameters.defaultMatters))
         this.workersDistribution = this.parameters.defaultWorkersDistribution
 
         this.universeModifiers = {}
@@ -20,8 +22,8 @@ export default class Universe {
         this.isReady = true
     }
 
-    async generateRandom() {
-        await this._setRandomUniverseModifiers()
+    async generateRandom(oldUniverseId) {
+        await this._setRandomUniverseModifiers(oldUniverseId)
         await this._applyUniverseModifiersToMatters()
 
         this.isReady = true
@@ -86,11 +88,14 @@ export default class Universe {
         }
     }
 
-    async _setRandomUniverseModifiers() {
-        const arrayType = Object.keys(this.parameters.universeProperties.type).filter(type => type !== 'epiphany')
-        //const randomType = this.parameters.universeProperties.type[arrayType[THREE.MathUtils.randInt(0, arrayType.length - 1)]]
+    async _setRandomUniverseModifiers(oldUniverseId) {
+        let arrayType = Object.keys(this.parameters.universeProperties.type).filter(type => type !== 'epiphany')
+        if(oldUniverseId)
+            arrayType = arrayType.filter(type => type !== oldUniverseId)
+        
+        const randomType = this.parameters.universeProperties.type[arrayType[THREE.MathUtils.randInt(0, arrayType.length - 1)]]
         // tochange
-        const randomType = {id: 'quantum'}
+        //const randomType = {id: 'abaddon'}
         this.universeModifiers = {
             type: randomType,
             age: this.parameters.universeProperties.age.child,
@@ -114,43 +119,44 @@ export default class Universe {
         switch (this.universeModifiers.type.id) {
             case 'stable':
                 this._applyStableTypeUniverseModifier()
-                break;
+                break
 
             case 'bloom':
                 this._applyBloomTypeUniverseModifier()
-                break;
+                break
             
             case 'filaments':
                 this._applyFilamentsTypeUniverseModifier()
-                break;
+                break
 
             case 'ethereum':
                 this._applyEthereumTypeUniverseModifier()
-                break;
+                break
 
             case 'whirlpool':
                 this._applyWhirlpoolTypeUniverseModifier()
-                break;
+                break
 
             case 'eternal':
                 this._applyEternalTypeUniverseModifier()
-                break;
+                break
 
             case 'quantum':
                 this._applyQuantumTypeUniverseModifier()
-                break;
+                break
+
+            case 'abaddon':
+                this._applyAbaddonTypeUniverseModifier()
+                break
 
             case 'epiphany':
                 this._applyEpiphanyTypeUniverseModifier()
-                break;
+                break
 
             default:
-                // tochange
-                // TODO : DELETE THIS should be in every cases
                 this.matters.global.bloomIntensity = 2
                 this.matters.global.clearColor = '#000000'
-                console.log('Universe type TODO', this.universeModifiers.type.id)
-                break;
+                break
         }
     }
 
@@ -466,14 +472,84 @@ export default class Universe {
         // workers modifiers
         this.workersDistribution = [
             {
-                chances: 50,
+                chances: 30,
                 type: 'StrangerThings',
                 subtype: 'Spear'
             },
             {
-                chances: 50,
+                chances: 30,
                 type: 'StrangerThings',
                 subtype: 'Cyclic'
+            },
+            {
+                chances: 20,
+                type: 'Galaxy',
+                subtype: 'Sombrero'
+            },
+            {
+                chances: 9,
+                type: 'Starfield',
+                subtype: 'Open'
+            },
+            {
+                chances: 1,
+                type: 'Singularity',
+                subtype: 'Blackhole'
+            }
+        ]
+    }
+
+    async _applyAbaddonTypeUniverseModifier() {
+        // matters modifiers
+        this.matters.global.bloomIntensity = 0
+        this.matters.global.clearColor = '#000000'
+
+        //this.matters.starfield.material.transparent = false
+        //this.matters.starfield.material.blending = THREE.SubtractiveBlending
+        this.matters.starfield.material.size.bright = { min: 1000, max: 1000}
+        this.matters.starfield.colors = ['#ff0000', '#ff5a00']
+
+        //this.matters.nebula.material.transparent = false
+        //this.matters.nebula.material.blending = THREE.CustomBlending
+        this.matters.nebula.material.opacity.cloud = { min: 0.03, max: 0.03 }
+        this.matters.nebula.colors.in = ['#ff0000', '#ff5a00']
+        this.matters.nebula.colors.out = ['#ff0000', '#ff5a00']
+        this.matters.nebula.geometry.emission.randomness = 0.001
+        this.matters.nebula.geometry.emission.radius = 20
+
+        //this.matters.galaxy.material.transparent = false
+        //this.matters.galaxy.material.blending = THREE.SubtractiveBlending
+        this.matters.galaxy.material.size.pass = { min: 300, max: 300}
+        this.matters.galaxy.colors = ['#ff0000', '#ff5a00']
+        this.matters.galaxy.galaxyColors.in = ['#ff0000', '#ff5a00']
+        this.matters.galaxy.galaxyColors.out = ['#ff0000', '#ff5a00']
+
+        // workers modifiers
+        this.workersDistribution = [
+            {
+                chances: 30,
+                type: 'Starfield',
+                subtype: 'Open'
+            },
+            {
+                chances: 30,
+                type: 'StrangerThings',
+                subtype: 'Cyclic'
+            },
+            {
+                chances: 20,
+                type: 'Galaxy',
+                subtype: 'Sombrero'
+            },
+            {
+                chances: 9,
+                type: 'Starfield',
+                subtype: 'Open'
+            },
+            {
+                chances: 1,
+                type: 'Singularity',
+                subtype: 'Blackhole'
             }
         ]
     }
