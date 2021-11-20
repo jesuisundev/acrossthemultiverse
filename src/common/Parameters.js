@@ -888,42 +888,42 @@ export default class Parameters {
       type: {
         stable : {
           id: 'stable',
-          displayName: 'Stable',
+          displayName: 'Stable (40%)',
           probability: 40,
         },
         bloom : {
           id: 'bloom',
-          displayName: 'Bloom',
+          displayName: 'Bloom (25%)',
           probability: 25,
         },
         filaments : {
           id: 'filaments',
-          displayName: 'Filaments',
+          displayName: 'Filaments (15%)',
           probability: 15,
         },
         ethereum : {
           id: 'ethereum',
-          displayName: 'Ethereum',
+          displayName: 'Ethereum (10%)',
           probability: 10,
         },
         whirlpool : {
           id: 'whirlpool',
-          displayName: 'whirlpool',
+          displayName: 'Whirlpool (5%)',
           probability: 5,
         },
         quantum : {
           id: 'quantum',
-          displayName: 'Quantum',
+          displayName: 'Quantum (4%)',
           probability: 4
         },
         abaddon : {
           id: 'abaddon',
-          displayName: 'Abaddon',
+          displayName: 'Abaddon (3%)',
           probability: 3,
         },
         eternal : {
           id: 'eternal',
-          displayName: 'Eternal',
+          displayName: 'Eternal (2%)',
           probability: 2
         },
         epiphany : {

@@ -194,10 +194,10 @@ function animate () {
   }
   
   // tochange - readd await
-  await helper.showElementById("title")
-  await helper.showElementById("description")
-  await helper.showElementById("notice")
-  await helper.showElementById("entrypoint")
+  helper.showElementById("title")
+  helper.showElementById("description")
+  helper.showElementById("notice")
+  helper.showElementById("entrypoint")
 }
 
  async function setupMultiplayer() {

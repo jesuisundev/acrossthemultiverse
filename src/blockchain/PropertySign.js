@@ -11,8 +11,10 @@ export default class PropertySign {
             owner: 'vooodoo.eth',
             metadata: {
                 type: 'Borealis (60%)',
-                astralDiversity: 'High (10%)',
-                astralSingularity: 'Magnetar (5%)'
+                age: 'Child | ~1T year (40%)',
+                diversity: 'High (10%)',
+                singularity: 'Magnetar (5%)',
+                dominantRace: 'Human (60%)'
             }
         }
         this.fontLoader = new FontLoader()
@@ -24,26 +26,33 @@ export default class PropertySign {
 
     addPropertySign() {
         this.text.metadata = this._getLocalUniverseMetadata()
+        console.log(this.text.metadata,'this.text.metadata')
         const text = `
             Universe : #${window.currentUniverse.universeNumber}
             Owner : ${this.text.owner}
 
             Type : ${this.text.metadata.type}
-            Astral Diversity : ${this.text.metadata.astralDiversity}
-            Astral Singularity : ${this.text.metadata.astralSingularity}
+            Age : ${this.text.metadata.age}
+            Diversity : ${this.text.metadata.diversity}
+            Singularity : ${this.text.metadata.singularity}
+            Dominant Race : ${this.text.metadata.dominantRace}
         `
 
         this.propertySignGeometry = new THREE.TextGeometry(text, {
             font: this.font,
             size: 2000,
-            height: 10,
-            curveSegments: 15,
-            bevelEnabled: true
+            height: 1,
+            curveSegments: 12,
+            bevelEnabled: true,
+            bevelThickness: 0,
+            bevelSize: 0,
+            bevelOffset: 0,
+            bevelSegments: 0
         })
-        this.propertySignMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff })
+        this.propertySignMaterial = new THREE.MeshBasicMaterial({ color: this._getTextColor(), side: THREE.BackSide })
         this.propertySignMesh = new THREE.Mesh(this.propertySignGeometry, this.propertySignMaterial)
 
-        this.propertySignMesh.position.set(-22000, 10000, -25000)
+        this.propertySignMesh.position.set(-22000, 10000, -40000)
         this.scene.add(this.propertySignMesh)
     }
 
@@ -58,12 +67,23 @@ export default class PropertySign {
             return {}
 
         return {
-            type: window.currentUniverse.universeModifiers.type,
-            age: window.currentUniverse.universeModifiers.age,
-            diversity: window.currentUniverse.universeModifiers.diversity,
-            singularity: window.currentUniverse.universeModifiers.singularity,
-            dominantRace: window.currentUniverse.universeModifiers.dominantRace
+            type: window.currentUniverse.universeModifiers.type.displayName,
+            age: window.currentUniverse.universeModifiers.age.displayName,
+            diversity: window.currentUniverse.universeModifiers.diversity.displayName,
+            singularity: window.currentUniverse.universeModifiers.singularity.displayName,
+            dominantRace: window.currentUniverse.universeModifiers.dominantRace.displayName
         }
+    }
+
+    _getTextColor() {
+        let color = 0xFFFFFF
+
+        switch (window.currentUniverse.universeModifiers.type.id) {
+            case 'eternal':
+                color = 0x000000
+        }
+
+        return color
     }
 
     _getOwner() {
