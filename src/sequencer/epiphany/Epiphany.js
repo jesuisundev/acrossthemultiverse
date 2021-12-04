@@ -15,7 +15,7 @@ export default class Epiphany {
         this._getEpiphanyAttributesInRandomPosition(
             300000,
             45000,
-            this.parameters.matters[0].galaxy,
+            this.parameters.defaultMatters.galaxy,
             window.currentUniverse
         )
     )
