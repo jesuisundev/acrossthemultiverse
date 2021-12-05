@@ -19,7 +19,7 @@ export default class PropertySign {
         }
         this.fontLoader = new FontLoader()
         this.fontLoader.load(
-            'fonts/optimer_regular.typeface.json',
+            'fonts/Roboto_Regular.json',
             font => { this.font = font}
         )
     }
@@ -69,7 +69,7 @@ export default class PropertySign {
         this.propertySignMeshDescription = new THREE.Mesh(this.propertySignGeometryDescription, this.propertySignMaterialDescription)
 
         this.propertySignMeshOwner.position.set(-8000, 5000, -31000)
-        this.propertySignMeshDescription.position.set(-5600, 1000, -31000)
+        this.propertySignMeshDescription.position.set(-5900, 500, -31000)
         this.scene.add(this.propertySignMeshOwner, this.propertySignMeshDescription)
     }
 
