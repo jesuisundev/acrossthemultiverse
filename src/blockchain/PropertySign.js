@@ -26,11 +26,13 @@ export default class PropertySign {
 
     addPropertySign() {
         this.text.metadata = this._getLocalUniverseMetadata()
-        console.log(this.text.metadata,'this.text.metadata')
-        const text = `
+
+        const textOwner = `
             Universe : #${window.currentUniverse.universeNumber}
             Owner : ${this.text.owner}
+        `
 
+        const textDescription = `
             Type : ${this.text.metadata.type}
             Age : ${this.text.metadata.age}
             Diversity : ${this.text.metadata.diversity}
@@ -38,9 +40,9 @@ export default class PropertySign {
             Dominant Race : ${this.text.metadata.dominantRace}
         `
 
-        this.propertySignGeometry = new THREE.TextGeometry(text, {
+        this.propertySignGeometryOwner = new THREE.TextGeometry(textOwner, {
             font: this.font,
-            size: 2000,
+            size: 1000,
             height: 1,
             curveSegments: 12,
             bevelEnabled: true,
@@ -49,17 +51,35 @@ export default class PropertySign {
             bevelOffset: 0,
             bevelSegments: 0
         })
-        this.propertySignMaterial = new THREE.MeshBasicMaterial({ color: this._getTextColor(), side: THREE.BackSide })
-        this.propertySignMesh = new THREE.Mesh(this.propertySignGeometry, this.propertySignMaterial)
+        this.propertySignMaterialOwner = new THREE.MeshBasicMaterial({ color: this._getTextColor(), side: THREE.BackSide })
+        this.propertySignMeshOwner = new THREE.Mesh(this.propertySignGeometryOwner, this.propertySignMaterialOwner)
 
-        this.propertySignMesh.position.set(-22000, 10000, -40000)
-        this.scene.add(this.propertySignMesh)
+        this.propertySignGeometryDescription = new THREE.TextGeometry(textDescription, {
+            font: this.font,
+            size: 500,
+            height: 1,
+            curveSegments: 12,
+            bevelEnabled: true,
+            bevelThickness: 0,
+            bevelSize: 0,
+            bevelOffset: 0,
+            bevelSegments: 0
+        })
+        this.propertySignMaterialDescription = new THREE.MeshBasicMaterial({ color: this._getTextColor(), side: THREE.BackSide })
+        this.propertySignMeshDescription = new THREE.Mesh(this.propertySignGeometryDescription, this.propertySignMaterialDescription)
+
+        this.propertySignMeshOwner.position.set(-8000, 5000, -31000)
+        this.propertySignMeshDescription.position.set(-5600, 1000, -31000)
+        this.scene.add(this.propertySignMeshOwner, this.propertySignMeshDescription)
     }
 
     dispose() {
-        this.propertySignGeometry.dispose()
-        this.propertySignMaterial.dispose()
-        this.scene.remove(this.propertySignMesh)
+        this.propertySignGeometryOwner.dispose()
+        this.propertySignMaterialOwner.dispose()
+
+        this.propertySignGeometryDescription.dispose()
+        this.propertySignMaterialDescription.dispose()
+        this.scene.remove(this.propertySignMeshOwner, this.propertySignMeshDescription)
     }
 
     _getLocalUniverseMetadata() {
