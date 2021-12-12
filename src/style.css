@@ -692,6 +692,10 @@ nav #menu .cell .description {
     display: none;
 }
 
+#warning-pc {
+    visibility:hidden;
+}
+
 @media (max-width:960px) {
     #logo {
         width: 350px;

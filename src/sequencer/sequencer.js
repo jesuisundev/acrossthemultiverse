@@ -87,8 +87,7 @@ export default class Sequencer {
     window.sequencer.active = false
     this._handleMultiplayerDisplay()
 
-    // TODO : fix bug surimpression
-    if(window.currentUniverse != 0)
+    if(window.isMetaverse)
       this.propertySign.addPropertySign()
   }
 
@@ -361,8 +360,9 @@ export default class Sequencer {
     this.stopAllSounds()
     this.multiplayer.hideMultiplayer()
 
-    // TODO: fix bug surimpression
-    this.propertySign.dispose()
+    if(window.isMetaverse) {
+      this.propertySign.dispose()
+    }
 
     this.fadeOutById('#credits', 0.1)
     this.hideNavigation()
@@ -379,7 +379,7 @@ export default class Sequencer {
     this.wormhole.active()
 
     // tochange back
-    //this.startSoundByTitle('wormhole')
+    this.startSoundByTitle('wormhole')
     this.fadeOutById('#blackwall', 0.5)
 
     const oldUniverseId = window.currentUniverse.universeModifiers.type.id
@@ -391,7 +391,7 @@ export default class Sequencer {
     // parallel awaits
     await generateCurrentUniverse
     // tochange back
-    //await wormholeAnimate
+    await wormholeAnimate
     await this.fadeInById('#whitewall', 1)
 
     this.changeUniverse()

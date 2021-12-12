@@ -103,7 +103,10 @@ function onLaunch(event, isHighEnd = false) {
   }
 
   document.getElementById('intro').className = 'fadeOut'
-  setTimeout(() => document.getElementById('intro').remove(), 3000)
+  setTimeout(() => {
+    if(document.getElementById('intro'))
+      document.getElementById('intro').remove()
+  }, 3000)
 
   needRender = true
   sequencer.launchNextSequence()
@@ -194,10 +197,10 @@ function animate () {
   }
   
   // tochange - readd await
-  helper.showElementById("title")
-  helper.showElementById("description")
-  helper.showElementById("notice")
-  helper.showElementById("entrypoint")
+  await helper.showElementById("title")
+  await helper.showElementById("description")
+  await helper.showElementById("notice")
+  await helper.showElementById("entrypoint")
 }
 
  async function setupMultiplayer() {

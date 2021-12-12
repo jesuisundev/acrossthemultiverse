@@ -68,8 +68,9 @@ export default class PropertySign {
         this.propertySignMaterialDescription = new THREE.MeshBasicMaterial({ color: this._getTextColor(), side: THREE.BackSide })
         this.propertySignMeshDescription = new THREE.Mesh(this.propertySignGeometryDescription, this.propertySignMaterialDescription)
 
-        this.propertySignMeshOwner.position.set(-8000, 5000, -31000)
-        this.propertySignMeshDescription.position.set(-5900, 500, -31000)
+        const z = window.isFirstUniverse ? -11000 : -31000
+        this.propertySignMeshOwner.position.set(-8000, 5000, z)
+        this.propertySignMeshDescription.position.set(-5900, 500, z)
         this.scene.add(this.propertySignMeshOwner, this.propertySignMeshDescription)
     }
 

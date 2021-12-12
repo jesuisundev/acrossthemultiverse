@@ -31,7 +31,7 @@ export default class Universe {
 
     _getSanitizedUniverseNumber(universeNumber) {
         if(!universeNumber) {
-            this.universeNumber = 1
+            this.universeNumber = THREE.MathUtils.randInt(1, 10000)
             return this.universeNumber
         }
 
@@ -94,8 +94,7 @@ export default class Universe {
             arrayType = arrayType.filter(type => type !== oldUniverseId)
         
         const randomType = this.parameters.universeProperties.type[arrayType[THREE.MathUtils.randInt(0, arrayType.length - 1)]]
-        // tochange
-        //const randomType = {id: 'abaddon'}
+
         this.universeModifiers = {
             type: randomType,
             age: this.parameters.universeProperties.age.child,
